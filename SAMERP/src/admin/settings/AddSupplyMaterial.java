@@ -50,12 +50,27 @@ public class AddSupplyMaterial extends HttpServlet {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     		String requiredDate = df.format(new Date()).toString();
 			
-			String insertQuery="INSERT INTO `material_supply_master`(`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`type`) VALUES ('"+supBussName+"','"+supplierName+"','"+supplierAddress+"','"+suppContact+"','"+openingBalance+"','"+type+"')";
+    		String alias="";
+    		if(type.equals("1"))
+    		{
+    			alias = "SR_"+supBussName;
+    		}
+    		else{
+    			alias = "SP_"+supBussName;
+    		}
+    		
+    		
+			String insertQuery="INSERT INTO `material_supply_master`(`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`supplier_alias`,`type`) VALUES ('"+supBussName+"','"+supplierName+"','"+supplierAddress+"','"+suppContact+"','"+openingBalance+"','"+alias+"', '"+type+"')";
+			System.out.println(insertQuery);
 			status=gd.executeCommand(insertQuery);	
 			if(status!=0)
 			{
 				String insertQuery1="INSERT INTO `total_supplier_payment_master`(`supplier_id`, `date`, `total_remaining`) VALUES ((select max(supplier_business_id) from material_supply_master), '"+requiredDate+"' , "+openingBalance+")";
+				
 				int status1=gd.executeCommand(insertQuery1);	
+				
+				String insertQuery2="INSERT INTO `debtor_master`(`type`) VALUES ('"+alias+"')";
+				int status2=gd.executeCommand(insertQuery2);
 				
 				String maxid="SELECT MAX(supplier_business_id) from material_supply_master";
 				List max=gd.getData(maxid);

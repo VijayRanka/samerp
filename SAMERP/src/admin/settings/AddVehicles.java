@@ -47,7 +47,7 @@ public class AddVehicles extends HttpServlet {
 			
 			String insertVehicleQuery = "insert into vehicle_details(vehicle_type, vehicle_number, vehicle_aliasname) values ('"+vehicleType+"', '"+vehicleNo+"', '"+vehicleAlias+"');";
 			
-			String insertDebt="INSERT INTO `debtor_master`(`type`) VALUES ('"+vehicleNo+"')";
+			String insertDebt="INSERT INTO `debtor_master`(`type`) VALUES ('"+vehicleAlias+"')";
 			int xx=gd.executeCommand(insertDebt);
 			if(xx>0)
 			{
