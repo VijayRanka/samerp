@@ -79,7 +79,7 @@
         
         
         
-      <!-- daily expenses start  vijay ranka part with omkar-->
+      <!-- daily expenses start  vijay ranka part with omkar Y shivadekar-->
         
           <div class="widget-title"> <a href="#collapseOne" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5>Daily Expenses</h5>
