@@ -672,8 +672,7 @@ to {
 				xhttp.onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
 						var myData = this.responseText.split(",");
-						var totalAmount=1;
-						alert(myData);
+						var totalAmount=0;
 						if(myData[0]==1)
 							{
 							document.getElementById("depositCount").innerHTML=myData[1];
@@ -695,6 +694,8 @@ to {
 							}
 					    var x=document.getElementById("product_pymt").value=totalProdCharge.innerHTML.trim();
 					    var xx=document.getElementById("querying_pymt").value=totalQueryCharge.innerHTML.trim();
+					    
+					    
 					    
 					    window.totalGrandAmount=document.getElementById("grandTotal").value= +x+ +xx - totalAmount;
 					    $("#myModal").modal();

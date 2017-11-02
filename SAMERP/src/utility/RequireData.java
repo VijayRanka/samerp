@@ -684,5 +684,38 @@ public class RequireData
 	
 	
 		//--vijay end
+			
+			//--common methods start
+			
+			public int checkPCStatus(int amount)
+			{
+				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
+				
+				if(!gd.getData(statusString).isEmpty())
+				{
+					int pcAmount=Integer.parseInt(gd.getData(statusString).get(0).toString());
+					if(pcAmount==0)
+						return 0;
+					else if(pcAmount-amount<0)
+						return 1;
+				}
+				
+				return 2;
+			}
+			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)
+			{
+				if(bankAliasName==null)
+					bankAliasName="";
+				if(chequeDetails==null)
+					chequeDetails="";
+				System.out.println(expTypeId+debtorId+name+amount+mode+bankAliasName+chequeDetails+date);
+				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
+						+ " `particular`, `other_details`, `date`) VALUES "
+						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"','"+bankAliasName+"','"+chequeDetails+"','"+date+"')";
+				int x=gd.executeCommand(insertQuery);
+			}
+			
+			
+			//-- common methods end
 	
 }

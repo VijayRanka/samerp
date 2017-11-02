@@ -19,20 +19,28 @@ public class demou {
 		
 		int count1=1;
 		GenericDAO gd=new GenericDAO();
-		
-		String getLoadingCharges="SELECT expenses_type.expenses_type_name,debtor_master.type"
-				+ ",expenses_master.name,expenses_master.amount,expenses_master.payment_mode,"
-				+ "expenses_master.date FROM expenses_type,debtor_master,expenses_master "
-				+ "WHERE expenses_master.expenses_type_id=expenses_type.expenses_type_id "
-				+ "AND expenses_master.debtor_id=debtor_master.id AND expenses_master.date "
-				+ "BETWEEN '2017-10-12' AND '2017-10-28' AND debtor_master.type='Team_2'";
-		System.out.println(gd.getData(getLoadingCharges));
-		
-		String getContractorDeposit="SELECT expenses_type.expenses_type_name,debtor_master.type,expenses_master.name,expenses_master.amount,expenses_master.payment_mode,expenses_master.date FROM expenses_type,debtor_master,expenses_master WHERE expenses_master.expenses_type_id=expenses_type.expenses_type_id AND expenses_master.debtor_id=debtor_master.id AND expenses_master.date BETWEEN '2017-10-12' AND '2017-10-28' AND debtor_master.type=(SELECT contractor_master.aliasname FROM contractor_master WHERE contractor_master.id=2)";
-		
-		System.out.println(gd.getData(getContractorDeposit));
-		
-		
+		RequireData rd=new RequireData();
+		demou d=new demou();
+		String x,cheque="",bankAlias="";
+		String d1="";
+		String d2="";
+		String d3="";
+		String d4="";
+		String d5="";
+		String d6="";
+		String d7="";
+		String d8="";
+			rd.commonExpEntry(d1, d1, d1, d1, d1, d1, d1, d1);
+			
 			}
 
+	public void abc(int a,int b,int c)
+	{
+		if(c==1)
+		{
+			
+		}
+		System.out.println(a+b+c);
+		
+	}
 }

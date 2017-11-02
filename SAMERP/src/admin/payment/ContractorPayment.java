@@ -15,12 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
+import utility.demou;
 
 
 
 public class ContractorPayment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out=response.getWriter();
+		response.setContentType("text/html");
+		
+		String d1=request.getParameter("contId");
+		out.println("hello"+d1);
+		RequireData rd=new RequireData();
+			rd.commonExpEntry("1", "1", "vijay", "5000", "CHEQUE","BOM1234", "123456", "2017-06-10");
+	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		PrintWriter out=response.getWriter();
@@ -172,7 +183,6 @@ public class ContractorPayment extends HttpServlet {
 					+ "debtor_master.type=(SELECT contractor_master.aliasname FROM contractor_master"
 					+ " WHERE contractor_master.id="+contId+")";
 			List loadingCharges=gd.getData(getLoadingCharges);
-			System.out.println(loadingCharges);
 			if(!loadingCharges.isEmpty())
 			{
 			out.println("1,"+loadingCharges.size());
@@ -189,7 +199,6 @@ public class ContractorPayment extends HttpServlet {
 						+ " sale_master,contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
 						+ "and sale_master.date BETWEEN '"+startDate+"' AND '"+lastDate+"' and sale_master.cp_status=0 and contractor_master.id="+contId;
 				List contCharges=gd.getData(getContractorDeposit);
-				System.out.println(contCharges);
 				if(!contCharges.isEmpty())
 				{
 					out.print("1,0,0,"+contCharges.size());
