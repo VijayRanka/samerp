@@ -50,7 +50,9 @@ public class AddContractor extends HttpServlet {
 					}
 					else
 					{
-
+						String query1="insert into `debtor_master`(`type`) values('"+replacealiasname+"')";
+						gd.executeCommand(query1);
+						
 						String query="INSERT INTO `contractor_master`(`name`,`contact_no`,`address`,`due_balance`,`aliasname`) VALUES('"+name+"','"+contact_no+"','"+address+"','"+due_balance+"','"+replacealiasname+"')";
 						int i=gd.executeCommand(query);
 						if(i>0)
@@ -141,7 +143,8 @@ public class AddContractor extends HttpServlet {
 				}
 				else
 				{
-					
+					String debtor_query="update `debtor_master` set `type`='"+update_aliasname+"'";
+					gd.executeCommand(debtor_query);
 					String query="update `contractor_master` set `name`='"+update_name+"',`contact_no`='"+update_contact_no+"',`address`='"+update_address+"',`due_balance`='"+update_duebalance+"',`aliasname`='"+update_aliasname+"' where `id`="+id+"";
 					System.out.println("update:"+query);
 					int i=gd.executeCommand(query);

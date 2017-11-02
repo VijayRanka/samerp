@@ -35,16 +35,17 @@ public class AddEmployee extends HttpServlet {
 		GenericDAO gd=new GenericDAO();
 		
 		//for inserting data into table--->employee_details
-		if(request.getParameter("insertemployee")!=null){
+		if(request.getParameter("submit")!=null){
 			
-			String employeename=request.getParameter("employeename");
-			String contactno=request.getParameter("contactno");
-			String employetype=request.getParameter("employetype");
-			String address=request.getParameter("address");
+			String employeename=request.getParameter("employee_name");
+			String contactno=request.getParameter("contact_no");
+			String work_with=request.getParameter("contractorVehicle_name");
+			String other=request.getParameter("other");
+			String aliasname=employeename+'_'+work_with;
 			int status=0;
 			
-			String insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno, emp_type, emp_address)"
-					+ " VALUES ('"+employeename+"','"+contactno+"','"+employetype+"','"+address+"');";
+			String insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_other,aliasname)"
+					+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+other+"','"+aliasname+"');";
 			
 			System.out.println("Q ===> "+insertQuery );
 			
@@ -53,9 +54,10 @@ public class AddEmployee extends HttpServlet {
 			{
 				System.out.println("employee successfully inserted");
 				request.setAttribute("status", "Employee Inserted Successfully");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
-				rd.forward(request, response);
+				
 			}
+			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
+			rd.forward(request, response);
 		}
 		
 		if(request.getParameter("deleteId")!=null)
@@ -66,10 +68,10 @@ public class AddEmployee extends HttpServlet {
 			if(delstatus!=0)
 			{
 				System.out.println("employee successfully deleted");
-				request.setAttribute("status", "Employee Deleted Successfully");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
-				rd.forward(request, response);
+				request.setAttribute("status", "Employee Deleted Successfully");				
 			}
+			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
+			rd.forward(request, response);
 			
 		}
 		
@@ -85,28 +87,31 @@ public class AddEmployee extends HttpServlet {
 			}
 		}
 		
-		if(request.getParameter("emp_submitbtn")!=null)
+		if(request.getParameter("insertemployee")!=null)
 		{
-			String employee_id = request.getParameter("employee_id");
+			String Emp_id=request.getParameter("Updateid");
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
-			String employee_type = request.getParameter("employee_type");
-			String employee_address = request.getParameter("employee_address");
+			String contractor_vehicleName = request.getParameter("contractorVehicle_name");
+			String other = request.getParameter("other");
 
-			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"',"
-					+ " emp_type='"+employee_type+"', emp_address='"+employee_address+"'  where emp_id='"+employee_id+"';";
+			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+contractor_vehicleName+"', emp_other='"+other+"'  where emp_id='"+Emp_id+"';";
 			
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			
-			if(updatestatus!=0){
+			System.out.println("update :"+updatestatus);
+			if(updatestatus!=0)
+			{
 				System.out.println("update Empolyee Successfully");
 				request.setAttribute("status", "Empolyee Updated Successfully");
-			}else{
+			}else
+			{
 				System.out.println("update Empolyee fail");
 				request.setAttribute("status", "Empolyee Update Fail");
 			}
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
 			rd.forward(request, response);
+			
 			
 		}
 	}
