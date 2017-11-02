@@ -83,6 +83,33 @@ public class GenericDAO
 		return list ;
 	}
 	
+	
+	public int deleteData(String query)
+	{
+		//for disable foreign key and delete relational data forcefully
+		
+		if (autoCommit) initConnection();
+		int count=0;
+		try
+		  {
+				Statement stmt=connection.createStatement();
+				boolean result=stmt.execute("set global foreign_key_checks = 0");
+				if(result)
+				{
+					count=stmt.executeUpdate(query);
+					stmt.execute("set global foreign_key_checks = 1");
+				}
+					
+		  }	catch (Exception e)
+		   {
+				System.out.println("[ERROR] executeCommand failed " + new java.util.Date()); 
+				e.printStackTrace() ; 
+		   }finally {  if( autoCommit ) endConnection();
+		}
+        return count;
+	}
+	
+	
 	public int executeCommand(String query)
 	{
 		if (autoCommit) initConnection();
