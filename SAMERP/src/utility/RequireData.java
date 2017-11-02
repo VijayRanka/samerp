@@ -10,6 +10,18 @@ public class RequireData
 {
 	GenericDAO gd=new GenericDAO();
 	
+	public boolean checkUser()
+	{
+		String check="SELECT * FROM `user_master` WHERE roll=1";
+		if(gd.getData(check).isEmpty())
+		{
+			return false;
+		}
+		else
+			return true;
+		
+	}
+	
 	//starts your methods here
 
 	
@@ -429,7 +441,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="select * from emplyoee_details";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_other,emplyoee_details.aliasname FROM emplyoee_details";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
@@ -443,7 +455,7 @@ public class RequireData
 		
 		public List getEmployeeRowData(String RowId)
 		{
-			String employeeRowDataQuery = "select emp_id, emp_name, emp_contactno, emp_type, emp_address from emplyoee_details where emp_id="+RowId+"; ";
+			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_other,emplyoee_details.aliasname FROM emplyoee_details where emp_id="+RowId+"; ";
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
 			return employeeDetailsData;
 		}
