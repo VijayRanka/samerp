@@ -1,3 +1,4 @@
+
 package utility;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,9 +13,24 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 import dao.General.GenericDAO;
 
 public class demou {
+	
+    public static int sum(int a, int... b) {
+    int sum = a;
+    for (int i : b) {
+        sum += i;
+    }
+	return sum;
+    }
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
+		
+		
+		System.out.println("Sum : "+sum(1,2,3,4,5,6));
+		
+		
+		
+		/*		// TODO Auto-generated method stub
 		String contId="2";
 		
 		int count1=1;
@@ -33,6 +49,7 @@ public class demou {
 		System.out.println(gd.getData(getContractorDeposit));
 		
 		
-			}
+			*/
 
+}
 }
