@@ -43,9 +43,17 @@ public class AddEmployee extends HttpServlet {
 			String other=request.getParameter("other");
 			String aliasname=employeename+'_'+work_with;
 			int status=0;
-			
-			String insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_other,aliasname)"
+			String insertQuery="";
+			if(other.equals(""))
+			{
+				 insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,aliasname)"
+						+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+aliasname+"');";
+				
+			}else
+			{
+			insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_other,aliasname)"
 					+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+other+"','"+aliasname+"');";
+			}
 			
 			System.out.println("Q ===> "+insertQuery );
 			
