@@ -9,7 +9,6 @@ public class DBConnection {
 
 
 	String driverName = "com.mysql.jdbc.Driver";
-	//String url = "jdbc:mysql://127.0.0.1:3306/";
 	String url = "jdbc:mysql://192.168.0.51:3306/";
 	String dbName = "samerp";
 	String userName = "root";
