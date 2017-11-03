@@ -709,11 +709,13 @@ public class RequireData
 					if(pcAmount==0)
 						return 0;
 					else if(pcAmount-amount<0)
-						return 1;
+						return -1;
 				}
 				
 				return 2;
 			}
+			
+			
 			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)
 			{
 				if(bankAliasName==null)

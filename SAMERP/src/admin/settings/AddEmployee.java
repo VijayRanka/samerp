@@ -44,18 +44,19 @@ public class AddEmployee extends HttpServlet {
 			String aliasname=employeename+'_'+work_with;
 			int status=0;
 			String insertQuery="";
-			if(other.equals(""))
-			{
-				 insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,aliasname)"
+
+			
+			if(other.equals("")){
+				insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith, aliasname)"
 						+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+aliasname+"');";
-				
-			}else
-			{
-			insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_other,aliasname)"
-					+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+other+"','"+aliasname+"');";
+			}
+			else{
+				insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_other,aliasname)"
+						+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+other+"','"+aliasname+"');";
 			}
 			
-			System.out.println("Q ===> "+insertQuery );
+			
+			System.out.println("Q ===> "+insertQuery);
 			
 			status=gd.executeCommand(insertQuery);	
 			if(status!=0)

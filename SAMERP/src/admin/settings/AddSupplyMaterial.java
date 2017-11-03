@@ -61,7 +61,6 @@ public class AddSupplyMaterial extends HttpServlet {
     		
     		
 			String insertQuery="INSERT INTO `material_supply_master`(`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`supplier_alias`,`type`) VALUES ('"+supBussName+"','"+supplierName+"','"+supplierAddress+"','"+suppContact+"','"+openingBalance+"','"+alias+"', '"+type+"')";
-			System.out.println(insertQuery);
 			status=gd.executeCommand(insertQuery);	
 			if(status!=0)
 			{
