@@ -243,6 +243,7 @@ public class RawSupplier extends HttpServlet {
 			}
 			
 			
+			
 			if(flag==1){
 				
 				String q = "SELECT `total_remaining` FROM `total_supplier_payment_master` WHERE id=(SELECT MAX(id) from total_supplier_payment_master WHERE supplier_id="+supid+")";

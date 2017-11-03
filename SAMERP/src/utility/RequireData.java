@@ -10,6 +10,18 @@ public class RequireData
 {
 	GenericDAO gd=new GenericDAO();
 	
+	public boolean checkUser()
+	{
+		String check="SELECT * FROM `user_master` WHERE roll=1";
+		if(gd.getData(check).isEmpty())
+		{
+			return false;
+		}
+		else
+			return true;
+		
+	}
+	
 	//starts your methods here
 
 	
@@ -429,7 +441,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="select * from emplyoee_details";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_other,emplyoee_details.aliasname FROM emplyoee_details";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
@@ -443,7 +455,7 @@ public class RequireData
 		
 		public List getEmployeeRowData(String RowId)
 		{
-			String employeeRowDataQuery = "select emp_id, emp_name, emp_contactno, emp_type, emp_address from emplyoee_details where emp_id="+RowId+"; ";
+			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_other,emplyoee_details.aliasname FROM emplyoee_details where emp_id="+RowId+"; ";
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
 			return employeeDetailsData;
 		}
@@ -684,5 +696,38 @@ public class RequireData
 	
 	
 		//--vijay end
+			
+			//--common methods start
+			
+			public int checkPCStatus(int amount)
+			{
+				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
+				
+				if(!gd.getData(statusString).isEmpty())
+				{
+					int pcAmount=Integer.parseInt(gd.getData(statusString).get(0).toString());
+					if(pcAmount==0)
+						return 0;
+					else if(pcAmount-amount<0)
+						return 1;
+				}
+				
+				return 2;
+			}
+			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)
+			{
+				if(bankAliasName==null)
+					bankAliasName="";
+				if(chequeDetails==null)
+					chequeDetails="";
+				System.out.println(expTypeId+debtorId+name+amount+mode+bankAliasName+chequeDetails+date);
+				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
+						+ " `particular`, `other_details`, `date`) VALUES "
+						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"','"+bankAliasName+"','"+chequeDetails+"','"+date+"')";
+				int x=gd.executeCommand(insertQuery);
+			}
+			
+			
+			//-- common methods end
 	
 }
