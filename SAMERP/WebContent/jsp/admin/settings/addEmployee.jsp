@@ -159,7 +159,7 @@ to {
 									<div class="controls">
 										<input type="text" name="contact_no" class="span5"
 											placeholder="Contact Number"
-											onkeypress="return isNumber(event)" maxlength="10" required />
+											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
 
@@ -249,9 +249,18 @@ to {
 						<tr>
 							<td id="<%=empid%>"><%=count %></td>
 							<td ><%=itr.next()%></td>
+							<td ><%=itr.next() %></td>							
 							<td ><%=itr.next() %></td>
-							<td ><%=itr.next() %></td>
-							<td ><%=itr.next()%></td>
+							
+							<% Object other= itr.next(); 
+										if(other==null){
+										%>
+											<td>-</td>
+										<%}else{ %>
+											<td><%=other %></td>
+										<%} %>
+							
+							
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
 										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)">Update</a>
@@ -312,7 +321,7 @@ to {
 										With:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_name" id="contractorVehicle" class="span3">
+										<select name="contractorVehicle_name" id="contractorVehicle" class="span3" readonly>
 
 											<%
 												List detail = rq.getContractorVehicle();
@@ -404,7 +413,7 @@ function searchEmpolyee(id) {
 			document.getElementById("contactno").value = demoStr[2];
 			document.getElementById("contractorVehicle").value = demoStr[3];
 			document.getElementById("other").value = demoStr[4];
-
+	
 			var dd = document.getElementById('contractorVehicle');
 			
 			for (var i = 0; i < dd.options.length; i++) {

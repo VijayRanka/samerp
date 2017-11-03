@@ -44,6 +44,7 @@ public class AddEmployee extends HttpServlet {
 			String aliasname=employeename+'_'+work_with;
 			int status=0;
 			String insertQuery="";
+
 			
 			if(other.equals("")){
 				insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith, aliasname)"

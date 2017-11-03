@@ -141,6 +141,8 @@ display: none;}
            <span class="badge badge-inverse pull-right" id="badgeClass" onclick="ableAll(this.id)" style="margin-right: 5px;margin-top: 10px; cursor: pointer;">
            Diesel Expense
             </span>
+             <span class="badge badge-inverse pull-right" href="#bankcashid" data-toggle="modal"  style="margin-right: 5px;margin-top: 10px; cursor: pointer;background-color: green;">
+           Cash Deposite to Bank</span>
         </div>
         <div class="widget-content nopadding">
           <form action="/SAMERP/Expenses.do" method="post" class="form-horizontal">
@@ -474,6 +476,80 @@ display: none;}
    </form>
   </div>
 </div>
+
+<div id="bankcashid" class="modal hide fade" role="dialog"
+		style="width: 55%; margin-left: -28%;">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Cash Deposite to Bank </h4>
+				</div>			
+
+					<form action='/SAMERP/Expenses.do' name="form2" method="Post"
+						class="form-horizontal">
+						<div class="modal-body">
+						<div class="control-group">
+									<label class="control-label" style="margin-bottom: 14px;">Bank Name:</label>
+
+									<div class="controls" style="width: 400px;margin-left: 171px;">
+										<select name="bank_name" class="span4" >
+
+											<%
+												List details = rd.getBankAliasList();
+												if (details != null) {
+													Iterator itr = details.iterator();
+													while (itr.hasNext()) {
+														String id = itr.next().toString();
+														String alias_name = itr.next().toString();
+											%>
+											<option value="<%=id%>"><%=alias_name%></option>
+											<%
+												}
+											%>
+										</select>
+									</div>
+									<%
+										}
+									%>
+								</div>
+						<div class="control-group">
+							<label class="control-label">Amount:</label>
+							<div class="controls">
+								<div class="input-append">
+									<input type="text" name="amount" id="amountid" class="span4"
+										placeholder="Amount" 
+										onkeyup="this.value=this.value.toUpperCase()" required />
+								</div>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label">Date :</label>
+							<div class="controls">
+								<%
+									SysDate date = new SysDate();
+									String[] demo = date.todayDate().split("-");
+								%>
+								<input name="date" type="date"
+									value="<%=demo[2] + "-" + demo[1] + "-" + demo[0]%>" class="span4">
+							</div>
+						</div>
+
+					</div>
+						<div class="modal-footer" style="padding-left: 450px">
+							<button type="submit" name="Bank_Deposite" class="btn btn-success">Update</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+						
+					</form>
+				</div>
+
+			</div>
+
+		</div>
 
 <script>
 
