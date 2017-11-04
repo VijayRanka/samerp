@@ -178,7 +178,7 @@ to {
 														String id = itr.next().toString();
 														String alias_name = itr.next().toString();
 											%>
-											<option value="<%=alias_name%>"><%=alias_name%></option>
+											<option value="<%=id%>"><%=alias_name%></option>
 											<%
 												}
 											%>
@@ -227,7 +227,7 @@ to {
 								<th>Sr.No.</th>
 								<th>Employee Name</th>
 								<th>Contact No</th>
-								<th>Work With</th>
+								<th>Debtor_Id</th>
 								<th>Other</th>
 								<th>AliasName</th>
 								<th>Actions</th>
@@ -315,23 +315,23 @@ to {
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
-
-								<div class="control-group">
+									
+									<div class="control-group">
 									<label class="control-label"><span style="color: red;">*</span>Work
 										With:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_name" id="contractorVehicle" class="span3" readonly>
+										<select name="contractorVehicle_alias" id="contractor_vehicle"class="span3">
 
 											<%
 												List detail = rq.getContractorVehicle();
 												if (details != null) {
 													Iterator itr = detail.iterator();
 													while (itr.hasNext()) {
-														String id1= itr.next().toString();
+														String id1 = itr.next().toString();
 														String alias_name = itr.next().toString();
 											%>
-											<option value="<%=alias_name%>"><%=alias_name%></option>
+											<option value="<%=id1%>"><%=alias_name%></option>
 											<%
 												}
 											%>
@@ -341,7 +341,7 @@ to {
 										}
 									%>
 								</div>
-
+								
 								<div class="control-group">
 									<label class="control-label">Other: </label>
 									<div class="controls">
@@ -411,22 +411,10 @@ function searchEmpolyee(id) {
 			document.getElementById("employeename").value = demoStr[1];
 			//alert(demoStr[1]);
 			document.getElementById("contactno").value = demoStr[2];
-			document.getElementById("contractorVehicle").value = demoStr[3];
+			document.getElementById("contractor_vehicle").value = demoStr[3];
 			document.getElementById("other").value = demoStr[4];
 	
-			var dd = document.getElementById('contractorVehicle');
-			
-			for (var i = 0; i < dd.options.length; i++) {
-			    if (dd.options[i].text === demoStr[3]) {
-			        dd.selectedIndex = i;
-			        //alert(demoStr[4]);
-			        getSetSelect('s2id_contractorVehicle', demoStr[3]);
-			        break;
-			    }
-			}
-			
-			
-			
+					
 			
 			}
 		};

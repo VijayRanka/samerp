@@ -7,15 +7,9 @@ import dao.General.GenericDAO;
 
 public class demou {
 	
-    public static int sum(int a, int... b) {
-    int sum = a;
-    for (int i : b) {
-        sum += i;
-    }
-	return sum;
-    }
 
 	public static void main(String[] args) {
+		
 
 		GenericDAO gd=new GenericDAO();
 		String startDate="2017-10-29";
