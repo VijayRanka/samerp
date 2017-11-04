@@ -39,20 +39,23 @@ public class AddEmployee extends HttpServlet {
 			
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
-			String work_with=request.getParameter("contractorVehicle_name");
+			String Debtor_Id=request.getParameter("contractorVehicle_name");
+			RequireData rq=new RequireData();
+			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
+			
 			String other=request.getParameter("other");
-			String aliasname=employeename+'_'+work_with;
+			String aliasname="EMP_"+employeename+'_'+WorkWith;
 			int status=0;
 			String insertQuery="";
 
 			
 			if(other.equals("")){
 				insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith, aliasname)"
-						+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+aliasname+"');";
+						+ " VALUES ('"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+aliasname+"');";
 			}
 			else{
 				insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_other,aliasname)"
-						+ " VALUES ('"+employeename+"','"+contactno+"','"+work_with+"','"+other+"','"+aliasname+"');";
+						+ " VALUES ('"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+other+"','"+aliasname+"');";
 			}
 			
 			
@@ -101,10 +104,10 @@ public class AddEmployee extends HttpServlet {
 			String Emp_id=request.getParameter("Updateid");
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
-			String contractor_vehicleName = request.getParameter("contractorVehicle_name");
+			String work_with= request.getParameter("contractorVehicle_alias");
 			String other = request.getParameter("other");
 
-			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+contractor_vehicleName+"', emp_other='"+other+"'  where emp_id='"+Emp_id+"';";
+			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_other='"+other+"'  where emp_id='"+Emp_id+"';";
 			
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			

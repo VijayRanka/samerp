@@ -70,7 +70,7 @@
     <servlet-name>SaleSupply</servlet-name>
     <url-pattern>/SaleSupply</url-pattern>
   </servlet-mapping>
-   <servlet>
+  <servlet>
     <servlet-name>Sales</servlet-name>
     <servlet-class>admin.sales.Sales</servlet-class>
   </servlet>
@@ -78,7 +78,7 @@
     <servlet-name>Sales</servlet-name>
     <url-pattern>/Sales</url-pattern>
   </servlet-mapping>
-   <servlet>
+  <servlet>
     <servlet-name>ProductPurchase</servlet-name>
     <servlet-class>admin.productPurchase.ProductPurchase</servlet-class>
   </servlet>
@@ -132,7 +132,7 @@
     <servlet-name>PurchaseRawMaterial</servlet-name>
     <servlet-class>admin.manufacture.PurchaseRawMaterial</servlet-class>
   </servlet>
-<servlet-mapping>
+  <servlet-mapping>
     <servlet-name>PurchaseRawMaterial</servlet-name>
     <url-pattern>/PurchaseRawMaterial</url-pattern>
   </servlet-mapping>
@@ -152,14 +152,14 @@
     <servlet-name>AddRates</servlet-name>
     <url-pattern>/AddRates</url-pattern>
   </servlet-mapping>
-   <servlet>
+  <servlet>
     <servlet-name>SalePayment</servlet-name>
     <servlet-class>admin.sales.SalePayment</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>SalePayment</servlet-name>
     <url-pattern>/SalePayment</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
   <servlet>
     <servlet-name>RawSupplier</servlet-name>
     <servlet-class>admin.payment.RawSupplier</servlet-class>
@@ -176,7 +176,6 @@
     <servlet-name>productSupplierPayment</servlet-name>
     <url-pattern>/productSupplierPayment</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>ContractorPayment</servlet-name>
     <servlet-class>admin.payment.ContractorPayment</servlet-class>
@@ -184,6 +183,5 @@
   <servlet-mapping>
     <servlet-name>ContractorPayment</servlet-name>
     <url-pattern>/ContractorPayment</url-pattern>
-  </servlet-mapping>  
-  
+  </servlet-mapping>
 </web-app>
