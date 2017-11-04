@@ -56,9 +56,8 @@ public class RequireData
 			
 			public List getVehicleRowData(String RowId)
 			{
-				String vehicleRowDataQuery = "select vehicle_id, vehicle_type, vehicle_number from vehicle_details where vehicle_id="+RowId+"; ";
+				String vehicleRowDataQuery = "select vehicle_id, vehicle_type, vehicle_number, vehicle_aliasname from vehicle_details where vehicle_id="+RowId+"; ";
 				List vehicleDetailsData = gd.getData(vehicleRowDataQuery);
-				System.out.println(vehicleDetailsData);
 				return vehicleDetailsData;
 			}
 			
