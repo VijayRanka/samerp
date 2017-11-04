@@ -21,16 +21,6 @@ import utility.demou;
 
 public class ContractorPayment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out=response.getWriter();
-		response.setContentType("text/html");
-		
-		String d1=request.getParameter("contId");
-		out.println("hello"+d1);
-		RequireData rd=new RequireData();
-			rd.commonExpEntry("1", "1", "vijay", "5000", "CHEQUE","BOM1234", "123456", "2017-06-10");
-	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
@@ -112,23 +102,22 @@ public class ContractorPayment extends HttpServlet {
 						+ "product_master.id=daily_stock_details.product_id and date BETWEEN '"+dateFromTo.split(",")[0]+"' and '"+dateFromTo.split(",")[1]+"' "
 						+ "AND product_master.contractor_id=contractor_master.id AND contractor_master.id="+contId+" )";
 				int xx=gd.executeCommand(updateDailyStock);
-				if(xx>0)
+				if(xx!=0)
 				{
 					String updateExp="UPDATE expenses_master SET expenses_master.cp_status=1 WHERE expenses_master.exp_id="
 							+ "(SELECT expenses_master.exp_id from debtor_master,contractor_master,expenses_type "
 							+ "WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id and debtor_master.id"
 							+ "=expenses_master.debtor_id and debtor_master.type=contractor_master.aliasname AND "
-							+ "expenses_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' AND cp_status=0 AND "
+							+ "expenses_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' AND "
 							+ "expenses_type.expenses_type_name='DEPOSIT' AND contractor_master.id="+contId+")";
-					int updDS=gd.executeCommand(updateDailyStock);
+					System.out.println(updateExp);
+					gd.executeCommand(updateDailyStock);
 			
 					String updateSaleMaster="UPDATE sale_master SET sale_master.cp_status=1 WHERE sale_master.id="
 							+ "(SELECT sale_master.id FROM contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
 							+ "and sale_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' and contractor_master.id="+contId+")";
 					
-					/*String expEntry="";
-					gd.executeCommand(expEntry);*/
-					int updSM=gd.executeCommand(updateSaleMaster);
+					gd.executeCommand(updateSaleMaster);
 					
 					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
 					rd.forward(request, response);
@@ -183,25 +172,24 @@ public class ContractorPayment extends HttpServlet {
 					+ "debtor_master.type=(SELECT contractor_master.aliasname FROM contractor_master"
 					+ " WHERE contractor_master.id="+contId+")";
 			List loadingCharges=gd.getData(getLoadingCharges);
+			
+			String getContractorDeposit="SELECT sale_master.loading_charges FROM"
+					+ " sale_master,contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
+					+ "and sale_master.date BETWEEN '"+startDate+"' AND '"+lastDate+"' and sale_master.cp_status=0 and contractor_master.id="+contId;
+			List contCharges=gd.getData(getContractorDeposit);
+			
 			if(!loadingCharges.isEmpty())
 			{
-			out.println("1,"+loadingCharges.size());
-			Iterator itr1=loadingCharges.iterator();
-			while(itr1.hasNext())
-			{
-				totalLoadingCharges+=Integer.parseInt(itr1.next().toString());
-			}
-			out.print(","+totalLoadingCharges);
-			}
-			else
-			{
-				String getContractorDeposit="SELECT sale_master.loading_charges FROM"
-						+ " sale_master,contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
-						+ "and sale_master.date BETWEEN '"+startDate+"' AND '"+lastDate+"' and sale_master.cp_status=0 and contractor_master.id="+contId;
-				List contCharges=gd.getData(getContractorDeposit);
+				out.print("1,"+loadingCharges.size());
+				Iterator itr1=loadingCharges.iterator();
+				while(itr1.hasNext())
+				{
+					totalLoadingCharges+=Integer.parseInt(itr1.next().toString());
+				}
+				out.print(","+totalLoadingCharges);
 				if(!contCharges.isEmpty())
 				{
-					out.print("1,0,0,"+contCharges.size());
+					out.print(","+contCharges.size());
 					Iterator itr2=contCharges.iterator();
 					while(itr2.hasNext())
 					{
@@ -210,127 +198,23 @@ public class ContractorPayment extends HttpServlet {
 					out.print(","+totalContCharges);
 				}
 				else
+					out.print("0,0");
+			}
+		else{
+			if(!contCharges.isEmpty())
+			{
+					out.print(","+contCharges.size());
+					Iterator itr2=contCharges.iterator();
+					while(itr2.hasNext())
+					{
+						totalContCharges+=Integer.parseInt(itr2.next().toString());
+					}
+					out.print(","+totalContCharges);
+			}
+				else
 					out.print("0,");
-			}
-			
-			
+		    }
 		}
-		
-		
-		
-		/*if(request.getParameter("pay")!=null)
-		{
-
-			RequireData rq=new RequireData();
-			List list=rq.getContractorId();
-			String id=list.get(0).toString();
-			
-			System.out.println("id is:"+id);
-			
-			String dd=request.getParameter("to_date");
-			System.out.println("to_date:"+dd);	
-			
-			String from_date=request.getParameter("to_date");
-			System.out.println("form_date:"+from_date);
-			
-			String total_bill_amount=request.getParameter("total");
-			String loading=request.getParameter("loading_charges");
-			String deposit=request.getParameter("contractor_deposite");
-			
-			String count="SELECT COUNT(id) FROM product_master WHERE contractor_id="+id+"";
-			String product_count=gd.getData(count).toString();
-			
-			
-			String insertdata="insert into contractor_payment_details(contractor_id,to_date,from_date,total_bill_amt,loading_charges,deposit) values('"+id+"','"+dd+"','"+from_date+"','"+total_bill_amount+"','"+loading+"','"+deposit+"')";
-			System.out.println("insertData is :"+insertdata);
-			int i=gd.executeCommand(insertdata);
-			if(i>0)
-			{
-				System.out.println("inserted Successfully");
-				request.setAttribute("status", "Inserted Successfully");
-				
-			}
-			else
-			{
-				System.out.println("Try Again");
-				request.setAttribute("status", "Try Again");
-			}
-			request.setAttribute("pay", "3");
-			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp");
-			rd.forward(request, response);
-			
-		}
-		
-		if(request.getParameter("payment")!=null)
-		{
-			String current_date=request.getParameter("current_date");
-			String paidamout=request.getParameter("paidAmt");
-			String payMode=request.getParameter("payMode");
-			String chequeNo = request.getParameter("chequeNo");
-			String bankInfo = request.getParameter("bankInfo");
-
-		
-				if(payMode.equals("Cash"))
-				{
-					String insertCashDetails="insert into contractor_payment_master(date,paid_amt,mode) values('"+current_date+"','"+paidamout+"','"+payMode+"')";
-					
-					System.out.println("inserted :"+insertCashDetails);
-					
-					int i=gd.executeCommand(insertCashDetails);
-					if(i>0)
-					{
-						System.out.println("inserted Successfully");
-						request.setAttribute("status", "Inserted Successfully");
-					}
-					else
-					{
-						System.out.println("Try Again");
-						
-					}
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp");
-					rd.forward(request, response);
-				}
-				else if(payMode.equals("Cheque"))
-				{
-					String insertChequeDetails="insert into contractor_payment_master(date,paid_amt,mode,cheque_no,particular) values('"+current_date+"','"+paidamout+"','"+payMode+"','"+chequeNo+"','"+bankInfo+"')";
-					System.out.println("insert :"+insertChequeDetails);
-					int i=gd.executeCommand(insertChequeDetails);
-					if(i>0)
-					{
-						System.out.println("inserted Successfully");
-						request.setAttribute("status", "Inserted Successfully");
-					}
-					else
-					{
-						System.out.println("Try Again");
-						
-					}
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp");
-					rd.forward(request, response);
-				}
-				else if(payMode.equals("Transfer"))
-				{
-					String transfer="insert into contractor_payment_master(date,paid_amt,mode,particular) values('"+current_date+"','"+paidamout+"','"+payMode+"','"+bankInfo+"'";
-					
-					System.out.println("insert :"+transfer);
-					
-					int i=gd.executeCommand(transfer);
-					if(i>0)
-					{
-						System.out.println("inserted Successfully");
-						request.setAttribute("status", "Inserted Successfully");
-					}
-					else
-					{
-						System.out.println("Try Again");
-						
-					}
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp");
-					rd.forward(request, response);
-				}
-			
-			
-		}*/
 	}
 
 }

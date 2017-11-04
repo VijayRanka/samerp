@@ -151,7 +151,7 @@ to {
 				RequireData rq = new RequireData();
 			%>
 			<div class="row-fluid">
-				<div class="span15">
+				<div class="span12">
 					<div class="widget-box">
 						<div class="widget-title">
 							<span class="icon"> <i class="icon-align-justify"></i>
@@ -330,6 +330,34 @@ to {
 					
 				</div>
 			</div>
+			<%if(request.getParameter("ppid")!=null){ %>
+			<div class="row-fluid">
+				<div class="span12">
+				<div class="widget-box">
+							<div class="widget-title">
+								<span class="icon"><i class="icon-th"></i></span>
+								<h5>Details</h5>
+							</div>
+							<div class="widget-content nopadding">
+								<table class="table table-bordered data-table">
+									<thead>
+										<tr>
+											<th>Date</th>
+											<th>Particular</th>
+											<th>Credit</th>
+											<th>Debit</th>
+											<th>Balance</th>
+										</tr>
+									</thead>
+									<tbody>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+				</div>
+			</div>
+			<%} %>
 		</div>
 </div>
 <%if(request.getParameter("ppid")!=null){ %>
@@ -697,6 +725,7 @@ to {
 							}
 					    var x=document.getElementById("product_pymt").value=totalProdCharge.innerHTML.trim();
 					    var xx=document.getElementById("querying_pymt").value=totalQueryCharge.innerHTML.trim();
+					    
 					    
 					    
 					    
