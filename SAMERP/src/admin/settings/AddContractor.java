@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
+import utility.SysDate;
 
 public class AddContractor extends HttpServlet {
        
@@ -50,8 +51,14 @@ public class AddContractor extends HttpServlet {
 					}
 					else
 					{
+						
+					
+						//debtor Master Insert
+						
 						String query1="insert into `debtor_master`(`type`) values('"+replacealiasname+"')";
 						gd.executeCommand(query1);
+						
+						//contractor_master
 						
 						String query="INSERT INTO `contractor_master`(`name`,`contact_no`,`address`,`due_balance`,`aliasname`) VALUES('"+name+"','"+contact_no+"','"+address+"','"+due_balance+"','"+replacealiasname+"')";
 						int i=gd.executeCommand(query);

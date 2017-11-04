@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 public class Sales extends HttpServlet {
 
@@ -25,6 +26,7 @@ public class Sales extends HttpServlet {
 
 		PrintWriter out = response.getWriter();
 		GenericDAO gd = new GenericDAO();
+		RequireData rd11=new RequireData();
 		
 		String searchVehicle = request.getParameter("searchVehicle");		
 		
@@ -78,26 +80,39 @@ public class Sales extends HttpServlet {
 				dieselInLiter="0";
 			}
 			
+			if(rd11.checkPCStatus(Integer.parseInt(vehicleDeposit))==1){				
+				out.println("if");
+			}
+			else{				
+				out.println("else");
+			}
 			
-			Object vehicle_id = null;
+/*			Object vehicle_id = null;
 			String q="SELECT vehicle_details.vehicle_id FROM vehicle_details WHERE vehicle_number='"+vehicleNo+"'";
 			List vehicle_id_temp=gd.getData(q);
 			
 			Iterator itr=vehicle_id_temp.iterator();
 			while (itr.hasNext()) {
 				vehicle_id=itr.next();
-				System.out.println(vehicle_id);
 			}
 			
 			String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type="
 					+ "(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE "
 					+ "vehicle_details.vehicle_number='"+vehicleNo+"')";
 			
-			String debtorId=gd.getData(getDebtorId).get(0).toString();
-			
-			String insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
-					+ " `vehicle_details`, `debtor_id`,`vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
-							+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+debtorId+","+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+			List debtorId=gd.getData(getDebtorId);
+			String insertQuery=null;
+			if(!debtorId.isEmpty()){
+				System.out.println(debtorId.get(0));
+				insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
+						+ " `debtor_id`,`vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
+								+ "'"+date+"','"+chalan_no+"',"+loading_charges+","+debtorId.get(0)+","+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+			}
+			else{
+				insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
+						+ " `vehicle_details`, `vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
+								+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+			}
 			
 			gd.executeCommand(insertQuery);
 			String max_id="select max(id) from sale_master";
@@ -107,13 +122,12 @@ public class Sales extends HttpServlet {
 			if(vehicle_id!=null)
 			{
 
+				System.out.println("hi");
 				if(!debtorId.isEmpty())
 				{
 				
-					System.out.println("sa");
-					System.out.println("VID : "+vehicle_id);				
 					String insertExp_master="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-							+ " `other_details`) VALUES (1,"+debtorId+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
+							+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
 					System.out.println(insertExp_master);
 			
 					gd.executeCommand(insertExp_master);
@@ -158,10 +172,13 @@ public class Sales extends HttpServlet {
 				gd.executeCommand(insertProduct);				
 				count--;
 			}	
-			
+
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
-			rd.forward(request, response);
+			rd.forward(request, response);*/
 		}
+		
+		
+		
 		
 		if(request.getParameter("deleteId")!=null){
 			

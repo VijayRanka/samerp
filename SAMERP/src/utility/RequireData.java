@@ -296,6 +296,14 @@ public class RequireData
 	//--omkar end
 	
 	// sandeep start
+	
+	public List getType(String debtor_id)
+	{
+		String query="SELECT debtor_master.type FROM debtor_master where debtor_master.id='"+debtor_id+"'";
+		List list=gd.getData(query);
+		return list;
+		
+	}
 
 	public List getBankAliasList()
 		{
@@ -306,7 +314,7 @@ public class RequireData
 		
 		public List getContractorVehicle()
 		{
-			String query="SELECT contractor_master.id AS cid, contractor_master.aliasname AS calias FROM contractor_master UNION ALL SELECT vehicle_details.vehicle_id AS cid, vehicle_details.vehicle_aliasname AS calias FROM vehicle_details";
+			String query="SELECT debtor_master.id,debtor_master.type FROM debtor_master,contractor_master,vehicle_details WHERE contractor_master.aliasname=debtor_master.type OR vehicle_details.vehicle_aliasname=debtor_master.type";
 			List list=gd.getData(query);
 			System.out.println("list is :"+list);
 			return list;
@@ -440,7 +448,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_other,emplyoee_details.aliasname FROM emplyoee_details";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_other,emplyoee_details.aliasname FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
@@ -713,16 +721,21 @@ public class RequireData
 			{
 				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
 				
-				if(!gd.getData(statusString).isEmpty())
-				{
-					int pcAmount=Integer.parseInt(gd.getData(statusString).get(0).toString());
-					if(pcAmount==0)
-						return 0;
-					else if(pcAmount-amount<0)
-						return -1;
-				}
+				String a=gd.getData(statusString).get(0).toString();
 				
-				return 2;
+				if(!a.isEmpty())
+				{
+					int pcAmount=Integer.parseInt(a.toString());
+					if(pcAmount==0)
+						return 0;  //petty cash balance is 0
+					else if(pcAmount-amount<0)
+						return -1;	//
+					else
+						return 1;  //
+				}
+				else{
+					return 2;
+				}
 			}
 			
 			
