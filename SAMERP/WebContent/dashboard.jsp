@@ -119,7 +119,7 @@
               <tbody id="expenseDataTable">
 	              <%RequireData rd=new RequireData();
 	                List getExpData=rd.getExpensesDetailsDash();
-	            	if(getExpData!=null){
+	            	if(!getExpData.isEmpty()){
 	            	Iterator getexpitr=getExpData.iterator();
 	            	int i=1;
 	            	while(getexpitr.hasNext()){ Object dataId=getexpitr.next();
