@@ -690,7 +690,18 @@ public class RequireData
 				
 				return combine;
 			}
-			
+			public List getContractorPayment(String contId)
+			{
+				List demoList;
+				String getList="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId;
+				if(!gd.getData(getList).isEmpty())
+				{
+					demoList=gd.getData(getList);
+					return demoList;
+				}
+				else
+				return null;
+			}
 			
 
 	

@@ -323,15 +323,16 @@ to {
 										 <button type="button" name="view&pay"
 									id="payButton" style="margin-left: 480px;" class="btn btn-success" disabled="disabled" onclick="getModal()">View&Pay</button>
 										 <%} }%>
-								
 							</form>
 						</div>
 					</div>
+					
 				</div>
 			</div>
 		</div>
 </div>
-		<%-- <div class="modal hide fade" id="ViewDetails" role="dialog"
+<%if(request.getParameter("ppid")!=null){ %>
+ <div class="modal hide fade" id="ViewDetails" role="dialog"
 			style="width: 55%; margin-left: -28%;">
 			<div class="modal-dialog">
 
@@ -372,7 +373,8 @@ to {
 				</div>
 
 			</div>
-		</div> --%>
+		</div>
+		<%} %>
 
 		<div id="myModal" class="modal hide fade" role="dialog"
 			style="width: 55%; margin-left: -28%;">

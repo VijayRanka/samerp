@@ -135,7 +135,23 @@ display: none;}
   <hr>
   <div class="row-fluid">
     <div class="span12">
-      <div class="widget-box">
+      
+    </div>
+</div>
+  <div class="row-fluid">
+  	<div class="span12">
+  	 <div class="widget-box">
+          <div class="widget-title">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#tab1">Expenses</a></li>
+              <li><a data-toggle="tab" href="#tab2">Hand Loan</a></li>
+              <li><a data-toggle="tab" href="#tab3">Peti-Cash</a></li>
+            </ul>
+          </div>
+          <div class="widget-content tab-content">
+            <div id="tab1" class="tab-pane active">
+              
+              <div class="widget-box">
         <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
           <h5>Expenses-Details</h5>
            <span class="badge badge-inverse pull-right" id="badgeClass" onclick="ableAll(this.id)" style="margin-right: 5px;margin-top: 10px; cursor: pointer;">
@@ -147,7 +163,8 @@ display: none;}
           <div class="control-group">
               <label class="control-label">Date :</label>
               <div class="controls">
-              <% SysDate sd=new SysDate();
+              <% RequireData rd=new RequireData(); 
+              SysDate sd=new SysDate();
               String[] sdDemo=sd.todayDate().split("-");
               %>
                 <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" class="span6">
@@ -183,7 +200,7 @@ display: none;}
               <label class="control-label">Debtors Type :</label>
               <div class="controls">
                 <select required class="span6" name="debtorType" id="debtorType">
-                 <%RequireData rd=new RequireData();
+                 <%
                   List debtorList=rd.getDebtorList();
                   if(!(debtorList.isEmpty())){
 	                  Iterator itr=debtorList.iterator();
@@ -244,11 +261,28 @@ display: none;}
           </form>
         </div>
       </div>
-    </div>
-</div>
-  <div class="row-fluid">
-  	<div class="span12">
-  		<div class="widget-box">
+              
+              
+            </div>
+            <div id="tab2" class="tab-pane">
+              <p> waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
+            </div>
+            <div id="tab3" class="tab-pane">
+              <p>full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
+            </div>
+          </div>
+        </div>
+         <div class="widget-box">
+          <div class="widget-title">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#expenseList">Expenses</a></li>
+              <li><a data-toggle="tab" href="#handLoadList">Hand-Loan</a></li>
+              <li><a data-toggle="tab" href="#petiCashList">Peti-Cash</a></li>
+            </ul>
+          </div>
+          <div class="widget-content tab-content">
+            <div id="expenseList" class="tab-pane active">
+              <div class="widget-box">
           <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
             <h5>Expenses :</h5>
           </div>
@@ -272,7 +306,9 @@ display: none;}
                 </tr>
               </thead>
               <tbody>
-	              <%List getExpData=rd.getExpensesDetails();
+	              <%
+	             
+	              List getExpData=rd.getExpensesDetails();
 	            	if(getExpData!=null){
 	            	Iterator getexpitr=getExpData.iterator();
 	            	int i=1;
@@ -311,6 +347,19 @@ display: none;}
             </table>
           </div>
         </div>
+            </div>
+            <div id="handLoadList" class="tab-pane">
+              <p> waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
+            </div>
+            <div id="petiCashList" class="tab-pane">
+              <p>full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
+            </div>
+          </div>
+        </div>
+        
+  		
+       
+        
   	</div>
   </div>
 </div>
