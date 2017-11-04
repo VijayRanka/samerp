@@ -87,7 +87,8 @@
 
 <!--sidebar-menu-->
 <jsp:include page="../common/left_navbar.jsp"></jsp:include>
-<!--sidebar-menu-->
+<!--sidebar-menu-->	
+
 	<div id="content">
 		<!--breadcrumbs-->
 		<div id="content-header">
@@ -118,7 +119,7 @@
 										<input type="text" name="name" class="span6"
 											placeholder="Name"
 											onkeyup="this.value=this.value.toUpperCase()"
-											pattern="[a-z A-Z 0-9]*" required />
+											pattern="[a-z A-Z ]*" required />
 									</div>
 								</div>
 
@@ -137,7 +138,7 @@
 										<textarea type="text" class="span6" name="address"
 											onkeyup="this.value=this.value.toUpperCase()"
 											placeholder="Address" pattern="[a-z A-Z 0-9]*"
-											maxlength="200" required></textarea>
+											 required></textarea>
 
 									</div>
 								</div>
@@ -147,7 +148,7 @@
 										<input type="number" name="due_balance" class="span6"
 											placeholder="Due Balance"
 											onkeyup="this.value=this.value.toUpperCase()"
-											pattern="[a-z A-Z]*" required />
+											pattern="[0-9]*" required />
 									</div>
 								</div>
 
@@ -157,7 +158,7 @@
 										<input type="text" name="alias_name" class="span6"
 											placeholder="Alias Name"
 											onkeyup="this.value=this.value.toUpperCase()"
-											pattern="[a-z A-Z 0-9]*" required />
+											pattern="[a-z A-Z _ 0-9]*" required />
 									</div>
 								</div>
 
@@ -286,7 +287,7 @@
 							<label class="control-label">Alias Name:</label>
 							<div class="controls">
 								<input type="text" id="updatealiasname" name="alias_name"
-									class="span4" placeholder="Alias Name" 
+									class="span4" placeholder="Alias Name" pattern="[a-z A-Z 0-9]*" readonly
 									required />
 							</div>
 						</div>

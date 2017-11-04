@@ -122,6 +122,7 @@ public class AddContractor extends HttpServlet {
 			String update_address=request.getParameter("address");
 			String update_duebalance=request.getParameter("due_balance");
 			String update_aliasname=request.getParameter("alias_name");
+			String up_aliasname=update_aliasname.replace(' ', '_');
 			boolean check=false;
 			
 			List cheackAliasName=null;
@@ -143,9 +144,9 @@ public class AddContractor extends HttpServlet {
 				}
 				else
 				{
-					String debtor_query="update `debtor_master` set `type`='"+update_aliasname+"'";
-					gd.executeCommand(debtor_query);
-					String query="update `contractor_master` set `name`='"+update_name+"',`contact_no`='"+update_contact_no+"',`address`='"+update_address+"',`due_balance`='"+update_duebalance+"',`aliasname`='"+update_aliasname+"' where `id`="+id+"";
+					/*String debtor_query="update `debtor_master` set `type`='"+up_aliasname+"'";
+					gd.executeCommand(debtor_query);*/
+					String query="update `contractor_master` set `name`='"+update_name+"',`contact_no`='"+update_contact_no+"',`address`='"+update_address+"',`due_balance`='"+update_duebalance+"',`aliasname`='"+up_aliasname+"' where `id`="+id+"";
 					System.out.println("update:"+query);
 					int i=gd.executeCommand(query);
 					

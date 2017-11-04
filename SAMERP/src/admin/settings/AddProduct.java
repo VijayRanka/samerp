@@ -38,7 +38,6 @@ public class AddProduct extends HttpServlet {
 			String gstper=request.getParameter("gst_per");
 			
 			String query="insert into product_master(`name`,`contractor_id`,`hsncode`,`gstper`) values('"+replacepname+"','"+contractor_id+"','"+hsn_code+"','"+gstper+"')";
-			System.out.println("query is:"+query);
 			int i=gd.executeCommand(query);
 			
 			if(i>0)
@@ -72,9 +71,7 @@ public class AddProduct extends HttpServlet {
 		if(request.getParameter("deleteId")!=null)
 		{
 			String id=request.getParameter("deleteId");
-			System.out.println(id);
 			String query1="DELETE FROM product_master WHERE id="+id+"";
-			System.out.println("Delete query :"+query1);
 			int i=gd.executeCommand(query1);
 			
 			if(i>0)
@@ -94,7 +91,6 @@ public class AddProduct extends HttpServlet {
 		if(request.getParameter("Updateid")!=null)
 		{
 			String RowId=request.getParameter("Updateid");
-			System.out.println("update id 1:"+RowId);
 			RequireData rd=new RequireData();
 			List demoList=rd.updateProductDetails(RowId);
 			Iterator itr=demoList.iterator();
@@ -108,8 +104,6 @@ public class AddProduct extends HttpServlet {
 		{
 			
 			String id=request.getParameter("Updateid");
-			System.out.println("id 2:"+id);			
-			 
 			
 			String update_cname=request.getParameter("contractor_name");
 			String aliasname=rq.getAliasName(update_cname);
@@ -122,7 +116,6 @@ public class AddProduct extends HttpServlet {
 			String update_gstper=request.getParameter("gst_per");
 						
 			String query="UPDATE contractor_master,product_master SET product_master.name='"+updatepname+"', product_master.hsncode='"+update_hsncode+"',product_master.gstper='"+update_gstper+"', contractor_master.aliasname='"+aliasname+"' WHERE product_master.contractor_id=contractor_master.id AND product_master.id="+id+"";
-			System.out.println("update:"+query);
 			int i=gd.executeCommand(query);
 			
 			if(i>0)
