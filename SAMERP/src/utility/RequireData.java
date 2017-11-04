@@ -722,16 +722,21 @@ public class RequireData
 			{
 				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
 				
-				if(!gd.getData(statusString).isEmpty())
-				{
-					int pcAmount=Integer.parseInt(gd.getData(statusString).get(0).toString());
-					if(pcAmount==0)
-						return 0;
-					else if(pcAmount-amount<0)
-						return -1;
-				}
+				String a=gd.getData(statusString).get(0).toString();
 				
-				return 2;
+				if(!a.isEmpty())
+				{
+					int pcAmount=Integer.parseInt(a.toString());
+					if(pcAmount==0)
+						return 0;  //petty cash balance is 0
+					else if(pcAmount-amount<0)
+						return -1;	//
+					else
+						return 1;  //
+				}
+				else{
+					return 2;
+				}
 			}
 			
 			
