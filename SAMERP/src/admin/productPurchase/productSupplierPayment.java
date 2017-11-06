@@ -61,6 +61,7 @@ public class productSupplierPayment extends HttpServlet {
 					
 					if(billUpdateppStatus==1){
 						request.setAttribute("status", "Bill Checked Successfully");
+						
 					}
 				}
 				
@@ -69,7 +70,7 @@ public class productSupplierPayment extends HttpServlet {
 				
 			}
 			
-			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp");
+			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supId);
 			rdd.forward(request, response);
 		}
 		
@@ -82,7 +83,7 @@ public class productSupplierPayment extends HttpServlet {
 			String payMode = request.getParameter("payMode");
 			String chequeNo = request.getParameter("chequeNo");
 			String bankInfo = request.getParameter("bankInfo");
-			int flag=0;
+			int flag=0, exit=0;
 			
 			if(payMode.equals("Cash")){
 				
@@ -97,23 +98,10 @@ public class productSupplierPayment extends HttpServlet {
 					List l = gd.getData(selectsup);
 					
 					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
+					
 				}
 			}
-			else  if(payMode.equals("Cheque")){
-				String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `cheque_no`, `description`)"
-						+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+chequeNo+"', '"+bankInfo+"')";
-				int insertPaymentStatus = gd.executeCommand(insertPayment);
-				
-				if(insertPaymentStatus==1){
-					flag=1;
-					
-					String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
-					List l = gd.getData(selectsup);
-					
-					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
-				}
-			}
-			else{
+			else if(payMode.equals("Transfer")){
 			
 				String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `description`)"
 						+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+bankInfo+"')";
@@ -130,7 +118,40 @@ public class productSupplierPayment extends HttpServlet {
 			}
 			
 			
-			if(flag==1){
+			if(payMode.equals("Cheque")){
+				String q1 = "SELECT `supplier_alias` FROM `material_supply_master` WHERE supplier_business_id="+supid;
+				List l1 = gd.getData(q1);
+				
+				int debtorId = rd.getDebtorId(l1.get(0).toString());
+				System.out.println("debid "+debtorId);
+				
+				int balStatus = rd.checkBankBalance(Integer.parseInt(paidAmt));
+				System.out.println("balStatus : "+balStatus);
+				
+				if(balStatus==1){
+					
+					String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `cheque_no`, `description`)"
+							+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+chequeNo+"', '"+bankInfo+"')";
+					int insertPaymentStatus = gd.executeCommand(insertPayment);
+					
+					if(insertPaymentStatus==1){
+						flag=1;
+						
+						String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
+						List l = gd.getData(selectsup);
+						
+						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
+					}
+					
+					rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode, String.valueOf(debtorId));		
+				}
+				else{
+					exit=1;
+					request.setAttribute("exit", exit);
+				}
+			}
+			
+			if(exit==0 && flag==1){
 				
 				String q = "SELECT `total_remaining` FROM `total_supplier_payment_master` WHERE id=(SELECT MAX(id) from total_supplier_payment_master WHERE supplier_id="+supid+")";
 				List l = gd.getData(q);
@@ -142,7 +163,8 @@ public class productSupplierPayment extends HttpServlet {
 				
 			}
 			
-			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp");
+			System.out.println("exit : "+exit);
+			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supid);
 			rdd.forward(request, response);
 		}
 		
