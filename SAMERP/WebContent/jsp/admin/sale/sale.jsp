@@ -1,4 +1,3 @@
-
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="utility.RequireData"%>
@@ -90,6 +89,15 @@ margin-top: 5px;
 <% if(request.getAttribute("status")!=null){ %>
 <div id="snackbar"><%=request.getAttribute("status")%></div>
 <%} %>
+
+<%
+	String error = "";
+
+	if (request.getAttribute("error") != null) {
+		error = request.getAttribute("error").toString();
+	}
+%>
+	<input type="hidden" name="error" id="error" value="<%=error%>" />
 
   <button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
 </div>
@@ -376,7 +384,16 @@ margin-top: 5px;
 								<td id="mytd<%=i%>" rowspan="<%=span%>"><%=itr2.next()%></td>
 								<td rowspan="<%=span%>"><%=itr2.next()%></td>
 								<td rowspan="<%=span%>"><%=itr2.next()%></td>
-								<td rowspan="<%=span%>"><%=itr2.next()%></td>
+								<%
+								String vehicleNo= itr2.next().toString();
+								
+								String debtorID= itr2.next().toString();
+								if(!debtorID.equals("0")){
+									vehicleNo=rd.getVehicleNumber(Integer.parseInt(debtorID));
+								}
+								
+								%>
+								<td rowspan="<%=span%>"><%=vehicleNo%></td>
 								<td rowspan="<%=span%>"><%=itr2.next()%></td>
 								
 								
@@ -492,6 +509,35 @@ margin-top: 5px;
 	</div>
 </div>
 <!-- ************************************* MODEL END ************************************* -->
+
+
+<!-- ************************************* MODEL START ************************************* -->
+<div class="modal fade" id="error-msg" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 style="color: red;" class="modal-title">Error</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" action="#" method="post" >
+					<div class="form-group">
+						<div class="widget-content nopadding">
+							<div class="control-group">
+
+								<h4>Add Balance in Petty Cash...</h4>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-primary"
+								id="submitbtn" data-dismiss="modal" value="OK" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ************************************* MODEL END ************************************* -->	
 
 <script src="/SAMERP/config/js/jquery.min.js"></script> 
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
@@ -732,6 +778,7 @@ function searchTableData() {
 function setFocusToTextBox() {
 	document.sales.clientid.focus();
 	document.getElementById("clientid").focus();
+	showModal();
 	myFunction();
 }
 //******************************** setFocusToTextBox Function END ********************************
@@ -775,6 +822,17 @@ function selectProduct(str)
 	}  
 }
 //*********************************** selectProduct Function END ************************************
+
+
+	function showModal(){
+	
+		var error = document.getElementById("error").value;
+		
+		if(error==1)
+		{
+			$('#error-msg').modal('show');
+		}
+	}
 
 </script>
 

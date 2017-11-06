@@ -5,7 +5,7 @@
 <%@page import="utility.SysDate"%>
 <html lang="en">
 <head>
-<title>JCB-POC Details</title>
+<title>Matrix Admin</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -18,7 +18,6 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
-<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
@@ -33,7 +32,7 @@
 	<!--Header-part-->
 	<div id="header">
 		<h1>
-			<a href="dashboard.jsp">Matrix Admin</a>
+			<a href="dashboard.html">Matrix Admin</a>
 		</h1>
 	</div>
 
@@ -44,7 +43,7 @@
 	</div>
 	<!--close-top-serch-->
 	<!--sidebar-menu-->
-	<jsp:include page="../common/left_navbar.jsp"></jsp:include>
+	<jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>
 	<!--sidebar-menu-->
 	<div id="content">
 		<div id="content-header">
@@ -95,9 +94,11 @@
 									</tr>
 									<tr>
 									<td style="text-align: right;">Customer Project : 
-										<select	name="cust_project" id="cust_project" class="span8" style="float: right;">
+									
+										<select	name="cust_project" id="cust_project" class="span6" style="float: right;">
 												<option></option>
 										</select>
+										<a href="#addProject" data-toggle="modal" class="btn btn-primary btn-mini" tabindex="-1" style="width: 35px; border: 2px black solid; font-size: 20px;">+</a>
 									</td>
 										<td style="text-align: right;">
 											Breaker Rate :
@@ -230,7 +231,7 @@
 										</td>
 									</tr>
 									<%
-										RequireData urd = new RequireData();
+										//RequireData urd = new RequireData();
 										List uVehicle = rd.getVehicleList();
 										Iterator uitr = Vehicle.iterator();
 									%>
@@ -433,7 +434,46 @@
 		</div>
 	</div>
 	<!-- ========================================Model End=========================================== -->
+	<!--***************************************************** Add Project *******************************************************-->
 	
+	<div id="addProject" class="modal hide fade" role="dialog"
+		style="width: 55%; margin-left: -28%;">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header" style="    height: 30px;">
+					<h4 class="modal-title">Add Customer Project</h4>
+				</div>
+				
+
+					<form action='/SAMERP/AddCustomer.do?path=jcbpoc' name="form2" method="Post"	class="form-horizontal">
+						<div class="modal-body">
+							<table id="display-textfeild" style="margin: 0 auto;">
+								<tr>
+									<td>
+										Project Name 1:
+										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" required>
+										<input type="hidden" name="custid_project" id="custid_project" >
+										<input type="hidden" name="count_project" id="count_project" value="1" >
+									</td>
+									<td><button type="button" onclick="insertDiv()">+</button></td>
+									<td><button type="button" onclick="deleteDiv()">-</button></td>
+								</tr>
+							</table>
+						</div>
+						<div class="modal-footer" style="padding-left: 450px">
+							<button type="submit" name="save" class="btn btn-success">Update</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+
+		</div>
+		
+	<!-- ============================================================	Add Project End =========================================-->
 	
 	
 	
@@ -503,6 +543,7 @@
 							var demoStr = this.responseText.split("~");
 							
 			 				document.getElementById("custid").value = demoStr[0];
+			 				document.getElementById("custid_project").value = demoStr[0];
 			 				document.getElementById("custname").value = demoStr[1];
 			 				document.getElementById("address").value = demoStr[2];
 			 				document.getElementById("contactno").value = demoStr[3];
@@ -718,10 +759,31 @@
 				}
 // 	======================================================	Update End=======================================================
 	
-</script>
+//==================================================== Add Project ======================================================
+	function insertDiv()
+{
+	var insertTable=document.getElementById("display-textfeild");
+	var Row=insertTable.rows;
+	var numrows=Row.length;
+	var row = insertTable.insertRow(numrows);
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = "Project Name "+ (numrows+1) +":<input type=\"text\" name=\"projectname"+ (numrows+1) +"\" id=\"project_name"+ (numrows+1) +"\" onkeyup=\"this.value=this.value.toUpperCase()\" required>";
+    document.getElementById('count_project').value=(numrows+1);
+}
 
-// ==============================================Include Bill==============================================================
-<jsp:include page="config/createBill.jsp"></jsp:include>
+function deleteDiv()
+{
+	var deleteRows=document.getElementById("display-textfeild");
+	var count=document.getElementById('count_project').value;
+	var Rows = deleteRows.rows;
+    var numRows = Rows.length;
+    if(numRows>1){
+    	deleteRows.deleteRow(numRows-1);
+    	document.getElementById('count_project').value=(count-1);
+    }
+}
+//================================================= End Project ==========================================================
+</script>
 
 
 

@@ -26,23 +26,33 @@ public class RequireData
 
 	
 	// himanshu start
-	public List getCustomerList() {
-		String Customer_query="SELECT `intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate` FROM `customer_master` ORDER BY `intcustid` DESC";
-		List CustomerList=gd.getData(Customer_query);
-		return CustomerList;
-	}
-	
-	public List getVehicleList() {
-		String Vehicle_query="SELECT `vehicle_id`,`vehicle_aliasname` FROM `vehicle_details`";
-		List VehicleList=gd.getData(Vehicle_query);
-		return VehicleList;
-	}
-	public List getJcbPocWorkDetail() {
-		String JcbPocWorkDetail_query="SELECT customer_master.`custname`,jcbpoc_master.`chalanno`,vehicle_details.vehicle_aliasname,jcbpoc_master.`data`,jcbpoc_master.bucket_hr,jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel,jcbpoc_master.intjcbpocid FROM `jcbpoc_master`,customer_master,vehicle_details WHERE jcbpoc_master.intcustid=customer_master.intcustid AND jcbpoc_master.intvehicleid=vehicle_details.vehicle_id ORDER BY jcbpoc_master.intjcbpocid DESC";
-		List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
-		return JcbPocWorkList;
-	}
-//--himanshu end
+				public List getCustomerList() {
+					String Customer_query="SELECT `intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate` FROM `customer_master` ORDER BY `intcustid` DESC";
+					List CustomerList=gd.getData(Customer_query);
+					return CustomerList;
+				}
+				
+				public List getVehicleList() {
+					String Vehicle_query="SELECT `vehicle_id`,`vehicle_aliasname` FROM `vehicle_details`";
+					List VehicleList=gd.getData(Vehicle_query);
+					return VehicleList;
+				}
+				public List getJcbPocWorkDetail() {
+					String JcbPocWorkDetail_query="SELECT customer_master.`custname`,jcbpoc_master.`chalanno`,vehicle_details.vehicle_aliasname,jcbpoc_master.`data`,jcbpoc_master.bucket_hr,jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel,jcbpoc_master.intjcbpocid FROM `jcbpoc_master`,customer_master,vehicle_details WHERE jcbpoc_master.intcustid=customer_master.intcustid AND jcbpoc_master.intvehicleid=vehicle_details.vehicle_id ORDER BY jcbpoc_master.intjcbpocid DESC";
+					List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
+					return JcbPocWorkList;
+				}
+				public List getCustomerListForPay() {
+					String Customer_query="SELECT customer_master.intcustid,customer_master.custname FROM customer_master,jcbpoc_master WHERE customer_master.intcustid=jcbpoc_master.intcustid AND jcbpoc_master.status=0 GROUP BY intcustid DESC";
+					List CustomerList=gd.getData(Customer_query);
+					return CustomerList;
+				}
+				public List getJcbPocBillDetail() {
+					String JcbPocBillDetail_query="SELECT jcbpoc_invoice.id,customer_master.intcustid,customer_master.custname,jcbpoc_invoice.date,jcbpoc_invoice.bill_amount FROM `jcbpoc_invoice`,`customer_master` WHERE `jcbpoc_invoice`.status=0 AND `customer_master`.intcustid=`jcbpoc_invoice`.cust_id ORDER BY jcbpoc_invoice.id DESC";
+					List JcbPocWorkList=gd.getData(JcbPocBillDetail_query);
+					return JcbPocWorkList;
+				}
+			//--himanshu end
 
 	
 	// mukesh start
@@ -490,7 +500,7 @@ public class RequireData
 		
 		public List getSalesDetails()
 		{
-			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,sale_master.vehicle_details,sale_master.vehicle_deposit FROM sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
 			List list=gd.getData(sale_query);
 			return list;		
 		}
@@ -554,6 +564,14 @@ public class RequireData
 			List list=gd.getData(query);
 			String aliasname=list.get(0).toString();
 			return aliasname;
+		}
+		
+		public String getVehicleNumber(int debtor_id)
+		{
+			String query="SELECT vehicle_number FROM vehicle_details WHERE vehicle_aliasname=(SELECT debtor_master.type FROM debtor_master WHERE id="+debtor_id+")";
+			List list=gd.getData(query);
+			String vehicleNumber=list.get(0).toString();
+			return vehicleNumber;
 		}
 	
 	//--sarang end
@@ -710,6 +728,10 @@ public class RequireData
 				return null;
 			}
 			
+			public List getContTransactions(String contId)
+			{
+				return null;
+			}
 
 	
 	
@@ -791,7 +813,7 @@ public class RequireData
 						return 1;  //
 				}
 				else{
-					return 2;
+					return -2;
 				}
 			}
 			

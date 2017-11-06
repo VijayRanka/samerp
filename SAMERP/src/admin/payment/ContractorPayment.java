@@ -52,18 +52,18 @@ public class ContractorPayment extends HttpServlet {
 			{
 				List getTotalBalance=gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId);
 				
-				int x=Integer.parseInt(getTotalBalance.get(getTotalBalance.size()-1).toString());
+				int previousAmount=Integer.parseInt(getTotalBalance.get(getTotalBalance.size()-1).toString());
 				
-				updatedAmount=x+Integer.parseInt(totalBillAmt)-Integer.parseInt(paidAmt);
+				updatedAmount=previousAmount + (Integer.parseInt(currentAmount)) - Integer.parseInt(paidAmt);
 				
 			}
 			else
-				updatedAmount=Integer.parseInt(totalBillAmt)-Integer.parseInt(paidAmt);
+				updatedAmount=Integer.parseInt(currentAmount)-Integer.parseInt(paidAmt);
 			
 			if(payMode.equals("Cash")){
 				String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
-						+ " `deposit`, `total_bill_amt`, `paid_amount`, `mode`,`total_balance`) VALUES "
-						+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+totalBillAmt+","+paidAmt+",'CASH',"+updatedAmount+")";
+						+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`,`total_balance`) VALUES "
+						+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CASH',"+updatedAmount+")";
 				int insertPaymentStatus = gd.executeCommand(insertPayment);
 				
 				if(insertPaymentStatus==1){
@@ -73,8 +73,8 @@ public class ContractorPayment extends HttpServlet {
 			}
 			else  if(payMode.equals("Cheque")){
 				String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
-						+ " `deposit`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
-						+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+totalBillAmt+","+paidAmt+",'CHEQUE','"+chequeNo+"','"+bankInfo+"',"+updatedAmount+")";
+						+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
+						+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CHEQUE','"+chequeNo+"','"+bankInfo+"',"+updatedAmount+")";
 				int insertPaymentStatus = gd.executeCommand(insertPayment);
 				
 				if(insertPaymentStatus==1){
@@ -85,8 +85,8 @@ public class ContractorPayment extends HttpServlet {
 			else{
 				
 				String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
-						+ " `deposit`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
-						+ "("+contId+","+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+totalBillAmt+","+paidAmt+",'TRANSFER',"+bankInfo+"',"+updatedAmount+")";
+						+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
+						+ "("+contId+","+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'TRANSFER',"+bankInfo+"',"+updatedAmount+")";
 				int insertPaymentStatus = gd.executeCommand(insertPayment);
 				
 				if(insertPaymentStatus==1){
@@ -110,8 +110,9 @@ public class ContractorPayment extends HttpServlet {
 							+ "=expenses_master.debtor_id and debtor_master.type=contractor_master.aliasname AND "
 							+ "expenses_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' AND "
 							+ "expenses_type.expenses_type_name='DEPOSIT' AND contractor_master.id="+contId+")";
-					System.out.println(updateExp);
-					gd.executeCommand(updateDailyStock);
+					
+					int xxx=gd.executeCommand(updateExp);
+					System.out.println(xxx);
 			
 					String updateSaleMaster="UPDATE sale_master SET sale_master.cp_status=1 WHERE sale_master.id="
 							+ "(SELECT sale_master.id FROM contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
