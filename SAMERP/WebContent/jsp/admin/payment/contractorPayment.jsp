@@ -435,7 +435,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label">Total Product Payment:</label>
+								<label class="control-label">(+)Total Product Payment:</label>
 								<div class="controls">
 
 									<div class="input-append">
@@ -447,7 +447,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label">Total Querying Payment:</label>
+								<label class="control-label">(+)Total Querying Payment:</label>
 								<div class="controls">
 									<input type="text" name="querying_paymt" id="querying_pymt"
 										class="span4" placeholder="Total Querying Payment " readonly="readonly" />
@@ -455,7 +455,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label"> Total Loading Charges:</label>
+								<label class="control-label"> (-)Total Loading Charges:</label>
 								<div class="controls">
 
 									<div class="input-prepend"> 
@@ -465,7 +465,7 @@ to {
 									</div>
 								</div>
 							</div><div class="control-group">
-								<label class="control-label">Contractor Deposit:</label>
+								<label class="control-label">(-)Contractor Deposit:</label>
 								<div class="controls">
 
 								<div class="input-prepend"> 
@@ -509,13 +509,13 @@ to {
 			<div class="form-group">
 				<div class="widget-content nopadding">
 					<div class="control-group" style="">
-	             	   <label class="control-label">Previous Remaining : </label>
+	             	   <label class="control-label">(+)Previous Remaining : </label>
 		               <div class="controls">
 		                 <input type="text" name="prevRemAmount" id="prevRemAmount" readonly="readonly" placeholder="Previous Remaining Amount" />
 		               </div>
 	             	</div>
 	             	<div class="control-group" style="">
-	             	   <label class="control-label">Current Amount : </label>
+	             	   <label class="control-label">(+)Current Amount : </label>
 		               <div class="controls">
 		                 <input type="text" name="currentAmount" id="currentAmount" readonly="readonly"  placeholder="Current Amount"/>
 		               </div>
@@ -528,7 +528,7 @@ to {
 	             	</div>
 					
 					<div class="control-group" style="">
-	             	   <label class="control-label">Paid Amount : </label>
+	             	   <label class="control-label">(-)Paid Amount : </label>
 		               <div class="controls">
 		                 <input type="text" name="paidAmount" id="paidAmount" placeholder="Paid Amount" required/>
 		               </div>
@@ -725,12 +725,11 @@ to {
 							}
 					    var x=document.getElementById("product_pymt").value=totalProdCharge.innerHTML.trim();
 					    var xx=document.getElementById("querying_pymt").value=totalQueryCharge.innerHTML.trim();
-					    
-					    
-					    
-					    
 					    window.totalGrandAmount=document.getElementById("grandTotal").value= +x+ +xx - totalAmount;
+					    if(totalGrandAmount<0)
+					    alert("Already "+Math.abs(totalGrandAmount)+" paid! No Need To Pay Extra")
 					    $("#myModal").modal();
+					    	
 						
 						}
 					};
