@@ -756,6 +756,9 @@ public class RequireData
 					
 					String insertQuery="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`)"
 							+ " VALUES ('"+bankId+"', '"+transactionDate+"', '"+debit+"', '"+credit+"', '"+particular+"', '"+debtorId+"', '"+balance+"')";
+					
+					System.out.println(insertQuery);
+					
 					int x=gd.executeCommand(insertQuery);
 					if(x>0)
 					{
@@ -764,6 +767,8 @@ public class RequireData
 				}
 				return flag;
 			}
+			
+			
 			public boolean pCashEntry(String transactionDate,int debit,int credit,String debtorId)
 			{
 				boolean flag=false;
@@ -846,6 +851,20 @@ public class RequireData
 						+ " `particular`, `other_details`, `date`) VALUES "
 						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"','"+bankAliasName+"','"+chequeDetails+"','"+date+"')";
 				int x=gd.executeCommand(insertQuery);
+			}
+			
+			
+			public int getDebtorId(String AliasName){
+				
+				String q = "SELECT `id` FROM `debtor_master` WHERE debtor_master.type='"+AliasName+"'";
+				List l = gd.getData(q);
+				
+				int debterId = 0;
+				if(!l.isEmpty()){
+					debterId = Integer.parseInt(l.get(0).toString());
+				}
+				
+				return debterId;
 			}
 			
 			
