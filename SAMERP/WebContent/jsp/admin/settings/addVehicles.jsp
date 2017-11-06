@@ -118,7 +118,7 @@
               <div class="controls">
 <!--                 <input type="text" class="span3" placeholder="Vehicle Type" onkeyup="this.value=this.value.toUpperCase()" name="vehicle_type" id="vehicle_type" required  /> -->
                 <select class="span3" style="width:257px;" name="vehicle_type" id="vehicle_type"  required >
-                	<option value=""> Select </option>
+                	<option value=""> Select</option>
                 	<option value="JCB">JCB</option>
                 	<option value="POCLAIN">POCLAIN</option>
                 	<option value="TRANSPORT">TRANSPORT</option>
@@ -354,10 +354,12 @@ function getRateText1(){
 function setSelectValue(){
 	
 	var e = document.getElementById("Updatevehicle_type");
+	var d = document.getElementById("vehicle_type");
 
 	
 	var txt = e.options[e.selectedIndex].text;
-	getSetSelect('s2id_Updatevehicle_type', txt);
+	var txt1 = d.options[d.selectedIndex].text;
+	getSetSelect('s2id_vehicle_type', txt1);
 	myFunction();
 }
 

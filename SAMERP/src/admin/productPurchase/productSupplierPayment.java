@@ -61,6 +61,7 @@ public class productSupplierPayment extends HttpServlet {
 					
 					if(billUpdateppStatus==1){
 						request.setAttribute("status", "Bill Checked Successfully");
+						
 					}
 				}
 				
@@ -69,7 +70,7 @@ public class productSupplierPayment extends HttpServlet {
 				
 			}
 			
-			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp");
+			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supId);
 			rdd.forward(request, response);
 		}
 		
@@ -97,6 +98,7 @@ public class productSupplierPayment extends HttpServlet {
 					List l = gd.getData(selectsup);
 					
 					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
+					
 				}
 			}
 			else  if(payMode.equals("Cheque")){
@@ -142,7 +144,8 @@ public class productSupplierPayment extends HttpServlet {
 				
 			}
 			
-			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp");
+
+			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supid);
 			rdd.forward(request, response);
 		}
 		

@@ -256,7 +256,7 @@ public class RequireData
 	public List getSupplyMaterials(String supplierId)
 	{
 		String id=supplierId;
-		String query="select `supplier_business_id`,`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`type` from `material_supply_master` where `supplier_business_id`="+id+"";
+		String query="select `supplier_business_id`,`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`type`, `supplier_alias` from `material_supply_master` where `supplier_business_id`="+id+"";
 		List supplierList=gd.getData(query);
 		return supplierList;
 	}
@@ -731,14 +731,66 @@ public class RequireData
 			
 			//--common methods start
 			
+			//common entries
+			
+			public boolean badEntry(String bankId,String transactionDate,int debit,int credit,String particular,String debtorId)
+			{
+				boolean flag=false;
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details)";
+				GenericDAO gd=new GenericDAO();
+				if(!gd.getData(statusString).isEmpty())
+				{
+					int balance=Integer.parseInt(gd.getData(statusString).get(0).toString());
+					if(debit>0)
+						balance=balance-debit;
+					if(credit>0)
+						balance=balance+credit;
+					
+					String insertQuery="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`)"
+							+ " VALUES ('"+bankId+"', '"+transactionDate+"', '"+debit+"', '"+credit+"', '"+particular+"', '"+debtorId+"', '"+balance+"')";
+					int x=gd.executeCommand(insertQuery);
+					if(x>0)
+					{
+						flag=true;
+					}
+				}
+				return flag;
+			}
+			public boolean pCashEntry(String transactionDate,int debit,int credit,String debtorId)
+			{
+				boolean flag=false;
+				String getBalance="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
+				GenericDAO gd=new GenericDAO();
+				if(!gd.getData(getBalance).isEmpty())
+				{
+					int balance=Integer.parseInt(gd.getData(getBalance).get(0).toString());
+					if(debit>0)
+						balance=balance-debit;
+					if(credit>0)
+						balance=balance+credit;
+					
+					String insertQuery="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `balance`, `debtor_id`) "
+							+ "VALUES ('"+transactionDate+"', "+debit+", "+credit+","+debtorId+", "+balance+")";
+					int x=gd.executeCommand(insertQuery);
+					if(x>0)
+					{
+						flag=true;
+					}
+				}
+				return flag;
+			}
+			
+			
 			public int checkPCStatus(int amount)
 			{
 				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
 				
-				String a=gd.getData(statusString).get(0).toString();
 				
-				if(!a.isEmpty())
+				
+				if(!gd.getData(statusString).isEmpty())
 				{
+					String a=gd.getData(statusString).get(0).toString();
+					
 					int pcAmount=Integer.parseInt(a.toString());
 					if(pcAmount==0)
 						return 0;  //petty cash balance is 0
@@ -751,6 +803,28 @@ public class RequireData
 					return 2;
 				}
 			}
+			
+			
+			public int checkBankBalance(int amount)
+			{
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details)";
+				if(!gd.getData(statusString).isEmpty())
+				{
+					String a=gd.getData(statusString).get(0).toString();
+					int bankAmount=Integer.parseInt(a.toString());
+					if(bankAmount==0)
+						return 0;  //petty cash balance is 0
+					else if(bankAmount-amount<0)
+						return -1;	//
+					else
+						return 1;  //
+				}
+				else{
+					return 2;
+				}
+			}
+			
+			
 			
 			
 			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)

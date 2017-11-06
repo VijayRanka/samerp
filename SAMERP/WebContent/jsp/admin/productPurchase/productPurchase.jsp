@@ -235,7 +235,7 @@
              	<div class="control-group" style="">
              		<label class="control-label" style=" margin-left: -5%;"><span style="color: red;">*</span>Quantity : </label>
 		               <div class="controls">
-		                 <input type="text" id="qty"  name="qty" placeholder="Quantity" style=" width: 300px; margin-left: -8%;" onkeyup="this.value=this.value.toUpperCase()" />
+		                 <input type="number" id="qty"  name="qty" placeholder="Quantity" style=" width: 300px; margin-left: -8%;" onkeyup="this.value=this.value.toUpperCase()" />
 		               </div>
              	</div>
              </td>
@@ -244,7 +244,7 @@
              	<div class="control-group" style="">
              		<label class="control-label" style="float: right; right: 38%; position: absolute;"><span style="color: red; ">*</span>Rate : </label>
 		              <div class="controls">
-		                  <input type="text" placeholder="Rate" name="rate" id="rate" class="span2" style=" width: 300px; margin-left: -11%;" >
+		                  <input type="number" placeholder="Rate" name="rate" id="rate" class="span2" style=" width: 300px; margin-left: -11%;" >
 		                  <span class="add-on" style="width: 20px;"><i class="icon-inr" style="font-size: 1.5em;"></i></span>
 		              </div>
              	</div>
@@ -894,7 +894,7 @@ function updateRecord(id) {
 				prolist = prolist + "," + proid;
 				
 				cell1.innerHTML = "<tr rowId='"+i+"'><td><input type='hidden' name='productPId"+i+"' id='productPId"+i+"'  value='"+proid+"' /><input type='text' style='width: 220px;' list='productList1' autocomplete='off' onkeyup='makeCaps(this.value, this.id)'  id='productName"+i+"'  name='productName"+i+"'  value='"+demoStr[++counter]+"' required /><datalist id='productList1'></datalist>"
-				cell2.innerHTML = "<input type='text' style='width: 220px;'   id='productQty"+i+"'   name='productQty"+i+"' value='"+demoStr[++counter]+"' pattern='[0-9]*' required />"
+				cell2.innerHTML = "<input type='number' style='width: 220px;'   id='productQty"+i+"'   name='productQty"+i+"' value='"+demoStr[++counter]+"' pattern='[0-9]*' required />"
 				cell3.innerHTML = "<input type='text' style='width: 220px;   id='productRate"+i+"'  name='productRate"+i+"' value='"+demoStr[++counter]+"' pattern='[0-9]*' required /> </td>"
 				if(!(window.billCheck==1)){
 					cell4.innerHTML = "<a onclick='+deletePaticularRow(this)'> <span class='icon'><i id='removeBtn' style=' color: red; font-size: 1.7em;' class='icon-remove'></i></span> </a></td></tr>"
