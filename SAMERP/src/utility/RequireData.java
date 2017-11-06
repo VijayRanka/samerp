@@ -26,23 +26,33 @@ public class RequireData
 
 	
 	// himanshu start
-	public List getCustomerList() {
-		String Customer_query="SELECT `intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate` FROM `customer_master` ORDER BY `intcustid` DESC";
-		List CustomerList=gd.getData(Customer_query);
-		return CustomerList;
-	}
-	
-	public List getVehicleList() {
-		String Vehicle_query="SELECT `vehicle_id`,`vehicle_aliasname` FROM `vehicle_details`";
-		List VehicleList=gd.getData(Vehicle_query);
-		return VehicleList;
-	}
-	public List getJcbPocWorkDetail() {
-		String JcbPocWorkDetail_query="SELECT customer_master.`custname`,jcbpoc_master.`chalanno`,vehicle_details.vehicle_aliasname,jcbpoc_master.`data`,jcbpoc_master.bucket_hr,jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel,jcbpoc_master.intjcbpocid FROM `jcbpoc_master`,customer_master,vehicle_details WHERE jcbpoc_master.intcustid=customer_master.intcustid AND jcbpoc_master.intvehicleid=vehicle_details.vehicle_id ORDER BY jcbpoc_master.intjcbpocid DESC";
-		List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
-		return JcbPocWorkList;
-	}
-//--himanshu end
+				public List getCustomerList() {
+					String Customer_query="SELECT `intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate` FROM `customer_master` ORDER BY `intcustid` DESC";
+					List CustomerList=gd.getData(Customer_query);
+					return CustomerList;
+				}
+				
+				public List getVehicleList() {
+					String Vehicle_query="SELECT `vehicle_id`,`vehicle_aliasname` FROM `vehicle_details`";
+					List VehicleList=gd.getData(Vehicle_query);
+					return VehicleList;
+				}
+				public List getJcbPocWorkDetail() {
+					String JcbPocWorkDetail_query="SELECT customer_master.`custname`,jcbpoc_master.`chalanno`,vehicle_details.vehicle_aliasname,jcbpoc_master.`data`,jcbpoc_master.bucket_hr,jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel,jcbpoc_master.intjcbpocid FROM `jcbpoc_master`,customer_master,vehicle_details WHERE jcbpoc_master.intcustid=customer_master.intcustid AND jcbpoc_master.intvehicleid=vehicle_details.vehicle_id ORDER BY jcbpoc_master.intjcbpocid DESC";
+					List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
+					return JcbPocWorkList;
+				}
+				public List getCustomerListForPay() {
+					String Customer_query="SELECT customer_master.intcustid,customer_master.custname FROM customer_master,jcbpoc_master WHERE customer_master.intcustid=jcbpoc_master.intcustid AND jcbpoc_master.status=0 GROUP BY intcustid DESC";
+					List CustomerList=gd.getData(Customer_query);
+					return CustomerList;
+				}
+				public List getJcbPocBillDetail() {
+					String JcbPocBillDetail_query="SELECT jcbpoc_invoice.id,customer_master.intcustid,customer_master.custname,jcbpoc_invoice.date,jcbpoc_invoice.bill_amount FROM `jcbpoc_invoice`,`customer_master` WHERE `jcbpoc_invoice`.status=0 AND `customer_master`.intcustid=`jcbpoc_invoice`.cust_id ORDER BY jcbpoc_invoice.id DESC";
+					List JcbPocWorkList=gd.getData(JcbPocBillDetail_query);
+					return JcbPocWorkList;
+				}
+			//--himanshu end
 
 	
 	// mukesh start
@@ -246,7 +256,7 @@ public class RequireData
 	public List getSupplyMaterials(String supplierId)
 	{
 		String id=supplierId;
-		String query="select `supplier_business_id`,`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`type` from `material_supply_master` where `supplier_business_id`="+id+"";
+		String query="select `supplier_business_id`,`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`type`, `supplier_alias` from `material_supply_master` where `supplier_business_id`="+id+"";
 		List supplierList=gd.getData(query);
 		return supplierList;
 	}
@@ -718,6 +728,10 @@ public class RequireData
 				return null;
 			}
 			
+			public List getContTransactions(String contId)
+			{
+				return null;
+			}
 
 	
 	
@@ -725,14 +739,66 @@ public class RequireData
 			
 			//--common methods start
 			
+			//common entries
+			
+			public boolean badEntry(String bankId,String transactionDate,int debit,int credit,String particular,String debtorId)
+			{
+				boolean flag=false;
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details)";
+				GenericDAO gd=new GenericDAO();
+				if(!gd.getData(statusString).isEmpty())
+				{
+					int balance=Integer.parseInt(gd.getData(statusString).get(0).toString());
+					if(debit>0)
+						balance=balance-debit;
+					if(credit>0)
+						balance=balance+credit;
+					
+					String insertQuery="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`)"
+							+ " VALUES ('"+bankId+"', '"+transactionDate+"', '"+debit+"', '"+credit+"', '"+particular+"', '"+debtorId+"', '"+balance+"')";
+					int x=gd.executeCommand(insertQuery);
+					if(x>0)
+					{
+						flag=true;
+					}
+				}
+				return flag;
+			}
+			public boolean pCashEntry(String transactionDate,int debit,int credit,String debtorId)
+			{
+				boolean flag=false;
+				String getBalance="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
+				GenericDAO gd=new GenericDAO();
+				if(!gd.getData(getBalance).isEmpty())
+				{
+					int balance=Integer.parseInt(gd.getData(getBalance).get(0).toString());
+					if(debit>0)
+						balance=balance-debit;
+					if(credit>0)
+						balance=balance+credit;
+					
+					String insertQuery="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `balance`, `debtor_id`) "
+							+ "VALUES ('"+transactionDate+"', "+debit+", "+credit+","+debtorId+", "+balance+")";
+					int x=gd.executeCommand(insertQuery);
+					if(x>0)
+					{
+						flag=true;
+					}
+				}
+				return flag;
+			}
+			
+			
 			public int checkPCStatus(int amount)
 			{
 				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
 				
-				String a=gd.getData(statusString).get(0).toString();
 				
-				if(!a.isEmpty())
+				
+				if(!gd.getData(statusString).isEmpty())
 				{
+					String a=gd.getData(statusString).get(0).toString();
+					
 					int pcAmount=Integer.parseInt(a.toString());
 					if(pcAmount==0)
 						return 0;  //petty cash balance is 0
@@ -745,6 +811,28 @@ public class RequireData
 					return -2;
 				}
 			}
+			
+			
+			public int checkBankBalance(int amount)
+			{
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details)";
+				if(!gd.getData(statusString).isEmpty())
+				{
+					String a=gd.getData(statusString).get(0).toString();
+					int bankAmount=Integer.parseInt(a.toString());
+					if(bankAmount==0)
+						return 0;  //petty cash balance is 0
+					else if(bankAmount-amount<0)
+						return -1;	//
+					else
+						return 1;  //
+				}
+				else{
+					return 2;
+				}
+			}
+			
+			
 			
 			
 			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)

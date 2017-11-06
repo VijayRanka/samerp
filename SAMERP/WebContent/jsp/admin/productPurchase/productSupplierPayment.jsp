@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
+<link rel="stylesheet" href="/SAMERP/config/css/select2.css" /> 
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
@@ -171,6 +171,7 @@
               
                 <% 
                 String s = request.getParameter("ppid");
+            	System.out.println(s);
             		
             	if(s!=null){
 	              	List chalanList = rd.getChalanDetails(s);

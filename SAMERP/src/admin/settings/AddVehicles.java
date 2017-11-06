@@ -57,10 +57,10 @@ public class AddVehicles extends HttpServlet {
 			
 			if(insertStatus==1){
 				System.out.println("insert successful");
-				request.setAttribute("status", "Vehicle Inserted Successfully");
+				request.setAttribute("status", "Vehicle added Successfully");
 			}else{
 				System.out.println("insert fail");
-				request.setAttribute("status", "Vehicle Insert Fail");
+				request.setAttribute("status", "Vehicle add Fail");
 			}
 			
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addVehicles.jsp");
