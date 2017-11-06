@@ -500,7 +500,7 @@ public class RequireData
 		
 		public List getSalesDetails()
 		{
-			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,sale_master.vehicle_details,sale_master.vehicle_deposit FROM sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
 			List list=gd.getData(sale_query);
 			return list;		
 		}
@@ -564,6 +564,14 @@ public class RequireData
 			List list=gd.getData(query);
 			String aliasname=list.get(0).toString();
 			return aliasname;
+		}
+		
+		public String getVehicleNumber(int debtor_id)
+		{
+			String query="SELECT vehicle_number FROM vehicle_details WHERE vehicle_aliasname=(SELECT debtor_master.type FROM debtor_master WHERE id="+debtor_id+")";
+			List list=gd.getData(query);
+			String vehicleNumber=list.get(0).toString();
+			return vehicleNumber;
 		}
 	
 	//--sarang end
@@ -800,7 +808,7 @@ public class RequireData
 						return 1;  //
 				}
 				else{
-					return 2;
+					return -2;
 				}
 			}
 			
