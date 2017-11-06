@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Vertical Software</title>
 <html lang="en">
 <head>
 <title>SAMERP PROJECT</title>
@@ -207,21 +207,34 @@ to {
 											class="span4">
 									</div>
 								</div>
+								<%
+								
+								List list=rq.getPreviousBal();
+								Iterator itr2=list.iterator();
+								while(itr2.hasNext())
+								{
+									
+									String pre_balance=itr2.next().toString();								
+								%>
 
 								<div class="control-group">
 									<label class="control-label">Previous Balance:</label>
 									<div class="controls">
-										<input type="text" name="previous_balance" class="span4"
-											onkeyup="this.value=this.value.toUpperCase()"
+										<input type="text" name="previous_balance" value="<%=pre_balance%>" class="span4" onkeyup="this.value=this.value.toUpperCase()"
 											placeholder="Previous Balance" pattern="[0-9]*" required />
 									</div>
 								</div>
+								<%
+								
+								}
+								
+								%>
 								<a href="#paymentEntry" data-toggle="modal"
 									style="position: absolute; margin-left: 46%; margin-top: 1.4%;">
 									<span class="badge badge-inverse"><i class="icon-plus"></i></span>
 								</a>
 
-								<div class="control-group">
+						<div class="control-group">
 									<label class="control-label">Hand Loan:</label>
 									<div class="controls">
 										<input type="text" name="hand_loan" class="span4"
@@ -287,10 +300,8 @@ to {
 								</div>
 
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="insert" class="btn btn-success">OK</button>
-									&nbsp;&nbsp;&nbsp;
-									<button type="button" class="btn btn-danger"
-										style="margin-right: 20px">Cancel</button>
+									<button type="submit" name="insert" class="btn btn-success">OK</button>&nbsp;&nbsp;&nbsp;
+									<a type="button" href="/SAMERP/index.jsp" class="btn btn-danger" style="margin-right: 20px">Exit</a>
 								</div>
 							</form>
 						</div>
@@ -369,8 +380,8 @@ to {
 		</div>
 
 		<div class="modal-body" style="padding: 0;">
-			<form class="form-horizontal" action="/SAMERP/productSupplierPayment"
-				method="post" name="">
+			<form class="form-horizontal" action="/SAMERP/PTCash"
+				method="post" name="ptcash">
 				<div class="form-group">
 					<div class="widget-content nopadding">
 
@@ -385,8 +396,7 @@ to {
 						<div class="control-group" style="">
 							<label class="control-label">Name: </label>
 							<div class="controls">
-								<input type="text" name="name" placeholder="Name"
-									maxlength="10" required />
+								<input type="text" name="name" placeholder="Name" required />
 							</div>
 						</div>
 						
@@ -466,8 +476,8 @@ to {
 				<input type="hidden" name="supid2" id="supid2" />
 
 				<div class="modal-footer">
-					<input type="submit" id="paymentSubmitbtn" name="paymentSubmitbtn"
-						class="btn btn-primary" value="Submit" /> <a href="#"
+					<input type="submit" id="paymentSubmitbtn" name="handloanbtn"
+						class="btn btn-primary" value="Submit" /> <a href="/SAMERP/index.jsp"
 						class="btn btn-danger" data-dismiss="modal">Cancel</a>
 				</div>
 
