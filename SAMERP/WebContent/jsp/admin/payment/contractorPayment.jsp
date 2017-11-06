@@ -1,4 +1,5 @@
 
+<%@page import="admin.JcbPocWork.demo"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -342,14 +343,52 @@ to {
 								<table class="table table-bordered data-table">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>Particular</th>
-											<th>Credit</th>
-											<th>Debit</th>
+											<th>S.No.</th>
+											<th>Paid Date</th>
+											<th>From-Date</th>
+											<th>To Date</th>
+											<th>Loading Charges</th>
+											<th>Deposit</th>
+											<th>Work Amount</th>
+											<th>Total Bill Amount</th>
+											<th>Paid Amount</th>
+											<th>Mode</th>
+											<th>Cheque Details</th>
+											<th>Bank Info</th>
 											<th>Balance</th>
+											
 										</tr>
 									</thead>
 									<tbody>
+									<%if(request.getParameter("ppid")!=null){
+									List demoList=rq.getContTransactions(request.getParameter("ppid"));
+									if(!demoList.isEmpty() )
+									{
+										int i=1;
+									Iterator itr=demoList.iterator();
+									while(itr.hasNext())
+									{
+										itr.next();
+										itr.next();
+									%>
+									<tr>
+									<td><%=i %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									</tr>	
+									<%itr.next();
+									i++;}}
+									}%>
 
 									</tbody>
 								</table>

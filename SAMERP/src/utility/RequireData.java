@@ -722,9 +722,24 @@ public class RequireData
 			
 			public List getContTransactions(String contId)
 			{
+		
+				String getDetails="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId;
+				if(!gd.getData(getDetails).isEmpty())
+				{
+					List demoList=gd.getData(getDetails);
+					return demoList;
+				}
 				return null;
 			}
-
+			public String getBankById(String bankId)
+			{
+				if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+				{
+					String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
+					return bankAlias;
+				}
+				return null;
+			}
 	
 	
 		//--vijay end
