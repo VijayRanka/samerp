@@ -129,6 +129,31 @@ public class Expenses extends HttpServlet {
 				}
 			}
 		}
+		
+		
+		//insert cash deposite to bank
+		if(request.getParameter("Bank_Deposite")!=null)
+		{
+			int bankstatus=0;
+			GenericDAO gd=new GenericDAO();
+			
+			String Bank_Id=request.getParameter("bank_name");
+			String Date=request.getParameter("date");
+			String Amount=request.getParameter("amount");
+			String particulars="cash";
+			
+			String query="insert into bank_account_details(bid,date,debit,particulars) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"')";
+		     bankstatus=gd.executeCommand(query);
+		    if(bankstatus!=0)
+		    {
+		    	System.out.println("Inserted Successfully");
+		    	request.setAttribute("status", "Inserted Successfully");
+		    }
+		    RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
+			rd.forward(request, response);
+			
+			
+		}
 		//updating Data
 		if(request.getParameter("UpdateData")!=null)
 		{
@@ -233,6 +258,8 @@ public class Expenses extends HttpServlet {
 			
 			
 		}
+		
+		
 		
 		if(request.getParameter("insertName")!=null)
 				{

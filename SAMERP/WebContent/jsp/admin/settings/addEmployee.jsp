@@ -159,7 +159,7 @@ to {
 									<div class="controls">
 										<input type="text" name="contact_no" class="span5"
 											placeholder="Contact Number"
-											onkeypress="return isNumber(event)" maxlength="10" required />
+											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
 
@@ -178,7 +178,7 @@ to {
 														String id = itr.next().toString();
 														String alias_name = itr.next().toString();
 											%>
-											<option value="<%=alias_name%>"><%=alias_name%></option>
+											<option value="<%=id%>"><%=alias_name%></option>
 											<%
 												}
 											%>
@@ -227,7 +227,7 @@ to {
 								<th>Sr.No.</th>
 								<th>Employee Name</th>
 								<th>Contact No</th>
-								<th>Work With</th>
+								<th>Debtor_Id</th>
 								<th>Other</th>
 								<th>AliasName</th>
 								<th>Actions</th>
@@ -249,9 +249,18 @@ to {
 						<tr>
 							<td id="<%=empid%>"><%=count %></td>
 							<td ><%=itr.next()%></td>
+							<td ><%=itr.next() %></td>							
 							<td ><%=itr.next() %></td>
-							<td ><%=itr.next() %></td>
-							<td ><%=itr.next()%></td>
+							
+							<% Object other= itr.next(); 
+										if(other==null){
+										%>
+											<td>-</td>
+										<%}else{ %>
+											<td><%=other %></td>
+										<%} %>
+							
+							
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
 										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)">Update</a>
@@ -306,33 +315,33 @@ to {
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
-
-								<div class="control-group">
+									
+									<div class="control-group">
 									<label class="control-label"><span style="color: red;">*</span>Work
 										With:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_name" id="contractorVehicle" class="span3">
+										<select name="contractorVehicle_alias" id="contractor_vehicle"class="span3">
 
 											<%
 												List detail = rq.getContractorVehicle();
 												if (details != null) {
 													Iterator itr = detail.iterator();
 													while (itr.hasNext()) {
-														String id1= itr.next().toString();
+														String id1 = itr.next().toString();
 														String alias_name = itr.next().toString();
 											%>
-											<option value="<%=alias_name%>"><%=alias_name%></option>
+											<option value="<%=id1%>"><%=alias_name%></option>
 											<%
 												}
 											%>
-										</select>
+										</select><input type="hidden" id="old_contractor_vehicle" name="old_contractor_vehicle">
 									</div>
 									<%
 										}
 									%>
 								</div>
-
+								
 								<div class="control-group">
 									<label class="control-label">Other: </label>
 									<div class="controls">
@@ -402,22 +411,11 @@ function searchEmpolyee(id) {
 			document.getElementById("employeename").value = demoStr[1];
 			//alert(demoStr[1]);
 			document.getElementById("contactno").value = demoStr[2];
-			document.getElementById("contractorVehicle").value = demoStr[3];
+			document.getElementById("contractor_vehicle").value = demoStr[3];
+			document.getElementById("old_contractor_vehicle").value = demoStr[3];
 			document.getElementById("other").value = demoStr[4];
-
-			var dd = document.getElementById('contractorVehicle');
-			
-			for (var i = 0; i < dd.options.length; i++) {
-			    if (dd.options[i].text === demoStr[3]) {
-			        dd.selectedIndex = i;
-			        //alert(demoStr[4]);
-			        getSetSelect('s2id_contractorVehicle', demoStr[3]);
-			        break;
-			    }
-			}
-			
-			
-			
+	
+					
 			
 			}
 		};

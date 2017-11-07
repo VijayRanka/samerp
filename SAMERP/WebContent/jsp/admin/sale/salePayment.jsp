@@ -101,6 +101,10 @@
 .table td {
    text-align: center;   
 }
+
+.modal.fade.in {
+    top: 5%;
+}
 </style>
 
 </head>
@@ -556,10 +560,10 @@
 			<table style="margin: 0 auto; width: 800px;" id="createBillTable">
 				<thead>
 					<tr>
-						<th colspan="12" ><h2 style="color: #ff704d">SARTHAK ENTERPRISES</h2></th>
+						<th colspan="12"><h2 style="color: #ff704d; margin: 0px; ">SARTHAK ENTERPRISES</h2></th>
 					</tr>
 					<tr>
-						<th colspan="12"><h4>Mannufacture RCC Pipe & Chember</h4></th>
+						<th colspan="12" ><h4 style="margin: 0px;">Mannufacture RCC Pipe & Chember</h4></th>
 					</tr>
 					<tr style="border-top: 1px; border-top-style: groove;">
 						<th colspan="12">A/P-Naigaon,Tal-Haveli,Dist-Pune 412110. Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com</h2></th>

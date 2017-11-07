@@ -136,7 +136,7 @@
 									<label class="control-label">Suppliers Contact :</label>
 									<div class="controls">
 										<input type="text" name="contact" class="span7"
-											placeholder="Suppliers Contact" pattern="[0-9]*" required/>
+											placeholder="Suppliers Contact" maxlength="10"  pattern="[0-9]*" required/>
 									</div>
 								</div>
 								<div class="control-group">
@@ -158,7 +158,8 @@
 								</div>
 								<div class="form-actions" style="padding-left: 350px">
 									<button type="submit" name="insertsupply" class="btn btn-success">Submit</button>
-									<button type="button" class="btn btn-danger">Cancel</button>
+								 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+
 								</div>
 							</form>
 						</div>
@@ -203,8 +204,7 @@
 									<%
 									String product,RawMaterial;
 										while (itr.hasNext()) {
-												String id1 = itr.next().toString();
-																								
+												String id1 = itr.next().toString();																							
 									%>
 									<tr class="gradeX">
 										<td id="<%=id1%>"><%=count%></td>
@@ -221,7 +221,8 @@
 											<td>RawMaterial</td>
 										<%} %>
 														
-										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> 
+										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> |
+										<a href="/SAMERP/AddSupplyMaterial?deleteId=<%=id1%>">Delete</a></td>
 									</tr>
 									<%
 										count++;
@@ -258,7 +259,10 @@
 						<div class="control-group">
 							<label class="control-label">Suppliers Business Name:</label>
 							<div class="controls">
-								<input type="hidden" id="Updateid" name="Updateid" /> 
+								<input type="hidden" id="Updateid" name="Updateid" />
+								<input type="hidden" id="old_sup_alias" name="old_sup_alias" />
+								<input type="hidden" id="update_material_type" name="material_type" />
+								 
 								<input type="text" name="suppbusinesname" id="update_business_name"
 									class="span4" placeholder="Suppliers-Business Name"
 									onkeyup="this.value=this.value.toUpperCase()"
@@ -293,6 +297,16 @@
 									required />
 							</div>
 						</div>
+						
+						<div class="control-group">
+									<label class="control-label">Type:</label>
+									<div class="controls">
+										<select name="material_type" ID="material_typeid" class="span4" >
+											<option value="1">Raw Material</option>
+											<option value="2">Product</option>
+										</select>
+									</div>
+								</div>
 
 						<div class="form-actions" style="padding-left: 450px">
 							<button type="submit" name="save" class="btn btn-success">Update</button>
@@ -326,13 +340,14 @@ function searchName(id1) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			"WebContent/jsp/admin/settings/addMaterialSuppliers.jsp"
+			alert(demoStr);
 			document.getElementById("Updateid").value = demoStr[0];
 			document.getElementById("update_business_name").value = demoStr[1];
 			document.getElementById("update_suppname").value = demoStr[2];
 			document.getElementById("update_address").value = demoStr[3];
 			document.getElementById("update_contact").value = demoStr[4];
 			document.getElementById("update_material_type").value = demoStr[5];
+			document.getElementById("old_sup_alias").value = demoStr[6];
 					
 			}
 		};

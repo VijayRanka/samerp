@@ -1,4 +1,3 @@
-
 package admin.sales;
 
 import java.io.IOException;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 public class Sales extends HttpServlet {
 
@@ -25,6 +25,7 @@ public class Sales extends HttpServlet {
 
 		PrintWriter out = response.getWriter();
 		GenericDAO gd = new GenericDAO();
+		RequireData rd11=new RequireData();
 		
 		String searchVehicle = request.getParameter("searchVehicle");		
 		
@@ -54,7 +55,7 @@ public class Sales extends HttpServlet {
 			String dieselInLiter=request.getParameter("diesel");
 			int count = Integer.parseInt(counter);
 			String vehicleDetails=vehicleNo.toUpperCase();
-			
+			int flag=1;
 			
 			if(loading_team_id.equals("")){
 				loading_team_id=null;
@@ -78,98 +79,124 @@ public class Sales extends HttpServlet {
 				dieselInLiter="0";
 			}
 			
-			
-			String insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
-					+ " `vehicle_details`, `vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
-							+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
-			
-			System.out.println(insertQuery);
-			//out.println(insertQuery);
-			gd.executeCommand(insertQuery);
-			String max_id="select max(id) from sale_master";
-			List l = gd.getData(max_id);
-			String max_sale_id = l.get(0).toString();
-
-			
+			Object vehicle_id = null;
 			String q="SELECT vehicle_details.vehicle_id FROM vehicle_details WHERE vehicle_number='"+vehicleNo+"'";
 			List vehicle_id_temp=gd.getData(q);
-			Object vehicle_id = null;
 			
 			Iterator itr=vehicle_id_temp.iterator();
 			while (itr.hasNext()) {
 				vehicle_id=itr.next();
 			}
 			
-			System.out.println("VID"+vehicle_id);
+			String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type="
+					+ "(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE "
+					+ "vehicle_details.vehicle_number='"+vehicleNo+"')";
 			
-			if(vehicle_id!=null)
-			{
-				
-				String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type="
-						+ "(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE "
-						+ "vehicle_details.vehicle_number='"+vehicleNo+"')";
-				if(!gd.getData(getDebtorId).isEmpty())
-				{
-					String debtorId=gd.getData(getDebtorId).get(0).toString();
-				
-				
-				System.out.println("VID : "+vehicle_id);				
-				String insertExp_master="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-						+ " `other_details`) VALUES (1,"+debtorId+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
-				//System.out.println(insertExp_master);
-		
-				gd.executeCommand(insertExp_master);
-				
-				if(vehicleAmount!=null||vehicleReading!=null||dieselInLiter!=null){
-					System.out.println("VRM");
-					
-					
-					String exp_id="SELECT max(exp_id) FROM expenses_master";
-					List l1 = gd.getData(exp_id);
-					String max_exp_id = l1.get(0).toString();
-					
-					if(!gd.getData("SELECT MAX(id) FROM sale_master").isEmpty())
-					{
-						String max_sales_id=gd.getData("SELECT MAX(id) FROM sale_master").get(0).toString();
-						String sales_id="INSERT INTO `vehicles_ride_details`(`exp_master_id`, `sales_id`) VALUES ("+max_exp_id+","+max_sales_id+")";
-						
-						int xx=gd.executeCommand(sales_id);
-						if(xx==1)
-						{
-							System.out.println("done Successfully in Vehicles rides details");
-							
-								String insertVRM ="INSERT INTO vehicle_reading_master(expenses_master_id, vehicle_id, vehicle_diesel_qty, vehicle_reading) "
-										+ " VALUES ("+max_exp_id+","+vehicle_id+","+dieselInLiter+","+vehicleReading+")";
-								//System.out.println(insertVRM);
-								gd.executeCommand(insertVRM);
-						}
-						 
-						
-					}
-					
+			List debtorId=gd.getData(getDebtorId);
 
+			if(vehicle_id!=null && !debtorId.isEmpty()){
+			
+				if(rd11.checkPCStatus(Integer.parseInt(vehicleDeposit))==1){
+					String pcStatusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
+					String pettyCash=gd.getData(pcStatusString).get(0).toString();		
+					int remaining=Integer.parseInt(pettyCash)-Integer.parseInt(vehicleDeposit);
+					String insertPettyCash="INSERT INTO `petty_cash_details`(`date`, `debit`, `balance`, `debtor_id`) VALUES ('"+date+"',"+Integer.parseInt(vehicleDeposit)+","+remaining+","+debtorId.get(0)+")";
+					int s=gd.executeCommand(insertPettyCash);
+					flag=1;
 				}
+				else
+					flag=0;
 			}
-			}
-
-			while(count>0){
-				
-				String productName = request.getParameter("productName1"+count);
-				String qty = request.getParameter("qty1"+count);
-				String rate = request.getParameter("rate1"+count);
-				String supplierName = request.getParameter("supplierName1"+count);
-				String chalanNo_third = request.getParameter("chalanNo_third1"+count);
-				
-				String insertProduct="INSERT INTO `sale_details_master`(`sale_master_id`, `product_name`, `qty`, `rate`, `supplier_name`, "
-						+ " `third_party_chalan`) VALUES ("+max_sale_id+",'"+productName+"',"+qty+","+rate+",'"+supplierName+"','"+chalanNo_third+"');";
-				//System.out.println(insertProduct);
-				gd.executeCommand(insertProduct);				
-				count--;
-			}	
 			
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
-			rd.forward(request, response);
+			if(flag==1)
+			{
+				String insertQuery=null;
+				if(!debtorId.isEmpty()){
+					System.out.println(debtorId.get(0));
+					insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
+							+ " `debtor_id`,`vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
+									+ "'"+date+"','"+chalan_no+"',"+loading_charges+","+debtorId.get(0)+","+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+				}
+				else{
+					insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
+							+ " `vehicle_details`, `vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
+									+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+				}
+				
+				gd.executeCommand(insertQuery);
+				String max_id="select max(id) from sale_master";
+				List l = gd.getData(max_id);
+				String max_sale_id = l.get(0).toString();
+				
+				if(vehicle_id!=null)
+				{
+	
+					System.out.println("hi");
+					if(!debtorId.isEmpty())
+					{
+					
+						String insertExp_master="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+								+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
+						System.out.println(insertExp_master);
+				
+						gd.executeCommand(insertExp_master);
+					
+						if(vehicleAmount!=null||vehicleReading!=null||dieselInLiter!=null)
+						{
+						
+							String exp_id="SELECT max(exp_id) FROM expenses_master";
+							List l1 = gd.getData(exp_id);
+							String max_exp_id = l1.get(0).toString();
+							
+							if(!gd.getData("SELECT MAX(id) FROM sale_master").isEmpty())
+							{
+								String max_sales_id=gd.getData("SELECT MAX(id) FROM sale_master").get(0).toString();
+								String sales_id="INSERT INTO `vehicles_ride_details`(`exp_master_id`, `sales_id`) VALUES ("+max_exp_id+","+max_sales_id+")";
+								
+								int xx=gd.executeCommand(sales_id);
+								if(xx==1)
+								{
+									System.out.println("done Successfully in Vehicles rides details");
+								
+									String insertVRM ="INSERT INTO vehicle_reading_master(expenses_master_id, vehicle_id, vehicle_diesel_qty, vehicle_reading) "
+											+ " VALUES ("+max_exp_id+","+vehicle_id+","+dieselInLiter+","+vehicleReading+")";
+									gd.executeCommand(insertVRM);
+								}
+							}
+						}
+					}
+				}
+	
+				while(count>0){
+					
+					/*UPDATE FINAL STOCK...
+					 * SELECT  final_stock.qty FROM final_stock WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')
+					 * UPDATE final_stock SET qty=40 WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')
+					 */
+					
+					String productName = request.getParameter("productName1"+count);
+					String qty = request.getParameter("qty1"+count);
+					String rate = request.getParameter("rate1"+count);
+					String supplierName = request.getParameter("supplierName1"+count);
+					String chalanNo_third = request.getParameter("chalanNo_third1"+count);
+					
+					
+					String insertProduct="INSERT INTO `sale_details_master`(`sale_master_id`, `product_name`, `qty`, `rate`, `supplier_name`, "
+							+ " `third_party_chalan`) VALUES ("+max_sale_id+",'"+productName+"',"+qty+","+rate+",'"+supplierName+"','"+chalanNo_third+"');";
+					gd.executeCommand(insertProduct);				
+					count--;
+				}	
+	
+				RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
+				rd.forward(request, response);
+			}
+			else {
+				request.setAttribute("error", "1");
+				RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
+				rd.forward(request, response);				
+			}
 		}
+		
 		
 		if(request.getParameter("deleteId")!=null){
 			
