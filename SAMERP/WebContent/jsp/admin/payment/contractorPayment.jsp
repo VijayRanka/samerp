@@ -1,4 +1,5 @@
 
+<%@page import="admin.JcbPocWork.demo"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -151,7 +152,7 @@ to {
 				RequireData rq = new RequireData();
 			%>
 			<div class="row-fluid">
-				<div class="span15">
+				<div class="span12">
 					<div class="widget-box">
 						<div class="widget-title">
 							<span class="icon"> <i class="icon-align-justify"></i>
@@ -330,6 +331,72 @@ to {
 					
 				</div>
 			</div>
+			<%if(request.getParameter("ppid")!=null){ %>
+			<div class="row-fluid">
+				<div class="span12">
+				<div class="widget-box">
+							<div class="widget-title">
+								<span class="icon"><i class="icon-th"></i></span>
+								<h5>Details</h5>
+							</div>
+							<div class="widget-content nopadding">
+								<table class="table table-bordered data-table">
+									<thead>
+										<tr>
+											<th>S.No.</th>
+											<th>Paid Date</th>
+											<th>From-Date</th>
+											<th>To Date</th>
+											<th>Loading Charges</th>
+											<th>Deposit</th>
+											<th>Work Amount</th>
+											<th>Total Bill Amount</th>
+											<th>Paid Amount</th>
+											<th>Mode</th>
+											<th>Cheque Details</th>
+											<th>Bank Info</th>
+											<th>Balance</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+									<%if(request.getParameter("ppid")!=null){
+									List demoList=rq.getContTransactions(request.getParameter("ppid"));
+									if(!demoList.isEmpty() )
+									{
+										int i=1;
+									Iterator itr=demoList.iterator();
+									while(itr.hasNext())
+									{
+										itr.next();
+										itr.next();
+									%>
+									<tr>
+									<td><%=i %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									</tr>	
+									<%itr.next();
+									i++;}}
+									}%>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+				</div>
+			</div>
+			<%} %>
 		</div>
 </div>
 <%if(request.getParameter("ppid")!=null){ %>
@@ -407,7 +474,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label">Total Product Payment:</label>
+								<label class="control-label">(+)Total Product Payment:</label>
 								<div class="controls">
 
 									<div class="input-append">
@@ -419,7 +486,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label">Total Querying Payment:</label>
+								<label class="control-label">(+)Total Querying Payment:</label>
 								<div class="controls">
 									<input type="text" name="querying_paymt" id="querying_pymt"
 										class="span4" placeholder="Total Querying Payment " readonly="readonly" />
@@ -427,7 +494,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label"> Total Loading Charges:</label>
+								<label class="control-label"> (-)Total Loading Charges:</label>
 								<div class="controls">
 
 									<div class="input-prepend"> 
@@ -437,7 +504,7 @@ to {
 									</div>
 								</div>
 							</div><div class="control-group">
-								<label class="control-label">Contractor Deposit:</label>
+								<label class="control-label">(-)Contractor Deposit:</label>
 								<div class="controls">
 
 								<div class="input-prepend"> 
@@ -481,13 +548,13 @@ to {
 			<div class="form-group">
 				<div class="widget-content nopadding">
 					<div class="control-group" style="">
-	             	   <label class="control-label">Previous Remaining : </label>
+	             	   <label class="control-label">(+)Previous Remaining : </label>
 		               <div class="controls">
 		                 <input type="text" name="prevRemAmount" id="prevRemAmount" readonly="readonly" placeholder="Previous Remaining Amount" />
 		               </div>
 	             	</div>
 	             	<div class="control-group" style="">
-	             	   <label class="control-label">Current Amount : </label>
+	             	   <label class="control-label">(+)Current Amount : </label>
 		               <div class="controls">
 		                 <input type="text" name="currentAmount" id="currentAmount" readonly="readonly"  placeholder="Current Amount"/>
 		               </div>
@@ -500,7 +567,7 @@ to {
 	             	</div>
 					
 					<div class="control-group" style="">
-	             	   <label class="control-label">Paid Amount : </label>
+	             	   <label class="control-label">(-)Paid Amount : </label>
 		               <div class="controls">
 		                 <input type="text" name="paidAmount" id="paidAmount" placeholder="Paid Amount" required/>
 		               </div>
@@ -697,11 +764,11 @@ to {
 							}
 					    var x=document.getElementById("product_pymt").value=totalProdCharge.innerHTML.trim();
 					    var xx=document.getElementById("querying_pymt").value=totalQueryCharge.innerHTML.trim();
-					    
-					    
-					    
 					    window.totalGrandAmount=document.getElementById("grandTotal").value= +x+ +xx - totalAmount;
+					    if(totalGrandAmount<0)
+					    alert("Already "+Math.abs(totalGrandAmount)+" paid! No Need To Pay Extra")
 					    $("#myModal").modal();
+					    	
 						
 						}
 					};

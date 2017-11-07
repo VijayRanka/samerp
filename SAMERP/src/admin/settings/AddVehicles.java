@@ -43,7 +43,6 @@ public class AddVehicles extends HttpServlet {
 			
 			String vehicleNo = vehicleNo1+"-"+vehicleNo2+"-"+vehicleNo3+"-"+vehicleNo4;
 			String vehicleAlias = vehicleType +"_"+vehicleNo1+"-"+vehicleNo2+"-"+vehicleNo3+"-"+vehicleNo4;
-			System.out.println(vehicleAlias);
 			
 			String insertVehicleQuery = "insert into vehicle_details(vehicle_type, vehicle_number, vehicle_aliasname) values ('"+vehicleType+"', '"+vehicleNo+"', '"+vehicleAlias+"');";
 			
@@ -58,10 +57,10 @@ public class AddVehicles extends HttpServlet {
 			
 			if(insertStatus==1){
 				System.out.println("insert successful");
-				request.setAttribute("status", "Vehicle Inserted Successfully");
+				request.setAttribute("status", "Vehicle added Successfully");
 			}else{
 				System.out.println("insert fail");
-				request.setAttribute("status", "Vehicle Insert Fail");
+				request.setAttribute("status", "Vehicle add Fail");
 			}
 			
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addVehicles.jsp");
@@ -97,13 +96,14 @@ public class AddVehicles extends HttpServlet {
 			{
 				out.print(itr.next()+",");
 			}
-	
 		}
 		
 		if(request.getParameter("updateSubmitBtn")!=null)
 		{
 			
 			String oldVehicleType = request.getParameter("oldvehicle_type");
+			String oldVehicleAlias = request.getParameter("oldvehicle_alias");
+			
 			String vehicleId = request.getParameter("Updatevehicle_id");
 			String vehicleType = request.getParameter("Updatevehicle_type");
 			
@@ -113,12 +113,17 @@ public class AddVehicles extends HttpServlet {
 			String Updatevehicleno4 = request.getParameter("Updatevehicleno4");
 			
 			String vehicleNum = Updatevehicleno1+"-"+Updatevehicleno2+"-"+Updatevehicleno3+"-"+Updatevehicleno4;
+			String updateVehicleAlias = vehicleType +"_"+Updatevehicleno1+"-"+Updatevehicleno2+"-"+Updatevehicleno3+"-"+Updatevehicleno4;
 			
-			String updateVehicleQuery1 = "update vehicle_details set vehicle_number='"+vehicleNum+"', vehicle_type='"+vehicleType+"'  where vehicle_id='"+vehicleId+"';";
+			String updateVehicleQuery1 = "update vehicle_details set vehicle_number='"+vehicleNum+"', vehicle_type='"+vehicleType+"', `vehicle_aliasname`='"+updateVehicleAlias+"'  where vehicle_id='"+vehicleId+"';";
 			int updatestatus1 = gd.executeCommand(updateVehicleQuery1);
 			
 			if(updatestatus1>=1){
 				System.out.println("update vehicle successful");
+				
+				String updateVehicleQuery2 = "UPDATE `debtor_master` SET `type`='"+updateVehicleAlias+"' WHERE debtor_master.type='"+oldVehicleAlias+"';";
+				int updatestatus2 = gd.executeCommand(updateVehicleQuery2);
+				
 				request.setAttribute("status", "Vehicle Updated Successfully");
 			}else{
 				
@@ -135,7 +140,6 @@ public class AddVehicles extends HttpServlet {
 		
 		if(request.getParameter("vno")!=null)
 		{
-			
 			String vno = request.getParameter("vno");
 			String sdate = request.getParameter("sdate");
 			String edate = request.getParameter("edate");

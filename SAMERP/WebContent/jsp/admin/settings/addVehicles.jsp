@@ -63,6 +63,7 @@
     from {top: 50px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }
+
 </style>
 </head>
 <body onload="setFocusToTextBox()">
@@ -112,12 +113,12 @@
         <div class="widget-content nopadding">
           <form action="/SAMERP/AddVehicles" method="post" class="form-horizontal" name="form1">
             
-			<div class="control-group">
+			<div class="control-group" style="height: 50px;">
               <label class="control-label"><span style="color: red;">*</span>Vehicle Type :</label>
               <div class="controls">
 <!--                 <input type="text" class="span3" placeholder="Vehicle Type" onkeyup="this.value=this.value.toUpperCase()" name="vehicle_type" id="vehicle_type" required  /> -->
-                <select class="span3" style="width:220px;" name="vehicle_type" id="vehicle_type"  required >
-                	<option value=""> Select </option>
+                <select class="span3" style="width:257px;" name="vehicle_type" id="vehicle_type"  required >
+                	<option value=""> Select</option>
                 	<option value="JCB">JCB</option>
                 	<option value="POCLAIN">POCLAIN</option>
                 	<option value="TRANSPORT">TRANSPORT</option>
@@ -145,8 +146,7 @@
       </div>
     </div>
   </div>
-     
-     
+  <hr>
   <div class="widget-box">
           <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
             <h5>Vehicles List</h5>
@@ -211,13 +211,15 @@
 					<div class="form-group">
 						<div class="widget-content nopadding">
           
-				            <div class="control-group">
-				              <label class="control-label"><span style="color: red;">*</span>Vehicle Type :</label>
-				              <div class="controls">
+				            <div class="control-group" style="height: 50px;">
+				              <label class="control-label"><span style="color: red; ">*</span>Vehicle Type :</label>
+				              <div class="controls" style="width: 45.7%; margin-left: 30.3%; position: absolute;">
 				              		<input type="hidden" name="Updatevehicle_id" id="Updatevehicle_id" />
 				              		<input type="hidden" name="oldvehicle_type" id="oldvehicle_type" />
+				              		<input type="hidden" name="oldvehicle_alias" id="oldvehicle_alias" />
+				              		
 				<!--                 <input type="text" class="span3" placeholder="Vehicle Type" onkeyup="this.value=this.value.toUpperCase()" name="vehicle_type" id="vehicle_type" required  /> -->
-				                <select class="span3" name="Updatevehicle_type" id="Updatevehicle_type" required >
+				                <select class="span3" style="width:269px;" name="Updatevehicle_type" id="Updatevehicle_type" required >
 				                	<option value=""> Select </option>
 				                	<option value="JCB">JCB</option>
 				                	<option value="POCLAIN">POCLAIN</option>
@@ -278,6 +280,9 @@ function searchName(id) {
 			document.getElementById("Updatevehicle_id").value = demoStr[0];
 			document.getElementById("Updatevehicle_type").value = demoStr[1];
 			document.getElementById("oldvehicle_type").value = document.getElementById("Updatevehicle_type").value;
+			getSetSelect("s2id_Updatevehicle_type", demoStr[1]);
+			
+			document.getElementById("oldvehicle_alias").value = demoStr[3];
 			
 			var vehicleNumber = demoStr[2].split("-");
 			
@@ -287,7 +292,7 @@ function searchName(id) {
 			document.getElementById("Updatevehicleno4").value = vehicleNumber[3];
 	
 			
-			document.getElementById("UpdateRateText").value = demoStr[3];
+			//document.getElementById("UpdateRateText").value = demoStr[3];
 			//document.getElementById("oldRate").value = document.getElementById("UpdateRateText").value;
 			//getRateText1();
 			}
@@ -314,6 +319,7 @@ function showModal(){
 function setFocusToTextBox() {
 	document.getElementById("vehicle_type").focus();
 	showModal();
+	setSelectValue();
 	myFunction();
 }
 
@@ -344,6 +350,25 @@ function getRateText1(){
 		document.getElementById("required2").innerHTML="*";
 	}
 } */
+
+function setSelectValue(){
+	
+	var e = document.getElementById("Updatevehicle_type");
+	var d = document.getElementById("vehicle_type");
+
+	
+	var txt = e.options[e.selectedIndex].text;
+	var txt1 = d.options[d.selectedIndex].text;
+	getSetSelect('s2id_vehicle_type', txt1);
+	myFunction();
+}
+
+function getSetSelect(id,value)
+{
+	var x=document.getElementById(id).children;
+	var xx=x[0].children;	
+	xx[0].innerHTML=value;
+}
 
 </script>
 
