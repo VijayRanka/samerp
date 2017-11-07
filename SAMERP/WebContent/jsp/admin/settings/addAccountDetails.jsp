@@ -254,12 +254,12 @@ transition: all 0.3s;
          			</div>
         	</div>
         	
-        	<div class="control-group">
+        	<!-- <div class="control-group">
                   <label class="control-label">Opening Balance</label>
                   <div class="controls">
                     <input type="text" id="modalBalance"  name="modalBalance" />
          			</div>
-        	</div>
+        	</div> -->
         	
         	<div class="control-group">
                   <label class="control-label">Alias Name</label>
@@ -327,8 +327,8 @@ function searchName(id) {
 			document.getElementById("modalName").value = demoStr[1];
 			document.getElementById("modalBranch").value = demoStr[2];
 			document.getElementById("modalAccNo").value = demoStr[3];
-			document.getElementById("modalBalance").value = demoStr[4];
-			document.getElementById("modalAlias").value = demoStr[5];
+			//document.getElementById("modalBalance").value = demoStr[4];
+			document.getElementById("modalAlias").value = demoStr[4];
 				
 			}
 		};
