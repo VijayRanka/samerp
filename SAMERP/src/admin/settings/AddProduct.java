@@ -38,6 +38,7 @@ public class AddProduct extends HttpServlet {
 			String gstper=request.getParameter("gst_per");
 			
 			String query="insert into product_master(`name`,`contractor_id`,`hsncode`,`gstper`) values('"+replacepname+"','"+contractor_id+"','"+hsn_code+"','"+gstper+"')";
+			System.out.println("Product is:"+query);
 			int i=gd.executeCommand(query);
 			
 			if(i>0)

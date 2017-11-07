@@ -307,6 +307,16 @@ public class RequireData
 	
 	// sandeep start
 	
+	public List getPreviousBal()
+	{
+		String maxid="SELECT MAX(id) FROM petty_cash_details";
+		String petty_cash_id=gd.getData(maxid).get(0).toString();
+		String previous_balance="SELECT petty_cash_details.balance FROM petty_cash_details WHERE petty_cash_details.id='"+petty_cash_id+"'";
+		List balance=gd.getData(previous_balance);
+		return balance;
+		
+	}
+	
 	public List getType(String debtor_id)
 	{
 		String query="SELECT debtor_master.type FROM debtor_master where debtor_master.id='"+debtor_id+"'";
@@ -324,7 +334,7 @@ public class RequireData
 		
 		public List getContractorVehicle()
 		{
-			String query="SELECT debtor_master.id,debtor_master.type FROM debtor_master,contractor_master,vehicle_details WHERE contractor_master.aliasname=debtor_master.type OR vehicle_details.vehicle_aliasname=debtor_master.type";
+			String query="SELECT DISTINCT debtor_master.id,debtor_master.type FROM debtor_master,contractor_master,vehicle_details WHERE contractor_master.aliasname=debtor_master.type OR vehicle_details.vehicle_aliasname=debtor_master.type";
 			List list=gd.getData(query);
 			System.out.println("list is :"+list);
 			return list;
