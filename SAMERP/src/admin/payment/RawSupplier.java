@@ -194,101 +194,95 @@ public class RawSupplier extends HttpServlet {
 			String payMode = request.getParameter("payMode");
 			String chequeNo = request.getParameter("chequeNo");
 			String bankInfo = request.getParameter("bankInfo");
-			int flag=0, exit=0;
-			
-			
-			
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String requiredDate = df.format(new Date()).toString();
+			int flag=0, bankExit=9, pettyExit=9;
 			
-			if(payMode.equals("Cash")){
-				
-				String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`)"
-						+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"')";
-				int insertPaymentStatus = gd.executeCommand(insertPayment);
-				
-				if(insertPaymentStatus==1){
-					flag=1;
-					
-					String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
-					List l = gd.getData(selectsup);
-					
-					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
-				}
-			}
-			else  if(payMode.equals("Cheque")){
-				
-				String getSupplierAlias = "SELECT `supplier_alias` FROM `material_supply_master` WHERE supplier_business_id="+supid;
-				List supplierAlias = gd.getData(getSupplierAlias);
-				
-				int debtorId = rdGet.getDebtorId(supplierAlias.get(0).toString());
-				System.out.println("debid "+debtorId);
-				
-				int balStatus = rdGet.checkBankBalance(Integer.parseInt(paidAmt));
-				System.out.println("balStatus : "+balStatus);
-				
-				if(balStatus==1)
-				{
-					String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `cheque_no`, `description`)"
-							+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+chequeNo+"', '"+bankInfo+"')";
-					int insertPaymentStatus = gd.executeCommand(insertPayment);
-					
-					if(insertPaymentStatus==1){
-						flag=1;
-						
-						String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
-						List l = gd.getData(selectsup);
-						
-						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
-					}
-					
-					rdGet.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode, String.valueOf(debtorId));
-				}
-				else{
-					exit=1;
-					request.setAttribute("exit", exit);
-				}
-				
-			}
-			else{
-				
-				String getSupplierAlias = "SELECT `supplier_alias` FROM `material_supply_master` WHERE supplier_business_id="+supid;
-				List supplierAlias = gd.getData(getSupplierAlias);
-				
-				int debtorId = rdGet.getDebtorId(supplierAlias.get(0).toString());
-				System.out.println("debid "+debtorId);
-				
-				int balStatus = rdGet.checkBankBalance(Integer.parseInt(paidAmt));
-				System.out.println("balStatus : "+balStatus);
-				
-				if(balStatus==1)
-				{
-					
-					String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `description`)"
-							+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+bankInfo+"')";
-					int insertPaymentStatus = gd.executeCommand(insertPayment);
-					
-					if(insertPaymentStatus==1){
-						flag=1;
-						
-						String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
-						List l = gd.getData(selectsup);
-						
-						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
-					}
-					
-					rdGet.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode, String.valueOf(debtorId));
-					
-				}
-				else{
-					exit=1;
-					request.setAttribute("exit", exit);
-				}
-				
-			}
+			String q1 = "SELECT `supplier_alias` FROM `material_supply_master` WHERE supplier_business_id="+supid;
+			List l1 = gd.getData(q1);
 			
-			if(exit==0 && flag==1)
+			int debtorId = rdGet.getDebtorId(l1.get(0).toString());
+			System.out.println("debid "+debtorId);
+			
+			
+			if(payMode.equals("Cash"))
 			{
+				int pettyStatus = rdGet.checkPCStatus(Integer.parseInt(paidAmt));
+				System.out.println("pettyStatus : "+pettyStatus);
+				pettyExit=pettyStatus;
+				
+				if(pettyStatus==1){
+					
+					if(rdGet.pCashEntry(paidDate, Integer.parseInt(paidAmt), 0, String.valueOf(debtorId))){
+						String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`)"
+								+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"')";
+						int insertPaymentStatus = gd.executeCommand(insertPayment);
+						
+						if(insertPaymentStatus==1){
+							flag=1;
+							
+							String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
+							List l = gd.getData(selectsup);
+							
+							request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
+						}
+					}
+				}
+				else{
+					request.setAttribute("pettyExit", pettyExit);
+				}
+			}
+			else 
+			{
+				
+				int balStatus = rdGet.checkBankBalance(Integer.parseInt(paidAmt), bankInfo);
+				System.out.println("balStatus : "+balStatus);
+				bankExit=balStatus;
+				
+				if(balStatus==1){
+					
+					if(rdGet.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode, String.valueOf(debtorId))){
+					
+						if(payMode.equals("Cheque")){
+							String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `cheque_no`, `description`)"
+									+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+chequeNo+"', '"+bankInfo+"')";
+							int insertPaymentStatus = gd.executeCommand(insertPayment);
+							
+							if(insertPaymentStatus==1){
+								flag=1;
+								
+								String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
+								List l = gd.getData(selectsup);
+								
+								request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
+							}
+							
+								
+						}
+						else if(payMode.equals("Transfer")){
+							
+							String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `description`)"
+									+ " VALUES ("+supid+", '"+paidDate+"', '"+paidAmt+"', '"+payMode+"', '"+bankInfo+"')";
+							int insertPaymentStatus = gd.executeCommand(insertPayment);
+							
+							if(insertPaymentStatus==1){
+								flag=1;
+								
+								String selectsup = "select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid;
+								List l = gd.getData(selectsup);
+								
+								request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully to "+l.get(0));
+							}
+								
+						}
+					}
+				}
+				else{
+					request.setAttribute("bankExit", bankExit);
+				}
+			}
+			
+			if(flag==1 && (bankExit==1 || pettyExit==1)){
 				
 				String q = "SELECT `total_remaining` FROM `total_supplier_payment_master` WHERE id=(SELECT MAX(id) from total_supplier_payment_master WHERE supplier_id="+supid+")";
 				List l = gd.getData(q);
@@ -296,11 +290,11 @@ public class RawSupplier extends HttpServlet {
 				int total = Integer.parseInt(l.get(0).toString()) - Integer.parseInt(paidAmt);
 				
 				String insertQuery1="INSERT INTO `total_supplier_payment_master`(`supplier_id`, `payment_id`, `paid_amt`, `date`, `total_remaining`) VALUES ("+supid+", (select max(id) from supplier_payment_master), (SELECT `paid_amt` FROM `supplier_payment_master` WHERE id=(SELECT MAX(id) from supplier_payment_master)), '"+requiredDate+"' , "+total+")";
-				int status1=gd.executeCommand(insertQuery1);
-				
+				int status1=gd.executeCommand(insertQuery1);				
 			}
 			
-			System.out.println("exit : "+exit);
+			System.out.println("bankExit : "+bankExit);
+			System.out.println("pettyExit : "+pettyExit);
 			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/payment/rawSupplier.jsp");
 			rdd.forward(request, response);
 		}

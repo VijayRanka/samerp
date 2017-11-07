@@ -849,7 +849,7 @@ public class RequireData
 			
 			public int checkBankBalance(int amount, String bankId)
 			{
-				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details WHERE bid="+bankId+")";
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details WHERE bid='"+bankId+"')";
 				if(!gd.getData(statusString).isEmpty())
 				{
 					String a=gd.getData(statusString).get(0).toString();
