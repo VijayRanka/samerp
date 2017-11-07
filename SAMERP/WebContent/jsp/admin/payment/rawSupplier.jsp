@@ -430,6 +430,69 @@ select {
   </div>
 </div>
 
+<!-- Insufficient balance in bank modal start -->
+
+<div class="modal hide fade zoom-out" id="bankBalanceError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; margin-left: 5%; margin-top: -4%; "> Warning </h4> </i> 
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+					<div class="alert">
+		              <h4> Insufficient balance in your Bank Account..!!  </h4> </div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+			</div>
+	
+		</form>
+	</div>
+</div>
+
+<!-- Insufficient balance in bank modal end -->
+
+
+<!-- Insufficient balance in petty Cash modal end -->
+
+<div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+						<div class="alert alert-error alert-block">
+		              		<h4> <i style=" font-size: 200%;" class="icon-remove-circle"> </i>Insufficient balance in your Petty Cash..!!  </h4> 
+		            	</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+			</div>
+	
+		</form>
+	</div>
+</div>
+
+<!-- Insufficient balance in petty Cash modal end -->
+
+
 
 <!--Footer-part-->
 
@@ -732,6 +795,18 @@ function myFunction() {
     var x = document.getElementById("snackbar")
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
+	
+	//for shownig insufficient balance error
+	var bankExit = <%=request.getAttribute("bankExit") %>
+	var pettyExit = <%=request.getAttribute("pettyExit") %>
+	
+	if(bankExit==0 || bankExit==-1){
+		$('#bankBalanceError').modal('show');
+	}
+	
+	if(pettyExit==0 || pettyExit==-1){
+		$('#pettyCashError').modal('show');
 	}
 }
 

@@ -2,6 +2,8 @@ package admin.pettycash;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,14 +24,7 @@ public class PTCash extends HttpServlet {
 						
 			int status=0;
 			
-			if(request.getParameter("handloanbtn")!=null)
-			{
-				
-			
-			
-			
-			}
-			
+					
 			if(request.getParameter("handloanbtn")!=null)
 			{
 				
@@ -38,9 +33,10 @@ public class PTCash extends HttpServlet {
 				
 				
 				String name=request.getParameter("name");				
-				String mobileNo=request.getParameter("mobileno");				
+				String mobileNo=request.getParameter("mobileno");	
+				System.out.println("mobile is:"+mobileNo);
 				String aliasname="HL_"+name.replace(" ", "_")+"_"+mobileNo;				
-				String HL_MasterDetails="insert into `handloan_master`(`name`,`mob_no`,`alias_name`) values('"+name+"','"+mobileNo+"','"+aliasname+"')";
+				String HL_MasterDetails="INSERT INTO handloan_master(name,mob_no,alias_name) VALUES('"+name+"','"+mobileNo+"','"+aliasname+"')";
 				status=gd.executeCommand(HL_MasterDetails);
 				
 				if(status==0)
@@ -66,22 +62,37 @@ public class PTCash extends HttpServlet {
 				String chequeNo=request.getParameter("chequeNo");
 				String bank_name=request.getParameter("bankInfo");
 				
-				System.out.println(handloan_id+","+date+","+amount+","+paymode+","+chequeNo+","+bank_name);
+			String q=handloan_id+","+date+","+amount+","+paymode+","+chequeNo+","+bank_name;
+				System.out.println(q);
 				
 				if(paymode.equals("Cash"))
 				{
-					String insert_cash="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
-					status1=gd.executeCommand(insert_cash);
+					String insert_bank="INSERT INTO bank_account_details(date,credit,particulars,balance) VALUES('"+date+"','"+amount+"','"+paymode+"','"+amount+"');";
+					gd.executeCommand(insert_bank);
+					
+					String insert_query1="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
+					System.out.println("cash:"+insert_query1);
+					status1=gd.executeCommand(insert_query1);
 					
 				}else if(paymode.equals("Cheque"))
 				{
-					String insert_cash="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`particulars`,`description`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+chequeNo+"','"+bank_name+"','"+amount+"')";
-					status1=gd.executeCommand(insert_cash);
+					
+					String insert_bank1="INSERT INTO bank_account_details(date,credit,particulars,balance) VALUES('"+date+"','"+amount+"','"+paymode+"','"+amount+"');";
+					gd.executeCommand(insert_bank1);
+					
+					String insert_query2="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`particulars`,`description`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+chequeNo+"','"+bank_name+"','"+amount+"')";
+					System.out.println("cheque:"+insert_query2);
+					status1=gd.executeCommand(insert_query2);
 					
 				}else if(paymode.equals("Transfer"))
 				{
-					String insert_cash="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`description`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+bank_name+"','"+amount+"')";
-					status1=gd.executeCommand(insert_cash);
+					
+					String insert_bank2="INSERT INTO bank_account_details(date,credit,particulars,balance) VALUES('"+date+"','"+amount+"','"+paymode+"','"+amount+"');";
+					gd.executeCommand(insert_bank2);
+					
+					String insert_query3="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`description`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+bank_name+"','"+amount+"')";
+					System.out.println("transfer:"+insert_query3);
+					status1=gd.executeCommand(insert_query3);
 				}
 				
 				
@@ -99,6 +110,24 @@ public class PTCash extends HttpServlet {
 				rq.forward(request, response);
 				
 			}
+			
+			if(request.getParameter("findName")!=null)
+			{
+							
+				String name=request.getParameter("findName");
+				String query="SELECT handloan_master.id,handloan_master.name FROM handloan_master WHERE handloan_master.name LIKE '%"+name+"%'";
+				
+				List getName=gd.getData(query);
+				Iterator itr=getName.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					out.print("<option>"+itr.next()+"</option>");
+				}	
+				
+			}
+			
+			
 	}
 
 

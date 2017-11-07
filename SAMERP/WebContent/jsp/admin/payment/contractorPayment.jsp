@@ -1,8 +1,6 @@
-
 <%@page import="admin.JcbPocWork.demo"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="com.mysql.jdbc.ResultSet"%>
 <%@page import="dao.General.GenericDAO"%>
 <%@page import="java.util.Iterator"%>
