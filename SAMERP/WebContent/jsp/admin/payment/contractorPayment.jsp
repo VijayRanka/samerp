@@ -1,3 +1,4 @@
+<%@page import="admin.JcbPocWork.demo"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="com.mysql.jdbc.ResultSet"%>
@@ -340,14 +341,52 @@ to {
 								<table class="table table-bordered data-table">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>Particular</th>
-											<th>Credit</th>
-											<th>Debit</th>
+											<th>S.No.</th>
+											<th>Paid Date</th>
+											<th>From-Date</th>
+											<th>To Date</th>
+											<th>Loading Charges</th>
+											<th>Deposit</th>
+											<th>Work Amount</th>
+											<th>Total Bill Amount</th>
+											<th>Paid Amount</th>
+											<th>Mode</th>
+											<th>Cheque Details</th>
+											<th>Bank Info</th>
 											<th>Balance</th>
+											
 										</tr>
 									</thead>
 									<tbody>
+									<%if(request.getParameter("ppid")!=null){
+									List demoList=rq.getContTransactions(request.getParameter("ppid"));
+									if(!demoList.isEmpty() )
+									{
+										int i=1;
+									Iterator itr=demoList.iterator();
+									while(itr.hasNext())
+									{
+										itr.next();
+										itr.next();
+									%>
+									<tr>
+									<td><%=i %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
+									<td><% String cDetails=itr.next().toString();if(!cDetails.isEmpty()){%><%=cDetails %><%}else{ %>-<%} %></td>
+									<td><% String bDetails=rq.getBankById(itr.next().toString());if(bDetails!=null){%><%=bDetails %><%}else{ %>-<%} %></td>
+									<td><%=itr.next() %></td>
+									</tr>	
+									<%itr.next();
+									i++;}}
+									}%>
 
 									</tbody>
 								</table>
@@ -584,7 +623,7 @@ to {
 		         <input type="text" name="dateFromTo" id="dateFromTo"/>
 		          <input type="hidden" name="deposit" id="deposit"/>
 		           <input type="hidden" name="loadingCharges" id="loadingCharges"/>
-				<input type="submit" id="paymentSubmitbtn" name="paymentSubmit" class="btn btn-primary" value="Submit" />
+				<input type="button" id="paymentSubmitbtn" name="paymentSubmit" class="btn btn-primary" value="Submit" />
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 	</form>
@@ -596,6 +635,19 @@ to {
 </div>
 
 		<script type="text/javascript"> 
+		function getPaymentEntryModal()
+		{
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var demoStr = this.responseText;
+					}
+				};
+			xhttp.open("POST", "/SAMERP/ContractorPayment?getPcStatus=1&mode=cash&amnt=50&bnkId=1", true);
+			xhttp.send();
+		}
+		
 		function getParameterByName(name, url) {
 		    if (!url) url = window.location.href;
 		    name = name.replace(/[\[\]]/g, "\\$&");

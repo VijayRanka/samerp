@@ -47,6 +47,8 @@ public class AddClient extends HttpServlet {
 		String address=request.getParameter("address");
 		String cbamount=request.getParameter("bamount");
 		
+		String client_aliasname="CL_"+coname;
+		
 		String src = "";
 		if(request.getParameter("productPurchasePage1")!=null){
 			src = request.getParameter("productPurchasePage1");
@@ -69,6 +71,12 @@ public class AddClient extends HttpServlet {
 			}
 			else
 			{
+				//debtor_master Entry
+				String Client_Aliasname="insert into `debtor_master`(`type`) values('"+client_aliasname+"')";
+				gd.executeCommand(Client_Aliasname);
+				
+				
+				//Client_Details 
 				String query="insert into `client_details` (`client_organization_name`,`client_name`,`client_contactno1`,`client_contactno2`,`client_email`,`client_address`,`client_balance_amount`) values('"+coname+"','"+cname+"','"+contactno1+"','"+contactno2+"','"+email+"','"+address+"','"+cbamount+"')";
 				System.out.println(query);
 				int i=gd.executeCommand(query);
@@ -172,12 +180,25 @@ public class AddClient extends HttpServlet {
 			String id=request.getParameter("Updateid");
 			System.out.println("id 2:"+id);
 			String update_coname=request.getParameter("coname");
+			
+			String old_coname=request.getParameter("old_coname");
+			
 			String update_cname=request.getParameter("cname");
 			String update_contactno1=request.getParameter("contactno1");
 			String update_contactno2=request.getParameter("contactno2");
 			String update_email=request.getParameter("email");
 			String update_address=request.getParameter("address");
 			int update_cbamount=Integer.parseInt(request.getParameter("bamount"));
+			
+			String update_clname="CL_"+update_coname;
+			
+			
+			//Update Entry In Debtor Master
+			
+				String query1="UPDATE debtor_master SET debtor_master.type='"+update_clname+"' WHERE debtor_master.type='"+"CL_"+old_coname+"'";
+				System.out.println(query1);
+				gd.executeCommand(query1);
+			
 			
 				String query="update `client_details` set `client_organization_name`='"+update_coname+"',`client_name`='"+update_cname+"',`client_contactno1`='"+update_contactno1+"',`client_contactno2`='"+update_contactno2+"',`client_email`='"+update_email+"',`client_address`='"+update_address+"',`client_balance_amount`="+update_cbamount+" where `client_id`="+id+"";
 				System.out.println("update:"+query);

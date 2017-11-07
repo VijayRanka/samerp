@@ -174,7 +174,7 @@
 							<div class="form-footer">
 								<div class="form-actions" style="padding-left: 350px">
 									<button type="submit" name="submit" class="btn btn-success">Submit</button>&nbsp;&nbsp;&nbsp;
-									<button type="button" class="btn btn-danger">Cancel</button>
+									 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 								</div>
 								</div>
 							</form>

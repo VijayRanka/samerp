@@ -101,7 +101,7 @@ to {
 
 
 
-<body onload=" setFocusToTextBox()">
+<body onload="setFocusToTextBox()">
 
 	<!--Header-part-->
 	<div id="header">
@@ -222,7 +222,7 @@ to {
 								</div>
 								<div class="form-actions" style="padding-left: 350px">
 									<button type="submit" name="insert" class="btn btn-success">Submit</button>&nbsp;&nbsp;&nbsp;
-									<button type="button" class="btn btn-danger" style="margin-right: 20px">Cancel</button>
+									 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 								</div>
 							</form>
 						</div>
@@ -277,7 +277,7 @@ to {
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
-										<td><a href="#myModal" data-toggle="modal"
+										<td><a href="#update" data-toggle="modal"
 											onclick="searchName(<%=id1%>)">Update</a> / <a
 											href="/SAMERP/AddClient?delete=<%=id1%>">Delete</a></td>
 									</tr>
@@ -298,7 +298,7 @@ to {
 
 
 	<!-- Modal -->
-	<div id="myModal" class="modal hide fade" role="dialog"
+	<div id="update" class="modal hide fade" role="dialog"
 		style="width: 55%; margin-left: -28%;">
 		<div class="modal-dialog">
 
@@ -308,18 +308,16 @@ to {
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Update Client Details</h4>
 				</div>
-				
-
 					<form action='/SAMERP/AddClient' name="form2" method="Post"
 						class="form-horizontal">
 						<div class="modal-body">
 						<div class="control-group">
 							<label class="control-label">Client Orgnization Name:</label>
 							<div class="controls">
-								<input type="hidden" id="Updateid" name="Updateid" /> <input
-									type="text" name="coname" id="Updateconame" class="span4"
-									placeholder="Client Orgnization Name"
-									onkeyup="this.value=this.value.toUpperCase()" required />
+								<input type="hidden" id="Updateid" name="Updateid" />
+								<input type="hidden" id="old_coname" name="old_coname" />
+								 
+								<input type="text" name="coname" id="Updateconame" class="span4" placeholder="Client Orgnization Name" onkeyup="this.value=this.value.toUpperCase()" required />
 							</div>
 						</div>
 						<div class="control-group">
@@ -438,6 +436,7 @@ function searchName(id1) {
 			var demoStr = this.responseText.split(",");
 			document.getElementById("Updateid").value = demoStr[0];
 			document.getElementById("Updateconame").value = demoStr[1];
+			document.getElementById("old_coname").value = demoStr[1];
 			document.getElementById("Updatecname").value = demoStr[2];
 			document.getElementById("Updatecontactno1").value = demoStr[3];
 			document.getElementById("Updatecontactno2").value = demoStr[4];

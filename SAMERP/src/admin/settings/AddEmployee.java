@@ -47,7 +47,14 @@ public class AddEmployee extends HttpServlet {
 			String aliasname="EMP_"+employeename+'_'+WorkWith;
 			int status=0;
 			String insertQuery="";
+			
+			//start debtor master
+			
+			insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
+			
+			gd.executeCommand(insertQuery);
 
+			//end debtor master
 			
 			if(other.equals("")){
 				insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith, aliasname)"
@@ -106,6 +113,10 @@ public class AddEmployee extends HttpServlet {
 			String contact_no = request.getParameter("contact_no");
 			String work_with= request.getParameter("contractorVehicle_alias");
 			String other = request.getParameter("other");
+			
+			String update_aliasname="EMP_"+work_with;
+			
+			String up_aliasname="";
 
 			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_other='"+other+"'  where emp_id='"+Emp_id+"';";
 			

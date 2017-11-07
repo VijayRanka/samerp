@@ -488,7 +488,7 @@
 	             	<div class="control-group" id="chequeDetails" style=" display: none;">
 	             	   <label class="control-label">Cheque Number : </label>
 		               <div class="controls">
-		                 <input type="text" placeholder="Cheque Number" name="chequeNo" id="chequeNo"/>
+		                 <input type="number" placeholder="Cheque Number" name="chequeNo" id="chequeNo"/>
 		               </div>
 	             	</div>
 		            
@@ -549,6 +549,64 @@
 		</form>
 	</div>
 </div>
+
+
+<div class="modal hide fade zoom-out" id="bankBalanceError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+						<div class="alert alert-error alert-block">
+		              		<h4> <i style=" font-size: 200%;" class="icon-remove-circle"> </i>You do not have sufficient balance in your Bank Account..!!  </h4> 
+		            	</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+			</div>
+	
+		</form>
+	</div>
+</div>
+
+
+<div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+						<div class="alert alert-error alert-block">
+		              		<h4> <i style=" font-size: 200%;" class="icon-remove-circle"> </i>You do not have sufficient balance in your Petty Cash..!!  </h4> 
+		            	</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+			</div>
+	
+		</form>
+	</div>
+</div>
+
+
 
 
 <script type="text/javascript">
@@ -651,12 +709,26 @@ function setSelectValue(){
 	var m = <%=request.getParameter("ppid") %>
 	var e = document.getElementById("Supplierid");
 
+	var bankExit = <%=request.getAttribute("bankExit") %>
+	var pettyExit = <%=request.getAttribute("pettyExit") %>
+	
+	if(bankExit==0 || bankExit==-1){
+		$('#bankBalanceError').modal('show');
+	}
+	
+	if(pettyExit==0 || pettyExit==-1){
+		$('#pettyCashError').modal('show');
+	}
+	
 	if(m!=null){
 		e.value=m;
 	}
+	
 	var txt = e.options[e.selectedIndex].text;
 	getSetSelect('s2id_Supplierid', txt);
 	myFunction();
+	
+	
 }
 
 function myFunction() {

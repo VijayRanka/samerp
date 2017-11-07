@@ -335,7 +335,7 @@ to {
 											<%
 												}
 											%>
-										</select>
+										</select><input type="hidden" id="old_contractor_vehicle" name="old_contractor_vehicle">
 									</div>
 									<%
 										}
@@ -412,6 +412,7 @@ function searchEmpolyee(id) {
 			//alert(demoStr[1]);
 			document.getElementById("contactno").value = demoStr[2];
 			document.getElementById("contractor_vehicle").value = demoStr[3];
+			document.getElementById("old_contractor_vehicle").value = demoStr[3];
 			document.getElementById("other").value = demoStr[4];
 	
 					
