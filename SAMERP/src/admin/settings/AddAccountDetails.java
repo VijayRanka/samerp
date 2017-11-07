@@ -60,17 +60,17 @@ public class AddAccountDetails extends HttpServlet {
 			String accNo=request.getParameter("modalAccNo");
 			String opBalance=request.getParameter("modalBalance");
 			String alias=request.getParameter("modalAlias");
-			String oldAlias=request.getParameter("");
+			String oldAlias=request.getParameter("oldAlias");
 			int status=0;
 			GenericDAO gd= new GenericDAO();
 			
-			String query="UPDATE `account_details` SET `bank_name`='"+bName+"',`branch`='"+branch+"',`acc_no`='"+accNo+"'"
+			String updateAccountDetails="UPDATE `account_details` SET `bank_name`='"+bName+"',`branch`='"+branch+"',`acc_no`='"+accNo+"'"
 					+ ",`acc_aliasname`='"+alias+"' WHERE acc_id="+bId+"";
-			status=gd.executeCommand(query);
+			status=gd.executeCommand(updateAccountDetails);
 			if(status==1)
 			{
-				String query1="";
-				int status1=gd.executeCommand(query1);
+				String updateDebtorMaster="UPDATE `debtor_master` SET `type`='"+alias+"' WHERE type='"+oldAlias+"'";
+				int status1=gd.executeCommand(updateDebtorMaster);
 				if(status1>0)
 				{
 					System.out.println("updated in debtor");

@@ -430,6 +430,36 @@ select {
   </div>
 </div>
 
+<!-- Insufficient balance in bank modal start -->
+
+<div class="modal hide fade zoom-out" id="bankBalanceError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; margin-left: 5%; margin-top: -4%; "> Warning </h4> </i> 
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+					<div class="alert">
+		              <h4> Insufficient balance in your Bank Account..!!  </h4> </div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+			</div>
+	
+		</form>
+	</div>
+</div>
+
+<!-- Insufficient balance in bank modal end -->
+
 
 <!--Footer-part-->
 
@@ -732,6 +762,13 @@ function myFunction() {
     var x = document.getElementById("snackbar")
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
+	
+	//
+	var exit = <%=request.getAttribute("exit") %>
+	
+	if(!exit==0){
+		$('#bankBalanceError').modal('show');
 	}
 }
 
