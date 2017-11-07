@@ -226,33 +226,45 @@ display: none;}
                 <input type="text" name="amount" class="span6" placeholder="Amount" required/>
                 </div>
             </div>
-            <div class="control-group">
-              <label class="control-label">Type :</label>
-              <div class="controls">
-                <select required class="span6" name="type">
-                  <option value="CASH" selected>CASH</option>
-                  <%
-                  List aliasnamelist=rd.getBankAliasName();
-                  if(aliasnamelist!=null){
-	                  Iterator aliasitr=aliasnamelist.iterator();
-	                  while(aliasitr.hasNext()){
-	                  Object aliasname=aliasitr.next();%>
-                  <option value="<%=aliasname%>"><%=aliasname %></option>
-                  <%}} %>
-                </select>
-              </div>
-            </div>
+            <div class="control-group" style="">
+	             	   <label class="control-label">Payment Mode : </label>
+		               <div class="controls">
+		                 <input type="radio" value="CASH" style="margin-left: 1%;" name="type" onclick="displayBank()" checked="checked"/> Cash
+		                 <input type="radio" value="CHEQUE" style="margin-left: 1%;" name="type" onclick="displayBank('bankDetails', 'chequeDetails')" /> Cheque
+		                 <input type="radio" value="TRANSFER" style="margin-left: 1%;" name="type" onclick="displayBank('bankDetails')" /> Transfer
+		               </div>
+	             	</div>
+	             	
+	             	<div class="control-group" id="chequeDetails" style=" display: none;">
+	             	   <label class="control-label">Cheque Number : </label>
+		               <div class="controls">
+		                 <input type="text" placeholder="Cheque Number" name="chequeNo" id="chequeNo"/>
+		               </div>
+	             	</div>
+		            
+	             	
+	             	<div class="control-group" id="bankDetails" style=" display: none;">
+	             	   <label class="control-label">Bank Details : </label>
+		               <div class="controls" style="width: 44%;">
+		                 <select name="bankInfo" id="bankInfo" >
+            				<option value=""> Select Bank Account</option>
+			            	  <%
+			            	  		List List1 = rd.getBank();
+			            	  		Iterator itrDemo = List1.iterator();
+				              		while(itrDemo.hasNext()){
+				              %>
+					                	<option value="<%=itrDemo.next()%>"><%=itrDemo.next()%></option>
+					           <%
+				              		}
+					           %>   
+       					</select>  
+		               </div>
+	             	</div>
              <div class="control-group">
               <label class="control-label"> Reason :</label>
               <div class="controls">
                 <input type="text" id="reason" list="getList" value="-" name="reason" onkeyup="searchName(this.value,this.id,this.list.id)" class="span6" placeholder="Reason" autocomplete="off" required/>
               	<datalist id=getList"></datalist>
-              </div>
-            </div>
-             <div class="control-group">
-              <label class="control-label">Other Details :</label>
-              <div class="controls">
-                <textarea class="span6" name="other_details" placeholder="Other Details	" ></textarea>
               </div>
             </div>
             <div class="form-actions">
@@ -417,6 +429,7 @@ display: none;}
 	                   <select id="uPayMode" name="uPayMode" style="width: 220px">
 	                   <option value="CASH">CASH</option>
                   <%
+                  List aliasnamelist=rd.getBankAliasName();
                   if(aliasnamelist!=null){
 	                  Iterator aliasitr=aliasnamelist.iterator();
 	                  while(aliasitr.hasNext()){
@@ -601,7 +614,34 @@ display: none;}
 		</div>
 
 <script>
+function displayBank(id, id1){
+	var x = document.getElementById(id);
+	var y = document.getElementById(id1);
+	
+	if( x==null ){
+		document.getElementById("chequeNo").required=false;
+		document.getElementById("bankInfo").required=false;
+		
+		document.getElementById("chequeDetails").style.display = "none";
+		document.getElementById("bankDetails").style.display = "none";
+		
+	}
+	else if(x!=null && y!=null){
+		x.style.display = "block";
+		y.style.display = "block";
+		
+		document.getElementById("chequeNo").required=true;
+		document.getElementById("bankInfo").required=true;
+	}
+	else{	
 
+		document.getElementById("chequeNo").required=false;
+		document.getElementById("chequeDetails").style.display = "none";
+		
+		x.style.display = "block";
+		document.getElementById("bankInfo").required=true;
+	}
+}
 function myFunction() {
 	document.getElementById("expenses_type_name").focus();
     var x = document.getElementById("snackbar");

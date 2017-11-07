@@ -59,7 +59,7 @@
       <!-- loop for all of them goes here -->
        <!--  <li class="bg_ls"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Supply & Sale</a> </li>
 		<li class="bg_lo"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Work Details</a> </li> -->
-		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/expenses/expenses.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Today's Expense</a> </li>
+		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/expenses/expenses.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Expense</a> </li>
 		<li class="bg_ly"> <a href="#"> <i class="icon-money"></i><span class="label label-success"></span>JCB POC Payment</a> </li>
 		<li class="bg_lb"> <a href="/SAMERP/jsp/admin/productPurchase/productSupplierPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Product Payment</a> </li>
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Raw Payment</a> </li>

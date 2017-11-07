@@ -869,16 +869,16 @@ public class RequireData
 			
 			
 			
-			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankAliasName, String chequeDetails, String date)
+			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankId, String chequeDetails, String date)
 			{
-				if(bankAliasName==null)
-					bankAliasName="";
+				if(bankId=="")
+					bankId="null";
 				if(chequeDetails==null)
 					chequeDetails="";
-				System.out.println(expTypeId+debtorId+name+amount+mode+bankAliasName+chequeDetails+date);
 				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
-						+ " `particular`, `other_details`, `date`) VALUES "
-						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"','"+bankAliasName+"','"+chequeDetails+"','"+date+"')";
+						+ " `bankId`, `other_details`, `date`) VALUES "
+						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"',"+bankId+",'"+chequeDetails+"','"+date+"')";
+				System.out.println(insertQuery);
 				int x=gd.executeCommand(insertQuery);
 			}
 			
