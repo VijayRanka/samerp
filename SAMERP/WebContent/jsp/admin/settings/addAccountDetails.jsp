@@ -226,7 +226,7 @@ transition: all 0.3s;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">Update Bank Details</h4>
       </div>
       <div class="modal-body" id="showModal">
       <form class="form-horizontal" action="/SAMERP/AddAccountDetails" method="post" name="updateAccount">
@@ -254,23 +254,24 @@ transition: all 0.3s;
          			</div>
         	</div>
         	
-        	<div class="control-group">
+        	<!-- <div class="control-group">
                   <label class="control-label">Opening Balance</label>
                   <div class="controls">
                     <input type="text" id="modalBalance"  name="modalBalance" />
          			</div>
-        	</div>
+        	</div> -->
         	
         	<div class="control-group">
                   <label class="control-label">Alias Name</label>
                   <div class="controls">
                     <input type="text" id="modalAlias"  name="modalAlias" />
+                    <input type="text" id="oldAlias"  name="oldAlias" />
          			</div>
         	</div>
       
       <div class="modal-footer">
         <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit"name="Update" class="btn btn-primary">Save changes</button></div>
+        <button type="submit" name="Update" class="btn btn-primary">Save changes</button></div>
       </div>
       </div>
       </form>
@@ -327,8 +328,8 @@ function searchName(id) {
 			document.getElementById("modalName").value = demoStr[1];
 			document.getElementById("modalBranch").value = demoStr[2];
 			document.getElementById("modalAccNo").value = demoStr[3];
-			document.getElementById("modalBalance").value = demoStr[4];
-			document.getElementById("modalAlias").value = demoStr[5];
+			document.getElementById("oldAlias").value = demoStr[4];
+			document.getElementById("modalAlias").value = demoStr[4];
 				
 			}
 		};

@@ -554,7 +554,7 @@
 <div class="modal hide fade zoom-out" id="bankBalanceError" role="dialog" style="width: 50%; margin-left: -25%;" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
-		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; margin-left: 5%; margin-top: -4%; "> Warning </h4> </i> 
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
 	</div>
 	
 	<div class="modal-body" style="padding: 0;">
@@ -563,8 +563,9 @@
 				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
 					
 					<div align="center" class="control-group">
-					<div class="alert">
-		              <h4> You does not have sufficient balance in your Bank Account..!!  </h4> </div>
+						<div class="alert alert-error alert-block">
+		              		<h4> <i style=" font-size: 200%;" class="icon-remove-circle"> </i>You do not have sufficient balance in your Bank Account..!!  </h4> 
+		            	</div>
 					</div>
 					
 				</div>
@@ -581,7 +582,7 @@
 <div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
-		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; margin-left: 5%; margin-top: -4%; "> Warning </h4> </i> 
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
 	</div>
 	
 	<div class="modal-body" style="padding: 0;">
@@ -590,8 +591,9 @@
 				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
 					
 					<div align="center" class="control-group">
-					<div class="alert">
-		              <h4> You does not have sufficient balance in Petty Cash..!!  </h4> </div>
+						<div class="alert alert-error alert-block">
+		              		<h4> <i style=" font-size: 200%;" class="icon-remove-circle"> </i>You do not have sufficient balance in your Petty Cash..!!  </h4> 
+		            	</div>
 					</div>
 					
 				</div>
@@ -603,6 +605,8 @@
 		</form>
 	</div>
 </div>
+
+
 
 
 <script type="text/javascript">
@@ -705,10 +709,15 @@ function setSelectValue(){
 	var m = <%=request.getParameter("ppid") %>
 	var e = document.getElementById("Supplierid");
 
-	var exit = <%=request.getAttribute("exit") %>
+	var bankExit = <%=request.getAttribute("bankExit") %>
+	var pettyExit = <%=request.getAttribute("pettyExit") %>
 	
-	if(!exit==0){
+	if(bankExit==0 || bankExit==-1){
 		$('#bankBalanceError').modal('show');
+	}
+	
+	if(pettyExit==0 || pettyExit==-1){
+		$('#pettyCashError').modal('show');
 	}
 	
 	if(m!=null){
