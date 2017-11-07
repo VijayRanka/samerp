@@ -41,7 +41,6 @@ public class ContractorPayment extends HttpServlet {
 			else if(mode.equalsIgnoreCase("cheque"))
 			{
 				int amount=Integer.parseInt(request.getParameter("amnt"));
-				rd.checkBankBalance(amount);
 			}
 			
 			
