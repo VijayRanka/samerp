@@ -751,10 +751,14 @@ public class RequireData
 			}
 			public String getBankById(String bankId)
 			{
-				if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+				if(!bankId.isEmpty())
 				{
-					String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
-					return bankAlias;
+					if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+					{
+						String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
+						return bankAlias;
+					}
+					
 				}
 				return null;
 			}
@@ -865,7 +869,7 @@ public class RequireData
 			
 			
 			
-			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)
+			public void commonExpEntry(String expTypeId,int debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)
 			{
 				if(bankAliasName==null)
 					bankAliasName="";

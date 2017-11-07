@@ -8,7 +8,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
-<title>Your Project</title>
+<title>Daily Stock</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
@@ -220,6 +220,17 @@ function getInsertData()
 				alert("Updated Successfully");
 				getProductList(document.getElementById("contractor").value);
 				}
+			if(demoStr[0]==3)
+				{
+				alert("Data Already Present");
+				getProductList(document.getElementById("contractor").value);
+					
+				}
+			else if(demoStr[0]==4)
+				{
+				alert("Assign Rates First");
+				getProductList(document.getElementById("contractor").value);
+				}
 				
 		}
 		};
@@ -241,41 +252,47 @@ function selectText() {
 }
 
 function getProductList(value){
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var demoStr = this.responseText.split(",");
-			if(demoStr[0]==0)
-				alert("Insert Data First")
-			else if(demoStr[0]==2)
-				{
+	if(value=='select'){
+		document.getElementById("myDataTable").innerHTML="";
+	}
+		
+	else{
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				if(demoStr[0]==0){
+					alert("Insert Data First");
+					document.getElementById("myDataTable").innerHTML="";
 				}
-			else if(demoStr[0]==1)
-			{
-				var tableStr="";
-				document.getElementById("myDataTable").innerHTML="";
-				var j=1;
-				for(var i=1;i<demoStr.length-2;i=i+3)
+				else if(demoStr[0]==2)
+					{
+					}
+				else if(demoStr[0]==1)
 				{
-					tableStr+="<tr id='tRowId"+j+"'><td style='text-align: center'><input type='hidden' id='productId"+j+"' value='"+demoStr[i]+"'>"+j+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
-					"<td style='text-align: center' contenteditable='true' id='dailyQty"+j+"' onfocus='getS(this.id);' onkeypress='if(event.keyCode==13) return false;'></td>"+
-					"<td style='text-align: center' contenteditable='true' id='querQty"+j+"' onfocus='getS(this.id);' onkeypress='if(event.keyCode==13) return false;'></td>"+
-					"<td style='text-align: center'>"+demoStr[i+2]+"</td><tr>";
-					j++;
+					var tableStr="";
+					document.getElementById("myDataTable").innerHTML="";
+					var j=1;
+					for(var i=1;i<demoStr.length-2;i=i+3)
+					{
+						tableStr+="<tr id='tRowId"+j+"'><td style='text-align: center'><input type='hidden' id='productId"+j+"' value='"+demoStr[i]+"'>"+j+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+						"<td style='text-align: center' contenteditable='true' id='dailyQty"+j+"' onfocus='getS(this.id);' onkeypress='if(event.keyCode==13) return false;'></td>"+
+						"<td style='text-align: center' contenteditable='true' id='querQty"+j+"' onfocus='getS(this.id);' onkeypress='if(event.keyCode==13) return false;'></td>"+
+						"<td style='text-align: center'>"+demoStr[i+2]+"</td><tr>";
+						j++;
+					}
+					document.getElementById("addCancel").setAttribute("style","display:block");
+					document.getElementById("countDown").value=j-1;
+					document.getElementById("myDataTable").innerHTML=tableStr;
+					document.getElementById("dailyQty1").focus();
 				}
-				document.getElementById("addCancel").setAttribute("style","display:block");
-				document.getElementById("countDown").value=j-1;
-				document.getElementById("myDataTable").innerHTML=tableStr;
-				document.getElementById("dailyQty1").focus();
-			}
-			}
-		};
-	xhttp.open("POST","/SAMERP/AddDailyStock?getPrdctData="+value, true);
-	xhttp.send();
-	
-	
+				}
+			};
+		xhttp.open("POST","/SAMERP/AddDailyStock?getPrdctData="+value, true);
+		xhttp.send();
+	}
 }
 function getS(id)
 {
