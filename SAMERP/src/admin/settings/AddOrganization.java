@@ -22,31 +22,14 @@ import dao.General.GenericDAO;
 import dao.dbconnect.DBConnection;
 import utility.RequireData;
 
-/**
- * Servlet implementation class addOrganization
- */
 @MultipartConfig(maxFileSize = 16177215)
 public class AddOrganization extends HttpServlet {
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AddOrganization() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doPost(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
@@ -62,25 +45,30 @@ public class AddOrganization extends HttpServlet {
 			String contactno1=request.getParameter("contactno1");
 			String contactno2=request.getParameter("contactno2");
 			String email=request.getParameter("email");		
+			String opening_balance=request.getParameter("opening_balance");
 			int status=0;
-			
+		
 			String insertQuery="INSERT INTO organization_details(organization_name, organization_address, organization_contactno1, "
-					+ "organization_contactno2, organization_email) VALUES ('"+organizationname+"','"+address+"','"+contactno1+"','"+contactno2+"','"+email+"');";
-			
-			System.out.println("Q ===> "+insertQuery );
-			
+					+ "organization_contactno2, organization_email,organization_op_balance) VALUES ('"+organizationname+"','"+address+"','"+contactno1+"','"+contactno2+"','"+email+"','"+opening_balance+"');";
+					
 			status=gd.executeCommand(insertQuery);
+			
+			/*//banck account details
+			String opening_bal="INSERT INTO bank_account_details(particulars,balance) VALUES('Opening Balance','"+opening_balance+"');";
+			status=gd.executeCommand(opening_bal);*/
+		
 
 			if(status!=0)
 			{
 				System.out.println("organizer successfully inserted");
 				request.setAttribute("status", "Organization Inserted Successfully");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addOrganization.jsp");
-				rd.forward(request, response);
+				
 			}
 			else{
 				System.out.println("Fail to upload");
 			}
+			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addOrganization.jsp");
+			rd.forward(request, response);
 		}
 		
 		if(request.getParameter("deleteId")!=null)
@@ -119,9 +107,10 @@ public class AddOrganization extends HttpServlet {
 			String contact_no1 = request.getParameter("contact_no1");
 			String contact_no2 = request.getParameter("contact_no2");
 			String email_id = request.getParameter("email_id");
+			String up_opening_balance=request.getParameter("opening_balance");
 
 			String updateorganizationQuery = "update organization_details set organization_name='"+organization_name+"', organization_address='"+organization_address+"',"
-					+ " organization_contactno1='"+contact_no1+"', organization_contactno2='"+contact_no2+"', organization_email='"+email_id+"'  where organization_id='"+organization_id+"';";
+					+ " organization_contactno1='"+contact_no1+"', organization_contactno2='"+contact_no2+"', organization_email='"+email_id+"',organization_op_balance='"+up_opening_balance+"'  where organization_id='"+organization_id+"';";
 			System.out.println("Q===>"+updateorganizationQuery);
 			int updatestatus = gd.executeCommand(updateorganizationQuery);
 			

@@ -307,6 +307,13 @@ public class RequireData
 	
 	// sandeep start
 	
+	public List getNameAmount()
+	{
+		String select_query="SELECT DISTINCT handloan_master.name,handloan_details.credit FROM handloan_master,handloan_details";
+		List list=gd.getData(select_query);
+		return list;
+	}
+	
 	public List getPreviousBal()
 	{
 		String maxid="SELECT MAX(id) FROM petty_cash_details";
@@ -489,7 +496,7 @@ public class RequireData
 		
 		public List getOrganizationData()
 		{
-			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email from organization_details";
+			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email,organization_op_balance from organization_details";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}

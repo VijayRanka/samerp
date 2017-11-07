@@ -41,9 +41,8 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" />
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 </head>
 <style>
 #snackbar {
@@ -180,7 +179,7 @@ to {
 					Home</a> <a href="#" class="current">PT Cash</a>
 			</div>
 		</div>
-		<!--End-breadcrumbs-- sandeep>
+		<!--End-breadcrumbs-->
 		<div class="container-fluid">
 			<hr>
 			<div class="row-fluid">
@@ -230,19 +229,31 @@ to {
 								
 								%>
 								<a href="#paymentEntry" data-toggle="modal"
-									style="position: absolute; margin-left: 46%; margin-top: 1.4%;">
-									<span class="badge badge-inverse"><i class="icon-plus"></i></span>
+									style="position: absolute; margin-left: 50%; margin-top: 1.4%;">
+									<span class="badge badge-inverse">Add HandLoan</span>
 								</a>
 
-						<div class="control-group">
-									<label class="control-label">Hand Loan:</label>
-									<div class="controls">
-										<input type="text" name="hand_loan" class="span4"
-											placeholder="Hand Loan"
-											onkeyup="this.value=this.value.toUpperCase()"
-											pattern="[0-9]*" maxlength="10" required />
-									</div>
-								</div>
+						<table id="HandLoan-details-table">
+															
+								<tr>
+								<div>
+								<label class="control-label">Hand Loan:</label>
+								<div class="controls controls-row">
+           								 <input type="text"  list="getList" autocomplete="off" onkeyup="this.value=this.value.toUpperCase()" placeholder="Name" id="name"  onfocus="searchSup(this.id,this.value)" <% if(request.getAttribute("notify")!=null){ %> value="<%=request.getAttribute("sbname")%>" <% }%> class="span2 m-wrap">
+           								 <input type="text" id="amount" placeholder="Amount" class="span2 m-wrap">&nbsp;&nbsp;
+           								 <button type="button" value="Add More" onclick="InsertRow()" class="add-more-button">+</button>
+           								 <button type="button" value="Remove" onclick="RemoveRow()" class="remove-button">-</button>
+        						  </div>
+        						  </div>      						  
+        						  
+										<div class="controls" style="display:none;">
+											<select name="entName" id="entName">
+												<option></option>
+											</select>
+										</div>
+								</tr>
+						</table>
+					
 								
 						
 						<a href="#addbankname" data-toggle="modal"
@@ -332,7 +343,10 @@ to {
 										<th>Action</th>
 									</tr>
 								</thead>
+								<%
 								
+								
+								%>
 								<tbody>
 							
 								</tbody>
@@ -373,6 +387,7 @@ to {
 			</div>
 		</div>
 	</div>
+	
 	<div class="modal hide fade zoom-out" id="paymentEntry" role="dialog">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal"></a>
@@ -380,8 +395,7 @@ to {
 		</div>
 
 		<div class="modal-body" style="padding: 0;">
-			<form class="form-horizontal" action="/SAMERP/PTCash"
-				method="post" name="ptcash">
+			<form class="form-horizontal" action="/SAMERP/PTCash" method="post" name="ptcash">
 				<div class="form-group">
 					<div class="widget-content nopadding">
 
@@ -396,15 +410,14 @@ to {
 						<div class="control-group" style="">
 							<label class="control-label">Name: </label>
 							<div class="controls">
-								<input type="text" name="name" placeholder="Name" required />
+								<input type="text" name="name" placeholder="Name" onkeyup="this.value=this.value.toUpperCase()" required />
 							</div>
 						</div>
 						
 						<div class="control-group" style="">
 							<label class="control-label">Mobile No: </label>
 							<div class="controls">
-								<input type="text" name="mobileno" placeholder="Mobile No"
-									maxlength="10" required />
+								<input type="text" name="mobileno" placeholder="Mobile No"	maxlength="10" required />
 							</div>
 						</div>
 
@@ -423,22 +436,16 @@ to {
 						<div class="control-group" style="">
 							<label class="control-label">Amount : </label>
 							<div class="controls">
-								<input type="text" name="paidAmt" placeholder="Amount" 
-									required />
+								<input type="text" name="paidAmt" placeholder="Amount" 	required />
 							</div>
 						</div>
 
 						<div class="control-group" style="">
 							<label class="control-label">Payment Mode : </label>
 							<div class="controls">
-								<input type="radio" value="Cash" style="margin-left: 1%;"
-									name="payMode" onclick="displayBank()" checked="checked" />
-								Cash <input type="radio" value="Cheque" style="margin-left: 1%;"
-									name="payMode"
-									onclick="displayBank('bankDetails', 'chequeDetails')" />
-								Cheque <input type="radio" value="Transfer"
-									style="margin-left: 1%;" name="payMode"
-									onclick="displayBank('bankDetails')" /> Transfer
+								<input type="radio" value="Cash" style="margin-left: 1%;" name="payMode" onclick="displayBank()" checked="checked" />Cash
+								 <input type="radio" value="Cheque" style="margin-left: 1%;" name="payMode"	onclick="displayBank('bankDetails', 'chequeDetails')" />
+								Cheque <input type="radio" value="Transfer"	style="margin-left: 1%;" name="payMode"	onclick="displayBank('bankDetails')" /> Transfer
 							</div>
 						</div>
 
@@ -496,7 +503,33 @@ to {
 		</div>
 	</div>
 
-<script>
+
+<script type="text/javascript">
+function InsertRow() {
+    var insertTable = document.getElementById("HandLoan-details-table");
+    var Row = insertTable.rows;
+    var numRows = Row.length;
+    var row = insertTable.insertRow(numRows);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    
+  
+    cell1.innerHTML = "<input type='text' list='getList' onfocus='searchSup(this.id,this.value)' style='margin-left:200px; width:115px;'  placeholder='Name' />";
+    cell2.innerHTML = "<input type='text' style='margin-left:20px;width:115px;' placeholder='Amount' />";
+     
+}
+
+function RemoveRow() {
+	var removeTable = document.getElementById("HandLoan-details-table");
+	var Rows = removeTable.rows;
+    var numRows = Rows.length;
+    if(numRows>1){
+		removeTable.deleteRow(numRows-1);
+    }
+}
+
+
 function displayBank(id, id1){
 	var x = document.getElementById(id);
 	var y = document.getElementById(id1);
@@ -525,6 +558,27 @@ function displayBank(id, id1){
 		document.getElementById("bankInfo").required=true;
 	}
 }
+
+function searchSup(idd,valu)
+{  		var xhttp;
+			document.getElementById(idd).value=valu.toUpperCase();
+			
+			xhttp = new XMLHttpRequest();
+			
+			xhttp.onreadystatechange = function() {
+				
+				if (this.readyState == 4 && this.status == 200) {
+					
+					var demoStr = this.responseText;
+					//alert(demoStr);
+					document.getElementById("getList").innerHTML = demoStr;
+					}
+				};
+			xhttp.open("POST", "/SAMERP/ptcash?findName="+valu, true);
+			xhttp.send();
+					
+}
+
 
 </script>
 
