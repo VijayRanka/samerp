@@ -108,7 +108,7 @@ public class SalePayment extends HttpServlet {
 				System.out.println(payment_received+" "+balance+" "+petty_cash_id);
 				
 				String updatepetty="UPDATE `petty_cash_details` SET payment_received="+payment_received+" , balance="+balance+" WHERE id="+petty_cash_id;
-				gd.executeCommand(updatepetty);
+				//gd.executeCommand(updatepetty);
 				flag=1;
 			}
 			else if(payMode.equals("Cheque")){

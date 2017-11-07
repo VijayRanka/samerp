@@ -28,11 +28,24 @@ public class Sales extends HttpServlet {
 		RequireData rd11=new RequireData();
 		
 		String searchVehicle = request.getParameter("searchVehicle");		
-		
+
+		// ajax to search vehicle		
 		if (searchVehicle != null){ 
 			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT'";
 			List list = gd.getData(query);			
 			Iterator itr = list.iterator();
+			while (itr.hasNext()) {
+				out.print(itr.next() + ",");
+			}
+		}
+		
+		// ajax to search product
+		if(request.getParameter("q")!=null){
+			
+			String query="SELECT `id`,`name`,`gstper` FROM `product_master` WHERE `name` LIKE '"+request.getParameter("q")+"%'";
+			List details = gd.getData(query);
+
+			Iterator itr = details.iterator();
 			while (itr.hasNext()) {
 				out.print(itr.next() + ",");
 			}
@@ -179,7 +192,17 @@ public class Sales extends HttpServlet {
 					String rate = request.getParameter("rate1"+count);
 					String supplierName = request.getParameter("supplierName1"+count);
 					String chalanNo_third = request.getParameter("chalanNo_third1"+count);
-					
+					if(supplierName.equals("SARTHAK")){
+						int p_qty = Integer.parseInt(qty);
+						q="SELECT  final_stock.qty FROM final_stock WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='"+productName+"')";
+						int product_qty=0;
+						List qty_product=gd.getData(q);
+						if(!qty_product.isEmpty()){
+							product_qty= Integer.parseInt(qty_product.get(0).toString());
+						}
+						String updateQuery="UPDATE final_stock SET qty="+(product_qty-p_qty)+" WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='"+productName+"')";
+						gd.executeCommand(updateQuery);
+					}
 					
 					String insertProduct="INSERT INTO `sale_details_master`(`sale_master_id`, `product_name`, `qty`, `rate`, `supplier_name`, "
 							+ " `third_party_chalan`) VALUES ("+max_sale_id+",'"+productName+"',"+qty+","+rate+",'"+supplierName+"','"+chalanNo_third+"');";

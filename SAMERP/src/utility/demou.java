@@ -87,7 +87,7 @@ public class demou {
 		UPDATE FINAL STOCK...
 		 * 
 		 * UPDATE final_stock SET qty=40 WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')
-		 
+		 */
 		
 		int qty=10;
 		
@@ -97,8 +97,18 @@ public class demou {
 		List qty_product=gd.getData(q);
 		if(!qty_product.isEmpty()){
 			product_qty= Integer.parseInt(qty_product.get(0).toString());
-		System.out.println(product_qty);
 		}
+
+		System.out.println(product_qty);
 		
-	}*/
-}}
+		String updateQuery="UPDATE final_stock SET qty="+(product_qty-qty)+" WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')";
+		
+		gd.executeCommand(updateQuery);
+		
+		
+	
+		
+		
+	}
+}
+

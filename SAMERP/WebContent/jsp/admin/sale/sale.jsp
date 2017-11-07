@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="/SAMERP/config/css/fullcalendar.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
@@ -74,6 +75,15 @@ margin-top: 5px;
 #s2id_organizationid{
     margin-left: 200px;
 }
+
+#saleDetails td{ 
+	text-align: -webkit-center;
+}
+
+.table td {
+   text-align: center;   
+}
+
 </style>
 </head>
 <body onload="setFocusToTextBox()">
@@ -145,6 +155,9 @@ margin-top: 5px;
 	              		}
 		           %>   
                 </select>
+                <a href="#add-client" data-toggle="modal" style="    position: absolute; margin-left: 15px; margin-top: 5px;">
+					<span class="badge badge-inverse"><i class="icon-plus"></i></span>
+			  	</a>
               	</div>
               	              
               <label class="control-label" style="margin-top: -50px; margin-left: 490px;"><span style="color: red;">*</span>Date :</label>
@@ -246,7 +259,7 @@ margin-top: 5px;
             <div class="control-group" style="height: 100px;" id="ownerDiv">              
               <label class="control-label">Product Name :</label>
               <div class="controls">
-              	<input list="productList" type="text" autocomplete="off" id="productNameSarthak" onkeyup="selectProduct(this.value)" name="productNameSarthak" placeholder="Product Name" style=" width: 200px; text-transform:uppercase;"/>
+              	<input list="productList" type="text" autocomplete="off" id="productNameSarthak" oninput="selectProduct(this.value)" name="productNameSarthak" placeholder="Product Name" style=" width: 200px; text-transform:uppercase;"/>
   				<datalist id="productList"></datalist>
                 <!-- <input type="text"  name="productNameSarthak" id="productNameSarthak" placeholder="Product Name" style="width: 200px;" onkeyup="this.value=this.value.toUpperCase()"/> -->
               </div>
@@ -268,9 +281,7 @@ margin-top: 5px;
             <div class="control-group" style="height: 140px;" id="thirdPartyDiv">              
               <label class="control-label">Product Name :</label>
               <div class="controls">
-                <input list="productList" type="text" autocomplete="off" id="productName" onkeyup="selectProduct(this.value)" name="productName" placeholder="Product Name" style=" width: 200px; text-transform:uppercase;
-                
-                "/>
+                <input list="productList" type="text" autocomplete="off" id="productName" onkeyup="selectProduct(this.value)" name="productName" placeholder="Product Name" style=" width: 200px; text-transform:uppercase;"/>
   				<datalist id="productList"></datalist>
                 <!-- <input type="text" name="productName" id="productName" placeholder="Product Name" style="width: 200px;" onkeyup="this.value=this.value.toUpperCase()"/> -->
               </div>
@@ -325,7 +336,7 @@ margin-top: 5px;
 		       </div>                 
     
             </div>  
-            
+            <input type="text" value="" id="g"/>
             <input type="hidden" name="counter" id="counter" />            
             
             <div class="form-actions" align="center">
@@ -408,7 +419,7 @@ margin-top: 5px;
 								<td><%=itr3.next()%></td>
 								<td><%=itr3.next()%></td>
 								<td><%=itr3.next()%></td>
-								<td rowspan="<%=span%>"><a class="tip" title="Update" href="#update" data-toggle="modal" onclick="updateRecord(<%=sid%>)"><i class="icon-pencil"></i></a> | 
+								<td rowspan="<%=span%>" ><%-- <a class="tip" title="Update" href="#update" data-toggle="modal" onclick="updateRecord(<%=sid%>)"><i class="icon-pencil"></i></a> | --%> 
 														<a class="tip" title="Delete" onclick="getDeleteId('<%=sid%>')" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a>
 								</td>
 
@@ -538,6 +549,80 @@ margin-top: 5px;
 	</div>
 </div>
 <!-- ************************************* MODEL END ************************************* -->	
+
+<!--  add client modal start -->
+<div class="modal hide fade zoom-out" id="add-client" role="dialog" style="width: 40%; margin-left: -21%;">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add New Client:</h4>
+			</div>
+			<div class="modal-body" style="max-height: 454px;">
+				<form action="/SAMERP/AddClient" method="Post"
+					class="form-horizontal" onsubmit="return validateForm()">
+					<div class="control-group">
+						<label class="control-label">Client Orgnization Name:</label>
+						<div class="controls">
+							<input type="text" id="coname" name="coname" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Client Orgnization Name" pattern="[a-z A-Z0-9]*" required />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Client Name:</label>
+						<div class="controls">
+							<input type="text" name="cname" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Client Name" pattern="[a-z A-Z0-9]*" required />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Client Contact No1:</label>
+						<div class="controls">
+							<input type="text" name="contactno1" id="validateno1" class="span3" placeholder="Client ContactNo1 " onkeyup="this.value=this.value.toUpperCase()" pattern="[0-9]*" maxlength="10" required />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">Client Contact No2:</label>
+						<div class="controls">
+							<input type="text" name="contactno2" id="validateno2" class="span3" placeholder="Client ContactNo2 " onkeyup="this.value=this.value.toUpperCase()" pattern="[0-9]*" maxlength="10" required />
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">Client EmailId:</label>
+						<div class="controls">
+							<input type="email" class="span3" name="email" placeholder="Client Email Id" required />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Client Address:</label>
+						<div class="controls">
+							<textarea type="text" class="span3" name="address" onkeyup="this.value=this.value.toUpperCase()" placeholder="Client Address" pattern="[a-z A-Z]*" maxlength="200" required></textarea>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Client Balance Amount:</label>
+						<div class="controls">
+
+							<input type="text" name="bamount"  placeholder="Client Balance Amount" class="span3" onkeyup="this.value=this.value.toUpperCase()" pattern="[0-9]*" required />
+						</div>
+					</div>
+					
+					<input type="hidden" name="productPurchasePage1" value="productPurchase" />
+					
+					<div class="modal-footer">
+						<button type="submit" name="insert" class="btn btn-success">Submit</button>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 20px">Cancel</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>	
+<!--  add client modal end -->
+	
 
 <script src="/SAMERP/config/js/jquery.min.js"></script> 
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
@@ -691,7 +776,7 @@ function addMaterialByThirdParty()
 	var rate = document.getElementById("rate").value;	
 	var ChalanNo=document.getElementById("chalanNo_third").value;
 	var supplierName=document.getElementById("supplierName").value;
-	
+    productName = productName.toUpperCase();
 	
 	if(productName && qty && rate && ChalanNo){
 		var table = document.getElementById("tempMaterialTable");
@@ -795,7 +880,7 @@ function myFunction() {
 function selectProduct(str)
 {
 	var request=new XMLHttpRequest();
-	var url="/SAMERP/ProductPurchase?q="+str;  
+	var url="/SAMERP/Sales?q="+str;  
 
 	try{  
 			request.onreadystatechange=function()
@@ -804,15 +889,16 @@ function selectProduct(str)
 				{  
 					var val=request.responseText;
 					var demoStr = val.split(",");
-					var i=0, text ="";
+					var i=0, text ="",gst="";
 					
 					for (; demoStr[i];) {
 						text += "<option id="+demoStr[i]+" value="+demoStr[i+1]+">"+ demoStr[i+1] + "</option>";
-						i=i+2;	
+						gst=demoStr[i+2];
+						i=i+3;	
 					}
+					document.sales.g.value=gst;
 					document.getElementById("productList").innerHTML = text;
 					document.getElementById("productList1").innerHTML = text;
-					
 				}
 			}
 			request.open("POST",url,true);  
@@ -823,18 +909,16 @@ function selectProduct(str)
 }
 //*********************************** selectProduct Function END ************************************
 
+function showModal(){
 
-	function showModal(){
+	var error = document.getElementById("error").value;
 	
-		var error = document.getElementById("error").value;
-		
-		if(error==1)
-		{
-			$('#error-msg').modal('show');
-		}
+	if(error==1)
+	{
+		$('#error-msg').modal('show');
 	}
+}
 
 </script>
-
 </body>
 </html>

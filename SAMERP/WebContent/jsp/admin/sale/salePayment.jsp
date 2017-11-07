@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
@@ -308,7 +309,7 @@
 	              		String span = itr2.next().toString();
 	              %>
 	                <tr id="tdId<%=i%>">
-	                  <td rowspan="<%=span%>"><input id="<%= sid%>" type="checkbox" /></td>
+	                  <td rowspan="<%=span%>"><input id="<%= sid%>" type="checkbox" onclick="selectChecks()"/></td>
 	                  <td rowspan="<%=span%>"> <%=i%> </td>
 	                  <td id="mytd<%=i%>" rowspan="<%= span%>"><%=itr2.next() %></td>
 	                  <td rowspan="<%= span%>"><%=itr2.next() %></td>
@@ -359,12 +360,21 @@
 	              	System.out.println("Sum "+sum);
             	}
                %>
-               
+               <tr>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<th style="text-align: right; ">Total Amount</th>
+               		<td id="totalAmount" style="text-align: center; ">  </td>
+               </tr>
               </tbody>
             </table>
            </form>
          </div>
-         <a href="" id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</a><hr style="    border-top-color: #c5bbbb;">
+         <a href="" id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</a>
+         <hr style="border-top-color: #c5bbbb;">
       </div>
       
       
@@ -789,134 +799,139 @@ function snackBar() {
 
 function inWords()
 {
-	   
-	    var str = document.getElementById("totalamt").innerHTML;
-	    var splt = str.split("");
-	    var rev = splt.reverse();
-	    var once = ['Zero', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine'];
-	    var twos = ['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
-	    var tens = ['', 'Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety'];
+    var str = document.getElementById("totalamt").innerHTML;
+    var splt = str.split("");
+    var rev = splt.reverse();
+    var once = ['Zero', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine'];
+    var twos = ['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
+    var tens = ['', 'Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety'];
 
-	    numLength = rev.length;
-	    var word = new Array();
-	    var j = 0;
+    numLength = rev.length;
+    var word = new Array();
+    var j = 0;
 
-	    for (i = 0; i < numLength; i++) {
-	        switch (i) {
+    for (i = 0; i < numLength; i++) {
+        switch (i) {
 
-	            case 0:
-	                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
-	                    word[j] = '';
-	                }
-	                else {
-	                    word[j] = '' + once[rev[i]];
-	                }
-	                word[j] = word[j];
-	                break;
+            case 0:
+                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
+                    word[j] = '';
+                }
+                else {
+                    word[j] = '' + once[rev[i]];
+                }
+                word[j] = word[j];
+                break;
 
-	            case 1:
-	                aboveTens();
-	                break;
+            case 1:
+                aboveTens();
+                break;
 
-	            case 2:
-	                if (rev[i] == 0) {
-	                    word[j] = '';
-	                }
-	                else if ((rev[i - 1] == 0) || (rev[i - 2] == 0)) {
-	                    word[j] = once[rev[i]] + " Hundred ";
-	                }
-	                else {
-	                    word[j] = once[rev[i]] + " Hundred and";
-	                }
-	                break;
+            case 2:
+                if (rev[i] == 0) {
+                    word[j] = '';
+                }
+                else if ((rev[i - 1] == 0) || (rev[i - 2] == 0)) {
+                    word[j] = once[rev[i]] + " Hundred ";
+                }
+                else {
+                    word[j] = once[rev[i]] + " Hundred and";
+                }
+                break;
 
-	            case 3:
-	                if (rev[i] == 0 || rev[i + 1] == 1) {
-	                    word[j] = '';
-	                }
-	                else {
-	                    word[j] = once[rev[i]];
-	                }
-	                if ((rev[i + 1] != 0) || (rev[i] > 0)) {
-	                    word[j] = word[j] + " Thousand";
-	                }
-	                break;
+            case 3:
+                if (rev[i] == 0 || rev[i + 1] == 1) {
+                    word[j] = '';
+                }
+                else {
+                    word[j] = once[rev[i]];
+                }
+                if ((rev[i + 1] != 0) || (rev[i] > 0)) {
+                    word[j] = word[j] + " Thousand";
+                }
+                break;
 
-	                
-	            case 4:
-	                aboveTens();
-	                break;
+                
+            case 4:
+                aboveTens();
+                break;
 
-	            case 5:
-	                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
-	                    word[j] = '';
-	                }
-	                else {
-	                    word[j] = once[rev[i]];
-	                }
-	                if (rev[i + 1] !== '0' || rev[i] > '0') {
-	                    word[j] = word[j] + " Lakh";
-	                }
-	                 
-	                break;
+            case 5:
+                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
+                    word[j] = '';
+                }
+                else {
+                    word[j] = once[rev[i]];
+                }
+                if (rev[i + 1] !== '0' || rev[i] > '0') {
+                    word[j] = word[j] + " Lakh";
+                }
+                 
+                break;
 
-	            case 6:
-	                aboveTens();
-	                break;
+            case 6:
+                aboveTens();
+                break;
 
-	            case 7:
-	                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
-	                    word[j] = '';
-	                }
-	                else {
-	                    word[j] = once[rev[i]];
-	                }
-	                if (rev[i + 1] !== '0' || rev[i] > '0') {
-	                    word[j] = word[j] + " Crore";
-	                }                
-	                break;
+            case 7:
+                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
+                    word[j] = '';
+                }
+                else {
+                    word[j] = once[rev[i]];
+                }
+                if (rev[i + 1] !== '0' || rev[i] > '0') {
+                    word[j] = word[j] + " Crore";
+                }                
+                break;
 
-	            case 8:
-	                aboveTens();
-	                break;
+            case 8:
+                aboveTens();
+                break;
 
-	            //            This is optional. 
+            //            This is optional. 
 
-	            //            case 9:
-	            //                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
-	            //                    word[j] = '';
-	            //                }
-	            //                else {
-	            //                    word[j] = once[rev[i]];
-	            //                }
-	            //                if (rev[i + 1] !== '0' || rev[i] > '0') {
-	            //                    word[j] = word[j] + " Arab";
-	            //                }
-	            //                break;
+            //            case 9:
+            //                if ((rev[i] == 0) || (rev[i + 1] == 1)) {
+            //                    word[j] = '';
+            //                }
+            //                else {
+            //                    word[j] = once[rev[i]];
+            //                }
+            //                if (rev[i + 1] !== '0' || rev[i] > '0') {
+            //                    word[j] = word[j] + " Arab";
+            //                }
+            //                break;
 
-	            //            case 10:
-	            //                aboveTens();
-	            //                break;
+            //            case 10:
+            //                aboveTens();
+            //                break;
 
-	            default: break;
-	        }
-	        j++;
-	    }
+            default: break;
+        }
+        j++;
+    }
 
-	    function aboveTens() {
-	        if (rev[i] == 0) { word[j] = ''; }
-	        else if (rev[i] == 1) { word[j] = twos[rev[i - 1]]; }
-	        else { word[j] = tens[rev[i]]; }
-	    }
+    function aboveTens() {
+        if (rev[i] == 0) { word[j] = ''; }
+        else if (rev[i] == 1) { word[j] = twos[rev[i - 1]]; }
+        else { word[j] = tens[rev[i]]; }
+    }
 
-	    word.reverse();
-	    var finalOutput = '';
-	    for (i = 0; i < numLength; i++) {
-	        finalOutput = finalOutput + word[i];
-	    }
-	    var print =finalOutput +" Only";
-	    document.getElementById("print_inwords").innerHTML = print;
-	}
+    word.reverse();
+    var finalOutput = '';
+    for (i = 0; i < numLength; i++) {
+        finalOutput = finalOutput + word[i];
+    }
+    var print =finalOutput +" Only";
+    document.getElementById("print_inwords").innerHTML = print;
+}
+
+function selectChecks()
+{
+	document.getElementById('chalanSubmitBtn').disabled=false;
+}
+
 </script>
 
 
@@ -955,6 +970,5 @@ $('#paymentEntry').on('shown.bs.modal', function () {
 $('#bill').on('shown.bs.modal', function () {
 	myFunction();   
 })
-
 </script>
 </html>
