@@ -554,7 +554,7 @@
 <div class="modal hide fade zoom-out" id="bankBalanceError" role="dialog" style="width: 50%; margin-left: -25%;" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
-		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error!</h4>
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
 	</div>
 	
 	<div class="modal-body" style="padding: 0;">
@@ -582,7 +582,7 @@
 <div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
-		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error!</h4>
+		 <h4 style="color: #b94a48; font-size: 200%;"><i class="icon-remove-circle" style="font-size: 140%;"></i> Error</h4>
 	</div>
 	
 	<div class="modal-body" style="padding: 0;">
@@ -710,8 +710,14 @@ function setSelectValue(){
 	var e = document.getElementById("Supplierid");
 
 	var bankExit = <%=request.getAttribute("bankExit") %>
+	var pettyExit = <%=request.getAttribute("pettyExit") %>
+	
 	if(bankExit==0 || bankExit==-1){
 		$('#bankBalanceError').modal('show');
+	}
+	
+	if(pettyExit==0 || pettyExit==-1){
+		$('#pettyCashError').modal('show');
 	}
 	
 	if(m!=null){

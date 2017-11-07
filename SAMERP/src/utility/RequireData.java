@@ -769,7 +769,7 @@ public class RequireData
 			public boolean badEntry(String bankId,String transactionDate,int debit,int credit,String particular,String debtorId)
 			{
 				boolean flag=false;
-				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details)";
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details WHERE bid="+bankId+")";
 				GenericDAO gd=new GenericDAO();
 				if(!gd.getData(statusString).isEmpty())
 				{
@@ -807,7 +807,7 @@ public class RequireData
 					if(credit>0)
 						balance=balance+credit;
 					
-					String insertQuery="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `balance`, `debtor_id`) "
+					String insertQuery="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) "
 							+ "VALUES ('"+transactionDate+"', "+debit+", "+credit+","+debtorId+", "+balance+")";
 					int x=gd.executeCommand(insertQuery);
 					if(x>0)
@@ -843,9 +843,9 @@ public class RequireData
 			}
 			
 			
-			public int checkBankBalance(int amount)
+			public int checkBankBalance(int amount, String bankId)
 			{
-				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details)";
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details WHERE bid="+bankId+")";
 				if(!gd.getData(statusString).isEmpty())
 				{
 					String a=gd.getData(statusString).get(0).toString();
@@ -865,7 +865,7 @@ public class RequireData
 			
 			
 			
-			public void commonExpEntry(String expTypeId,String debtorId,String name,String amount,String mode,String bankAliasName,String chequeDetails,String date)
+			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankAliasName, String chequeDetails, String date)
 			{
 				if(bankAliasName==null)
 					bankAliasName="";
