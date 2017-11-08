@@ -79,9 +79,9 @@ public class productSupplierPayment extends HttpServlet {
 			
 			String supid = request.getParameter("supid2");
 			String paidDate = request.getParameter("paidDate");
-			String paidAmt = request.getParameter("paidAmt");
+			String paidAmt = request.getParameter("paidAmt").trim();
 			String payMode = request.getParameter("payMode");
-			String chequeNo = request.getParameter("chequeNo");
+			String chequeNo = request.getParameter("chequeNo").trim();
 			String bankInfo = request.getParameter("bankInfo");
 			int flag=0, bankExit=9, pettyExit=9;
 			
@@ -128,7 +128,7 @@ public class productSupplierPayment extends HttpServlet {
 				
 				if(balStatus==1){
 					
-					if(rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode, String.valueOf(debtorId))){
+					if(rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode+"_"+chequeNo, String.valueOf(debtorId))){
 					
 						if(payMode.equals("Cheque")){
 							String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `cheque_no`, `description`)"
@@ -174,7 +174,7 @@ public class productSupplierPayment extends HttpServlet {
 				String q = "SELECT `total_remaining` FROM `total_supplier_payment_master` WHERE id=(SELECT MAX(id) from total_supplier_payment_master WHERE supplier_id="+supid+")";
 				List l = gd.getData(q);
 				
-				int total = Integer.parseInt(l.get(0).toString()) - Integer.parseInt(paidAmt);
+				int total = Integer.parseInt(l.get(0).toString()) - Integer.parseInt(paidAmt); 
 				
 				String insertQuery1="INSERT INTO `total_supplier_payment_master`(`supplier_id`, `payment_id`, `paid_amt`, `date`, `total_remaining`) VALUES ("+supid+", (select max(id) from supplier_payment_master), (SELECT `paid_amt` FROM `supplier_payment_master` WHERE id=(SELECT MAX(id) from supplier_payment_master)), '"+requiredDate+"' , "+total+")";
 				int status1=gd.executeCommand(insertQuery1);				
