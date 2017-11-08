@@ -551,7 +551,6 @@ function getDates() {
 function getDriverExp(sdate, edate)
 {
 	var value = document.getElementById("selectVehicle").value;
-	alert(value);
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -580,6 +579,6 @@ function getDriverExp(sdate, edate)
 <script src="/SAMERP/config/js/wysihtml5-0.3.0.js"></script> 
 <script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
-</script>
+
 </body>
 </html>
