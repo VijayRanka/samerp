@@ -307,6 +307,13 @@ public class RequireData
 	
 	// sandeep start
 	
+	public List getNameAmount()
+	{
+		String select_query="SELECT DISTINCT handloan_master.name,handloan_details.credit FROM handloan_master,handloan_details";
+		List list=gd.getData(select_query);
+		return list;
+	}
+	
 	public List getPreviousBal()
 	{
 		String maxid="SELECT MAX(id) FROM petty_cash_details";
@@ -489,7 +496,7 @@ public class RequireData
 		
 		public List getOrganizationData()
 		{
-			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email from organization_details";
+			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email,organization_op_balance from organization_details";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
@@ -751,10 +758,14 @@ public class RequireData
 			}
 			public String getBankById(String bankId)
 			{
-				if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+				if(!bankId.isEmpty())
 				{
-					String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
-					return bankAlias;
+					if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+					{
+						String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
+						return bankAlias;
+					}
+					
 				}
 				return null;
 			}
@@ -845,7 +856,7 @@ public class RequireData
 			
 			public int checkBankBalance(int amount, String bankId)
 			{
-				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details WHERE bid="+bankId+")";
+				String statusString="SELECT balance FROM bank_account_details WHERE id=(SELECT MAX(id) FROM bank_account_details WHERE bid='"+bankId+"')";
 				if(!gd.getData(statusString).isEmpty())
 				{
 					String a=gd.getData(statusString).get(0).toString();
@@ -865,16 +876,16 @@ public class RequireData
 			
 			
 			
-			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankAliasName, String chequeDetails, String date)
+			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankId, String chequeDetails, String date)
 			{
-				if(bankAliasName==null)
-					bankAliasName="";
+				if(bankId=="")
+					bankId="null";
 				if(chequeDetails==null)
 					chequeDetails="";
-				System.out.println(expTypeId+debtorId+name+amount+mode+bankAliasName+chequeDetails+date);
 				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
-						+ " `particular`, `other_details`, `date`) VALUES "
-						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"','"+bankAliasName+"','"+chequeDetails+"','"+date+"')";
+						+ " `bankId`, `other_details`, `date`) VALUES "
+						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"',"+bankId+",'"+chequeDetails+"','"+date+"')";
+				System.out.println(insertQuery);
 				int x=gd.executeCommand(insertQuery);
 			}
 			

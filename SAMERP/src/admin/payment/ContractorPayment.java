@@ -46,95 +46,166 @@ public class ContractorPayment extends HttpServlet {
 			String bankInfo = request.getParameter("bankInfo");
 			int updatedAmount=0;
 			boolean flag=false;
+			boolean amountStatusClear=false;
+			RequireData rd=new RequireData();
 			
 			
-			if(!gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId).isEmpty())
+			if(payMode.equalsIgnoreCase("Cash"))
 			{
-				List getTotalBalance=gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId);
+				int pcStatus=rd.checkPCStatus(Integer.parseInt(paidAmt));
+				if(pcStatus==0)
+				{
+					request.setAttribute("status", "You don't have enough balance in your Peti Cash");
 				
-				int previousAmount=Integer.parseInt(getTotalBalance.get(getTotalBalance.size()-1).toString());
-				
-				updatedAmount=previousAmount + (Integer.parseInt(currentAmount)) - Integer.parseInt(paidAmt);
+				}
+				else if(pcStatus==-1)
+				{
+					request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+				}
+				else if(pcStatus==1)
+				{
+					amountStatusClear=true;
+				}
 				
 			}
 			else
-				updatedAmount=Integer.parseInt(currentAmount)-Integer.parseInt(paidAmt);
-			
-			if(payMode.equals("Cash")){
-				String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
-						+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`,`total_balance`) VALUES "
-						+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CASH',"+updatedAmount+")";
-				int insertPaymentStatus = gd.executeCommand(insertPayment);
-				
-				if(insertPaymentStatus==1){
-					flag=true;
-					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
-				}
-			}
-			else  if(payMode.equals("Cheque")){
-				String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
-						+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
-						+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CHEQUE','"+chequeNo+"','"+bankInfo+"',"+updatedAmount+")";
-				int insertPaymentStatus = gd.executeCommand(insertPayment);
-				
-				if(insertPaymentStatus==1){
-					flag=true;
-					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
-				}
-			}
-			else{
-				
-				String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
-						+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
-						+ "("+contId+","+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'TRANSFER',"+bankInfo+"',"+updatedAmount+")";
-				int insertPaymentStatus = gd.executeCommand(insertPayment);
-				
-				if(insertPaymentStatus==1){
-					flag=true;
-					
-					request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
-				}
-			}
-			if(flag)
 			{
-				String updateDailyStock="UPDATE daily_stock_details SET status=1 "
-						+ "WHERE id=(SELECT daily_stock_details.id from contractor_master,product_master WHERE "
-						+ "product_master.id=daily_stock_details.product_id and date BETWEEN '"+dateFromTo.split(",")[0]+"' and '"+dateFromTo.split(",")[1]+"' "
-						+ "AND product_master.contractor_id=contractor_master.id AND contractor_master.id="+contId+" )";
-				int xx=gd.executeCommand(updateDailyStock);
-				if(xx!=0)
+				int badStatus=rd.checkBankBalance(Integer.parseInt(paidAmt),bankInfo);
+				if(badStatus==0)
+						{
+							request.setAttribute("status", "You have insufficient balance in your Bank");
+						}
+				else if(badStatus==-1)
 				{
-					String updateExp="UPDATE expenses_master SET expenses_master.cp_status=1 WHERE expenses_master.exp_id="
-							+ "(SELECT expenses_master.exp_id from debtor_master,contractor_master,expenses_type "
-							+ "WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id and debtor_master.id"
-							+ "=expenses_master.debtor_id and debtor_master.type=contractor_master.aliasname AND "
-							+ "expenses_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' AND "
-							+ "expenses_type.expenses_type_name='DEPOSIT' AND contractor_master.id="+contId+")";
+					request.setAttribute("status", "You have insufficient balance in your Bank");
+				}
+				else if(badStatus==1)
+				{
+					amountStatusClear=true;
+				}
+				
+			}
+			if(amountStatusClear)
+			{
+				int debtorId=rd.getDebtorId(gd.getData("SELECT contractor_master.aliasname FROM contractor_master WHERE contractor_master.id="+contId).get(0).toString());
+				String contName=gd.getData("SELECT contractor_master.name FROM contractor_master WHERE contractor_master.id="+contId).get(0).toString();
+				
+				if(!gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId).isEmpty())
+				{
+					List getTotalBalance=gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId);
 					
-					int xxx=gd.executeCommand(updateExp);
-					System.out.println(xxx);
-			
-					String updateSaleMaster="UPDATE sale_master SET sale_master.cp_status=1 WHERE sale_master.id="
-							+ "(SELECT sale_master.id FROM contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
-							+ "and sale_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' and contractor_master.id="+contId+")";
+					int previousAmount=Integer.parseInt(getTotalBalance.get(getTotalBalance.size()-1).toString());
 					
-					gd.executeCommand(updateSaleMaster);
+					updatedAmount=previousAmount + (Integer.parseInt(currentAmount)) - Integer.parseInt(paidAmt);
 					
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
-					rd.forward(request, response);
+				}
+				else
+					updatedAmount=Integer.parseInt(currentAmount)-Integer.parseInt(paidAmt);
+				
+				if(payMode.equals("Cash")){
+					String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
+							+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`,`total_balance`) VALUES "
+							+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CASH',"+updatedAmount+")";
+					int insertPaymentStatus = gd.executeCommand(insertPayment);
+					
+					if(insertPaymentStatus==1){
+						flag=true;
+						if(Integer.parseInt(paidAmt)>0)
+						{
+							rd.pCashEntry(paidDate, Integer.parseInt(paidAmt), 0, Integer.toString(debtorId));
+						}
+						
+						
+						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
+					}
+				}
+				else  if(payMode.equals("Cheque")){
+					String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
+							+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
+							+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CHEQUE','"+chequeNo+"','"+bankInfo+"',"+updatedAmount+")";
+					int insertPaymentStatus = gd.executeCommand(insertPayment);
+					
+					if(insertPaymentStatus==1){
+						flag=true;
+						if(Integer.parseInt(paidAmt)>0)
+						{
+							rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, "CHEQUE_"+chequeNo, Integer.toString(debtorId));
+						}
+						
+						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
+					}
+				}
+				else{
+					
+					String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
+							+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
+							+ "("+contId+","+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'TRANSFER',"+bankInfo+"',"+updatedAmount+")";
+					int insertPaymentStatus = gd.executeCommand(insertPayment);
+					
+					if(insertPaymentStatus==1){
+						flag=true;
+						if(Integer.parseInt(paidAmt)>0)
+						{
+							rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, "TRANSFER", Integer.toString(debtorId));
+						}
+						
+						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
+					}
+				}
+				if(flag)
+				{
+					String updateDailyStock="UPDATE daily_stock_details SET status=1 "
+							+ "WHERE id=(SELECT daily_stock_details.id from contractor_master,product_master WHERE "
+							+ "product_master.id=daily_stock_details.product_id and date BETWEEN '"+dateFromTo.split(",")[0]+"' and '"+dateFromTo.split(",")[1]+"' "
+							+ "AND product_master.contractor_id=contractor_master.id AND contractor_master.id="+contId+" )";
+					int xx=gd.executeCommand(updateDailyStock);
+					if(xx!=0)
+					{
+						String updateExp="UPDATE expenses_master SET expenses_master.cp_status=1 WHERE expenses_master.exp_id="
+								+ "(SELECT expenses_master.exp_id from debtor_master,contractor_master,expenses_type "
+								+ "WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id and debtor_master.id"
+								+ "=expenses_master.debtor_id and debtor_master.type=contractor_master.aliasname AND "
+								+ "expenses_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' AND "
+								+ "expenses_type.expenses_type_name='DEPOSIT' AND contractor_master.id="+contId+")";
+						
+						int xxx=gd.executeCommand(updateExp);
+						System.out.println(xxx);
+				
+						String updateSaleMaster="UPDATE sale_master SET sale_master.cp_status=1 WHERE sale_master.id="
+								+ "(SELECT sale_master.id FROM contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
+								+ "and sale_master.date BETWEEN '"+dateFromTo.split(",")[0]+"' AND '"+dateFromTo.split(",")[1]+"' and contractor_master.id="+contId+")";
+						
+						gd.executeCommand(updateSaleMaster);
+						
+						if(!gd.getData("SELECT contractor_master.aliasname FROM contractor_master WHERE contractor_master.id="+contId).isEmpty());
+						{
+							
+							rd.commonExpEntry("4", debtorId, contName, paidAmt, payMode, bankInfo, chequeNo,paidDate );
+						}
+						
+						
+						RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
+						reqDisp.forward(request, response);
+						
+					}
+					else{
+						request.setAttribute("status", "Daily Stock Not Updated");
+						RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
+						reqDisp.forward(request, response);
+					}
 					
 				}
 				else{
-					request.setAttribute("status", "Daily Stock Not Updated");
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
-					rd.forward(request, response);
+					request.setAttribute("status", "Something's Wrong");
+					RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
+					reqDisp.forward(request, response);
 				}
 				
 			}
-			else{
-				request.setAttribute("status", "Something's Wrong");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
-				rd.forward(request, response);
+			else
+			{
+				RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
+				reqDisp.forward(request, response);
 			}
 		}
 		//remaing amount for ajax

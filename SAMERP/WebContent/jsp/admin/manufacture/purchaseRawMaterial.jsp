@@ -1,3 +1,4 @@
+
 	<%@page import="utility.SysDate"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
@@ -141,6 +142,7 @@
 												<option></option>
 											</select>
 										</div>
+										
 										</div></td>
 									<td><a href="#add-brand" data-toggle="modal">
 											<span class="badge badge-inverse"><i class="icon-plus"></i></span>

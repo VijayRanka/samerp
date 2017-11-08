@@ -1,5 +1,6 @@
 package utility;
 
+import java.util.Iterator;
 import java.util.List;
 
 import dao.General.GenericDAO;
@@ -14,7 +15,26 @@ public class demou {
 		GenericDAO gd=new GenericDAO();
 		SysDate sd=new SysDate();
 		
-		String startDate="2017-10-29";
+		String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
+		List getDateExistDetailList=gd.getData(getDateExistDetail);
+		Iterator traverseDS=getDateExistDetailList.iterator();
+		while(traverseDS.hasNext())
+		{
+			System.out.println(traverseDS.next());
+		}
+		String bankId="";
+		if(!bankId.isEmpty())
+		{
+			
+			if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+			{
+				String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
+				System.out.println(bankAlias);
+			}
+			
+		}
+		
+		/*String startDate="2017-10-29";
 		String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 		String contId="1";
 		int count=Integer.parseInt(gd.getData("SELECT DATEDIFF('"+lastDate+"','"+startDate+"')").get(0).toString());
@@ -64,7 +84,7 @@ public class demou {
 			}
 			
 		
-		/*UPDATE FINAL STOCK...
+		UPDATE FINAL STOCK...
 		 * 
 		 * UPDATE final_stock SET qty=40 WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')
 		 */
@@ -77,8 +97,18 @@ public class demou {
 		List qty_product=gd.getData(q);
 		if(!qty_product.isEmpty()){
 			product_qty= Integer.parseInt(qty_product.get(0).toString());
-		System.out.println(product_qty);
 		}
+
+		System.out.println(product_qty);
+		
+		String updateQuery="UPDATE final_stock SET qty="+(product_qty-qty)+" WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')";
+		
+		gd.executeCommand(updateQuery);
+		
+		
+	
+		
 		
 	}
-}}
+}
+

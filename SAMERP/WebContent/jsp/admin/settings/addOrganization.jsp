@@ -113,7 +113,7 @@
             <div class="control-group">
               <label class="control-label"><span style="color: red;">*</span>Address :</label>
               <div class="controls">
-                <input type="text" name="address" class="span6" placeholder="Address" onkeyup="this.value=this.value.toUpperCase()" maxlength="10" required/>
+                <input type="text" name="address" class="span6" placeholder="Address" onkeyup="this.value=this.value.toUpperCase()" required/>
               </div>
             </div>
             <div class="control-group">
@@ -127,6 +127,13 @@
               <label class="control-label">Email :</label>
               <div class="controls">
                 <input type="text" name="email" class="span6" placeholder="Email" />
+              </div>
+            </div>
+            
+            <div class="control-group">
+              <label class="control-label">Opening Balance:</label>
+              <div class="controls">
+                <input type="text" name="opening_balance" id="opening_balanceid" class="span6" placeholder="Opening Balance" />
               </div>
             </div>
             
@@ -155,6 +162,7 @@
                   <th>Contact No2</th>
                   <th>Address</th>
                   <th>Email ID</th>
+                  <th>Opening Balance</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -169,6 +177,7 @@
               	%>
                 <tr>
                   <td style="text-align: center"><%=i %><% i++; %></td>
+                  <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
@@ -235,7 +244,15 @@
 				              <div class="controls">
 				                    <input type="text" class="span3" name="email_id" id="email_id" />
 				              </div>
-				            </div>			            
+				            </div>	
+				            
+				            <div class="control-group">
+					              <label class="control-label">Opening Balance:</label>
+					              <div class="controls">
+					                <input type="text" name="opening_balance" id="opening_balanceid" class="span3" placeholder="Opening Balance" />
+					              </div>
+					            </div>
+				            	            
 				            <div class="modal-footer">
 									<input type="submit" id="org_submitbtn" name="org_submitbtn" class="btn btn-primary" value="Update" />
 									<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Cancel"/>
@@ -292,6 +309,7 @@ function searchOrganization(id) {
 			document.getElementById("contact_no1").value = demoStr[3];
 			document.getElementById("contact_no2").value = demoStr[4];
 			document.getElementById("email_id").value = demoStr[5];
+			document.getElementById("opening_balanceid").value = demoStr[6];
 			
 			}
 		};

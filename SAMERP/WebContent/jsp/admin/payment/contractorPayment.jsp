@@ -1,8 +1,6 @@
-
 <%@page import="admin.JcbPocWork.demo"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="com.mysql.jdbc.ResultSet"%>
 <%@page import="dao.General.GenericDAO"%>
 <%@page import="java.util.Iterator"%>
@@ -382,8 +380,8 @@ to {
 									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
-									<td><%=itr.next() %></td>
-									<td><%=itr.next() %></td>
+									<td><% String cDetails=itr.next().toString();if(!cDetails.isEmpty()){%><%=cDetails %><%}else{ %>-<%} %></td>
+									<td><% String bDetails=rq.getBankById(itr.next().toString());if(bDetails!=null){%><%=bDetails %><%}else{ %>-<%} %></td>
 									<td><%=itr.next() %></td>
 									</tr>	
 									<%itr.next();
@@ -637,6 +635,7 @@ to {
 </div>
 
 		<script type="text/javascript"> 
+		
 		function getParameterByName(name, url) {
 		    if (!url) url = window.location.href;
 		    name = name.replace(/[\[\]]/g, "\\$&");
