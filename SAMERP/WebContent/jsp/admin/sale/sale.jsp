@@ -259,41 +259,51 @@ margin-top: 5px;
             <div class="control-group" style="height: 100px;" id="ownerDiv">              
               <label class="control-label">Product Name :</label>
               <div class="controls">
-              	<input list="productList" type="text" autocomplete="off" id="productNameSarthak" oninput="selectProduct(this.value)" name="productNameSarthak" placeholder="Product Name" style=" width: 200px; text-transform:uppercase;"/>
+              	<input list="productList" type="text" autocomplete="off" id="productNameSarthak" oninput="selectProduct(this.value)" name="productNameSarthak" placeholder="Product Name" style=" width: 140px; text-transform:uppercase;"/>
   				<datalist id="productList"></datalist>
                 <!-- <input type="text"  name="productNameSarthak" id="productNameSarthak" placeholder="Product Name" style="width: 200px;" onkeyup="this.value=this.value.toUpperCase()"/> -->
               </div>
               
-              <label class="control-label" style="margin-top: -50px; margin-left: 320px;">Quantity :</label>
+              <label class="control-label" style="margin-top: -50px; margin-left: 265px;">Quantity :</label>
               <div class="controls">
-                <input type="number" name="qtySarthak" id="qtySarthak" placeholder="Quantity" style="width: 100px; margin-top: -50px; margin-left: 320px;"/>
+                <input type="number" name="qtySarthak" id="qtySarthak" placeholder="Quantity" style="width: 70px; margin-top: -50px; margin-left: 265px;"/>
               </div>
 
-              <label class="control-label" style="margin-top: -70px; margin-left: 530px;">Rate :</label>
+              <label class="control-label" style="margin-top: -70px; margin-left: 435px;">Rate :</label>
               <div class="controls">
-                <input type="number" name="rateSarthak" id="rateSarthak" placeholder="Rate" style="width: 100px; margin-top: -70px; margin-left: 530px;"/>
+                <input type="number" name="rateSarthak" id="rateSarthak" placeholder="Rate" style="width: 70px; margin-top: -70px; margin-left: 435px;"/>
+              </div>
+
+              <label class="control-label" style="margin-top: -90px; margin-left: 600px;">GST :</label>
+              <div class="controls">
+                <input type="text" name="gstSarthak" id="gstSarthak" placeholder="GST" style="width: 70px; margin-top: -90px; margin-left: 600px;"/>
               </div>  
               
-              <button type="button" id="submitbtn" name="addMaterialFromSarthakSubmitBtn" onclick="addMaterial()" class="btn btn-success" style="margin-top: -20px; margin-left: 450px;">Add Materials</button>
+              <button type="button" id="submitbtn" name="addMaterialFromSarthakSubmitBtn" onclick="addMaterial()" class="btn btn-success" style="margin-top: -40px; margin-left: 450px;">Add Materials</button>
                           
             </div>              
             
-            <div class="control-group" style="height: 140px;" id="thirdPartyDiv">              
+            <div class="control-group" style="height: 160px;" id="thirdPartyDiv">              
               <label class="control-label">Product Name :</label>
               <div class="controls">
-                <input list="productList" type="text" autocomplete="off" id="productName" onkeyup="selectProduct(this.value)" name="productName" placeholder="Product Name" style=" width: 200px; text-transform:uppercase;"/>
+                <input list="productList" type="text" autocomplete="off" id="productName" onkeyup="selectProduct(this.value)" name="productName" placeholder="Product Name" style=" width: 140px; text-transform:uppercase;"/>
   				<datalist id="productList"></datalist>
                 <!-- <input type="text" name="productName" id="productName" placeholder="Product Name" style="width: 200px;" onkeyup="this.value=this.value.toUpperCase()"/> -->
               </div>
               
-              <label class="control-label" style="margin-top: -50px; margin-left: 320px;">Quantity :</label>
+              <label class="control-label" style="margin-top: -50px; margin-left: 265px;">Quantity :</label>
               <div class="controls">
-                <input type="number" name="qty" id="qty" placeholder="Quantity" style="width: 100px; margin-top: -50px; margin-left: 320px;" />
+                <input type="number" name="qty" id="qty" placeholder="Quantity" style="width: 70px; margin-top: -50px; margin-left: 265px;" />
               </div>
 
-              <label class="control-label" style="margin-top: -70px; margin-left: 530px;">Rate :</label>
+              <label class="control-label" style="margin-top: -70px; margin-left: 435px;">Rate :</label>
               <div class="controls">
-                <input type="number" name="rate" id="rate" placeholder="Rate" style="width: 100px; margin-top: -70px; margin-left: 530px;" />
+                <input type="number" name="rate" id="rate" placeholder="Rate" style="width: 70px; margin-top: -70px; margin-left: 435px;" />
+              </div>
+              
+              <label class="control-label" style="margin-top: -90px; margin-left: 600px;">GST :</label>
+              <div class="controls">
+                <input type="text" name="gst" id="gst" placeholder="GST" style="width: 70px; margin-top: -90px; margin-left: 600px;"/>
               </div>
               
               <label class="control-label" style="margin-top: -50px;">Chalan No :</label>
@@ -304,8 +314,8 @@ margin-top: 5px;
               <label class="control-label" style="margin-top: -65px; margin-left: 420px;">Supplier Name :</label>
               <div class="controls">
                 <input type="text" name="supplierName" id="supplierName" placeholder="Supplier Name" style="width: 250px; margin-top: -65px; margin-left: 420px;" onkeyup="this.value=this.value.toUpperCase()"/>
-              </div>              
-                 <button type="button" id="submitbtn" name="addMaterialFromTPSubmitBtn" onclick="addMaterialByThirdParty()" class="btn btn-success" style="margin-top: -20px; margin-left: 450px;">Add Materials</button>
+              </div><br>              
+                 <button type="button" id="submitbtn" name="addMaterialFromTPSubmitBtn" onclick="addMaterialByThirdParty()" class="btn btn-success" style="margin-top: -40px; margin-left: 450px;">Add Materials</button>
             </div>              
             
             <div class="control-group">
@@ -324,6 +334,7 @@ margin-top: 5px;
 		                  <th>Chalan No</th>
 		                  <th>Quantity</th>
 		                  <th>Rate</th>
+		                  <th>GST</th>
 		                </tr>
 		              </thead>
 		              <tbody>	
@@ -336,7 +347,7 @@ margin-top: 5px;
 		       </div>                 
     
             </div>  
-            <input type="text" value="" id="g"/>
+            
             <input type="hidden" name="counter" id="counter" />            
             
             <div class="form-actions" align="center">
@@ -731,6 +742,7 @@ function addMaterial()
 	var rate = document.getElementById("rateSarthak").value;	
 	var ChalanNo="-";
 	var supplierName="SARTHAK";
+	var gst=document.getElementById("gstSarthak").value;
 	
 	if(productName && qty && rate){
 		var table = document.getElementById("tempMaterialTable");
@@ -746,13 +758,15 @@ function addMaterial()
 		var cell4 = row.insertCell(3);
 		var cell5 = row.insertCell(4);
 		var cell6 = row.insertCell(5);
-	    
+		var cell7 = row.insertCell(6);
+		
 		cell1.innerHTML = "<td style='text-align: center;'>" +  counter +"</td>";
 		cell2.innerHTML = "<td style='text-align: center;'>" +  productName +"<input type='hidden' name='productName1"+counter+"' id='productName1"+counter+"' value='"+productName+"' /> </td>";
 		cell3.innerHTML = "<td style='text-align: center;'>" + supplierName +" <input type='hidden' name='supplierName1"+counter+"' id='supplierName1"+counter+"' value='"+supplierName+"' /> </td>";
 		cell4.innerHTML = "<td style='text-align: center;'>" + ChalanNo +" <input type='hidden' name='chalanNo_third1"+counter+"' id='chalanNo_third1"+counter+"' value='"+ChalanNo+"' /> </td>";
 		cell5.innerHTML = "<td style='text-align: center;'>" + qty +" <input type='hidden' name='qty1"+counter+"' id='qty1"+counter+"' value='"+qty+"' /> </td>";
 		cell6.innerHTML = "<td style='text-align: center;'>" + rate +" <input type='hidden' name='rate1"+counter+"' id='rate1"+counter+"' value='"+rate+"' /> </td>";
+		cell7.innerHTML = "<td style='text-align: center;'>" + gst +" <input type='hidden' name='gst1"+counter+"' id='gst1"+counter+"' value='"+gst+"' /> </td>";
 		
 		//alert(productName+" "+qty+" "+rate+" "+ChalanNo+" "+supplierName);
 	}
@@ -762,6 +776,8 @@ function addMaterial()
 	document.getElementById("productNameSarthak").value="";
 	document.getElementById("qtySarthak").value="";
 	document.getElementById("rateSarthak").value="";
+	document.getElementById("gstSarthak").value="";
+	document.getElementById("gst").value="";
 	
 	document.getElementById("productNameSarthak").focus();
 	
@@ -776,6 +792,7 @@ function addMaterialByThirdParty()
 	var rate = document.getElementById("rate").value;	
 	var ChalanNo=document.getElementById("chalanNo_third").value;
 	var supplierName=document.getElementById("supplierName").value;
+	var gst=document.getElementById("gst").value;
     productName = productName.toUpperCase();
 	
 	if(productName && qty && rate && ChalanNo){
@@ -792,6 +809,7 @@ function addMaterialByThirdParty()
 		var cell4 = row.insertCell(3);
 		var cell5 = row.insertCell(4);
 		var cell6 = row.insertCell(5);
+		var cell7 = row.insertCell(6);
 	    
 		cell1.innerHTML = "<td style='text-align: center;'>" +  counter +"</td>";
 		cell2.innerHTML = "<td style='text-align: center;'>" +  productName +"<input type='hidden' name='productName1"+counter+"' id='productName1"+counter+"' value='"+productName+"' /> </td>";
@@ -799,6 +817,7 @@ function addMaterialByThirdParty()
 		cell4.innerHTML = "<td style='text-align: center;'>" + ChalanNo +" <input type='hidden' name='chalanNo_third1"+counter+"' id='chalanNo_third1"+counter+"' value='"+ChalanNo+"' /> </td>";
 		cell5.innerHTML = "<td style='text-align: center;'>" + qty +" <input type='hidden' name='qty1"+counter+"' id='qty1"+counter+"' value='"+qty+"' /> </td>";
 		cell6.innerHTML = "<td style='text-align: center;'>" + rate +" <input type='hidden' name='rate1"+counter+"' id='rate1"+counter+"' value='"+rate+"' /> </td>";
+		cell7.innerHTML = "<td style='text-align: center;'>" + gst +" <input type='hidden' name='gst1"+counter+"' id='gst1"+counter+"' value='"+gst+"' /> </td>";
 		
 		//alert(productName+" "+qty+" "+rate+" "+ChalanNo+" "+supplierName);
 	}
@@ -809,6 +828,8 @@ function addMaterialByThirdParty()
 	document.getElementById("rate").value="";
 	document.getElementById("chalanNo_third").value="";
 	document.getElementById("supplierName").value="";
+	document.getElementById("gstSarthak").value="";
+	document.getElementById("gst").value="";
 	
 	document.getElementById("productName").focus();
 }
@@ -896,7 +917,8 @@ function selectProduct(str)
 						gst=demoStr[i+2];
 						i=i+3;	
 					}
-					document.sales.g.value=gst;
+					document.sales.gstSarthak.value=gst;
+					document.sales.gst.value=gst;
 					document.getElementById("productList").innerHTML = text;
 					document.getElementById("productList1").innerHTML = text;
 				}
