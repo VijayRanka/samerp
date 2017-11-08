@@ -769,6 +769,26 @@ public class RequireData
 				}
 				return null;
 			}
+			public int totalExpenseDay()
+			{
+				int amount=0;
+				SysDate sd=new SysDate();
+				List getDataList=gd.getData("SELECT amount FROM `expenses_master` "
+						+ "WHERE date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'");
+				System.out.println("SELECT amount FROM `expenses_master` "
+						+ "WHERE date="+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]);
+				if(!getDataList.isEmpty())
+				{
+					Iterator itr=getDataList.iterator();
+					while(itr.hasNext())
+					{
+						amount+=Integer.parseInt(itr.next().toString());
+					}
+					
+				}
+					
+					return amount;
+			}
 	
 	
 		//--vijay end

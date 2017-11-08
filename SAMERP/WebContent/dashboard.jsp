@@ -85,8 +85,10 @@
         
           <div class="widget-title"> <a href="#collapseOne" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5>Daily Expenses</h5>
+            <%RequireData rd=new RequireData(); %>
+             <span class="badge badge-inverse" style="margin-top: 10px">Total Expense: <%=rd.totalExpenseDay() %></span>
             </a> 
-             <div class="dateDiv" style="position: relative;left: 680px;top: 3px;">
+             <div class="dateDiv" style="position: relative;left: 680px;bottom: 25px;">
              <div class="control-group">
               <div class="controls">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
@@ -117,7 +119,7 @@
                 </tr>
               </thead>
               <tbody id="expenseDataTable">
-	              <%RequireData rd=new RequireData();
+	              <%
 	                List getExpData=rd.getExpensesDetailsDash();
 	            	if(!getExpData.isEmpty()){
 	            	Iterator getexpitr=getExpData.iterator();
@@ -168,8 +170,10 @@
       <!-- daily collection starts -->
           
           
-          <div class="widget-title"> <a href="#collapseTwo" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
-            <h5>Daily Collection</h5>
+          <div class="widget-title" > <a href="#collapseTwo" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
+            <h5 onclick="">Daily Collection</h5>
+           <span class="badge badge-inverse" style="margin-top: 10px" id="pCash">Petty Cash: 50000</span>
+           <span class="badge badge-inverse" style="margin-top: 10px" id="bankAmount">Bank Status: 50000</span>
             </a> 
           </div>
           <div class="collapse" id="collapseTwo">
@@ -186,6 +190,7 @@
           
            <div class="widget-title"> <a href="#collapseThree" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5>JCB-POC Work Details</h5>
+            
             </a> 
           </div>
           <div class="collapse" id="collapseThree">
