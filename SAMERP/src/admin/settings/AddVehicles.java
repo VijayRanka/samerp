@@ -2,6 +2,7 @@ package admin.settings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -138,25 +139,35 @@ public class AddVehicles extends HttpServlet {
 		}
 		
 		
-		if(request.getParameter("vno")!=null)
+		if(request.getParameter("vno")!="")
 		{
 			String vno = request.getParameter("vno");
 			String sdate = request.getParameter("sdate");
 			String edate = request.getParameter("edate");
+			List l2 = new ArrayList();
 			
-			String q = "SELECT `amount` FROM `expenses_master` WHERE debtor_id='"+vno+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
-			List l = gd.getData(q);
+			System.out.println("vno "+ vno);
 			
-			Iterator itr=l.iterator();
-			int total=0;
-			
-			while(itr.hasNext())
-			{
-				total += Integer.parseInt(itr.next().toString());
+			if(vno!=null){
+				String q2="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vno+")";
+				l2 = gd.getData(q2);
 			}
-			out.print(total);
-			System.out.println(l);
 			
+			
+			if(!l2.isEmpty()){
+				String q = "SELECT `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
+				List l = gd.getData(q);
+				
+				Iterator itr=l.iterator();
+				int total=0;
+				
+				while(itr.hasNext())
+				{
+					total += Integer.parseInt(itr.next().toString());
+				}
+				out.print(total);
+				System.out.println("vdata "+l);
+			}
 		}
 		
 	}
