@@ -341,11 +341,11 @@
             
            <!--  <table>
             	<tr> <td></td> <td></td> </tr>
-            	<tr> <td id="tripCnt">Trip(s) : </td> <td></td> </tr>
-            	<tr> <td id="dieselCost">Diesel : </td> <td></td> </tr>
-            	<tr> <td>Deposit : </td> <td></td> </tr>
-            	<tr> <td>Driver : </td> <td></td> </tr>
-            	<tr> <td>Total : </td> <td></td> </tr>
+            	<tr> <td id="tripCnt">Trip(s) : </td> <td><span id="tripCnt"> </span></td> </tr>
+            	<tr> <td id="dieselCost">Diesel : </td> <td><span id="dieselCost"> </span></td> </tr>
+            	<tr> <td>Deposit : </td> <td><span id="depositCost">  </span></td> </tr>
+            	<tr> <td>Driver : </td> <td> <span id="driverCost"> </span></td> </tr>
+            	<tr> <td>Total : </td> <td><span id="totalCost">  </span></td> </tr>
             
             </table> -->
             
@@ -556,7 +556,7 @@ function getDates() {
 function getDriverExp(sdate, edate)
 {
 	var value = document.getElementById("selectVehicle").value;
-	
+	alert(value);
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
