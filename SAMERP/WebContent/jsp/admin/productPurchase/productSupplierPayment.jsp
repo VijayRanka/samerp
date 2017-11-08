@@ -579,6 +579,7 @@
 </div>
 
 
+
 <div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
