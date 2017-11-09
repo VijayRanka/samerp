@@ -21,7 +21,7 @@
 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 <link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
-
+	
 </head>
 <style>
 
@@ -125,41 +125,41 @@ transition: all 0.3s;
       <div class="span12">
         <div class="widget-box">
           <div class="widget-title"> <span class="icon"> <i class="icon-pencil"></i> </span>
-            <h5>Form wizard &amp; validation</h5>
+            <h5>Add Account Details</h5>
           </div>
           <div class="widget-content nopadding">
             <form id="form-wizard" class="form-horizontal" action="/SAMERP/AddAccountDetails" method="post">
                 <div class="control-group">
                   <label class="control-label">Bank Name</label>
                   <div class="controls">
-                    <input type="text" id="bankName" name="bankName" onkeyup="this.value=this.value.toUpperCase()"/>
+                    <input type="text" id="bankName" placeholder="Bank Name" name="bankName" pattern="[a-z A-Z]*" onkeyup="this.value=this.value.toUpperCase()" required/>
                   </div>
                 </div>
                 
                 <div class="control-group">
                   <label class="control-label">Branch</label>
                   <div class="controls">
-                    <input type="text" name="branch" onkeyup="this.value=this.value.toUpperCase()"/>
+                    <input type="text" name="branch" placeholder="Branch" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
                   </div>
                 </div>
                 
                 <div class="control-group">
                   <label class="control-label">Account No</label>
                   <div class="controls">
-                    <input type="text" name="accNo" />
+                    <input type="text" name="accNo" placeholder="Account No" pattern="[0-9]*" required/>
                   </div>
                 </div>
                 
                 <div class="control-group" >
                   <label class="control-label">Opening Balance</label>
                   <div class="controls">
-                    <input type="text" name="openingBalance" />
+                    <input type="text" name="openingBalance" placeholder="Opening Balance" pattern="[0-9]*" required/>
                   </div>
                 </div>
-         
+          
               <div class="form-actions" align="center">
                 <input class="btn btn-success" name="insertAccDetails" type="submit" value="OK" />
-                <input class="btn btn-danger" type="button" value="Cancel" />
+                <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
                 
                 
                 <div id="status"></div>
@@ -174,10 +174,10 @@ transition: all 0.3s;
   	<div class="span12">
   		<div class="widget-box">
           <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
-            <h5>Suppliers Material Data</h5>
+            <h5>Bank Details</h5>
           </div>
           <div class="widget-content nopadding">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered data-table">
               <thead>
                 <tr>
                   <th>S.No.</th>
@@ -236,21 +236,21 @@ transition: all 0.3s;
                   <label class="control-label">Bank Name</label>
                   <div class="controls">
                   <input type="hidden" id="modalId"  name="modalId"/>
-                    <input type="text" id="modalName" name="modalbName"/>
+                    <input type="text" id="modalName" name="modalbName" placeholder="Bank Name" pattern="[a-z A-Z]*" onkeyup="this.value=this.value.toUpperCase()" required />
          			</div>
         	</div>
         	
         	<div class="control-group">
                   <label class="control-label">Branch</label>
                   <div class="controls">
-                    <input type="text" id="modalBranch"  name="modalBranch" />
+                    <input type="text" id="modalBranch"  name="modalBranch" placeholder="Branch" pattern="[a-z A-Z]*" onkeyup="this.value=this.value.toUpperCase()" required/>
          			</div>
         	</div>
         	
         	<div class="control-group">
                   <label class="control-label">Account No</label>
                   <div class="controls">
-                    <input type="text" id="modalAccNo"  name="modalAccNo" />
+                    <input type="text" id="modalAccNo"  name="modalAccNo" placeholder="Account No" pattern="[0-9]*"  required />
          			</div>
         	</div>
         	
@@ -264,7 +264,7 @@ transition: all 0.3s;
         	<div class="control-group">
                   <label class="control-label">Alias Name</label>
                   <div class="controls">
-                    <input type="text" id="modalAlias"  name="modalAlias" />
+                    <input type="hidden" id="modalAlias"  name="modalAlias" />
                     <input type="text" id="oldAlias"  name="oldAlias" />
          			</div>
         	</div>

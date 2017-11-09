@@ -397,7 +397,6 @@ function getExpData(value)
 			document.getElementById("expenseDataTable").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
 			else{
 				var count=1;
-				alert(demoStr);
 				var wholeData="";
 				for(var i=0;i<demoStr.length-2;i=i+9){
 					
@@ -551,7 +550,6 @@ function getDates() {
 function getDriverExp(sdate, edate)
 {
 	var value = document.getElementById("selectVehicle").value;
-	alert(value);
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
