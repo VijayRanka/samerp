@@ -557,7 +557,7 @@ public class RequireData
 		
 		public List getChalanProductDetailsForSale(String pid)
 		{
-			String cpquery = "SELECT sale_details_master.product_name,sale_details_master.qty,sale_details_master.rate FROM sale_details_master, "
+			String cpquery = "SELECT sale_details_master.product_name,sale_details_master.qty,sale_details_master.rate,sale_details_master.gst FROM sale_details_master, "
 					+ "sale_master WHERE sale_details_master.sale_master_id=sale_master.id AND sale_master.id="+pid;
 			List cpList = gd.getData(cpquery);
 			return cpList;
