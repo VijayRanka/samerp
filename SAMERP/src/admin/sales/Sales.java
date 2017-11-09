@@ -237,8 +237,6 @@ public class Sales extends HttpServlet {
 			request.setAttribute("status", "Record Deleted Successfully");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
 			rd.forward(request, response);
-		}		
-
-		
+		}
 	}
 }

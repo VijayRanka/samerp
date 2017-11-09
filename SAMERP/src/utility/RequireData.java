@@ -514,7 +514,15 @@ public class RequireData
 		
 		public List getSalesDetails()
 		{
-			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+			
+//			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,"
+//					+ " sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master,client_details WHERE "
+//					+ " sale_master.client_id = client_details.client_id AND (sale_master.date between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )";
+			
+			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,"
+					+ "sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM "
+					+ "sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+
 			List list=gd.getData(sale_query);
 			return list;		
 		}
