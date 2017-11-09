@@ -150,7 +150,7 @@ to {
 									<div class="controls">
 										<input type="text" name="employee_name" 
 											class="span5" placeholder="Employee Name"
-											onkeyup="this.value=this.value.toUpperCase()" required />
+											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
 								<div class="control-group">

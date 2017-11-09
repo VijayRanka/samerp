@@ -107,13 +107,13 @@
             <div class="control-group">
               <label class="control-label"><span style="color: red;">*</span> Organization Name :</label>
               <div class="controls">
-                <input type="text" name="organizationname" id="organizationname" class="span6" placeholder="Organization Name" onkeyup="this.value=this.value.toUpperCase()" required/>
+                <input type="text" name="organizationname" id="organizationname" class="span6" placeholder="Organization Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*"  required/>
               </div>
             </div>
             <div class="control-group">
               <label class="control-label"><span style="color: red;">*</span>Address :</label>
               <div class="controls">
-                <input type="text" name="address" class="span6" placeholder="Address" onkeyup="this.value=this.value.toUpperCase()" required/>
+                <input type="textarea" name="address" class="span6" placeholder="Address" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z 0-9]*" required/>
               </div>
             </div>
             <div class="control-group">
@@ -126,19 +126,19 @@
             <div class="control-group">
               <label class="control-label">Email :</label>
               <div class="controls">
-                <input type="text" name="email" class="span6" placeholder="Email" />
+                <input type="text" name="email" class="span6" placeholder="Email" required/>
               </div>
             </div>
             
             <div class="control-group">
               <label class="control-label">Opening Balance:</label>
               <div class="controls">
-                <input type="text" name="opening_balance" id="opening_balanceid" class="span6" placeholder="Opening Balance" />
+                <input type="text" name="opening_balance" id="opening_balanceid" class="span6" placeholder="Opening Balance" pattern="[0-9]*" required/>
               </div>
             </div>
             
             <div class="form-actions" >
-            <button type="submit" name="insertorganizer" class="btn btn-success"         style="position:relative; right:700px; float:right;">Submit</button>
+            <button type="submit" name="insertorganizer" class="btn btn-success" style="position:relative; right:700px; float:right;">Submit</button>
               <a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger " style="position:relative; right:550px;   float:right;">Exit</button></a>
             </div>  
           </form>
@@ -214,14 +214,14 @@
 				              <label class="control-label"><span style="color: red;">*</span>Organization Name : </label>
 				              <div class="controls">
 				              		<input type="hidden" name="organization_id" id="organization_id" />
-				                    <input type="text" class="span3" onkeyup="this.value=this.value.toUpperCase()" name="organization_name" id="organization_name" required  />
+				                    <input type="text" class="span3" onkeyup="this.value=this.value.toUpperCase()" name="organization_name" id="organization_name" pattern="[a-z A-Z]*" required  />
 				              </div>
 				            </div>
 				            
 				            <div class="control-group">
 				              <label class="control-label"><span style="color: red;">*</span>Organization Address : </label>
 				              <div class="controls">
-				                    <input type="text" class="span3" onkeyup="this.value=this.value.toUpperCase()" name="organization_address" id="organization_address" required  />
+				                    <textarea type="text" class="span3" onkeyup="this.value=this.value.toUpperCase()" name="organization_address" id="organization_address" pattern="[a-z A-Z]*" required></textarea>
 				              </div>
 				            </div>
 				            
@@ -249,7 +249,7 @@
 				            <div class="control-group">
 					              <label class="control-label">Opening Balance:</label>
 					              <div class="controls">
-					                <input type="text" name="opening_balance" id="opening_balanceid" class="span3" placeholder="Opening Balance" />
+					                <input type="text" name="opening_balance" id="opening_balanceid" class="span3" placeholder="Opening Balance" pattern="[0-9]*" required/>
 					              </div>
 					            </div>
 				            	            
