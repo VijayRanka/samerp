@@ -495,12 +495,13 @@ public class RequireData
 		{
 			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email,organization_op_balance from organization_details";
 			List demoList=gd.getData(demo);
+			System.out.println("List is:"+demoList);
 			return demoList;
 		}
 		
 		public List getOrganizationRowData(String RowId)
 		{
-			String organizationRowDataQuery = "select organization_id, organization_name, organization_address, organization_contactno1, organization_contactno2, organization_email from organization_details where organization_id="+RowId+"; ";
+			String organizationRowDataQuery = "select organization_id, organization_name, organization_address, organization_contactno1, organization_contactno2, organization_email,organization_op_balance from organization_details where organization_id="+RowId+"; ";
 			List organizationDetailsData = gd.getData(organizationRowDataQuery);
 			return organizationDetailsData;
 		}
