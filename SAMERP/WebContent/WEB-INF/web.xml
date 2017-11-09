@@ -184,4 +184,12 @@
     <servlet-name>ContractorPayment</servlet-name>
     <url-pattern>/ContractorPayment</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>PTCash</servlet-name>
+    <servlet-class>admin.pettycash.PTCash</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PTCash</servlet-name>
+    <url-pattern>/PTCash</url-pattern>
+  </servlet-mapping>
 </web-app>
