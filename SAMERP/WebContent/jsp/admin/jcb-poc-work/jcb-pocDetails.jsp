@@ -145,24 +145,55 @@
 											</select>
 
 										</td>
-										<td style="text-align: right;">
-											Bucket Hrs : <input type="text" name="bucket_hrs" placeholder="HH:MM">
-										</td>
-									</tr>
-									<tr>
-										<td style="text-align: right;">
-											Deposit :<input type="text" name="deposit" placeholder="Deposit">
-										</td>
-										<td style="text-align: right;">
-											Breaker Hrs : <input type="text" name="breaker_hrs" placeholder="HH:MM">
+										<td style="text-align: right; padding-right: 100px;">
+											Bucket Hrs : <input type="hidden" id="bucket_hrs" name="bucket_hrs" value="00:00" placeholder="HH:MM">
+											<input type="text" id="bHrs" maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
+											 : 
+											<input type="text" id="bMus" maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
 										</td>
 									</tr>
 									<tr>
 										<td style="text-align: right;">
 											Diesel Amount :<input type="text" name="diesel" placeholder="Diesel">
 										</td>
+										<td style="text-align: right; padding-right: 100px;">
+											Breaker Hrs : <input type="hidden" id="breaker_hrs" name="breaker_hrs" value="00:00" placeholder="HH:MM">
+											<input type="text" id="bkHrs"  maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
+											 : 
+											<input type="text" id="bkMus"  maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); }  setHours();" style="width: 40px;">
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: right; padding-right: 14%;">
+											Deposit :
+											<input type="radio" name="radios" value="1" checked="checked" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cash
+											<input type="radio" name="radios" value="2" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cheque
+										</td>
 										<td style="text-align: right;">
-											HSN : <input type="text" name="hsnno" placeholder="HSN">
+<!-- 											HSN : <input type="text" name="hsnno" placeholder="HSN"> -->
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">
+											<input type="text" name="deposit" id="deposit" onkeypress="return isNumber(event)" placeholder="Deposit">
+											<var class="control-group hide" id="selectBank">
+												Select Bank :
+													<select class="span8">
+														<option>First option</option>
+														<option>Second option</option>
+														<option>Third option</option>
+														<option>Fourth option</option>
+														<option>Fifth option</option>
+														<option>Sixth option</option>
+														<option>Seventh option</option>
+														<option>Eighth option</option>
+													</select>
+											</var>
+										</td>
+										<td style="text-align: right;">
+											<var class="control-group hide" id="selectBankCheque">
+												Cheque No :<input type="text" class="span8" placeholder="Cheque No" />
+											</var>
 										</td>
 									</tr>
 									<tr>
@@ -249,16 +280,22 @@
 										</select>
 
 										</td>
-										<td style="text-align: right;">
-											Bucket Hrs : <input type="text" name="bucket_hrs" id="bucket_hrs_update" placeholder="HH:MM">
+										<td style="text-align: right; padding-right: 100px;">
+											Bucket Hrs : <input type="hidden" name="bucket_hrs" id="bucket_hrs_update" placeholder="HH:MM">
+											<input type="text" id="bHrsUpdate" maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHoursUpdate();" style="width: 40px;">
+											 : 
+											<input type="text" id="bMusUpdate" maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
 										</td>
 									</tr>
 									<tr>
-										<td style="text-align: right;">
+										<td style="text-align: right; ">
 											Deposit :<input type="text" name="deposit" id="deposit_update" placeholder="Deposit">
 										</td>
-										<td style="text-align: right;">
-											Breaker Hrs : <input type="text" name="breaker_hrs" id="breaker_hrs_update" placeholder="HH:MM">
+										<td style="text-align: right; padding-right: 100px;">
+											Breaker Hrs : <input type="hidden" name="breaker_hrs" id="breaker_hrs_update" placeholder="HH:MM">
+											<input type="text" id="bkHrsUpdate"  maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHoursUpdate();" style="width: 40px;">
+											 : 
+											<input type="text" id="bkMusUpdate"  maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); }  setHoursUpdate();" style="width: 40px;">
 										</td>
 									</tr>
 									<tr>
@@ -367,8 +404,10 @@
 
 		</div>
 	</div>
+	
 	<!--Footer-part-->
 	<!--===================================== Model================================================== -->
+	<jsp:include page="config/addProject.jsp"></jsp:include>
 	<div class="modal hide fade" id="addCustomer" role="dialog">
 		<div class="modal-dialog">
 		<form action="/SAMERP/AddCustomer.do?path=jcbpoc" method="post" class="form-horizontal" name="customerupdateform">
@@ -394,8 +433,10 @@
 						<div class="control-group">
 							<label class="control-label">Contact No :</label>
 							<div class="controls">
-								<input type="text" name="contactno" id="contactno" placeholder="Contact Number"
-									onkeypress="return isNumber(event)"  maxlength="10" />
+								<input type="text" name="contactno" id="contactno"
+									placeholder="Contact Number"
+									onkeypress="return isNumber(event)" onkeyup="if(this.value.length==10){ checkContactNo(this.value); }"  minlength="10" maxlength="10" autocomplete="off" required/>
+								<span class="help-inline error" id="contactError" style="color: red; font-weight: bold;"></span>
 							</div>
 						</div>
 						<div class="control-group">
@@ -424,7 +465,7 @@
 			</div>
 			<div class="modal-footer">
 				<div class="form-actions">
-							<button type="submit" name="insertorganizer"
+							<button type="submit" name="insertorganizer" id="custSubmit"
 								class="btn btn-success"
 								style="float: right;">Submit</button>
 							</div>
@@ -434,46 +475,6 @@
 		</div>
 	</div>
 	<!-- ========================================Model End=========================================== -->
-	<!--***************************************************** Add Project *******************************************************-->
-	
-	<div id="addProject" class="modal hide fade" role="dialog"
-		style="width: 55%; margin-left: -28%;">
-		<div class="modal-dialog">
-
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header" style="    height: 30px;">
-					<h4 class="modal-title">Add Customer Project</h4>
-				</div>
-				
-
-					<form action='/SAMERP/AddCustomer.do?path=jcbpoc' name="form2" method="Post"	class="form-horizontal">
-						<div class="modal-body">
-							<table id="display-textfeild" style="margin: 0 auto;">
-								<tr>
-									<td>
-										Project Name 1:
-										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" required>
-										<input type="hidden" name="custid_project" id="custid_project" >
-										<input type="hidden" name="count_project" id="count_project" value="1" >
-									</td>
-									<td><button type="button" onclick="insertDiv()">+</button></td>
-									<td><button type="button" onclick="deleteDiv()">-</button></td>
-								</tr>
-							</table>
-						</div>
-						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="save" class="btn btn-success">Update</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-						</div>
-					</form>
-				</div>
-
-			</div>
-
-		</div>
-		
-	<!-- ============================================================	Add Project End =========================================-->
 	
 	
 	
@@ -489,6 +490,14 @@
 	</div>
 	<!--end-Footer-part-->
 	<script type="text/javascript">
+	function isNumber(evt) {
+	    evt = (evt) ? evt : window.event;
+	    var charCode = (evt.which) ? evt.which : evt.keyCode;
+	    if (charCode > 31 && ( charCode < 48 || charCode > 57)) {
+	        return false;
+	    }
+	    return true;
+	}
 		//**********************Customer Search******************************************
 		
 		
@@ -564,6 +573,46 @@
 			    }
 		}
 		//******************************************END Cutomer Print******************************************************************
+		//***************************************** SET Hours***************************************************************************** 
+		function setHours() {
+			var bkHrs=document.getElementById("bkHrs").value;
+			var bkMus=document.getElementById("bkMus").value;
+			
+			var breaker_Hrs=bkHrs +":"+ bkMus;
+			
+			document.getElementById("breaker_hrs").value=breaker_Hrs;
+			
+			
+			
+			var bHrs=document.getElementById("bHrs").value;
+			var bMus=document.getElementById("bMus").value;
+			
+			var bucket_Hrs=bHrs +":"+ bMus;
+			
+			document.getElementById("bucket_hrs").value=bucket_Hrs;
+			
+			
+		}
+		function setHoursUpdate() {
+			var bkHrs=document.getElementById("bkHrsUpdate").value;
+			var bkMus=document.getElementById("bkMusUpdate").value;
+			
+			var breaker_Hrs=bkHrs +":"+ bkMus;
+			
+			document.getElementById("breaker_hrs_update").value=breaker_Hrs;
+			
+			
+			
+			var bHrs=document.getElementById("bHrsUpdate").value;
+			var bMus=document.getElementById("bMusUpdate").value;
+			
+			var bucket_Hrs=bHrs +":"+ bMus;
+			
+			document.getElementById("bucket_hrs_update").value=bucket_Hrs;
+			
+			
+		}
+		//***************************************** END SET Hours*****************************************************************************
 		//******************************************Cutomer Project******************************************************************
 		function SelectCustomerProject(str) {
 			document.getElementById("cust_project").innerHTML = "";
@@ -739,8 +788,17 @@
 				 				document.getElementById("vehicle_update").value = demoStr[6];
 				 				var date=demoStr[7].split("-");
 				 				document.getElementById("chalandate_update").value =date[2]+"-"+date[1]+"-"+date[0];
+				 				
 				 				document.getElementById("bucket_hrs_update").value = demoStr[8];
+				 				var newBHr=demoStr[8].split(":");
+				 				document.getElementById("bHrsUpdate").value = newBHr[0];
+				 				document.getElementById("bMusUpdate").value = newBHr[1];
+				 				
 				 				document.getElementById("breaker_hrs_update").value = demoStr[9];
+				 				var newBrHr=demoStr[9].split(":");
+				 				document.getElementById("bkHrsUpdate").value = newBrHr[0];
+				 				document.getElementById("bkMusUpdate").value = newBrHr[1];
+				 				
 				 				document.getElementById("deposit_update").value = demoStr[10];
 				 				document.getElementById("diesel_update").value = demoStr[11];
 				 				document.getElementById("jcbpocid_update").value = demoStr[12];
@@ -783,6 +841,51 @@ function deleteDiv()
     }
 }
 //================================================= End Project ==========================================================
+//***************************************Contact Error *******************************
+function checkContactNo(str) {
+	var xhttp;
+	if (str == "") {
+		return;
+	}
+	xhttp = new XMLHttpRequest();
+
+	try {
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split("~");
+				if (demoStr[0] =="") {
+					document.getElementById("contactError").innerHTML ="";
+					document.getElementById("custSubmit").disabled = false;
+				}else {
+					document.getElementById("contactError").innerHTML ="This Contact Already Exists!";
+					document.getElementById("custSubmit").disabled = true;
+				}
+			}
+
+		};
+
+		xhttp.open("POST", "/SAMERP/AddCustomer.do?checkContactNo=" + str, true);
+		xhttp.send();
+	} catch (e) {
+		alert("Unable to connect to server");
+	}
+}
+//*************************************** End Contact Error *******************************
+//*************************************** DEPOSIT *******************************
+function showBank(str) {
+	if(str==1){
+		document.getElementById("deposit").style.display = 'inline-block';;
+		document.getElementById("selectBank").className="control-group hide";
+		document.getElementById("selectBankCheque").className="control-group hide";
+	}
+	if(str==2){
+		document.getElementById("deposit").style.display = "none";
+		document.getElementById("selectBank").className="control-group";
+		document.getElementById("selectBankCheque").className="control-group";
+	}
+	
+}
+//*************************************** END DEPOSIT *******************************
 </script>
 
 

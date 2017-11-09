@@ -24,7 +24,7 @@
 <style type="text/css">
 #s2id_autogen3, #s2id_cust_project{
 	float: inherit;
-    margin-left: 605px;
+    margin-left: 615px;
     margin-top: -27px;
 }
 </style>
@@ -61,7 +61,7 @@
 			<div class="row-fluid">
 				<div class="span12">
 					<div class="widget-box" id="addWork" style="display: block;">
-						<div class="alert alert-info" style="padding-left: 40px;">
+						<div class="alert alert-info">
 							<var id="newBillEntry" style=" display: block; font-style: normal">
 								<strong>Enter Customer Name <span class="badge badge-info">OR</span> Contact No : </strong>
 								<input list="browsers" name="browser" id="editdata"	onkeyup="CustomerSearch(this.value)" onkeydown="CustomerPrint()" autocomplete="off" required>
@@ -74,7 +74,9 @@
 							<var id="updateBillEntry" style="display: none; font-style: normal; height: 28px;">
 								<h4>Update Bill</h4>
 							</var>
-							<a href="#createBill" data-toggle="modal" onclick="createBill()" class="btn btn-primary" style="float: right; margin-right: 100px; margin-top: -31px;">Create Bill</a>
+							<a href="#createBill" data-toggle="modal" onclick="createBill()" class="btn btn-primary" style="float: right; margin-right: -20px; margin-top: -31px;">Create Bill</a>
+							<strong style="float: right; margin-right: 170px; margin-top: -24px;">GST(%) : </strong>
+							<input type="text" name="gst" id="gst" onkeyup="countTotalHr()" value="0" class="span1" style="float: right; margin-right: 100px; margin-top: -31px;">
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered table-striped with-check">
@@ -120,12 +122,12 @@
 										<th>(-)</th>
 									</tr>
 									<tr>
-										<th colspan="4" style="text-align: right;">CGST(9%)</th>
+										<th colspan="4" style="text-align: right;">CGST(<var id="cgstPer">0</var>%)</th>
 										<th><label id="cgst"></label></th>
 										<th colspan="2" rowspan="2">Pay Amount <br> <span class="label label-success" id="payAmt" style="font-size: large;"></span></th>
 									</tr>
 									<tr>
-										<th colspan="4" style="text-align: right;">SGST(9%)</th>
+										<th colspan="4" style="text-align: right;">SGST(<var id="sgstPer">0</var>%)</th>
 										<th><label id="sgst"></label></th>
 									</tr>
 								</tbody>
@@ -440,10 +442,19 @@ function countTotalHr(){
 	//BILL AMOUNT========================================================================
 		var billAmount=bucketRound + breakerRound;
 		document.getElementById("billAmount").innerHTML=billAmount;
+	
+	//GST ================================================================================
+		var gst=document.getElementById("gst").value;
+		gst=gst/2;
+		document.getElementById("cgstPer").innerHTML=gst;
+		document.getElementById("sgstPer").innerHTML=gst;
+		document.getElementById("cgstPerPrint").innerHTML=gst;
+		document.getElementById("sgstPerPrint").innerHTML=gst;
+		gst=gst/100;
 		
 	//CGST & SGST =======================================================================
-		var cgst=Math.round((billAmount*0.09) * 100) / 100;
-		var sgst=Math.round((billAmount*0.09) * 100) / 100;
+		var cgst=Math.round((billAmount*gst) * 100) / 100;
+		var sgst=Math.round((billAmount*gst) * 100) / 100;
 		document.getElementById("cgst").innerHTML=cgst;
 		document.getElementById("sgst").innerHTML=sgst;
 	

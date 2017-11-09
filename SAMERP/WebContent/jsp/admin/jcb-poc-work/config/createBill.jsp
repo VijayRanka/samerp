@@ -43,7 +43,7 @@
 				<tbody>
 					<tr>
 						<td colspan="6">To,<var id="customerBill"></var><input type="hidden" id="customerInvoice" name="customerInvoice"></td>
-						<td colspan="2">Bill No : <var id="billNo" style="font-weight: bold;"></var> <input type="hidden" id="invoiceId" name="invoiceId" value=""></td>
+						<td colspan="2">Bill No : <var id="billNo" style="font-weight: bold;"></var> <input type="hidden" id="invoiceId" name="invoiceId" value=""><input type="hidden" id="gstPrint" name="gstPrint"> </td>
 					</tr>
 					<tr>
 					<td colspan="6"><!-- Site:-<var id="projectBill"></var>  --></td>
@@ -96,7 +96,7 @@
 						<th>(-)</th>
 					</tr>
 					<tr>
-						<th colspan="5" style="text-align: right;">CGST(9%)</th>
+						<th colspan="5" style="text-align: right;">CGST(<var id="cgstPerPrint"></var>%)</th>
 						<th id="cgstPrint"></th>
 						<th colspan="2" rowspan="2">
 							Pay Amount <br> 
@@ -105,7 +105,7 @@
 						</th>
 					</tr>
 					<tr>
-						<th colspan="5" style="text-align: right;">SGST(9%)</th>
+						<th colspan="5" style="text-align: right;">SGST(<var id="sgstPerPrint"></var>%)</th>
 						<th id="sgstPrint"></th>
 					</tr>
 					<tr>
@@ -237,13 +237,12 @@
 	//===================================create Bill==============================================
 		function createBill(){
 			var billEntry=document.getElementById("newBillEntry").style.display;
-			alert(billEntry);
 			if(billEntry == "block"){
 				getBillNo();
 			}else {
 				getBillNoUpdate();
 			}
-		
+			document.getElementById("gstPrint").value=document.getElementById("gst").value;
 			document.getElementById("customerBillDetailPrint").innerHTML ="";
 			var str=document.getElementById("rowCounter").value;
 			var text = "";

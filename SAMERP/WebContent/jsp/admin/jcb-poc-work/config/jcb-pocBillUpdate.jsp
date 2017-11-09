@@ -14,8 +14,9 @@ function getCustomerBillDataUpdate(str) {
 			if (this.readyState == 4 && this.status == 200) {
 				document.getElementById("customerBillDetail").innerHTML ="";
 				var demoStr = this.responseText.split("~");
+				document.getElementById("gst").value = demoStr[0];
 				var text = "";
-				var i = 0;
+				var i = 1;
 				var checkId;
 				var j=1;
 				for (; demoStr[i];) {
