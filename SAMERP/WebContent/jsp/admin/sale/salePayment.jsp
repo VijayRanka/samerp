@@ -27,7 +27,7 @@
 #createBillTable tbody {
 	border: 1px;
 	border-style: groove;
-}
+}		
 #createBillTable tbody tr td{
 	border: 1px;
 	border-style: groove;

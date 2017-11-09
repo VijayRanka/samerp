@@ -76,6 +76,13 @@ margin-top: 5px;
     margin-left: 200px;
 }
 
+/* .select2-choice{
+	margin-top: -67px;
+    margin-left: 425px;
+    width: 250px;
+	
+} */
+
 #saleDetails td{ 
 	text-align: -webkit-center;
 }
@@ -311,11 +318,26 @@ margin-top: 5px;
                 <input type="text" name="chalanNo_third" id="chalanNo_third" placeholder="Chalan Number" style="width: 250px; margin-top: -50px;" onkeyup="this.value=this.value.toUpperCase()"/>
               </div>
               
-              <label class="control-label" style="margin-top: -65px; margin-left: 420px;">Supplier Name :</label>
-              <div class="controls">
-                <input type="text" name="supplierName" id="supplierName" placeholder="Supplier Name" style="width: 250px; margin-top: -65px; margin-left: 420px;" onkeyup="this.value=this.value.toUpperCase()"/>
+              <label class="control-label" style="margin-top: -65px; margin-left: 420px;">Select Supplier :</label>
+              <div class="controls" style="    margin-left: 57%; width: 166%; margin-top: -6%; position: absolute;">
+              		<select class="span2" name="supplierName" id="supplierName" autofocus   >
+	                	
+           	  			<%
+           	  				List supplierList = rd.getSupplierList1();
+		           	  		if(!supplierList.isEmpty()){
+		          			Iterator itrS = supplierList.iterator();
+			              		while(itrS.hasNext()){
+			              			Object supplierName=itrS.next();
+	          			%>
+		                <option value="<%=supplierName%>"><%=supplierName%></option>
+		      			<%
+	              				}
+           	  			}
+	           			%>   
+	           		</select> 
+<!--                 <input type="text" name="supplierName" id="supplierName" placeholder="Supplier Name" style="width: 250px; margin-top: -65px; margin-left: 420px;" onkeyup="this.value=this.value.toUpperCase()"/> -->
               </div><br>              
-                 <button type="button" id="submitbtn" name="addMaterialFromTPSubmitBtn" onclick="addMaterialByThirdParty()" class="btn btn-success" style="margin-top: -40px; margin-left: 450px;">Add Materials</button>
+                  <button type="button" id="submitbtn" name="addMaterialFromTPSubmitBtn" onclick="addMaterialByThirdParty()" class="btn btn-success" style="margin-top: -20px; margin-left: 450px;">Add Materials</button>
             </div>              
             
             <div class="control-group">
