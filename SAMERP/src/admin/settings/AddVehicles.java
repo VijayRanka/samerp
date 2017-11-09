@@ -155,17 +155,24 @@ public class AddVehicles extends HttpServlet {
 			
 			
 			if(!l2.isEmpty()){
-				String q = "SELECT `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
+				String q = "SELECT `expenses_type_id`, `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
 				List l = gd.getData(q);
 				
 				Iterator itr=l.iterator();
-				int total=0;
+				int DieselTotal=0, total=0;
 				
 				while(itr.hasNext())
 				{
-					total += Integer.parseInt(itr.next().toString());
+					String et = itr.next().toString();
+					if(et.equals("2")){
+						DieselTotal += Integer.parseInt(itr.next().toString());
+					}
+					else{
+						total += Integer.parseInt(itr.next().toString());
+					}
 				}
-				out.print(total);
+				
+				out.print(DieselTotal+ "," + total);
 				System.out.println("vdata "+l);
 			}
 		}
