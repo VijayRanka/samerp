@@ -421,7 +421,7 @@
             	Trip(s) : <span id="tripCnt"> </span>  <br>
             	Diesel : <span id="dieselCost">  </span> <br>
             	Deposit : <span id="depositCost">  </span> <br>
-            	Driver : <span id="driverCost">  </span> <br>
+            	Maintenance : <span id="driverCost">  </span> <br>
             	Total : <span id="totalCost">  </span>
             	</h4>
             </span>
@@ -622,9 +622,9 @@ function getDriverExp(sdate, edate)
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			demoStr = this.responseText;
+			alert(demoStr);
 			document.getElementById("driverCost").innerHTML=demoStr;
 			document.getElementById("totalCost").innerHTML=totalCost+ +demoStr;
-
 		}
 	};
 	xhttp.open("POST", "/SAMERP/AddVehicles?vno="+value+"&sdate="+sdate+"&edate="+edate, true);
@@ -639,9 +639,9 @@ function getDriverExp(sdate, edate)
 <script src="/SAMERP/config/js/jquery.toggle.buttons.js"></script> 
 <script src="/SAMERP/config/js/jquery.uniform.js"></script> 
 <script src="/SAMERP/config/js/select2.min.js"></script> 
-<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script>  
 <script src="/SAMERP/config/js/matrix.js"></script> 
-<script src="/SAMERP/config/js/matrix.tables.js"></script>
+<script src="/SAMERP/config/js/matrix.tables.js"></script> 
 <script src="/SAMERP/config/js/wysihtml5-0.3.0.js"></script> 
 <script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 

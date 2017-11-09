@@ -214,7 +214,7 @@ public class RequireData
 				System.out.println("vid "+vid);
 				if(!vid.equals("")){
 					String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, sale_master.debtor_id, "
-							+ "sale_master.vehicle_deposit  FROM sale_master, vehicle_details, client_details WHERE "
+							+ "sale_master.vehicle_deposit  FROM sale_master, client_details WHERE "
 							+ "sale_master.debtor_id=(SELECT debtor_master.id FROM debtor_master WHERE "
 							+ "debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vid+")) "
 							+ "AND client_details.client_id=sale_master.client_id";
@@ -238,7 +238,6 @@ public class RequireData
 			}
 			
 			public List getDieselAmt(String saleId){
-				
 				String q = "SELECT expenses_master.amount FROM expenses_master WHERE expenses_master.exp_id=(SELECT exp_master_id FROM vehicles_ride_details WHERE sales_id="+saleId+")";
 				List l = gd.getData(q);
 				return l;
