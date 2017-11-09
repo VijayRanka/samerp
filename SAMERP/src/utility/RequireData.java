@@ -588,6 +588,12 @@ public class RequireData
 			return vehicleNumber;
 		}
 	
+		public List getSupplierList1()
+		{
+			String supplierListQuery = "select supplier_name from material_supply_master where type=2;";
+			List supplierList = gd.getData(supplierListQuery);
+			return supplierList;
+		}
 	//--sarang end
 	
 	// vijay start
