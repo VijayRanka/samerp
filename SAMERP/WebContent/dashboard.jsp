@@ -86,23 +86,22 @@
           <div class="widget-title"> <a href="#collapseOne" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5>Daily Expenses</h5>
             <%RequireData rd=new RequireData(); %>
-             <span class="badge badge-inverse" style="margin-top: 10px">Total Expense: <%=rd.totalExpenseDay() %></span>
+             <span class="badge badge-important" style="margin-top: 10px; float: right;">Total Expense: <%=rd.totalExpenseDay() %></span>
             </a> 
              <div class="dateDiv" style="position: relative;left: 680px;bottom: 25px;">
-             <div class="control-group">
-              <div class="controls">
-              <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
-              <% SysDate sd=new SysDate();
-              String[] sdDemo=sd.todayDate().split("-");
-              %>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
-                </div>
-            </div>
+             
              </div>
             </div>
           <div class="collapse" id="collapseOne">
            <div class="widget-content nopadding	">
             <table class="table table-bordered data-table">
+              <div class="controls"style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
+              <% SysDate sd=new SysDate();
+              String[] sdDemo=sd.todayDate().split("-");
+              %>
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                </div> 
               <thead>
                 <tr>
                   <th>S.No.</th>
@@ -172,12 +171,76 @@
           
           <div class="widget-title" > <a href="#collapseTwo" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5 onclick="">Daily Collection</h5>
-           <span class="badge badge-inverse" style="margin-top: 10px" id="pCash">Petty Cash: 50000</span>
-           <span class="badge badge-inverse" style="margin-top: 10px" id="bankAmount">Bank Status: 50000</span>
+           <span class="badge badge-important" style="margin-top: 10px;float: right;" id="bankAmount">Bank Status: <%=rd.getTotalBadAmount() %></span>
+           <span class="badge badge-important" style="margin-top: 10px;float: right;" id="pCash">Petty Cash: <%=rd.getTotalPtCash() %></span>
             </a> 
           </div>
           <div class="collapse" id="collapseTwo">
-            <div class="widget-content"> This box is now open </div>
+           <div class="widget-content nopadding	">
+            <table class="table table-bordered data-table">
+              <div class="controls"style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
+              <% sdDemo=sd.todayDate().split("-");
+              %>
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                </div> 
+              <thead>
+                <tr>
+                  <th>S.No.</th>
+                  <th>Name</th>
+                  <th>Amount</th>
+                  <th>Payment Mode</th>
+                  <th>Reason</th>
+                  <th>Vehicle</th>
+                  <th>Vehicle Reading</th>
+                  <th>Qty In Litres(s)</th>
+                  <th>Expenses Type</th>
+                  <th>Debtor Type</th>
+                  <th>Other Details</th>
+                </tr>
+              </thead>
+              <tbody id="expenseDataTable">
+	              <%
+	                getExpData=rd.getExpensesDetailsDash();
+	            	if(!getExpData.isEmpty()){
+	            	Iterator getexpitr=getExpData.iterator();
+	            	int i=1;
+	            	while(getexpitr.hasNext()){ Object dataId=getexpitr.next();
+	              %>
+                <tr id="tRow<%=i%>">
+                  <td style="text-align: center"><%=i %></td>
+                  <%getexpitr.next(); %>
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
+ 
+                  <% String vrmData=rd.getVRM(dataId.toString());
+                  if(vrmData!=null){%>
+                  <td style="text-align: center" ><%=vrmData.split(",")[0] %></td>
+                  <td style="text-align: center"><%=vrmData.split(",")[1] %></td>
+                  <td style="text-align: center"><%=vrmData.split(",")[2] %></td>
+                  <%}else{ %>
+                  <td style="text-align: center" >-</td>
+                  <td style="text-align: center">-</td>
+                   <td style="text-align: center">-</td>
+                  <%} %>
+                
+                  
+                  <% Object detailsdata=getexpitr.next(); %>
+                  <td style="text-align: center"><%if(detailsdata.equals("")){ %>-<%} else{%><%=detailsdata %><%} %></td>
+                  <td style="text-align: center"> <%=getexpitr.next() %></td>
+                  
+                  <% Object otherdetailsdata=getexpitr.next(); %>
+                  <td style="text-align: center"><%if(otherdetailsdata.equals("")){ %>-<%} else{%><%=otherdetailsdata %><%} %></td>
+                </tr>
+                <%i++;}} %>
+                
+                
+                
+              </tbody>
+            </table>
+          </div>
           </div>
           
           
@@ -402,7 +465,6 @@ function getExpData(value)
 			document.getElementById("expenseDataTable").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
 			else{
 				var count=1;
-				alert(demoStr);
 				var wholeData="";
 				for(var i=0;i<demoStr.length-2;i=i+9){
 					
@@ -522,7 +584,6 @@ function getDates() {
 		      if (date<=toDate && date>=fromDate ) {
 		    	  tr[i].style.display = "";
 		    	  ++counter;
-		    	  //alert();
 		    	  dieselCost = +dieselCost + +document.getElementById("diesel"+i).innerHTML;
 		    	  depositCost = +depositCost + +document.getElementById("deposit"+i).innerHTML;
 		      }
@@ -556,7 +617,6 @@ function getDates() {
 function getDriverExp(sdate, edate)
 {
 	var value = document.getElementById("selectVehicle").value;
-	alert(value);
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {

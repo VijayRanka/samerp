@@ -144,7 +144,6 @@ display: none;}
           <div class="widget-title">
             <ul class="nav nav-tabs">
               <li class="active"><a data-toggle="tab" href="#tab1">Expenses</a></li>
-              <li><a data-toggle="tab" href="#tab2">Hand Loan</a></li>
               <li><a data-toggle="tab" href="#tab3">Peti-Cash</a></li>
             </ul>
           </div>
@@ -275,28 +274,7 @@ display: none;}
           </form>
         </div>
       </div>
-              
-              
-            </div>
-            <div id="tab2" class="tab-pane">
-              <p> waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
-            </div>
-            <div id="tab3" class="tab-pane">
-              <p>full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
-            </div>
-          </div>
-        </div>
-         <div class="widget-box">
-          <div class="widget-title">
-            <ul class="nav nav-tabs">
-              <li class="active"><a data-toggle="tab" href="#expenseList">Expenses</a></li>
-              <li><a data-toggle="tab" href="#handLoadList">Hand-Loan</a></li>
-              <li><a data-toggle="tab" href="#petiCashList">Peti-Cash</a></li>
-            </ul>
-          </div>
-          <div class="widget-content tab-content">
-            <div id="expenseList" class="tab-pane active">
-              <div class="widget-box">
+      <div class="widget-box">
           <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
             <h5>Expenses :</h5>
           </div>
@@ -362,18 +340,14 @@ display: none;}
           </div>
         </div>
             </div>
-            <div id="handLoadList" class="tab-pane">
+            <div id="tab2" class="tab-pane">
               <p> waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
             </div>
-            <div id="petiCashList" class="tab-pane">
+            <div id="tab3" class="tab-pane">
               <p>full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
             </div>
           </div>
         </div>
-        
-  		
-       
-        
   	</div>
   </div>
 </div>

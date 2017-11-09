@@ -789,6 +789,24 @@ public class RequireData
 					
 					return amount;
 			}
+			public String getTotalPtCash()
+			{
+				
+				String demoList="SELECT id,petty_cash_details.balance FROM petty_cash_details ORDER BY id DESC LIMIT 1";
+				if(!gd.getData(demoList).isEmpty())
+					return gd.getData(demoList).get(1).toString();
+				else
+					return "0";
+			}
+			public String getTotalBadAmount	()
+			{
+				SysDate sd=new SysDate();
+				String demoList="SELECT id,bank_account_details.balance FROM bank_account_details ORDER BY id DESC LIMIT 1";
+				if(!gd.getData(demoList).isEmpty())
+					return gd.getData(demoList).get(1).toString();
+				else
+					return "0";
+			}
 	
 	
 		//--vijay end
