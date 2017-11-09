@@ -171,7 +171,7 @@ public class AddVehicles extends HttpServlet {
 						total += Integer.parseInt(itr.next().toString());
 					}
 				}
-				
+				System.out.println(DieselTotal+ "," + total);
 				out.print(DieselTotal+ "," + total);
 				System.out.println("vdata "+l);
 			}
