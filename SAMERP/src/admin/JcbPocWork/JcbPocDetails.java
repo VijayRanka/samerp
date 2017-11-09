@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
+import utility.SysDate;
 
 /**
  * Servlet implementation class JcbPocDetails
@@ -76,7 +78,21 @@ public class JcbPocDetails extends HttpServlet {
 
 		List details = null;
 		if (custid != null && vehicleid!= null) {
+			
 			String[] arrayOfString = chalandate.split("-");
+			if (deposit != "") {
+				String contactno="CUST_"+request.getParameter("contactno");
+				query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
+				details=dao.getData(query);
+				
+				String transactionDate=arrayOfString[2]+"-"+arrayOfString[1]+"-"+arrayOfString[0];
+				int debit = 0;
+				int credit = Integer.parseInt(deposit);
+				String debtorId = details.get(0).toString();
+				RequireData rd =new RequireData();
+				rd.pCashEntry(transactionDate, debit, credit, debtorId);
+			}
+			
 		
 			query = "INSERT INTO `jcbpoc_master`(`intjcbpocid`, `intcustid`, `project_id`, `intvehicleid`, `chalanno`, `data`, `bucket_hr`, `breaker_hr`, `bucket_rate`, `breaker_rate`, `deposit`, `diesel`) VALUES (DEFAULT,'"+custid+"','"+project_id+"','"+vehicleid+"','"+chalanno+"','"+arrayOfString[2]+"-"+arrayOfString[1]+"-"+arrayOfString[0]+"','"+bucket_hrs+"','"+breaker_hrs+"','"+bucket_rate+"','"+breaker_rate+"','"+deposit+"','"+diesel+"')";
 
@@ -89,6 +105,72 @@ public class JcbPocDetails extends HttpServlet {
 			}
 		}
 		if (update !=null && jcbpocid != null) {
+			
+			query="SELECT `deposit` FROM `jcbpoc_master` WHERE `intjcbpocid`="+jcbpocid;
+			details=dao.getData(query);
+			Iterator itr = details.iterator();
+			String updateDeposit="";
+			while (itr.hasNext()) {
+				updateDeposit=(String) itr.next();
+
+			}
+			
+			if (!deposit.equals(updateDeposit)) {
+				if (updateDeposit.equals("")) {
+					updateDeposit="0";
+				}
+				if (deposit.equals("")) {
+					deposit="0";
+				}
+				int newDeposit=Integer.parseInt(deposit);
+				int oldDeposit=Integer.parseInt(updateDeposit);
+				
+				if (newDeposit > oldDeposit) {
+					
+					SysDate sd=new SysDate();
+					String[] todate= sd.todayDate().split("-");
+					String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
+					
+					int debit = oldDeposit;
+					int credit = 0;
+					String debtorId = "1";
+					
+					RequireData rd =new RequireData();
+					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+					
+					String contactno="CUST_"+request.getParameter("contactno");
+					query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
+					details=dao.getData(query);
+					
+					debit = 0;
+					credit = newDeposit;
+					debtorId = details.get(0).toString();
+					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+				}
+				
+				if (newDeposit < oldDeposit) {
+					
+					SysDate sd=new SysDate();
+					String[] todate= sd.todayDate().split("-");
+					String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
+					
+					int debit = oldDeposit;
+					int credit = 0;
+					String debtorId = "1";
+					
+					RequireData rd =new RequireData();
+					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+					
+					String contactno="CUST_"+request.getParameter("contactno");
+					query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
+					details=dao.getData(query);
+					
+					debit = 0;
+					credit = newDeposit;
+					debtorId = details.get(0).toString();
+					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+				}
+			}
 			String[] arrayOfString = chalandate.split("-");
 			query = "UPDATE `jcbpoc_master` SET `project_id`="+project_id+",`intvehicleid`='"+vehicleid+"',`chalanno`='"+chalanno+"',`data`='"+arrayOfString[2]+"-"+arrayOfString[1]+"-"+arrayOfString[0]+"',`bucket_hr`='"+bucket_hrs+"',`breaker_hr`='"+breaker_hrs+"',`bucket_rate`='"+bucket_rate+"',`breaker_rate`='"+breaker_rate+"',`deposit`='"+deposit+"',`diesel`='"+diesel+"' WHERE `intjcbpocid`="+jcbpocid;
 
