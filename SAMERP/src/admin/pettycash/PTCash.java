@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
 
-@WebServlet("/PTCash")
+//@WebServlet("/PTCash")
 public class PTCash extends HttpServlet {
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -24,28 +24,40 @@ public class PTCash extends HttpServlet {
 						
 			int status=0;
 			
+			
+			if(request.getParameter("insertPetty")!=null)
+			{
+				out.println("working");
+				String pettyDate=request.getParameter("date");
+				String previousBalance=request.getParameter("previous_balance");
+				String handLoanName=request.getParameter("hlName");
+				String bankName=request.getParameter("bank_name");
+				String atmCash=request.getParameter("amount");
+				String payReceived=request.getParameter("pay_received");
+				String tAmt=request.getParameter("total");
+				
+				
+			}
+			
+				
 					
 			if(request.getParameter("handloanbtn")!=null)
 			{
 				
 				//Handloan master
 				int status1=0;		
-				
-				
 				String name=request.getParameter("name");				
 				String mobileNo=request.getParameter("mobileno");	
-				System.out.println("mobile is:"+mobileNo);
 				String aliasname="HL_"+name.replace(" ", "_")+"_"+mobileNo;				
+				String date=request.getParameter("date");				
+				String amount=request.getParameter("paidAmt");				
+				String paymode=request.getParameter("payMode");
+				String chequeNo=request.getParameter("chequeNo");
+				String bank_name=request.getParameter("bankInfo");
+				
+				
 				String HL_MasterDetails="INSERT INTO handloan_master(name,mob_no,alias_name) VALUES('"+name+"','"+mobileNo+"','"+aliasname+"')";
 				status=gd.executeCommand(HL_MasterDetails);
-				
-				if(status==0)
-				{
-					System.out.println("Inserted Successfully");
-					request.setAttribute("status", "Inserted Successfully");
-				}
-				
-					
 				
 				//debtor master 
 				
@@ -56,20 +68,8 @@ public class PTCash extends HttpServlet {
 				String handloan_id=gd.getData(maxid).get(0).toString();
 				
 						
-				String date=request.getParameter("date");				
-				String amount=request.getParameter("paidAmt");				
-				String paymode=request.getParameter("payMode");
-				String chequeNo=request.getParameter("chequeNo");
-				String bank_name=request.getParameter("bankInfo");
-				
-			String q=handloan_id+","+date+","+amount+","+paymode+","+chequeNo+","+bank_name;
-				System.out.println(q);
-				
 				if(paymode.equals("Cash"))
 				{
-					String insert_bank="INSERT INTO bank_account_details(date,credit,particulars,balance) VALUES('"+date+"','"+amount+"','"+paymode+"','"+amount+"');";
-					gd.executeCommand(insert_bank);
-					
 					String insert_query1="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
 					System.out.println("cash:"+insert_query1);
 					status1=gd.executeCommand(insert_query1);
@@ -96,14 +96,17 @@ public class PTCash extends HttpServlet {
 				}
 				
 				
-				if(status1==0)
+				if(status1>0)
 				{
 					System.out.println("inserted Successfully");
-					request.setAttribute("status", "Insertion Successfully");
-				}else
+					request.setAttribute("hName", name);
+					request.setAttribute("amt", amount);
+					request.setAttribute("status", "Handloan Details Added");
+				}
+				else
 				{
 					System.out.println("plz Try Again");
-					request.setAttribute("status", "Insertion Fail");
+					request.setAttribute("status", "Handloan Insertion Fail");
 				}
 				
 				RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
@@ -113,9 +116,8 @@ public class PTCash extends HttpServlet {
 			
 			if(request.getParameter("findName")!=null)
 			{
-							
 				String name=request.getParameter("findName");
-				String query="SELECT handloan_master.id,handloan_master.name FROM handloan_master WHERE handloan_master.name LIKE '%"+name+"%'";
+				String query="SELECT handloan_master.id,handloan_master.name FROM handloan_master";
 				
 				List getName=gd.getData(query);
 				Iterator itr=getName.iterator();
@@ -126,6 +128,16 @@ public class PTCash extends HttpServlet {
 				}	
 				
 			}
+			
+			if(request.getParameter("eName")!=null)
+			{
+				String name=request.getParameter("eName");
+				String query="SELECT handloan_details.credit FROM handloan_details,handloan_master WHERE handloan_master.id=handloan_details.handloan_id AND handloan_master.name='"+name+"'";
+				
+				List getAmt=gd.getData(query);
+				out.print(getAmt.get(0));
+			}
+			
 			
 			
 	}

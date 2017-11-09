@@ -11,7 +11,7 @@
 <title>Vertical Software</title>
 <html lang="en">
 <head>
-<title>SAMERP PROJECT</title>
+<title>Petty Cash</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
@@ -46,101 +46,50 @@
 </head>
 <style>
 #snackbar {
-	visibility: hidden;
-	min-width: 250px;
-	margin-left: -125px;
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	border-radius: 20px;
-	padding: 16px;
-	position: fixed;
-	z-index: 1;
-	left: 50%;
-	top: 80px;
-	font-size: 14px;
-}
+	    visibility: hidden;
+	    min-width: 250px;
+	    margin-left: -125px;
+	    background-color: #333;
+	    color: #fff;
+	    text-align: center;
+	    border-radius: 2px;
+	    padding: 16px;
+	    position: fixed;
+	    z-index: 1;
+	    left: 50%;
+	    top: 50px;
+	    font-size: 15px;
+	    border-radius:50px 50px;
+	}
 
 #snackbar.show {
-	visibility: visible;
-	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-@
--webkit-keyframes fadein {
-	from {top: 0;
-	opacity: 0;
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
-to {
-	top: 80px;
-	opacity: 1;
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
-}
-@
-keyframes fadein {
-	from {top: 0;
-	opacity: 0;
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
-to {
-	top: 80px;
-	opacity: 1;
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 
-}
-@
--webkit-keyframes fadeout {
-	from {top: 80px;
-	opacity: 1;
-}
-
-to {
-	top: 0;
-	opacity: 0;
-}
-
-}
-@
-keyframes fadeout {
-	from {top: 80px;
-	opacity: 1;
-}
-
-to {
-	top: 0;
-	opacity: 0;
-}
-
-}
-.ttiptext {
-	position: absolute;
-	height: 17.5px;
-	width: 26px;
-	background-color: #3a87ad;
-	color: #fff;
-	text-align: center;
-	border-radius: 0px 150px 150px 0px;
-	padding: 5px 0;
-	left: 473px;
-	top: 49px;
-}
-
-#vehicleDiv {
-	display: none;
-}
-
-#readingDiv {
-	display: none;
-}
-
-#vehicleLtrDiv {
-	display: none;
-}
 </style>
-<body onload="">
+<body onload="myFunction()">
 
 	<!--Header-part-->
 	<div id="header">
@@ -188,7 +137,7 @@ to {
 					<div class="widget-title">
 							<span class="icon"> <i class="icon-align-justify"></i>
 							</span>
-							<h5>PT Cash</h5>
+							<h5>Petty Cash</h5>
 						</div>
 						
 						<div class="widget-content nopadding">
@@ -239,18 +188,19 @@ to {
 								<div>
 								<label class="control-label">Hand Loan:</label>
 								<div class="controls controls-row">
-           								 <input type="text"  list="getList" autocomplete="off" onkeyup="this.value=this.value.toUpperCase()" placeholder="Name" id="name"  onfocus="searchSup(this.id,this.value)" <% if(request.getAttribute("notify")!=null){ %> value="<%=request.getAttribute("sbname")%>" <% }%> class="span2 m-wrap">
-           								 <input type="text" id="amount" placeholder="Amount" class="span2 m-wrap">&nbsp;&nbsp;
+           								 <input type="text"  list="getName" autocomplete="off" placeholder="Name" id="hlName" name="hlName" <%if(request.getAttribute("hName")!=null) {%> value="<%=request.getAttribute("hName") %>" <%} %> onfocus="searchName(this.value)" oninput="getAmt(this.value)" style="width: 170px;margin-right: 10px;" class="span2">
+           								 <datalist id="getName"></datalist>
+           								 <input type="text" name="hlAmt" id="hlAmt" <%if(request.getAttribute("amt")!=null) {%> value="<%=request.getAttribute("amt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;
            								 <button type="button" value="Add More" onclick="InsertRow()" class="add-more-button">+</button>
            								 <button type="button" value="Remove" onclick="RemoveRow()" class="remove-button">-</button>
         						  </div>
         						  </div>      						  
         						  
-										<div class="controls" style="display:none;">
+										<!-- <div class="controls" style="display:none;">
 											<select name="entName" id="entName">
 												<option></option>
 											</select>
-										</div>
+										</div> -->
 								</tr>
 						</table>
 					
@@ -311,7 +261,7 @@ to {
 								</div>
 
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="insert" class="btn btn-success">OK</button>&nbsp;&nbsp;&nbsp;
+									<button type="submit" name="insertPetty" class="btn btn-success">OK</button>&nbsp;&nbsp;&nbsp;
 									<a type="button" href="/SAMERP/index.jsp" class="btn btn-danger" style="margin-right: 20px">Exit</a>
 								</div>
 							</form>
@@ -483,7 +433,7 @@ to {
 				<input type="hidden" name="supid2" id="supid2" />
 
 				<div class="modal-footer">
-					<input type="submit" id="paymentSubmitbtn" name="handloanbtn"
+					<input type="submit" id="handloanbtn" name="handloanbtn"
 						class="btn btn-primary" value="Submit" /> <a href="/SAMERP/index.jsp"
 						class="btn btn-danger" data-dismiss="modal">Cancel</a>
 				</div>
@@ -505,8 +455,60 @@ to {
 
 
 <script type="text/javascript">
+
+function getAmt(name)
+{
+	
+	var opts = document.getElementById('getName').childNodes;
+	for (var i = 0; i < opts.length; i++) {
+		 if (opts[i].value === name) 
+		 {
+			 var xhttp;
+				xhttp = new XMLHttpRequest();
+				
+				xhttp.onreadystatechange = function() {
+					
+					if (this.readyState == 4 && this.status == 200) {
+						
+						var demoStr = this.responseText;
+						
+						var demoStr = this.responseText;
+						document.getElementById("hlAmt").value = demoStr;
+						//document.getElementById("").focus();	
+					}
+				};
+				xhttp.open("POST", "/SAMERP/PTCash?eName="+name, true);
+				xhttp.send(); 
+				break;
+		 }
+	}
+}
+function myFunction() {
+		if(document.getElementById("snackbar")!=null)
+		{
+		    var x = document.getElementById("snackbar")
+		    x.className = "show";
+		    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+		}
+	
+	//for shownig insufficient balance error
+	<%-- var bankExit = <%=request.getAttribute("bankExit") %>
+	var pettyExit = <%=request.getAttribute("pettyExit") %>
+	
+	if(bankExit==0 || bankExit==-1){
+		$('#bankBalanceError').modal('show');
+	}
+	
+	if(pettyExit==0 || pettyExit==-1){
+		$('#pettyCashError').modal('show');
+	} --%>
+}
+
+
+
+var nameCount=1
 function InsertRow() {
-    var insertTable = document.getElementById("HandLoan-details-table");
+	var insertTable = document.getElementById("HandLoan-details-table");
     var Row = insertTable.rows;
     var numRows = Row.length;
     var row = insertTable.insertRow(numRows);
@@ -515,9 +517,9 @@ function InsertRow() {
     var cell3 = row.insertCell(2);
     
   
-    cell1.innerHTML = "<input type='text' list='getList' onfocus='searchSup(this.id,this.value)' style='margin-left:200px; width:115px;'  placeholder='Name' />";
-    cell2.innerHTML = "<input type='text' style='margin-left:20px;width:115px;' placeholder='Amount' />";
-     
+    cell1.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='Name' id='hlName"+nameCount+"' name='hlName"+nameCount+"' oninput='getAmt(this.value)' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-left:200px;margin-right: 10px;'>";
+    cell2.innerHTML = "<input type='text' style='width:83px;' name='hlAmt"+nameCount+"' id='hlAmt"+nameCount+"' placeholder='Amount' />";
+    nameCount++; 
 }
 
 function RemoveRow() {
@@ -527,6 +529,7 @@ function RemoveRow() {
     if(numRows>1){
 		removeTable.deleteRow(numRows-1);
     }
+    nameCount--;
 }
 
 
@@ -559,9 +562,9 @@ function displayBank(id, id1){
 	}
 }
 
-function searchSup(idd,valu)
-{  		var xhttp;
-			document.getElementById(idd).value=valu.toUpperCase();
+function searchName(valu)
+{  	
+	var xhttp;
 			
 			xhttp = new XMLHttpRequest();
 			
@@ -571,10 +574,10 @@ function searchSup(idd,valu)
 					
 					var demoStr = this.responseText;
 					//alert(demoStr);
-					document.getElementById("getList").innerHTML = demoStr;
+					document.getElementById("getName").innerHTML = demoStr;
 					}
 				};
-			xhttp.open("POST", "/SAMERP/ptcash?findName="+valu, true);
+			xhttp.open("POST", "/SAMERP/PTCash?findName="+valu, true);
 			xhttp.send();
 					
 }
