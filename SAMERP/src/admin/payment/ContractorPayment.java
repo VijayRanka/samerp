@@ -29,23 +29,6 @@ public class ContractorPayment extends HttpServlet {
 		
 		GenericDAO gd=new GenericDAO();
 		
-		if(request.getParameter("getPcStatus")!=null)
-		{
-			RequireData rd=new RequireData();
-			String mode=request.getParameter("mode");
-			if(mode.equalsIgnoreCase("cash"))
-			{
-				int amount=Integer.parseInt(request.getParameter("amnt"));
-				rd.checkPCStatus(amount);
-			}
-			else if(mode.equalsIgnoreCase("cheque"))
-			{
-				int amount=Integer.parseInt(request.getParameter("amnt"));
-			}
-			
-			
-		}
-		
 		//paymentDataEntry
 		if(request.getParameter("paymentSubmit")!=null)
 		{
@@ -63,9 +46,50 @@ public class ContractorPayment extends HttpServlet {
 			String bankInfo = request.getParameter("bankInfo");
 			int updatedAmount=0;
 			boolean flag=false;
+			boolean amountStatusClear=false;
 			RequireData rd=new RequireData();
 			
 			
+			if(payMode.equalsIgnoreCase("Cash"))
+			{
+				int pcStatus=rd.checkPCStatus(Integer.parseInt(paidAmt));
+				if(pcStatus==0)
+				{
+					request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+				
+				}
+				else if(pcStatus==-1)
+				{
+					request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+				}
+				else if(pcStatus==1)
+				{
+					amountStatusClear=true;
+				}
+				
+			}
+			else
+			{
+				int badStatus=rd.checkBankBalance(Integer.parseInt(paidAmt),bankInfo);
+				if(badStatus==0)
+						{
+							request.setAttribute("status", "You have insufficient balance in your Bank");
+						}
+				else if(badStatus==-1)
+				{
+					request.setAttribute("status", "You have insufficient balance in your Bank");
+				}
+				else if(badStatus==1)
+				{
+					amountStatusClear=true;
+				}
+				
+			}
+			if(amountStatusClear)
+			{
+				int debtorId=rd.getDebtorId(gd.getData("SELECT contractor_master.aliasname FROM contractor_master WHERE contractor_master.id="+contId).get(0).toString());
+				String contName=gd.getData("SELECT contractor_master.name FROM contractor_master WHERE contractor_master.id="+contId).get(0).toString();
+				
 				if(!gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId).isEmpty())
 				{
 					List getTotalBalance=gd.getData("SELECT `total_balance` FROM `contractor_payment_details` WHERE contractor_id="+contId);
@@ -78,7 +102,7 @@ public class ContractorPayment extends HttpServlet {
 				else
 					updatedAmount=Integer.parseInt(currentAmount)-Integer.parseInt(paidAmt);
 				
-				if(payMode.equalsIgnoreCase("Cash")){
+				if(payMode.equals("Cash")){
 					String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
 							+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`,`total_balance`) VALUES "
 							+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CASH',"+updatedAmount+")";
@@ -86,10 +110,16 @@ public class ContractorPayment extends HttpServlet {
 					
 					if(insertPaymentStatus==1){
 						flag=true;
+						if(Integer.parseInt(paidAmt)>0)
+						{
+							rd.pCashEntry(paidDate, Integer.parseInt(paidAmt), 0, Integer.toString(debtorId));
+						}
+						
+						
 						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
 					}
 				}
-				else  if(payMode.equalsIgnoreCase("Cheque")){
+				else  if(payMode.equals("Cheque")){
 					String insertPayment = "INSERT INTO `contractor_payment_details`( `contractor_id`,`date`, `from_date`, `to_date`, `loading_charges`,"
 							+ " `deposit`, `work_amount`, `total_bill_amt`, `paid_amount`, `mode`, `particular`, `description`,`total_balance`) VALUES "
 							+ "("+contId+",'"+paidDate+"','"+dateFromTo.split(",")[0]+"','"+dateFromTo.split(",")[1]+"',"+loadingCharges+","+deposit+","+currentAmount+","+totalBillAmt+","+paidAmt+",'CHEQUE','"+chequeNo+"','"+bankInfo+"',"+updatedAmount+")";
@@ -97,6 +127,11 @@ public class ContractorPayment extends HttpServlet {
 					
 					if(insertPaymentStatus==1){
 						flag=true;
+						if(Integer.parseInt(paidAmt)>0)
+						{
+							rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, "CHEQUE_"+chequeNo, Integer.toString(debtorId));
+						}
+						
 						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
 					}
 				}
@@ -109,6 +144,10 @@ public class ContractorPayment extends HttpServlet {
 					
 					if(insertPaymentStatus==1){
 						flag=true;
+						if(Integer.parseInt(paidAmt)>0)
+						{
+							rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, "TRANSFER", Integer.toString(debtorId));
+						}
 						
 						request.setAttribute("status", "Payment of "+paidAmt+" Rs. done Successfully");
 					}
@@ -140,8 +179,7 @@ public class ContractorPayment extends HttpServlet {
 						
 						if(!gd.getData("SELECT contractor_master.aliasname FROM contractor_master WHERE contractor_master.id="+contId).isEmpty());
 						{
-							int debtorId=rd.getDebtorId(gd.getData("SELECT contractor_master.aliasname FROM contractor_master WHERE contractor_master.id="+contId).get(0).toString());
-							String contName=gd.getData("SELECT contractor_master.name FROM contractor_master WHERE contractor_master.id="+contId).get(0).toString();
+							
 							rd.commonExpEntry("4", debtorId, contName, paidAmt, payMode, bankInfo, chequeNo,paidDate );
 						}
 						
@@ -162,6 +200,13 @@ public class ContractorPayment extends HttpServlet {
 					RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
 					reqDisp.forward(request, response);
 				}
+				
+			}
+			else
+			{
+				RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/payment/contractorPayment.jsp?ppid="+contId);
+				reqDisp.forward(request, response);
+			}
 		}
 		//remaing amount for ajax
 		if(request.getParameter("contId")!=null)

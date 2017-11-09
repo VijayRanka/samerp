@@ -59,7 +59,7 @@
       <!-- loop for all of them goes here -->
        <!--  <li class="bg_ls"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Supply & Sale</a> </li>
 		<li class="bg_lo"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Work Details</a> </li> -->
-		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/expenses/expenses.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Today's Expense</a> </li>
+		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/expenses/expenses.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Expense</a> </li>
 		<li class="bg_ly"> <a href="#"> <i class="icon-money"></i><span class="label label-success"></span>JCB POC Payment</a> </li>
 		<li class="bg_lb"> <a href="/SAMERP/jsp/admin/productPurchase/productSupplierPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Product Payment</a> </li>
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Raw Payment</a> </li>
@@ -85,8 +85,10 @@
         
           <div class="widget-title"> <a href="#collapseOne" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5>Daily Expenses</h5>
+            <%RequireData rd=new RequireData(); %>
+             <span class="badge badge-inverse" style="margin-top: 10px">Total Expense: <%=rd.totalExpenseDay() %></span>
             </a> 
-             <div class="dateDiv" style="position: relative;left: 680px;top: 3px;">
+             <div class="dateDiv" style="position: relative;left: 680px;bottom: 25px;">
              <div class="control-group">
               <div class="controls">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
@@ -117,7 +119,7 @@
                 </tr>
               </thead>
               <tbody id="expenseDataTable">
-	              <%RequireData rd=new RequireData();
+	              <%
 	                List getExpData=rd.getExpensesDetailsDash();
 	            	if(!getExpData.isEmpty()){
 	            	Iterator getexpitr=getExpData.iterator();
@@ -168,8 +170,10 @@
       <!-- daily collection starts -->
           
           
-          <div class="widget-title"> <a href="#collapseTwo" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
-            <h5>Daily Collection</h5>
+          <div class="widget-title" > <a href="#collapseTwo" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
+            <h5 onclick="">Daily Collection</h5>
+           <span class="badge badge-inverse" style="margin-top: 10px" id="pCash">Petty Cash: 50000</span>
+           <span class="badge badge-inverse" style="margin-top: 10px" id="bankAmount">Bank Status: 50000</span>
             </a> 
           </div>
           <div class="collapse" id="collapseTwo">
@@ -186,6 +190,7 @@
           
            <div class="widget-title"> <a href="#collapseThree" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
             <h5>JCB-POC Work Details</h5>
+            
             </a> 
           </div>
           <div class="collapse" id="collapseThree">
@@ -336,11 +341,11 @@
             
            <!--  <table>
             	<tr> <td></td> <td></td> </tr>
-            	<tr> <td id="tripCnt">Trip(s) : </td> <td></td> </tr>
-            	<tr> <td id="dieselCost">Diesel : </td> <td></td> </tr>
-            	<tr> <td>Deposit : </td> <td></td> </tr>
-            	<tr> <td>Driver : </td> <td></td> </tr>
-            	<tr> <td>Total : </td> <td></td> </tr>
+            	<tr> <td id="tripCnt">Trip(s) : </td> <td><span id="tripCnt"> </span></td> </tr>
+            	<tr> <td id="dieselCost">Diesel : </td> <td><span id="dieselCost"> </span></td> </tr>
+            	<tr> <td>Deposit : </td> <td><span id="depositCost">  </span></td> </tr>
+            	<tr> <td>Driver : </td> <td> <span id="driverCost"> </span></td> </tr>
+            	<tr> <td>Total : </td> <td><span id="totalCost">  </span></td> </tr>
             
             </table> -->
             
@@ -551,7 +556,6 @@ function getDates() {
 function getDriverExp(sdate, edate)
 {
 	var value = document.getElementById("selectVehicle").value;
-	
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -580,6 +584,6 @@ function getDriverExp(sdate, edate)
 <script src="/SAMERP/config/js/wysihtml5-0.3.0.js"></script> 
 <script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
-</script>
+
 </body>
 </html>

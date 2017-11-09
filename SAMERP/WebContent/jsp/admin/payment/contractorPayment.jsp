@@ -623,7 +623,7 @@ to {
 		         <input type="text" name="dateFromTo" id="dateFromTo"/>
 		          <input type="hidden" name="deposit" id="deposit"/>
 		           <input type="hidden" name="loadingCharges" id="loadingCharges"/>
-				<input type="button" id="paymentSubmitbtn" name="paymentSubmit" class="btn btn-primary" value="Submit" />
+				<input type="submit" id="paymentSubmitbtn" name="paymentSubmit" class="btn btn-primary" value="Submit" />
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 	</form>
@@ -635,18 +635,6 @@ to {
 </div>
 
 		<script type="text/javascript"> 
-		function getPaymentEntryModal()
-		{
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					var demoStr = this.responseText;
-					}
-				};
-			xhttp.open("POST", "/SAMERP/ContractorPayment?getPcStatus=1&mode=cash&amnt=50&bnkId=1", true);
-			xhttp.send();
-		}
 		
 		function getParameterByName(name, url) {
 		    if (!url) url = window.location.href;

@@ -211,11 +211,13 @@ public class RequireData
 			
 			public List getVehicleDetails(String vid){
 				List l = new ArrayList<>();
+				System.out.println("vid "+vid);
 				if(!vid.equals("")){
-					String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, vehicle_details.vehicle_number, "
+					String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, sale_master.debtor_id, "
 							+ "sale_master.vehicle_deposit  FROM sale_master, vehicle_details, client_details WHERE "
-							+ "vehicle_details.vehicle_number=sale_master.vehicle_details AND client_details.client_id=sale_master.client_id AND "
-							+ "sale_master.vehicle_details=(SELECT vehicle_details.vehicle_number FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+")";
+							+ "sale_master.debtor_id=(SELECT debtor_master.id FROM debtor_master WHERE "
+							+ "debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vid+")) "
+							+ "AND client_details.client_id=sale_master.client_id";
 					l = gd.getData(q);
 					
 				}
@@ -237,12 +239,7 @@ public class RequireData
 			
 			public List getDieselAmt(String saleId){
 				
-				String q1 = "SELECT exp_master_id FROM vehicles_ride_details WHERE sales_id="+saleId;
-				List l1 = gd.getData(q1);
-				
-				String expId = l1.get(0).toString();
-				
-				String q = "SELECT expenses_master.amount FROM expenses_master WHERE expenses_master.exp_id="+expId;
+				String q = "SELECT expenses_master.amount FROM expenses_master WHERE expenses_master.exp_id=(SELECT exp_master_id FROM vehicles_ride_details WHERE sales_id="+saleId+")";
 				List l = gd.getData(q);
 				return l;
 			}
@@ -769,6 +766,26 @@ public class RequireData
 				}
 				return null;
 			}
+			public int totalExpenseDay()
+			{
+				int amount=0;
+				SysDate sd=new SysDate();
+				List getDataList=gd.getData("SELECT amount FROM `expenses_master` "
+						+ "WHERE date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'");
+				System.out.println("SELECT amount FROM `expenses_master` "
+						+ "WHERE date="+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]);
+				if(!getDataList.isEmpty())
+				{
+					Iterator itr=getDataList.iterator();
+					while(itr.hasNext())
+					{
+						amount+=Integer.parseInt(itr.next().toString());
+					}
+					
+				}
+					
+					return amount;
+			}
 	
 	
 		//--vijay end
@@ -876,16 +893,16 @@ public class RequireData
 			
 			
 			
-			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankAliasName, String chequeDetails, String date)
+			public void commonExpEntry(String expTypeId, int debtorId, String name, String amount, String mode, String bankId, String chequeDetails, String date)
 			{
-				if(bankAliasName==null)
-					bankAliasName="";
+				if(bankId=="")
+					bankId="null";
 				if(chequeDetails==null)
 					chequeDetails="";
-				System.out.println(expTypeId+debtorId+name+amount+mode+bankAliasName+chequeDetails+date);
 				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
-						+ " `particular`, `other_details`, `date`) VALUES "
-						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"','"+bankAliasName+"','"+chequeDetails+"','"+date+"')";
+						+ " `bankId`, `other_details`, `date`) VALUES "
+						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"',"+bankId+",'"+chequeDetails+"','"+date+"')";
+				System.out.println(insertQuery);
 				int x=gd.executeCommand(insertQuery);
 			}
 			

@@ -373,8 +373,10 @@ public class Expenses extends HttpServlet {
 				boolean status=false;
 				String expType=request.getParameter("expType");
 				String name=request.getParameter("name");
-				double amount=Double.parseDouble(request.getParameter("amount").toString());
-				String type=request.getParameter("type");
+				int amount=Integer.parseInt(request.getParameter("amount").toString());
+				String payMode=request.getParameter("type");
+				String chequeNo=request.getParameter("chequeNo");
+				String bankInfo=request.getParameter("bankInfo");
 				String date=request.getParameter("date");
 				String vehicleDetail=request.getParameter("vehicleDetail");
 				String debtType=request.getParameter("debtorType");
@@ -383,47 +385,95 @@ public class Expenses extends HttpServlet {
 				String[] arrayOfString = date.split("-");
 				String details=request.getParameter("reason");
 				String other_details=request.getParameter("other_details");
+				
 				//fetching the query
-				String getExpIdQuery="select expenses_type_id from expenses_type where expenses_type_name='"+expType+"'";
-				List expId=gd.getData(getExpIdQuery);
-				Iterator expiditr=expId.iterator();
 				String getExpId="";
-				while(expiditr.hasNext())
+				boolean amountStatusClear=false;
+				RequireData rd=new RequireData();
+				
+				if(payMode.equalsIgnoreCase("Cash"))
 				{
-					getExpId=expiditr.next().toString();
+					int pcStatus=rd.checkPCStatus(amount);
+					if(pcStatus==0)
+					{
+						request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+					
+					}
+					else if(pcStatus==-1)
+					{
+						request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+					}
+					else if(pcStatus==1)
+					{
+						amountStatusClear=true;
+					}
+					
 				}
-				String query2="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`,`name`, `amount`, `payment_mode`, `date`,`reason`, `other_details`) "
-						+ "VALUES ("+getExpId+","+debtType+",'"+name+"',"+amount+",'"+type+"','"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"','"+details+"','"+other_details+"')";
-				getstatus=gd.executeCommand(query2);
-				if(getstatus!=0)
+				else
 				{
-					status=true;
-					System.out.println("Successfully Inserted In Expenses");
+					int badStatus=rd.checkBankBalance(amount,bankInfo);
+					if(badStatus==0)
+							{
+								request.setAttribute("status", "You have insufficient balance in your Bank");
+							}
+					else if(badStatus==-1)
+					{
+						request.setAttribute("status", "You have insufficient balance in your Bank");
+					}
+					else if(badStatus==1)
+					{
+						amountStatusClear=true;
+					}
+					
+				}
+				if(amountStatusClear)
+				{
+					getExpId=gd.getData("select expenses_type_id from expenses_type where expenses_type_name='"+expType+"'").get(0).toString();
+					rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
 					request.setAttribute("status", "Data Inserted Successfully");
-				}
-	
-				if(!request.getParameter("vehicleDetail").isEmpty())
-				{
-					String getMax="SELECT MAX(expenses_master.exp_id) FROM expenses_master";
-					if(!gd.getData(getMax).isEmpty()){
-						String getVehicleId="SELECT vehicle_details.vehicle_id FROM vehicle_details WHERE vehicle_details.vehicle_aliasname='"+vehicleDetail+"'";
-						if(!gd.getData(getVehicleId).isEmpty())
-						{
-							String insertVRM="INSERT INTO `vehicle_reading_master`(`expenses_master_id`, `vehicle_id`,`vehicle_diesel_qty`, `vehicle_reading`) VALUES ("+gd.getData(getMax).get(0)+","+gd.getData(getVehicleId).get(0).toString()+","+vehicleLtrQt+","+vehicleReading+")";
-							int stats=gd.executeCommand(insertVRM);
-							if(stats>0){
-								System.out.println("Vehicle Reading Updated");
-								status=true;
-								request.setAttribute("status", "Reading and Data Inserted Successfully");
-								}
+					
+					if(payMode.equalsIgnoreCase("cash"))
+					rd.pCashEntry(arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, debtType);
+					else if(payMode.equalsIgnoreCase("cheque"))
+						rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, payMode, debtType);
+					else
+						rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, payMode, debtType);
+					
+					if(!request.getParameter("vehicleDetail").isEmpty())
+					{
+						String getMax="SELECT MAX(expenses_master.exp_id) FROM expenses_master";
+						if(!gd.getData(getMax).isEmpty()){
+							String getVehicleId="SELECT vehicle_details.vehicle_id FROM vehicle_details WHERE vehicle_details.vehicle_aliasname='"+vehicleDetail+"'";
+							if(!gd.getData(getVehicleId).isEmpty())
+							{
+								String insertVRM="INSERT INTO `vehicle_reading_master`(`expenses_master_id`, `vehicle_id`,`vehicle_diesel_qty`, `vehicle_reading`) VALUES ("+gd.getData(getMax).get(0)+","+gd.getData(getVehicleId).get(0).toString()+","+vehicleLtrQt+","+vehicleReading+")";
+								int stats=gd.executeCommand(insertVRM);
+								if(stats>0){
+									System.out.println("Vehicle Reading Updated");
+									status=true;
+									request.setAttribute("status", "Reading and Data Inserted Successfully");
+									}
+							}
 						}
 					}
+					if(status)
+					{
+						RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
+						reqDisp.forward(request, response);
+					}
+					else{
+						RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
+						reqDisp.forward(request, response);
+					}
+						
 				}
-				if(status)
+				else
 				{
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
-					rd.forward(request, response);
+					RequestDispatcher reqDisp=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
+					reqDisp.forward(request, response);
 				}
+	
+				
 			}
 			catch(Exception e)
 			{
