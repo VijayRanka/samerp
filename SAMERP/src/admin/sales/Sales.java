@@ -192,6 +192,7 @@ public class Sales extends HttpServlet {
 					String rate = request.getParameter("rate1"+count);
 					String supplierName = request.getParameter("supplierName1"+count);
 					String chalanNo_third = request.getParameter("chalanNo_third1"+count);
+					String gst = request.getParameter("gst1"+count);
 					if(supplierName.equals("SARTHAK")){
 						int p_qty = Integer.parseInt(qty);
 						q="SELECT  final_stock.qty FROM final_stock WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='"+productName+"')";
@@ -204,8 +205,8 @@ public class Sales extends HttpServlet {
 						gd.executeCommand(updateQuery);
 					}
 					
-					String insertProduct="INSERT INTO `sale_details_master`(`sale_master_id`, `product_name`, `qty`, `rate`, `supplier_name`, "
-							+ " `third_party_chalan`) VALUES ("+max_sale_id+",'"+productName+"',"+qty+","+rate+",'"+supplierName+"','"+chalanNo_third+"');";
+					String insertProduct="INSERT INTO `sale_details_master`(`sale_master_id`, `product_name`, `qty`, `rate`, `gst`, `supplier_name`, "
+							+ " `third_party_chalan`) VALUES ("+max_sale_id+",'"+productName+"',"+qty+","+rate+","+gst+",'"+supplierName+"','"+chalanNo_third+"');";
 					gd.executeCommand(insertProduct);				
 					count--;
 				}	
