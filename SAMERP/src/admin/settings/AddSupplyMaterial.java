@@ -24,16 +24,21 @@ public class AddSupplyMaterial extends HttpServlet {
 		doPost(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
 		GenericDAO gd=new GenericDAO();
 		
 		//for inserting new supplier data into table
+		
+		
 		if(request.getParameter("insertsupply")!=null)
 		{
+			
 		
+			
 			String supBussName=request.getParameter("suppbusinesname");
 			String supplierName=request.getParameter("suppname");
 			String supplierAddress=request.getParameter("address");
@@ -42,7 +47,8 @@ public class AddSupplyMaterial extends HttpServlet {
 			String type=request.getParameter("material_type");
 			
 			String src = "";
-			if(request.getParameter("productPurchasePage")!=null){
+			if(request.getParameter("productPurchasePage")!=null)
+			{
 				src = request.getParameter("productPurchasePage");
 			}
 			int status=0;
@@ -59,61 +65,114 @@ public class AddSupplyMaterial extends HttpServlet {
     			alias = "SP_"+supBussName;
     		}
     		
+    		List checkRows=null;
     		
-			String insertQuery="INSERT INTO `material_supply_master`(`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`supplier_alias`,`type`) VALUES ('"+supBussName+"','"+supplierName+"','"+supplierAddress+"','"+suppContact+"','"+openingBalance+"','"+alias+"', '"+type+"')";
-			status=gd.executeCommand(insertQuery);	
-			if(status!=0)
-			{
-				String insertQuery1="INSERT INTO `total_supplier_payment_master`(`supplier_id`, `date`, `total_remaining`) VALUES ((select max(supplier_business_id) from material_supply_master), '"+requiredDate+"' , "+openingBalance+")";
+    		if(supBussName!=null)
+    		{
+    			String queryCheck="SELECT supplier_business_name FROM material_supply_master WHERE supplier_business_name='"+supBussName+"'";
+    			//System.out.println("supplier business Name:"+queryCheck);
+    			checkRows=gd.getData(queryCheck);	
+    			System.out.println("check"+checkRows);
+    		}
+    		
+    		
+
+    		if(checkRows.isEmpty())
+    		{
+    			char x= supBussName.charAt(0);
+    			System.out.println("x:"+x);
+    			if(x==' ')
+    			{
+    				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
+    				rd.forward(request, response);
+    			}
+    			else
+    			{
+    			
+					String insertQuery="INSERT INTO `material_supply_master`(`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`supplier_opening_balance`,`supplier_alias`,`type`) VALUES ('"+supBussName+"','"+supplierName+"','"+supplierAddress+"','"+suppContact+"','"+openingBalance+"','"+alias+"', '"+type+"')";
+					status=gd.executeCommand(insertQuery);	
+					if(status!=0)		
+					{
+						String insertQuery1="INSERT INTO `total_supplier_payment_master`(`supplier_id`, `date`, `total_remaining`) VALUES ((select max(supplier_business_id) from material_supply_master), '"+requiredDate+"' , "+openingBalance+")";
+						
+						int status1=gd.executeCommand(insertQuery1);	
+						
+						String insertQuery2="INSERT INTO `debtor_master`(`type`) VALUES ('"+alias+"')";
+						int status2=gd.executeCommand(insertQuery2);
+						
+						String maxid="SELECT MAX(supplier_business_id) from material_supply_master";
+						List max=gd.getData(maxid);
+						request.setAttribute("status", " New Supplier Added Successfully");
+						request.setAttribute("notify", "supplier");
+						request.setAttribute("sid", max.get(0));
+						request.setAttribute("sbname", supBussName);
+						request.setAttribute("sname", supplierName);
+						request.setAttribute("cn", suppContact);
+						
 				
-				int status1=gd.executeCommand(insertQuery1);	
-				
-				String insertQuery2="INSERT INTO `debtor_master`(`type`) VALUES ('"+alias+"')";
-				int status2=gd.executeCommand(insertQuery2);
-				
-				String maxid="SELECT MAX(supplier_business_id) from material_supply_master";
-				List max=gd.getData(maxid);
-				request.setAttribute("status", " New Supplier Added Successfully");
-				request.setAttribute("notify", "supplier");
-				request.setAttribute("sid", max.get(0));
-				request.setAttribute("sbname", supBussName);
-				request.setAttribute("sname", supplierName);
-				request.setAttribute("cn", suppContact);
-				
-				
-				if(src.equals("productPurchase")){
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/productPurchase/productPurchase.jsp");
-					rd.forward(request, response);
+						if(src.equals("productPurchase")){
+							RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/productPurchase/productPurchase.jsp");
+							rd.forward(request, response);
+						}
+						else if(src.equals("RawPurchase"))
+						{
+							RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/manufacture/purchaseRawMaterial.jsp");
+							rd.forward(request, response);
+						}
+						else{
+							RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
+							rd.forward(request, response);
+						}
+						
+					}
 				}
-				else if(src.equals("RawPurchase"))
-				{
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/manufacture/purchaseRawMaterial.jsp");
-					rd.forward(request, response);
-				}
-				else{
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
-					rd.forward(request, response);
-				}
-				
-			}
+    		}
+    		else
+    		{
+    			
+    			request.setAttribute("error", "2");
+    			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
+    			rd.forward(request, response);
+    		}
 		}
 		
-		if(request.getParameter("deleteId")!=null)
+		
+		String deleteid=request.getParameter("delete");
+		System.out.println("deleted :"+deleteid);
+    
+		if(deleteid==null)
 		{
-			String id=request.getParameter("deleteId");
-			String deleteQuery="Delete from `material_supply_master` where `supplier_business_id`="+id+"";
-			int i=gd.executeCommand(deleteQuery);
-			if(i>0)
-			{
-				request.setAttribute("status", "Supplier Deleted Successfully");
+			
+			
+						
+							String deleteQuery="Delete from `material_supply_master` where `supplier_business_id`="+deleteid+"";
+							int i=gd.executeCommand(deleteQuery);
+							if(i>0)
+							{
+								request.setAttribute("status", "Supplier Deleted Successfully");
+								
+							}else
+								{
+									System.out.println("please try again");
+									RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
+									rd.forward(request, response);
+								}
+							
 				
-			}
+				
 			
-			
-			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
-			rd.forward(request, response);
 			
 		}
+			else
+			{
+				request.setAttribute("error", "3");
+				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addMaterialSuppliers.jsp");
+				rd.forward(request, response);
+			}
+		
+	
+
+		
 		
 		//AJAX for getting enterprise name(purchaseRawMaterail)
 		if(request.getParameter("findName")!=null)
@@ -148,14 +207,15 @@ public class AddSupplyMaterial extends HttpServlet {
 		if(request.getParameter("Updateid")!=null)
 		{
 			String RowId=request.getParameter("Updateid");
-			
+			System.out.println("row id:"+RowId);
 			RequireData rd=new RequireData();
-			List demoList=rd.getSupplyMaterials(RowId);
+			List demoList=rd.getSupplyMaterials(RowId);				
 			Iterator itr=demoList.iterator();
 			while(itr.hasNext())
 			{
 				out.print(itr.next()+",");
 			}
+			
 		}
 		
 		//for getting supplier name and contact no. after adding new supplier
@@ -175,19 +235,19 @@ public class AddSupplyMaterial extends HttpServlet {
 			String supname=request.getParameter("suppname");
 			String supaddress=request.getParameter("address");
 			String supcontactno=request.getParameter("contact");
-			String type=request.getParameter("material_type");
+			String type1=request.getParameter("material_type");
 			String oldAlias = request.getParameter("old_sup_alias");
 			
-			String alias="";
-    		if(type.equals("1"))
+			String alias1="";
+    		if(type1.equals("1"))
     		{
-    			alias = "SR_"+supbname;
+    			alias1 = "SR_"+supbname;
     		}
     		else{
-    			alias = "SP_"+supbname;
+    			alias1 = "SP_"+supbname;
     		}
 			
-			String query="update `material_supply_master` set `supplier_business_name`='"+supbname+"',`supplier_name`='"+supname+"',`supplier_address`='"+supaddress+"',`supplier_contactno`='"+supcontactno+"', `supplier_alias`='"+alias+"' where `supplier_business_id`="+id+"";
+			String query="update `material_supply_master` set `supplier_business_name`='"+supbname+"',`supplier_name`='"+supname+"',`supplier_address`='"+supaddress+"',`supplier_contactno`='"+supcontactno+"', `supplier_alias`='"+alias1+"' where `supplier_business_id`="+id+"";
 			
 			int i=gd.executeCommand(query);
 			
@@ -195,7 +255,7 @@ public class AddSupplyMaterial extends HttpServlet {
 			{
 				request.setAttribute("status", "Supplier Updated Successfully");
 				
-				String updateQuery2 = "UPDATE `debtor_master` SET `type`='"+alias+"' WHERE debtor_master.type='"+oldAlias+"';";
+				String updateQuery2 = "UPDATE `debtor_master` SET `type`='"+alias1+"' WHERE debtor_master.type='"+oldAlias+"';";
 				int updatestatus2 = gd.executeCommand(updateQuery2);
 				
 			}
