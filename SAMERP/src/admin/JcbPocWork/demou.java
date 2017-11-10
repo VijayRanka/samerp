@@ -1,5 +1,8 @@
 package admin.JcbPocWork;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class demou {
 				+ "AND jcbpoc_master.status=0 ORDER BY jcbpoc_master.intcustid";
 		List getCustList=gd.getData(query);
 		Iterator custList=getCustList.iterator();
+		
 		double allOverBucketAmount;
 		double allOverBreakerAmount;
 		int demoCustId1=0;

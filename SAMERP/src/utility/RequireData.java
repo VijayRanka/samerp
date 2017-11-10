@@ -214,7 +214,7 @@ public class RequireData
 				System.out.println("vid "+vid);
 				if(!vid.equals("")){
 					String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, sale_master.debtor_id, "
-							+ "sale_master.vehicle_deposit  FROM sale_master, vehicle_details, client_details WHERE "
+							+ "sale_master.vehicle_deposit  FROM sale_master, client_details WHERE "
 							+ "sale_master.debtor_id=(SELECT debtor_master.id FROM debtor_master WHERE "
 							+ "debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vid+")) "
 							+ "AND client_details.client_id=sale_master.client_id";
@@ -238,7 +238,6 @@ public class RequireData
 			}
 			
 			public List getDieselAmt(String saleId){
-				
 				String q = "SELECT expenses_master.amount FROM expenses_master WHERE expenses_master.exp_id=(SELECT exp_master_id FROM vehicles_ride_details WHERE sales_id="+saleId+")";
 				List l = gd.getData(q);
 				return l;
@@ -495,12 +494,13 @@ public class RequireData
 		{
 			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email,organization_op_balance from organization_details";
 			List demoList=gd.getData(demo);
+			System.out.println("List is:"+demoList);
 			return demoList;
 		}
 		
 		public List getOrganizationRowData(String RowId)
 		{
-			String organizationRowDataQuery = "select organization_id, organization_name, organization_address, organization_contactno1, organization_contactno2, organization_email from organization_details where organization_id="+RowId+"; ";
+			String organizationRowDataQuery = "select organization_id, organization_name, organization_address, organization_contactno1, organization_contactno2, organization_email,organization_op_balance from organization_details where organization_id="+RowId+"; ";
 			List organizationDetailsData = gd.getData(organizationRowDataQuery);
 			return organizationDetailsData;
 		}
@@ -514,7 +514,15 @@ public class RequireData
 		
 		public List getSalesDetails()
 		{
-			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+			
+//			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,sale_master.date,"
+//					+ " sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master,client_details WHERE "
+//					+ " sale_master.client_id = client_details.client_id AND (sale_master.date between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )";
+			
+			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,"
+					+ "sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM "
+					+ "sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+
 			List list=gd.getData(sale_query);
 			return list;		
 		}
@@ -549,7 +557,7 @@ public class RequireData
 		
 		public List getChalanProductDetailsForSale(String pid)
 		{
-			String cpquery = "SELECT sale_details_master.product_name,sale_details_master.qty,sale_details_master.rate FROM sale_details_master, "
+			String cpquery = "SELECT sale_details_master.product_name,sale_details_master.qty,sale_details_master.rate,sale_details_master.gst FROM sale_details_master, "
 					+ "sale_master WHERE sale_details_master.sale_master_id=sale_master.id AND sale_master.id="+pid;
 			List cpList = gd.getData(cpquery);
 			return cpList;
@@ -588,6 +596,12 @@ public class RequireData
 			return vehicleNumber;
 		}
 	
+		public List getSupplierList1()
+		{
+			String supplierListQuery = "select supplier_name from material_supply_master where type=2;";
+			List supplierList = gd.getData(supplierListQuery);
+			return supplierList;
+		}
 	//--sarang end
 	
 	// vijay start

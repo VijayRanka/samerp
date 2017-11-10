@@ -412,16 +412,16 @@
             
             </table> -->
             
-            <span>
-            	<h4>Total Expendeture of <span id="vnum"> </span> From <span id="fdate"> </span> To <span id="tdate"> </span> : </h4> 
+            <span style="margin-bottom: 8%; margin-top: 2%; ">
+            	<h4 style=" margin-bottom: 8%; margin-top: 2%; margin-left: 11%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : </h4> 
             </span>    
             
-            <span>
+            <span style="float: right; position: relative; right: 13%; margin-top: -10.64%;">
             	<h4>
-            	Trip(s) : <span id="tripCnt"> </span>  <br>
+            	Trip(s) : <span id="tripCnt">  </span>  <br>
             	Diesel : <span id="dieselCost">  </span> <br>
             	Deposit : <span id="depositCost">  </span> <br>
-            	Driver : <span id="driverCost">  </span> <br>
+            	Maintenance : <span id="driverCost">  </span> <br>
             	Total : <span id="totalCost">  </span>
             	</h4>
             </span>
@@ -573,9 +573,9 @@ function getDates() {
 	var fromDate = document.getElementById("fromDate").value.trim();
 	var toDate = document.getElementById("toDate").value.trim();
 	var counter=0, dieselCost=0, depositCost=0;
-
-	 table = document.getElementById("vehicleDetails");
-	  tr = table.getElementsByTagName("tr");
+	
+	table = document.getElementById("vehicleDetails");
+	tr = table.getElementsByTagName("tr");
 	  for (i = 0; i < tr.length; i++) {
 		  td = tr[i].getElementsByTagName("td")[1];
 		  	
@@ -598,10 +598,10 @@ function getDates() {
 	  
 	  
 	  var dropObj = document.getElementById("selectVehicle");
-	  document.getElementById("vnum").innerHTML="\""+dropObj.options[dropObj.selectedIndex].text+"\"";
+	  document.getElementById("vnum").innerHTML=""+dropObj.options[dropObj.selectedIndex].text+"";
 	  
-	  document.getElementById("fdate").innerHTML="\""+fromDate+"\"";
-	  document.getElementById("tdate").innerHTML="\""+toDate+"\"";
+	  document.getElementById("fdate").innerHTML=""+fromDate+"";
+	  document.getElementById("tdate").innerHTML=""+toDate+"";
 	  
 	  document.getElementById("tripCnt").innerHTML=counter;
 	  document.getElementById("dieselCost").innerHTML=dieselCost;
@@ -622,11 +622,23 @@ function getDriverExp(sdate, edate)
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			demoStr = this.responseText;
-			document.getElementById("driverCost").innerHTML=demoStr;
-			document.getElementById("totalCost").innerHTML=totalCost+ +demoStr;
-
+			var d = demoStr.split(",");
+			
+			if(d[0]!=""){
+				var expDCost = document.getElementById("dieselCost").innerHTML;
+				
+				totalCost = +totalCost + +d[0];
+				document.getElementById("dieselCost").innerHTML = expDCost + " + " + d[0];
+				document.getElementById("driverCost").innerHTML = d[1];
+				document.getElementById("totalCost").innerHTML = totalCost+  +d[1];
+			}else{
+				document.getElementById("dieselCost").innerHTML = "0 + 0";
+				document.getElementById("driverCost").innerHTML = "0";
+				document.getElementById("totalCost").innerHTML = "0";
+			}
 		}
 	};
+	
 	xhttp.open("POST", "/SAMERP/AddVehicles?vno="+value+"&sdate="+sdate+"&edate="+edate, true);
 	xhttp.send();
 }
@@ -639,9 +651,9 @@ function getDriverExp(sdate, edate)
 <script src="/SAMERP/config/js/jquery.toggle.buttons.js"></script> 
 <script src="/SAMERP/config/js/jquery.uniform.js"></script> 
 <script src="/SAMERP/config/js/select2.min.js"></script> 
-<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script>  
 <script src="/SAMERP/config/js/matrix.js"></script> 
-<script src="/SAMERP/config/js/matrix.tables.js"></script>
+<script src="/SAMERP/config/js/matrix.tables.js"></script> 
 <script src="/SAMERP/config/js/wysihtml5-0.3.0.js"></script> 
 <script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 

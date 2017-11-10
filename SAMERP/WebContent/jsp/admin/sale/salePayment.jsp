@@ -27,7 +27,7 @@
 #createBillTable tbody {
 	border: 1px;
 	border-style: groove;
-}
+}		
 #createBillTable tbody tr td{
 	border: 1px;
 	border-style: groove;
@@ -288,6 +288,7 @@
                   <th width="20%">Product Name</th>
                   <th>Quantity</th>
                   <th>Rate</th>
+                  <th>GST</th>
                 </tr>
               </thead>
               <tbody>
@@ -322,6 +323,7 @@
 	   			 		String product_name=itr3.next().toString();
 	   			 	 	int qty=Integer.parseInt(itr3.next().toString());
 	   			 	 	int rate=Integer.parseInt(itr3.next().toString());
+	   			 		int gst=Integer.parseInt(itr3.next().toString());
 	   			 	 	sum+=(qty*rate);
  	   			 		
 	   			 	  %>
@@ -329,7 +331,7 @@
 	     				<td><%=product_name %></td>
 		                <td><%=qty %></td>
 		                <td><%=rate %></td>
-	                
+	                	<td><%=gst %></td>
 	   			 	  <%
 
 	   			 		
@@ -338,12 +340,14 @@
 	   			 		String product_name1=itr3.next().toString();
 	   			 	 	int qty1=Integer.parseInt(itr3.next().toString());
 	   			 	 	int rate1=Integer.parseInt(itr3.next().toString());
+	   			 		int gst1=Integer.parseInt(itr3.next().toString());
 	   			 	 	sum+=(qty1*rate1);
 	     			  %>	
 	     				<tr>
 	     				<td><%=product_name1 %></td>
 		                <td><%=qty1 %></td>
 		                <td><%=rate1 %></td>
+		                <td><%=gst1 %></td>
 		                
 		                <%
 		                	if(itr3.hasNext()){
@@ -361,6 +365,7 @@
             	}
                %>
                <tr>
+               		<td>  </td>
                		<td>  </td>
                		<td>  </td>
                		<td>  </td>
@@ -702,6 +707,20 @@
 	
 <script type="text/javascript">
 
+var tableId=document.getElementById("chalanDetailsTable");
+if(tableId!=null){
+	for (var i = 0; i < table.rows.length; i++) {
+        for (var j = 0; j < table.rows[i].cells.length; j++)
+        table.rows[i].cells[j].onclick = function () {
+            tableText(this);
+        };
+    }
+}
+
+function tableText(tableCell) {
+    alert(tableCell.innerHTML);
+}
+
 function setClientId() {	
 	document.getElementById("clt_id").value = document.getElementById("clientid").value;
 	var s = document.getElementById("clt_id").value;
@@ -929,6 +948,7 @@ function inWords()
 
 function selectChecks()
 {
+	
 	document.getElementById('chalanSubmitBtn').disabled=false;
 }
 

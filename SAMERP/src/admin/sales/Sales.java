@@ -149,7 +149,7 @@ public class Sales extends HttpServlet {
 					{
 					
 						String insertExp_master="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-								+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
+								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
 						System.out.println(insertExp_master);
 				
 						gd.executeCommand(insertExp_master);
@@ -237,8 +237,6 @@ public class Sales extends HttpServlet {
 			request.setAttribute("status", "Record Deleted Successfully");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
 			rd.forward(request, response);
-		}		
-
-		
+		}
 	}
 }
