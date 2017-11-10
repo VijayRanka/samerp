@@ -243,6 +243,7 @@ to {
 											  <tbody id="tBody">
 											  <%
 											  if(request.getParameter("ppid")!=null){
+												  
 											  List demoList=rq.getProductListContractor(request.getParameter("ppid").toString());
 											  if(!demoList.isEmpty()){
 												  List countList=(List)demoList.get(1);
@@ -357,10 +358,10 @@ to {
 											
 										</tr>
 									</thead>
-									<tbody>
+									 <tbody>
 									<%if(request.getParameter("ppid")!=null){
-									List demoList=rq.getContTransactions(request.getParameter("ppid"));
-									if(!demoList.isEmpty() )
+									List demoList=rq.getContTransactions(request.getParameter("ppid").toString());
+									if(demoList!=null)
 									{
 										int i=1;
 									Iterator itr=demoList.iterator();
@@ -380,8 +381,8 @@ to {
 									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
-									<td><% String cDetails=itr.next().toString();if(!cDetails.isEmpty()){%><%=cDetails %><%}else{ %>-<%} %></td>
-									<td><% String bDetails=rq.getBankById(itr.next().toString());if(bDetails!=null){%><%=bDetails %><%}else{ %>-<%} %></td>
+									<td><%=itr.next() %></td>
+									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
 									</tr>	
 									<%itr.next();

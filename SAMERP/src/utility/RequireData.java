@@ -607,8 +607,8 @@ public class RequireData
 			}
 			public List getExpensesDetails()
 			{
-				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`, `reason`,"
-						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details` FROM "
+				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
+						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
 						+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
 						+ "and expenses_master.debtor_id=debtor_master.id order by date";
 				List demoList=gd.getData(demo);
@@ -749,7 +749,10 @@ public class RequireData
 				if(!gd.getData(getDetails).isEmpty())
 				{
 					List demoList=gd.getData(getDetails);
+					if(!demoList.isEmpty())
 					return demoList;
+					else
+						return null;
 				}
 				return null;
 			}

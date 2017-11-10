@@ -13,9 +13,10 @@ public class demou {
 
 		//vijay ranka data don't delet it
 		GenericDAO gd=new GenericDAO();
+		RequireData rd=new RequireData();
 		SysDate sd=new SysDate();
 		
-		String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
+		/*String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
 		List getDateExistDetailList=gd.getData(getDateExistDetail);
 		Iterator traverseDS=getDateExistDetailList.iterator();
 		while(traverseDS.hasNext())
@@ -32,7 +33,11 @@ public class demou {
 				System.out.println(bankAlias);
 			}
 			
-		}
+		}*/
+		System.out.println(rd.getProductListContractor("1"));
+		List demoList=rd.getProductListContractor("1");
+		  List countList=(List)demoList.get(0);
+		  System.out.println(countList);
 		
 		/*String startDate="2017-10-29";
 		String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
@@ -89,21 +94,6 @@ public class demou {
 		 * UPDATE final_stock SET qty=40 WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')
 		 */
 		
-		int qty=10;
-		
-		
-		String q="SELECT  final_stock.qty FROM final_stock WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')";
-		int product_qty=0;
-		List qty_product=gd.getData(q);
-		if(!qty_product.isEmpty()){
-			product_qty= Integer.parseInt(qty_product.get(0).toString());
-		}
-
-		System.out.println(product_qty);
-		
-		String updateQuery="UPDATE final_stock SET qty="+(product_qty-qty)+" WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')";
-		
-		gd.executeCommand(updateQuery);
 		
 		
 	
