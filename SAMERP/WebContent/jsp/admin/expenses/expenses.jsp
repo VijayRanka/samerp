@@ -96,12 +96,11 @@
     left: 473px;
     top:49px;
 }
-#vehicleDiv{
-display: none;}
 #readingDiv{
 display: none;}
 #vehicleLtrDiv{
 display: none;}
+
 
 </style>
 <body onload="myFunction()">
@@ -176,13 +175,6 @@ display: none;}
               <div class="controls">
              <input name="expType" list="getExpList" id="expenses_type_name" onfocus="searchName3()" onblur="checkData(this.value,this.id)" autocomplete="off" type="text" class="span6" placeholder="Expence Type" onkeyup="this.value=this.value.toUpperCase()" required/>
              <datalist id="getExpList"></datalist>
-             </div>
-            </div>
-            <div class="control-group" id="vehicleDiv">
-              <label class="control-label"><strong>Vehicle-Details</strong></label>
-              <div class="controls">
-             <input list="getWholeList" name="vehicleDetail" id="vehicleDetail" onfocus="callOut(this.list.id)" autocomplete="off" type="text" class="span6" placeholder="Vehicle Details"/>
-             <datalist id="getWholeList"></datalist>
              </div>
             </div>
              <div class="control-group" id="readingDiv">
@@ -260,7 +252,7 @@ display: none;}
 		               </div>
 	             	</div>
              <div class="control-group">
-              <label class="control-label"> Reason :</label>
+              <label class="control-label"> Description :</label>
               <div class="controls">
                 <input type="text" id="reason" list="getList" value="-" name="reason" onkeyup="searchName(this.value,this.id,this.list.id)" class="span6" placeholder="Reason" autocomplete="off" required/>
               	<datalist id=getList"></datalist>
@@ -287,13 +279,13 @@ display: none;}
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Payment Mode</th>
-                  <th>Reason</th>
                   <th>Vehicle</th>
                   <th>Vehicle Reading</th>
                   <th>Qty In Litres(s)</th>
                   <th>Expenses Type</th>
                   <th>Debtor Type</th>
-                  <th>Other Details</th>
+                  <th>Cheque Details</th>
+                  <th>Description</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -312,7 +304,7 @@ display: none;}
                   <td style="text-align: center"><%=getexpitr.next() %></td>
                   <td style="text-align: center"><%=getexpitr.next() %></td>
                   <td style="text-align: center"><%=getexpitr.next() %></td>
-                  <td style="text-align: center"><%=getexpitr.next() %></td>
+                  
  
                   <% String vrmData=rd.getVRM(dataId.toString());
                   if(vrmData!=null){%>
@@ -332,6 +324,7 @@ display: none;}
                   
                   <% Object otherdetailsdata=getexpitr.next(); %>
                   <td style="text-align: center"><%if(otherdetailsdata.equals("")){ %>-<%} else{%><%=otherdetailsdata %><%} %></td>
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
                   <td style="text-align: center"><a data-toggle="modal" href="#update" onclick="getUpdateData(<%=dataId%>)">Update</a>|<a href="/SAMERP/Expenses.do?deleteId=<%=dataId%>">Delete</a></td>
                 </tr>
                 <%i++;}} %>
@@ -379,7 +372,7 @@ display: none;}
 	                  <label class="control-label">Date</label>
 	                  <div class="controls">
 	                	<input type="hidden" id="uId" name="uId"/>
-	                    <input type="date" id="uDate" name="uDate"/>
+	                    <input type="date" id="uDate" name="uDate" disabled="disabled"/>
 	         			</div>
 	        	</div>
 	        	
@@ -393,24 +386,65 @@ display: none;}
 	        	<div class="control-group">
 	                  <label class="control-label">Amount</label>
 	                  <div class="controls">
-	                     <input type="text" id="uAmount" name="uAmount"/>
+	                     <input type="text" id="uAmount" name="uAmount" readonly="readonly"/>
+	                      <input type="hidden" id="oldAmount" name="oldAmount" value="0" />
+	                     <input type="checkbox" id="revertCheck" onclick="onUamount()">Reverted
+	         			</div>
+	        	</div>
+	        	<script type="text/javascript">
+	        	function onUamount()
+	        	{
+	        		if(document.getElementById('uAmount').readOnly==false)
+	        			{
+	        			document.getElementById('uAmount').value=firstAmount;
+	        			document.getElementById('oldAmount').value="0";
+	        			document.getElementById('uAmount').readOnly=true;
+	        			}
+	        		else
+	        			{
+	        			window.firstAmount=document.getElementById('uAmount').value;
+	        			document.getElementById('oldAmount').value=firstAmount;
+	        			document.getElementById('uAmount').readOnly=false;
+	        			}
+	        		
+	        	}</script>
+	        	<div class="control-group">
+	                  <label class="control-label">Payment Mode</label>
+	                  <div class="controls">
+	                   <input type="text" id="uPayMode" name="uPayMode" readonly="readonly" >
+	         			</div>
+	        	</div>
+	        	<div class="control-group">
+	                  <label class="control-label">Expenses Type</label>
+	                  <div class="controls">
+	                     <input type="text" name="updExpType" value="" id="updExpType" placeholder="Expence Type" disabled="disabled"/>
+							<datalist id="updList"></datalist>	         			
+	         			</div>
+	        	</div>
+	        	<div class="control-group" id="uChequeDetails">
+	                  <label class="control-label">Cheque Details</label>
+	                  <div class="controls">
+	                       <input type="text" id="uOtherDetails" name="uOtherDetails" onkeyup="this.value=this.value.toUpperCase()"/>
 	         			</div>
 	        	</div>
 	        	
 	        	<div class="control-group">
-	                  <label class="control-label">Payment Mode</label>
+	                  <label class="control-label">Debtor Type</label>
 	                  <div class="controls">
-	                   <select id="uPayMode" name="uPayMode" style="width: 220px">
-	                   <option value="CASH">CASH</option>
-                  <%
-                  List aliasnamelist=rd.getBankAliasName();
-                  if(aliasnamelist!=null){
-	                  Iterator aliasitr=aliasnamelist.iterator();
-	                  while(aliasitr.hasNext()){
-	                  Object aliasname=aliasitr.next();%>
-                  <option value="<%=aliasname%>"><%=aliasname %></option>
-                  <%}} %>
-                </select>
+	                      <input type="text" required name="uDebtorType" id="uDebtorType" readonly="readonly">
+	         			</div>
+	        	</div>
+	        	<div class="control-group" id="uVehR">
+	                  <label class="control-label">Vehicle Reading</label>
+	                  <div class="controls">
+	                     <input type="text" id="uVehReading" name="uVehReading"/>
+	         			</div>
+	        	</div>
+	        	
+	        	<div class="control-group" id="uVehDsQty">
+	                  <label class="control-label">Diesel Qty</label>
+	                  <div class="controls">
+	                    <input type="text" pattern="[0-9]*" id="uDieselQty" name="uDieselQty" />
 	         			</div>
 	        	</div>
 	        	
@@ -420,54 +454,7 @@ display: none;}
 	                     <input type="text" id="uReason" name="uReason" onkeyup="this.value=this.value.toUpperCase()"/>
 	         			</div>
 	        	</div>
-	        	<div class="control-group">
-	                  <label class="control-label">Vehicle Details</label>
-	                  <div class="controls">
-	                      <input type="text" list="updVehicleList" id="uVehDetails" name="uVehDetails" onfocus="callOut(this.list.id)" autocomplete="off">
-	         				<datalist id="updVehicleList"></datalist>
-	         			</div>
-	        	</div>
-	        	<div class="control-group">
-	                  <label class="control-label">Vehicle Reading</label>
-	                  <div class="controls">
-	                     <input type="text" id="uVehReading" name="uVehReading"/>
-	         			</div>
-	        	</div>
 	        	
-	        	<div class="control-group">
-	                  <label class="control-label">Diesel Qty</label>
-	                  <div class="controls">
-	                    <input type="text" pattern="[0-9]*" id="uDieselQty" name="uDieselQty" />
-	         			</div>
-	        	</div>
-	        	
-	        	<div class="control-group">
-	                  <label class="control-label">Expenses Type</label>
-	                  <div class="controls">
-	                     <input type="text" name="updExpType" value="" id="updExpType" list="updList"  onkeyup="searchName2(this.value,this.id,this.list.id)" onblur="checkData(this.value,this.id)" autocomplete="off" placeholder="Expence Type"/>
-							<datalist id="updList"></datalist>	         			
-	         			</div>
-	        	</div>
-
-	        	<div class="control-group">
-	                  <label class="control-label">Debtor Type</label>
-	                  <div class="controls">
-	                      <select required style="width: 220px" name="uDebtorType" id="uDebtorType">
-                 <%
-                  if(!(debtorList.isEmpty())){
-	                  Iterator itr=debtorList.iterator();
-	                  while(itr.hasNext()){%>
-                <option value="<%=itr.next() %>"><%=itr.next() %></option>
-                <%itr.next();}} %>
-                </select>
-	         			</div>
-	        	</div>
-	        	<div class="control-group">
-	                  <label class="control-label">Other Details</label>
-	                  <div class="controls">
-	                       <input type="text" id="uOtherDetails" name="uOtherDetails" onkeyup="this.value=this.value.toUpperCase()"/>
-	         			</div>
-	        	</div>
 		      </div>
 	      	</div>
       </div> 
@@ -626,12 +613,7 @@ function myFunction() {
     	}
     
 }
-function getSetSelect(id,value)
-{
-	var x=document.getElementById(id).children;
-	var xx=x[0].children;
-	xx[0].innerHTML=value;
-}
+
 function getVehicleUList(id)
 {
 	
@@ -639,10 +621,9 @@ function getVehicleUList(id)
 
 function ableAll(id)
 {
-	document.getElementById("expenses_type_name").focus();
-	if(document.getElementById("vehicleDetail")!=null)
+	
+	if(document.getElementById("vehicleReading")!=null)
 	{
-	document.getElementById("vehicleDetail").value="";
 	document.getElementById("vehicleReading").value="";
 	document.getElementById("vehicleLtrQty").value="";
 	}
@@ -650,33 +631,52 @@ function ableAll(id)
 	document.getElementById(id).style.backgroundColor="black";
 	else
 		document.getElementById(id).style.backgroundColor="green";
-	if(document.getElementById("vehicleDiv").style.display=="block")
+	if(document.getElementById("readingDiv").style.display=="block")
 		{
-		document.getElementById("vehicleDetail").required=false;
 		document.getElementById("vehicleReading").required=false;
 		document.getElementById("vehicleLtrQty").required=false;
-		document.getElementById("vehicleDiv").style.display="none";
 		document.getElementById("readingDiv").style.display="none";
 		document.getElementById("vehicleLtrDiv").style.display="none";
+		document.getElementById("expenses_type_name").value="";
+		document.getElementById("expenses_type_name").focus();
+		
 		}
 	else{
-			document.getElementById("vehicleDiv").style.display="block";
 			document.getElementById("readingDiv").style.display="block";
 			document.getElementById("vehicleLtrDiv").style.display="block";
-			document.getElementById("vehicleDetail").required=true;
 			document.getElementById("vehicleReading").required=true;
 			document.getElementById("vehicleLtrQty").required=true;
+			document.getElementById("expenses_type_name").value="DIESEL";
+			document.getElementById("vehicleReading").focus();
 		} 
-	if(document.getElementById("vehicleDetail")!=null)
+	if(document.getElementById("vehicleReading")!=null)
 		{
-		document.getElementById("vehicleDetail").value="";
 		document.getElementById("vehicleReading").value="";
 		document.getElementById("vehicleLtrQty").value="";
+		
 		}
 	
 	}
 	function getUpdateData(id)
 	{
+		
+		if(document.getElementById("uVehDsQty").style.display=="none")
+			{
+			document.getElementById("uVehDsQty").style.display="block";
+			document.getElementById("uVehR").style.display="block";
+			
+			document.getElementById("uVehReading").value="";
+			document.getElementById("uDieselQty").value="";
+			}
+		if(document.getElementById("uChequeDetails").style.display=="none")
+			{
+			document.getElementById("uChequeDetails").style.display="block";
+			document.getElementById("uChequeDetails").style.display=""
+			}
+		document.getElementById('oldAmount').value="0";
+		document.getElementById('uAmount').readOnly=true;
+		document.getElementById('revertCheck').checked=false;
+		document.getElementById('uniform-revertCheck').children[0].setAttribute("class","");
 		var xhttp;
 		xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -687,24 +687,33 @@ function ableAll(id)
 				document.getElementById("uName").value=demoStr[2];
 				document.getElementById("uAmount").value=demoStr[3];
 				document.getElementById("uPayMode").value=demoStr[4];
-				getSetSelect("s2id_uPayMode",demoStr[4]);
 				document.getElementById("uReason").value=demoStr[5];
 				document.getElementById("updExpType").value=demoStr[6];
-				document.getElementById("uDebtorType").value=demoStr[7];
-				getSetSelect("s2id_uDebtorType",demoStr[8]);
+				document.getElementById("uDebtorType").value=demoStr[8];
+				if(demoStr[4]=="CASH")
+					document.getElementById("uChequeDetails").style.display="none";
+				else
 				document.getElementById("uOtherDetails").value=demoStr[9];
 				if(demoStr[10]==1)
 				{
-					document.getElementById("uVehDetails").value=demoStr[11];
-					document.getElementById("uVehReading").value=demoStr[12];
-					document.getElementById("uDieselQty").value=demoStr[13];
+						document.getElementById("uVehReading").value=demoStr[12];
+						document.getElementById("uDieselQty").value=demoStr[13];
+				}
+				else{
+					document.getElementById("uVehDsQty").style.display="none";
+					document.getElementById("uVehR").style.display="none";	
 				}
 				}
 			};
 		xhttp.open("POST", "/SAMERP/Expenses.do?getUpdate="+id, true);
 		xhttp.send();
 	}
-	 
+	function getSetSelect(id,value)
+	{
+		var x=document.getElementById(id).children;
+		var xx=x[0].children;
+		xx[0].innerHTML=value;
+	}
 function callOut(id)
 {
 	var xhttp;

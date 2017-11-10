@@ -66,6 +66,14 @@ public class JcbPocBill extends HttpServlet {
 		
 		//Update
 		if (getBillId != null) {
+			query="SELECT `gst` FROM `jcbpoc_invoice` WHERE `id`="+getBillId;
+			details=dao.getData(query);
+			Iterator itr1 = details.iterator();
+			while (itr1.hasNext()) {
+				out.print(itr1.next() + "~");
+
+			}
+			
 			query="SELECT `intjcbpocid`, `data`, `chalanno`,"
 					+ " `bucket_hr`, `breaker_hr`,`deposit`, `diesel`,"
 					+ "  `bucket_rate`, `breaker_rate` FROM `jcbpoc_master` WHERE jcbpoc_master.invoice_id="+getBillId;
@@ -108,10 +116,23 @@ public class JcbPocBill extends HttpServlet {
 				String customerInvoice = request.getParameter("customerInvoice");
 				String invoiceDate=request.getParameter("invoiceDate");
 				String payAmtPrintTxt=request.getParameter("payAmtPrintTxt");
-				
-				query = "INSERT INTO `jcbpoc_invoice`(`id`, `cust_id`, `date`, `bill_amount`) VALUES ("+invoiceId+",'"+customerInvoice+"','"+invoiceDate+"','"+payAmtPrintTxt+"')";
+				String gst=request.getParameter("gstPrint");
+				int gstPrint=Integer.parseInt(gst.trim());
+				if (gstPrint == 0) {
+					query = "INSERT INTO `jcbpoc_invoice`(`id`, `cust_id`, `date`, `bill_amount`) VALUES ("+invoiceId+",'"+customerInvoice+"','"+invoiceDate+"','"+payAmtPrintTxt+"')";
 
-				result = dao.executeCommand(query);
+					result = dao.executeCommand(query);
+				}else {
+					query="SELECT MAX(`bill_id`) FROM `jcbpoc_invoice`";
+					details=dao.getData(query);
+					int billId = (int) details.get(0);
+					billId=billId + 1;
+					query = "INSERT INTO `jcbpoc_invoice`(`id`, `bill_id`, `cust_id`, `date`, `bill_amount`, `gst`) VALUES "
+							+ "("+invoiceId+","+billId+",'"+customerInvoice+"','"+invoiceDate+"','"+payAmtPrintTxt+"','"+gst+"')";
+
+					result = dao.executeCommand(query);
+				}
+				
 
 				if (result == 1) {
 					int str=Integer.parseInt(request.getParameter("rowCounterPrint"));
@@ -131,8 +152,23 @@ public class JcbPocBill extends HttpServlet {
 				dao.executeCommand(query);
 						
 				String payAmtPrintTxt=request.getParameter("payAmtPrintTxt");
-				query = "UPDATE `jcbpoc_invoice` SET `bill_amount`='"+payAmtPrintTxt+"' WHERE `id`="+invoiceId;
-
+				
+				String gst=request.getParameter("gstPrint");
+				int gstPrint=Integer.parseInt(gst.trim());
+				
+				query="SELECT `bill_id` FROM `jcbpoc_invoice` WHERE `id`="+invoiceId;
+				details=dao.getData(query);
+				int billId = (int) details.get(0);
+				
+				if (gstPrint != 0 && billId == 0) {
+					query="SELECT MAX(`bill_id`) FROM `jcbpoc_invoice`";
+					details=dao.getData(query);
+					billId = (int) details.get(0);
+					billId=billId + 1;
+					query = "UPDATE `jcbpoc_invoice` SET `bill_id`="+billId+",`bill_amount`='"+payAmtPrintTxt+"',`gst`='"+gst+"' WHERE `id`="+invoiceId;
+				}else {
+					query = "UPDATE `jcbpoc_invoice` SET `bill_amount`='"+payAmtPrintTxt+"',`gst`='"+gst+"' WHERE `id`="+invoiceId;
+				}
 				result = dao.executeCommand(query);
 				if (result == 1) {
 					int str=Integer.parseInt(request.getParameter("rowCounterPrint"));

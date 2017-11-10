@@ -16,7 +16,6 @@
 <link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css"
 	rel="stylesheet" />
 <link
@@ -120,7 +119,7 @@ to {
 	</div>
 	<!--close-top-serch-->
 	<!--sidebar-menu-->
-<jsp:include page="../common/left_navbar.jsp"></jsp:include>
+	<jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>
 	<!--sidebar-menu-->
 
 	<!--main-container-part-->
@@ -169,7 +168,8 @@ to {
 									<div class="controls">
 										<input type="text" name="contactno" class="span6"
 											placeholder="Contact Number"
-											onkeypress="return isNumber(event)" maxlength="10" />
+											onkeypress="return isNumber(event)" onkeyup="if(this.value.length==10){ checkContactNo(this.value); }"  minlength="10" maxlength="10" autocomplete="off" required/>
+										<span class="help-inline error" id="contactError" style="color: red; font-weight: bold;"></span>
 									</div>
 								</div>
 								<div class="control-group">
@@ -198,7 +198,7 @@ to {
 
 
 								<div class="form-actions">
-									<button type="submit" name="insertorganizer"
+									<button type="submit" name="insertorganizer" id="custSubmit"
 										class="btn btn-success"
 										style="position: relative; right: 700px; float: right;">Submit</button>
 									<a href="/SAMERP/index.jsp"><button type="button"
@@ -336,7 +336,8 @@ to {
 							<label class="control-label">Contact No :</label>
 							<div class="controls">
 								<input type="text" name="contactno" id="update_contactno" placeholder="Contact Number"
-									onkeypress="return isNumber(event)"  maxlength="10" />
+									onkeypress="return isNumber(event)"  onkeyup="if(this.value.length==10){ checkContactNoUpdate(this.value); }"  minlength="10" maxlength="10" autocomplete="off" />
+								<span class="help-inline error" id="contactErrorUpdate" style="color: red; font-weight: bold;"></span>
 									<input type="hidden" name="custid" id="custid"/>
 							</div>
 						</div>
@@ -371,7 +372,7 @@ to {
 			</div>
 			<div class="modal-footer">
 				<div class="form-actions">
-							<button type="submit" name="insertorganizer"
+							<button type="submit" name="insertorganizer" id="custSubmitUpdate"
 								class="btn btn-success"
 								style="float: right;">Submit</button>
 							</div>
@@ -402,26 +403,55 @@ to {
 
 					</div>
 
-					<form action='/SAMERP/AddCustomer.do?path=cust' name="form2" method="Post"	class="form-horizontal">
+<!-- 					<form name="form2"	class="form-horizontal"> -->
 						<div class="modal-body">
 							<table id="display-textfeild" style="margin: 0 auto;">
 								<tr>
 									<td>
-										Project Name 1:
+										Project Name :
 										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" required>
 										<input type="hidden" name="custid_project" id="custid_project" >
-										<input type="hidden" name="count_project" id="count_project" value="1" >
 									</td>
-									<td><button type="button" onclick="insertDiv()">+</button></td>
-									<td><button type="button" onclick="deleteDiv()">-</button></td>
+								</tr>
+								<tr>
+									<td>
+										Opening Balance :
+										<input type="radio" name="radios" value="1" checked="checked" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cash
+										<input type="radio" name="radios" value="2" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cheque
+									</td>
+								</tr>
+								<tr>
+									<td style="float: right;">
+										<input type="text" name="openingBal" id="openingBal" onkeypress="return isNumber(event)" placeholder="Deposit">
+										<var class="control-group hide" id="selectBankProject">
+											Select Bank :
+												<select class="">
+													<option>First option</option>
+													<option>Second option</option>
+													<option>Third option</option>
+													<option>Fourth option</option>
+													<option>Fifth option</option>
+													<option>Sixth option</option>
+													<option>Seventh option</option>
+													<option>Eighth option</option>
+												</select>
+										</var>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<var class="control-group hide" id="selectBankChequeProject">
+											Cheque No :<input type="text" class="" placeholder="Cheque No" />
+										</var>
+									</td>
 								</tr>
 							</table>
 						</div>
 						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="save" class="btn btn-success">Update</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+							<button type="submit" name="save" id="" onclick="addProject()" class="btn btn-success">Add</button>
+							<button type="button" class="btn btn-danger" id="closeProject" data-dismiss="modal">Close</button>
 						</div>
-					</form>
+<!-- 					</form> -->
 				</div>
 
 			</div>
@@ -444,7 +474,117 @@ function isNumber(evt) {
     }
     return true;
 }
+//*************************************** DEPOSIT *******************************
+function showBank(str) {
+	if(str==1){
+		document.getElementById("openingBal").style.display = 'inline-block';;
+		document.getElementById("selectBankProject").className="control-group hide";
+		document.getElementById("selectBankChequeProject").className="control-group hide";
+	}
+	if(str==2){
+		document.getElementById("openingBal").style.display = "none";
+		document.getElementById("selectBankProject").className="control-group";
+		document.getElementById("selectBankChequeProject").className="control-group";
+	}
+	
+}
+//*************************************** END DEPOSIT *******************************
+//***************************************addProject********************************
+function addProject() {
+	var custid_project=document.getElementById("custid_project").value;
+	var projectname=document.getElementById("project_name1").value;
+	var openingBal=document.getElementById("openingBal").value;
+	var xhttp;
+	if (custid_project == "") {
+		alert("Select Customer!")
+		return;
+	}
+	if (projectname == "") {
+		alert("Add Project Name!")
+		return;
+	}
+	
+	xhttp = new XMLHttpRequest();
 
+	try {
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText;
+				alert(demoStr);
+				document.getElementById("closeProject").click();
+				document.getElementById("custid_project").value="";
+				document.getElementById("project_name1").value="";
+				document.getElementById("openingBal").value="";
+				document.getElementById("editdata").value="";
+			}
+
+		};
+		xhttp.open("POST", "/SAMERP/AddCustomer.do?custid_project=" +custid_project+"&projectname="+projectname+"&openingBal="+openingBal, true);
+		xhttp.send();
+	} catch (e) {
+		alert("Unable to connect to server");
+	}
+}
+//***************************************END addProject****************************
+//***************************************Contact Error *******************************
+function checkContactNo(str) {
+	var xhttp;
+	if (str == "") {
+		return;
+	}
+	xhttp = new XMLHttpRequest();
+
+	try {
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split("~");
+				if (demoStr[0] =="") {
+					document.getElementById("contactError").innerHTML ="";
+					document.getElementById("custSubmit").disabled = false;
+				}else {
+					document.getElementById("contactError").innerHTML ="This Contact Already Exists!";
+					document.getElementById("custSubmit").disabled = true;
+				}
+			}
+
+		};
+
+		xhttp.open("POST", "/SAMERP/AddCustomer.do?checkContactNo=" + str, true);
+		xhttp.send();
+	} catch (e) {
+		alert("Unable to connect to server");
+	}
+}
+function checkContactNoUpdate(str) {
+	var checkCustid=document.getElementById("custid").value;
+	var xhttp;
+	if (str == "") {
+		return;
+	}
+	xhttp = new XMLHttpRequest();
+
+	try {
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split("~");
+				if (demoStr[0] =="") {
+					document.getElementById("contactErrorUpdate").innerHTML ="";
+					document.getElementById("custSubmitUpdate").disabled = false;
+				}else {
+					document.getElementById("contactErrorUpdate").innerHTML ="This Contact Already Exists!";
+					document.getElementById("custSubmitUpdate").disabled = true;
+				}
+			}
+
+		};
+
+		xhttp.open("POST", "/SAMERP/AddCustomer.do?checkContactNoUpdate=" + str+"&checkCustid="+checkCustid, true);
+		xhttp.send();
+	} catch (e) {
+		alert("Unable to connect to server");
+	}
+}
+//*************************************** End Contact Error *******************************
 //**********************Customer Search******************************************
 
 
@@ -534,28 +674,6 @@ function DeleteCustomer(id){
 }
 
 
-function insertDiv()
-{
-	var insertTable=document.getElementById("display-textfeild");
-	var Row=insertTable.rows;
-	var numrows=Row.length;
-	var row = insertTable.insertRow(numrows);
-    var cell1 = row.insertCell(0);
-    cell1.innerHTML = "Project Name "+ (numrows+1) +":<input type=\"text\" name=\"projectname"+ (numrows+1) +"\" id=\"project_name"+ (numrows+1) +"\" onkeyup=\"this.value=this.value.toUpperCase()\" required>";
-    document.getElementById('count_project').value=(numrows+1);
-}
-
-function deleteDiv()
-{
-	var deleteRows=document.getElementById("display-textfeild");
-	var count=document.getElementById('count_project').value;
-	var Rows = deleteRows.rows;
-    var numRows = Rows.length;
-    if(numRows>1){
-    	deleteRows.deleteRow(numRows-1);
-    	document.getElementById('count_project').value=(count-1);
-    }
-}
 //********************************Print Customer Data**************************
 function  CustomerPrintProject() {
 	var val = document.getElementById('editdata').value;
@@ -565,7 +683,7 @@ function  CustomerPrintProject() {
 		if (str == "undefined") {
 			return;
 		}else {
-			if(event.keyCode == 13) {
+			if(event.keyCode == 13 || event.keyCode == 9) {
 				 document.getElementById('custid_project').value=str;
 				
 	    	}
