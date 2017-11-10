@@ -2,6 +2,7 @@ package admin.pettycash;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,14 +28,51 @@ public class PTCash extends HttpServlet {
 			
 			if(request.getParameter("insertPetty")!=null)
 			{
-				out.println("working");
 				String pettyDate=request.getParameter("date");
 				String previousBalance=request.getParameter("previous_balance");
-				String handLoanName=request.getParameter("hlName");
+				//String handLoanName=request.getParameter("hlName");
 				String bankName=request.getParameter("bank_name");
-				String atmCash=request.getParameter("amount");
-				String payReceived=request.getParameter("pay_received");
-				String tAmt=request.getParameter("total");
+				int atmCash=Integer.parseInt(request.getParameter("amount"));
+				//String payReceived=request.getParameter("pay_received");
+				//String tAmt=request.getParameter("total");
+				int count=Integer.parseInt(request.getParameter("count"));
+				//int arrAmt[] = new int[count];
+				ArrayList<Integer> arrAmt=new ArrayList<>();
+				int sum=0;
+				
+				for(int i=0;i<=count;i++)
+				{
+					String handLoanName=request.getParameter("hlName,"+i);
+					String add="HL_";
+					String alias=add+handLoanName;
+					
+					String handLoanDetails="SELECT handloan_details.id,handloan_details.credit FROM handloan_details,handloan_master WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"'";
+					//List getDetails=gd.getData(handLoanDetails);
+					 
+					//int addAmt=(int)getDetails.get(1);
+					int amt=Integer.parseInt(request.getParameter("hlAmt,"+i));
+					arrAmt.add(amt);
+				
+					//int updateAmt=addAmt+amt;
+					
+					/*String updateHandLoanDetails="UPDATE `handloan_details` SET handloan_details.credit="+updateAmt+" WHERE handloan_details.id="+getDetails.get(0)+"";
+					int updateStatus=gd.executeCommand(updateHandLoanDetails);
+					if(updateStatus>0)
+					{
+						System.out.println("updated credit amt in handloanDetails");
+					}*/
+						
+					//out.println("Alias : "+alias+" insert amount : "+amt+" new amt : "+updateAmt);
+				}
+				
+				for(int num:arrAmt)
+				{
+					sum+=num;
+				}
+				out.print(sum);
+				
+				
+				
 				
 				
 			}
@@ -117,22 +155,37 @@ public class PTCash extends HttpServlet {
 			if(request.getParameter("findName")!=null)
 			{
 				String name=request.getParameter("findName");
-				String query="SELECT handloan_master.id,handloan_master.name FROM handloan_master";
+				String query="SELECT handloan_master.id,handloan_master.alias_name FROM handloan_master";
 				
 				List getName=gd.getData(query);
 				Iterator itr=getName.iterator();
 				while(itr.hasNext())
 				{
 					itr.next();
-					out.print("<option>"+itr.next()+"</option>");
+					out.print("<option>"+itr.next().toString().replace("HL_", "")+"</option>");
 				}	
 				
 			}
+			if(request.getParameter("findBankName")!=null)
+			{
+				String bankName=request.getParameter("findBankName");
+				String query="SELECT account_details.acc_id,account_details.acc_aliasname FROM account_details";
+				List getBankDetails=gd.getData(query);
+				Iterator itr=getBankDetails.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					out.print("<option>"+itr.next()+"</option>");
+				}
+			}
+			
 			
 			if(request.getParameter("eName")!=null)
 			{
 				String name=request.getParameter("eName");
-				String query="SELECT handloan_details.credit FROM handloan_details,handloan_master WHERE handloan_master.id=handloan_details.handloan_id AND handloan_master.name='"+name+"'";
+				String add="HL_";
+				String alias=add+name;
+				String query="SELECT handloan_details.credit FROM handloan_details,handloan_master WHERE handloan_master.id=handloan_details.handloan_id AND handloan_master.alias_name='"+alias+"'";
 				
 				List getAmt=gd.getData(query);
 				out.print(getAmt.get(0));

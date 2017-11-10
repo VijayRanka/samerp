@@ -107,9 +107,8 @@
 		}
 	%>
 	
-	<%
-	RequireData rq=new RequireData();
-	%>
+	<%RequireData rq=new RequireData();%>
+	
 	<div id="search">
 		<button type="submit" class="tip-bottom">LOGOUT</button>
 	</div>
@@ -168,8 +167,8 @@
 								<div class="control-group">
 									<label class="control-label">Previous Balance:</label>
 									<div class="controls">
-										<input type="text" name="previous_balance" value="<%=pre_balance%>" class="span4" onkeyup="this.value=this.value.toUpperCase()"
-											placeholder="Previous Balance" pattern="[0-9]*" required />
+										<input type="text" id="previous_balance" name="previous_balance" value="<%=pre_balance%>" class="span4" onkeyup="this.value=this.value.toUpperCase()"
+											placeholder="Previous Balance" pattern="[0-9]*" readonly required />
 									</div>
 								</div>
 								<%
@@ -177,22 +176,24 @@
 								}
 								
 								%>
-								<a href="#paymentEntry" data-toggle="modal"
-									style="position: absolute; margin-left: 50%; margin-top: 1.4%;">
-									<span class="badge badge-inverse">Add HandLoan</span>
-								</a>
+								
 
-						<table id="HandLoan-details-table">
+						<table id="HandLoan-details-table" style="margin-top: -10px;">
 															
 								<tr>
 								<div>
 								<label class="control-label">Hand Loan:</label>
 								<div class="controls controls-row">
-           								 <input type="text"  list="getName" autocomplete="off" placeholder="Name" id="hlName" name="hlName" <%if(request.getAttribute("hName")!=null) {%> value="<%=request.getAttribute("hName") %>" <%} %> onfocus="searchName(this.value)" oninput="getAmt(this.value)" style="width: 170px;margin-right: 10px;" class="span2">
+           								 <input type="text"  list="getName" autocomplete="off" placeholder="HandLoan Name" id="hlName,0" name="hlName,0" <%if(request.getAttribute("hName")!=null) {%> value="<%=request.getAttribute("hName") %>" <%} %> onfocus="searchName(this.value)" style="width: 170px;margin-right: 10px;" class="span2">
            								 <datalist id="getName"></datalist>
-           								 <input type="text" name="hlAmt" id="hlAmt" <%if(request.getAttribute("amt")!=null) {%> value="<%=request.getAttribute("amt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;
-           								 <button type="button" value="Add More" onclick="InsertRow()" class="add-more-button">+</button>
-           								 <button type="button" value="Remove" onclick="RemoveRow()" class="remove-button">-</button>
+           								 <input type="text" name="hlAmt,0" id="hlAmt,0" <%if(request.getAttribute("amt")!=null) {%> value="<%=request.getAttribute("amt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;
+           								 <span class="badge badge-inverse" onclick="InsertRow()"><i class="icon-plus"></i></span>
+           								 <span class="badge badge-inverse" onclick="RemoveRow()"><i class="icon-minus"></i></span>
+           								 <a href="#paymentEntry" data-toggle="modal">
+											<span class="badge badge-inverse">Add HandLoan</span>
+										 </a>
+           								 <button type="button" value="Add More" onclick="" class="add-more-button">+</button>
+           								 <button type="button" value="Remove" style="display: none;" onclick="" class="remove-button">-</button>
         						  </div>
         						  </div>      						  
         						  
@@ -204,61 +205,44 @@
 								</tr>
 						</table>
 					
-								
+							
+							<table id="bank-details-table" style="margin-top: -10px;">
+															
+								<tr>
+								<div>
+								<label class="control-label">Bank Name:</label>
+								<div class="controls controls-row">
+           								 <input type="text"  list="getBankName" autocomplete="off" placeholder="Bank Name" id="bName,0" name="bName,0" <%if(request.getAttribute("bName")!=null) {%> value="<%=request.getAttribute("bName") %>" <%} %> onfocus="searchBankName(this.value)" style="width: 170px;margin-right: 10px;" class="span2">
+           								 <datalist id="getBankName"></datalist>
+           								 <input type="text" name="bAmt,0" id="bAmt,0" <%if(request.getAttribute("bAmt")!=null) {%> value="<%=request.getAttribute("bAmt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;
+           								 <span class="badge badge-inverse" onclick="InsertBankRow()"><i class="icon-plus"></i></span>
+           								 <span class="badge badge-inverse" onclick="RemoveBankRow()"><i class="icon-minus"></i></span>
+           								 <button type="button" value="Add More" onclick="" class="add-more-button">+</button>
+           								 <button type="button" id="removeBank" value="Remove" style="display: none;" onclick="" class="remove-button">-</button>
+        						  </div>
+        						  </div>      						  
+        						  
+								</tr>
+						</table>
+							
 						
-						<a href="#addbankname" data-toggle="modal"
-									style="position: absolute; margin-left: 46%; margin-top: 1.4%;">
-									<span class="badge badge-inverse"><i class="icon-plus"></i></span>
-								</a>
-						
-						
-							<div class="control-group">
-										<label class="control-label">Bank Name:</label>
-										<div class="controls" style="width: 893px;">
-											<select name="bank_name" class="span4">
-
-												<%
-													List details = rq.getBankAliasList();
-													if (details != null) {
-														Iterator itr = details.iterator();
-														while (itr.hasNext()) {
-															String id = itr.next().toString();
-															String alias_name = itr.next().toString();
-												%>
-												<option value="<%=id%>"><%=alias_name%></option>
-												<%
-													}
-												%>
-											</select>
-										</div>
-										<%
-											}
-										%>
-									</div>
-									
+	
 								<div class="control-group">
 									<label class="control-label"> ATM Cash Amount:</label>
 									<div class="controls">
-										<input type="text" name="amount" class="span4"
-											placeholder="Amount" pattern="[0-9]*" required />
+										<input type="text" id="atmCash" name="amount" class="span4" placeholder="Amount" pattern="[0-9]*" />
+										<input type="text" class="span4" name="count" id="count" placeholder="Total" value="0" readonly />
+										<input type="text" class="span4" name="bankCount" id="bankCount" placeholder="Total" value="0" readonly />
 									</div>
 								</div>
-								
-									<div class="control-group">
-									<label class="control-label"> Pay Received:</label>
-									<div class="controls">
-										<input type="text" name="pay_received" class="span4"
-											placeholder="Pay Received" pattern="[0-9]*" required />
-									</div>
-								</div>									
 
-								<div class="control-group">
+								<!-- <div class="control-group">
 									<label class="control-label">Total:</label>
 									<div class="controls">
-										<input type="text" class="span4" name="total"
-											placeholder="Total" required />
+										<input type="text" id="tAmt" class="span4" name="total" placeholder="Total" required />
+											
 									</div>
-								</div>
+								</div> -->
 
 								<div class="form-actions" style="padding-left: 350px">
 									<button type="submit" name="insertPetty" class="btn btn-success">OK</button>&nbsp;&nbsp;&nbsp;
@@ -310,33 +294,6 @@
 		</div>
 	</div>
 
-<div class="modal hide fade" id="addbankname" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add New Bank </h4>
-				</div>
-				<div class="modal-body">
-					<form action="/SAMERP/PTCash" method="post" class="form-horizontal">
-					<div class="control-group">
-									<label class="control-label">Add Bank Name:</label>
-									<div class="controls">
-										<input type="text" class="span3" name="bank_name"
-											placeholder="Bank Name" required />
-									</div>
-								</div>
-								
-						<div class='modal-footer' >
-							<button type="submit" name="addBankName" class="btn btn-success">Submit</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-						</div>
-					</form>
-				</div>
-
-			</div>
-		</div>
-	</div>
 	
 	<div class="modal hide fade zoom-out" id="paymentEntry" role="dialog">
 		<div class="modal-header">
@@ -456,9 +413,42 @@
 
 <script type="text/javascript">
 
-function getAmt(name)
+var nameCount=1;
+var bankNameCount=1;
+var counter=0;
+var bankCounter=0;
+function totalPetty(val)
 {
+	var prevBalance=document.getElementById('previous_balance').value;
+	/* var atmCash=document.getElementById('atmCash').value; */
+	var lastTotal=document.getElementById('tAmt').value;
+	if (val == "")
+         val = 0;
+	if (prevBalance == "")
+		prevBalance = 0;
 	
+	if(lastTotal=="")
+	{
+		var total=parseInt(prevBalance)+parseInt(val);
+		
+		if (!isNaN(total)) {
+	           document.getElementById('tAmt').value = total;
+	       }	
+	}
+	else
+	{
+		var total=parseInt(val)+parseInt(lastTotal);
+		if (!isNaN(total)) {
+	           document.getElementById('tAmt').value = total;
+	       }	
+	}
+	
+	
+}
+
+function getAmt(name,id)
+{
+	var amtId=id.split(",");
 	var opts = document.getElementById('getName').childNodes;
 	for (var i = 0; i < opts.length; i++) {
 		 if (opts[i].value === name) 
@@ -473,7 +463,15 @@ function getAmt(name)
 						var demoStr = this.responseText;
 						
 						var demoStr = this.responseText;
-						document.getElementById("hlAmt").value = demoStr;
+						if(amtId[1]==0)
+						{
+							document.getElementById("hlAmt,"+amtId[1]).value = demoStr;	
+						}
+						else
+						{
+							document.getElementById("hlAmt"+amtId[1]).value = demoStr;
+						}
+						
 						//document.getElementById("").focus();	
 					}
 				};
@@ -505,8 +503,44 @@ function myFunction() {
 }
 
 
+function InsertBankRow()
+{
+	
+	document.getElementById("removeBank").style="display:block";
+	var insertTable = document.getElementById("bank-details-table");
+    var Row = insertTable.rows;
+    var numRows = Row.length;
+    var row = insertTable.insertRow(numRows);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    
+  
+    cell1.innerHTML = "<input type='text'  list='getBankName' autocomplete='off' placeholder='Bank Name' id='bName,"+nameCount+"' name='bName,"+nameCount+"' onfocus='searchBankName(this.value)' class='span2' style='width: 170px;margin-top: 10px;margin-left:200px;margin-right: 10px;'>";
+    cell2.innerHTML = "<input type='text' style='width:83px;margin-top: 10px;' name='hlAmt,"+nameCount+"' id='hlAmt"+nameCount+"' placeholder='Amount' />";
+    bankNameCount++; 
+    bankCounter++;
+    document.getElementById("bankCount").value=bankCounter;
+}
 
-var nameCount=1
+function RemoveBankRow() {
+	var removeTable = document.getElementById("bank-details-table");
+	var Rows = removeTable.rows;
+    var numRows = Rows.length;
+    if(numRows>1){
+		removeTable.deleteRow(numRows-1);
+    }
+    bankNameCount--;
+    bankCounter--;
+    if(bankCounter==0)
+    {
+    	document.getElementById("removeBank").style="display:none";
+    	
+    }
+    document.getElementById("bankCount").value=bankCounter;
+}
+
+
 function InsertRow() {
 	var insertTable = document.getElementById("HandLoan-details-table");
     var Row = insertTable.rows;
@@ -517,9 +551,11 @@ function InsertRow() {
     var cell3 = row.insertCell(2);
     
   
-    cell1.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='Name' id='hlName"+nameCount+"' name='hlName"+nameCount+"' oninput='getAmt(this.value)' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-left:200px;margin-right: 10px;'>";
-    cell2.innerHTML = "<input type='text' style='width:83px;' name='hlAmt"+nameCount+"' id='hlAmt"+nameCount+"' placeholder='Amount' />";
+    cell1.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='HandLoan Name' id='hlName,"+nameCount+"' name='hlName,"+nameCount+"' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-top:10px;margin-left:200px;margin-right: 10px;'>";
+    cell2.innerHTML = "<input type='text' style='width:83px;margin-top:10px;' name='bAmt,"+nameCount+"' id='bAmt,"+nameCount+"' placeholder='Amount' />";
     nameCount++; 
+    counter++;
+    document.getElementById("count").value=counter;
 }
 
 function RemoveRow() {
@@ -530,6 +566,8 @@ function RemoveRow() {
 		removeTable.deleteRow(numRows-1);
     }
     nameCount--;
+    counter--;
+    document.getElementById("count").value=counter;
 }
 
 
@@ -581,6 +619,28 @@ function searchName(valu)
 			xhttp.send();
 					
 }
+
+function searchBankName(valu)
+{  	
+	var xhttp;
+			
+			xhttp = new XMLHttpRequest();
+			
+			xhttp.onreadystatechange = function() {
+				
+				if (this.readyState == 4 && this.status == 200) {
+					
+					var demoStr = this.responseText;
+					//alert(demoStr);
+					document.getElementById("getBankName").innerHTML = demoStr;
+					}
+				};
+			xhttp.open("POST", "/SAMERP/PTCash?findBankName="+valu, true);
+			xhttp.send();
+					
+}
+
+
 
 
 </script>
