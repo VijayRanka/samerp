@@ -544,7 +544,7 @@ display: none;}
 								<div class="input-append">
 									<input type="text" name="amount" id="amountid" class="span4"
 										placeholder="Amount" 
-										onkeyup="this.value=this.value.toUpperCase()" required />
+										onkeyup="this.value=this.value.toUpperCase()" style="margin-left: 11px;width: 345px;" required />
 								</div>
 							</div>
 						</div>
@@ -557,7 +557,7 @@ display: none;}
 									String[] demo = date.todayDate().split("-");
 								%>
 								<input name="date" type="date"
-									value="<%=demo[2] + "-" + demo[1] + "-" + demo[0]%>" class="span4">
+									value="<%=demo[2] + "-" + demo[1] + "-" + demo[0]%>" class="span4" style="margin-left: 11px;width: 345px;">
 							</div>
 						</div>
 

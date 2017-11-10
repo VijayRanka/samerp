@@ -443,7 +443,7 @@ function searchName(id1) {
 			document.getElementById("Updateemail").value = demoStr[5];
 			document.getElementById("Updateaddress").value = demoStr[6];
 			document.getElementById("Updatebamount").value = demoStr[7];
-			
+			alert(demoStr[1]);
 			
 			}
 		};

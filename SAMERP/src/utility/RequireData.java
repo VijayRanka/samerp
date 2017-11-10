@@ -252,7 +252,8 @@ public class RequireData
 	public List getSupplyMaterials(String supplierId)
 	{
 		String id=supplierId;
-		String query="select `supplier_business_id`,`supplier_business_name`,`supplier_name`, `supplier_address`, `supplier_contactno`,`type`, `supplier_alias` from `material_supply_master` where `supplier_business_id`="+id+"";
+		String query="SELECT material_supply_master.supplier_business_id,material_supply_master.supplier_business_name,material_supply_master.supplier_name,material_supply_master.supplier_address,material_supply_master.supplier_contactno, material_supply_master.supplier_opening_balance FROM material_supply_master WHERE material_supply_master.supplier_business_id='"+id+"'";
+		System.out.println("query is:"+query);
 		List supplierList=gd.getData(query);
 		return supplierList;
 	}
@@ -302,6 +303,13 @@ public class RequireData
 	//--omkar end
 	
 	// sandeep start
+	
+	public List getHandLoanDetails()
+	{		
+		String handloan_insert="SELECT DISTINCT handloan_master.id,handloan_master.name,handloan_master.mob_no,handloan_details.date,handloan_details.credit,handloan_details.mode,handloan_details.particulars,handloan_master.alias_name FROM handloan_master,handloan_details WHERE handloan_master.id=handloan_details.handloan_id";
+		List list=gd.getData(handloan_insert);
+		return list;		
+	}
 	
 	public List getNameAmount()
 	{
