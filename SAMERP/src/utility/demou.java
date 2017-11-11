@@ -16,89 +16,36 @@ public class demou {
 		RequireData rd=new RequireData();
 		SysDate sd=new SysDate();
 		
-		/*String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
-		List getDateExistDetailList=gd.getData(getDateExistDetail);
-		Iterator traverseDS=getDateExistDetailList.iterator();
-		while(traverseDS.hasNext())
+/*		String id="3";
+		String getUpdDetails="SELECT sale_master.date, client_details.client_organization_name,sale_master.chalan_no, "
+				+ "sale_master.debtor_id,sale_master.vehicle_details,sale_master.vehicle_deposit FROM `sale_master`,client_details WHERE "
+				+ "client_details.client_id=sale_master.client_id AND sale_master.id="+id;
+		if(!gd.getData(getUpdDetails).isEmpty())
 		{
-			System.out.println(traverseDS.next());
-		}
-		String bankId="";
-		if(!bankId.isEmpty())
-		{
-			
-			if(!gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).isEmpty())
+			List demoList=gd.getData(getUpdDetails);
+			Iterator itr=demoList.iterator();
+			while(itr.hasNext())
 			{
-				String bankAlias=gd.getData("SELECT account_details.acc_aliasname from account_details WHERE account_details.acc_id="+bankId).get(0).toString();
-				System.out.println(bankAlias);
-			}
-			
-		}*/
-		System.out.println(rd.getProductListContractor("1"));
-		List demoList=rd.getProductListContractor("1");
-		  List countList=(List)demoList.get(0);
-		  System.out.println(countList);
-		
-		/*String startDate="2017-10-29";
-		String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
-		String contId="1";
-		int count=Integer.parseInt(gd.getData("SELECT DATEDIFF('"+lastDate+"','"+startDate+"')").get(0).toString());
-		
-		String getDateList="SELECT expenses_master.date FROM expenses_type,debtor_master,expenses_master WHERE "
-				+ "expenses_master.expenses_type_id=expenses_type.expenses_type_id AND expenses_master.debtor_id=debtor_master.id"
-				+ " AND debtor_master.type=(SELECT contractor_master.aliasname FROM "
-				+ "contractor_master WHERE contractor_master.id=1) UNION SELECT sale_master.date FROM sale_master,"
-				+ "contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
-				+ "and contractor_master.id=1 UNION SELECT contractor_payment_details.date FROM contractor_payment_details "
-				+ "WHERE contractor_payment_details.contractor_id=1 GROUP BY date ORDER BY date";
-		
-		if(count>0){
-			for(int i=0;i<=count;i++)
-			{
-				String getDate=gd.getData("SELECT DATE_ADD('"+startDate+"', INTERVAL "+i+" DAY)").get(0).toString();
+				Object date=itr.next();
+				Object orgName=itr.next();
+				Object chalanNo=itr.next();
+				Object debtorId=itr.next();
+				Object vehDetails=itr.next();
+				Object vehDeposit=itr.next();
+				System.out.print(date+","+orgName+","+chalanNo+",");
 				
-				String expMaster="SELECT expenses_master.date, expenses_master.amount FROM "
-						+ "expenses_type,debtor_master,expenses_master WHERE expenses_master.expenses_type_id=expenses_type."
-						+ "expenses_type_id AND expenses_master.debtor_id=debtor_master.id AND expenses_master."
-						+ "date='"+getDate+"' AND expenses_master.cp_status=1 AND debtor_master.type="
-						+ "(SELECT contractor_master.aliasname FROM contractor_master WHERE "
-						+ "contractor_master.id="+contId+")";
-				System.out.println(expMaster);
-				
-				List demoList1=gd.getData(expMaster);
-				if(!demoList1.isEmpty())
-				System.out.println(getDate+" expenses "+demoList1);
-
-				String saleMaster="SELECT sale_master.loading_charges FROM"
-						+ " sale_master,contractor_master WHERE contractor_master.id=sale_master.loading_by_id "
-						+ "and sale_master.date='"+getDate+"' and sale_master.cp_status=1 and contractor_master.id="+contId;
-				
-				System.out.println(saleMaster);
-				List demoList2=gd.getData(saleMaster);
-				if(!demoList2.isEmpty())
-				System.out.println(getDate+" loading charges "+demoList2);
-				
-				String contPayment="SELECT contractor_payment_details.paid_amount FROM "
-						+ "contractor_payment_details WHERE contractor_payment_details.contractor_id="+contId+" and contractor_payment_details.date='"+getDate+"'";
-				
-				List demoList3=gd.getData(contPayment);
-				System.out.println(contPayment);
-				if(!demoList3.isEmpty())
-				System.out.println(getDate+" payment "+demoList3);
-				
-			}
-			
-		
-		UPDATE FINAL STOCK...
-		 * 
-		 * UPDATE final_stock SET qty=40 WHERE final_stock.product_id=(SELECT product_master.id FROM product_master WHERE product_master.name='PIPE_6')
-		 */
-		
-		
-		
-	
-		
-		
+				if(debtorId.toString().equals("0"))
+				{					
+					System.out.print(vehDetails);
+				}
+				else
+				{
+					String getDebtorType="SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtorId;
+					System.out.print(gd.getData(getDebtorType).get(0).toString().split("_")[1]);
+					
+				}
+				System.out.print(","+vehDeposit);	
+			}	
+		}*/		
 	}
 }
-

@@ -271,7 +271,7 @@
             
     <div class="widget-box" id="billDetails" style="display:none;">
           <div class="widget-title"> <span class="icon">
-            <input type="checkbox" id="title-checkbox" name="title-checkbox" />
+		    <input type="checkbox" id="getAll" onclick="getAllCheckBoxes()"/>
             </span>
             <h5> Available Chalan Details </h5>
             <!-- <input type="text" id="myInput" onkeyup="myFunction1()" style=" float: right; margin-right: -6%; margin-top: 0.3%;" placeholder="Search for Supplier..." title="Type in a Supplier name"> -->
@@ -294,23 +294,22 @@
               <tbody>
               
                 <% 
+               
                 String s = request.getParameter("ppid");
-            	int sum=0;
-            		
+
+                int i=1,j;	
             	if(s!=null){
 	              	List chalanList = rd.getChalanDetailsForSale(s);
 	              	Iterator itr2 = chalanList.iterator();
 	              	
-	              	int i=1;
 	              	
 	              	while(itr2.hasNext()){
 	              		
-	              		int j=1;
 	              		String sid = itr2.next().toString();
 	              		String span = itr2.next().toString();
 	              %>
 	                <tr id="tdId<%=i%>">
-	                  <td rowspan="<%=span%>"><input id="<%= sid%>" type="checkbox" onclick="selectChecks()"/></td>
+	                  <td rowspan="<%=span%>"><input id="<%= sid%>" type="checkbox" onclick="selectChecks(this.id)"/></td>
 	                  <td rowspan="<%=span%>"> <%=i%> </td>
 	                  <td id="mytd<%=i%>" rowspan="<%= span%>"><%=itr2.next() %></td>
 	                  <td rowspan="<%= span%>"><%=itr2.next() %></td>
@@ -324,7 +323,7 @@
 	   			 	 	int qty=Integer.parseInt(itr3.next().toString());
 	   			 	 	int rate=Integer.parseInt(itr3.next().toString());
 	   			 		int gst=Integer.parseInt(itr3.next().toString());
-	   			 	 	sum+=(qty*rate);
+
  	   			 		
 	   			 	  %>
 	   			 	  	
@@ -334,16 +333,18 @@
 	                	<td><%=gst %></td>
 	   			 	  <%
 
-	   			 		
+	   			 		j=0;
 	   			 		while(itr3.hasNext()){
+	   			 			
 	   			 			
 	   			 		String product_name1=itr3.next().toString();
 	   			 	 	int qty1=Integer.parseInt(itr3.next().toString());
 	   			 	 	int rate1=Integer.parseInt(itr3.next().toString());
 	   			 		int gst1=Integer.parseInt(itr3.next().toString());
-	   			 	 	sum+=(qty1*rate1);
+						j++;
+	   			 		System.out.println(j);
 	     			  %>	
-	     				<tr>
+	     				<tr id="innerTR_<%=i%>_<%=j%>">
 	     				<td><%=product_name1 %></td>
 		                <td><%=qty1 %></td>
 		                <td><%=rate1 %></td>
@@ -355,15 +356,16 @@
 		                	</tr>
 		                <%
 		                	}
+		                
 	   			 		 }
 		                %>
 	                </tr>
 	               <%
 	               	i++;
 	              	}
-	              	System.out.println("Sum "+sum);
             	}
                %>
+               <input type="hidden" id="iCount" value="<%=i-1%>">
                <tr>
                		<td>  </td>
                		<td>  </td>
@@ -378,7 +380,7 @@
             </table>
            </form>
          </div>
-         <a href="" id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</a>
+         <button  id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" disabled="disabled" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
          <hr style="border-top-color: #c5bbbb;">
       </div>
       
@@ -423,11 +425,13 @@
 	             	<div class="control-group" style="">
 	             		<label class="control-label">Bill Amount : </label>
 			               <div class="controls">
-			                 <input type="text" id="billAmt" name="billAmt" value="<%=sum%>"/>
+			                 <input type="text" id="billAmt" name="billAmt" value=""/>
 			               </div>
 	             	</div>
 	             	
 <%-- 	             	<%
+
+
 	             	
 	             		float cgst=(sum/100)*9;
 	             		float sgst=(sum/100)*9;
@@ -681,7 +685,7 @@
 					<tr>
 						<th colspan="8" style="text-align: right; border: 0;"></th>
 						<th style="text-align: right;" >Total Amount</th>
-						<th colspan="3" style="text-align: right;" id="totalamt"><%=sum %></th>
+						<th colspan="3" style="text-align: right;" id="totalamt"><%-- <%=sum %> --%></th>
 					</tr>
 
 					<tr>
@@ -704,21 +708,85 @@
 			</div>
 		</div>
 	</div>
+
+<!-- 	
+<div class="modal hide fade zoom-out" id="checkboxError" role="dialog" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; margin-left: 5%; margin-top: -4%; "> Warning </h4> </i> 
+	</div>
 	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding">
+					
+					<div align="center" class="control-group">
+						<h4> Please select at least one record(s)..!!  </h4>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+			</div>
+	
+		</form>
+	</div>
+</div>	
+	 -->
+
 <script type="text/javascript">
 
-var tableId=document.getElementById("chalanDetailsTable");
-if(tableId!=null){
-	for (var i = 0; i < table.rows.length; i++) {
-        for (var j = 0; j < table.rows[i].cells.length; j++)
-        table.rows[i].cells[j].onclick = function () {
-            tableText(this);
-        };
-    }
+function getAllCheckBoxes(){
+	
+	if(document.getElementById("getAll").checked==true){
+		
+		var iCount=document.getElementById("iCount").value;
+		var grandTotal=0;
+		if(iCount>0){
+			for (var i = 1; i <= iCount; i++) {
+				var qty = document.getElementById('tdId'+i).children[5].innerHTML.trim();
+				var rate = document.getElementById('tdId'+i).children[6].innerHTML.trim();
+				var gstper = document.getElementById('tdId'+i).children[7].innerHTML.trim();
+				var total=qty*rate;
+				var gst=(total*gstper)/100;
+				grandTotal+=total+gst;
+				alert(grandTotal);
+				var dataCount=document.getElementById('tdId'+i).children[1].rowSpan;
+				for(var j=1;j<dataCount;j++)
+				{
+					
+					var qty1 = document.getElementById('innerTR_'+i+"_"+j).children[1].innerHTML.trim()
+					var rate1 = document.getElementById('innerTR_'+i+"_"+j).children[2].innerHTML.trim()
+					var gstper1 = document.getElementById('innerTR_'+i+"_"+j).children[3].innerHTML.trim()
+					var innerTotal=(qty1*rate1)+(qty1*rate1*gstper1)/100;
+					grandTotal+=innerTotal;
+					alert(grandTotal);
+// 					var total1=qty1*rate1;
+// 					var gst1=(total1*gstper1)/100;
+// 					var innerTotal=total1+gst1;
+// 					grandTotal+=innerTotal;
+// 					alert(innerTotal);
+				}	
+			}
+			
+			document.getElementById('totalAmount').innerHTML=grandTotal;
+		}
+
+		document.getElementById('chalanSubmitBtn').disabled=false;		
+	}
+	else{
+		document.getElementById('chalanSubmitBtn').disabled=true;
+	}
+	
 }
 
-function tableText(tableCell) {
-    alert(tableCell.innerHTML);
+function selectChecks(id)
+{
+	
+	var iCount=document.getElementById("iCount").value;
+
 }
 
 function setClientId() {	
@@ -944,12 +1012,6 @@ function inWords()
     }
     var print =finalOutput +" Only";
     document.getElementById("print_inwords").innerHTML = print;
-}
-
-function selectChecks()
-{
-	
-	document.getElementById('chalanSubmitBtn').disabled=false;
 }
 
 </script>
