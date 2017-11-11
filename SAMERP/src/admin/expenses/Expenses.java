@@ -49,39 +49,48 @@ public class Expenses extends HttpServlet {
 			GenericDAO gd=new GenericDAO();
 			RequireData rd=new RequireData();
 			String singleDate=request.getParameter("getTableData");
-			String getDataExp="SELECT `exp_id`,`name`, `amount`, `payment_mode`, `reason`,"
-					+ "`expenses_type`.`expenses_type_name`, "
-					+ "`other_details` FROM `expenses_master`,`debtor_master`,`expenses_type` "
-					+ "WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id and"
-					+ " expenses_master.debtor_id=debtor_master.id and expenses_master.date='"+singleDate+"'";
-			
-			if(!gd.getData(getDataExp).isEmpty())
+			String getDataExp="SELECT exp_id,`date`, `name`, `amount`, `payment_mode`,"
+					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+					+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
+					+ "and expenses_master.debtor_id=debtor_master.id and "
+					+ "expenses_master.date='"+singleDate+"'";
+		
+		if(!gd.getData(getDataExp).isEmpty())
+		{
+			List demoList=gd.getData(getDataExp);
+			Iterator itr=demoList.iterator();
+			while(itr.hasNext())
 			{
-				List demoList=gd.getData(getDataExp);
-				Iterator itr=demoList.iterator();
-				while(itr.hasNext())
+				Object id=itr.next();
+				Object date=itr.next();
+				Object name=itr.next();
+				Object amount=itr.next();
+				Object payMode=itr.next();
+				Object expType=itr.next();
+				Object debtorType=itr.next();
+				Object cDetails=itr.next();
+				Object description=itr.next();
+				
+				out.print(date+","+name+","+amount+","+payMode+",");
+				
+				String vrmData=rd.getVRM(id.toString());
+				if(vrmData!=null)
 				{
-					Object id=itr.next();
-					out.print(itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+",");
-					
-					String vrmData=rd.getVRM(id.toString());
-					if(vrmData!=null)
-					{
-						out.print(vrmData.split(",")[0]+","+vrmData.split(",")[1]+","+vrmData.split(",")[2]+",");
-					}
-					else{
-						out.print("-,-,-,");
-					}
-					
-					out.print(itr.next()+",");
-					Object oDetails=itr.next();
-					if(oDetails==null)
-						out.print(oDetails+",");
-					else
-						out.print("-,");
-					
+					out.print(vrmData.split(",")[0]+","+vrmData.split(",")[1]+",");
 				}
+				else{
+					out.print("-,-,");
+				}
+				
+				out.print(expType+","+debtorType+",");
+				if(cDetails!=null)
+					out.print(cDetails+",");
+				else
+					out.print("-,");
+				out.print(description+",");
+				
 			}
+		}
 		}
 		
 		if(request.getParameter("addNewExpType")!=null)

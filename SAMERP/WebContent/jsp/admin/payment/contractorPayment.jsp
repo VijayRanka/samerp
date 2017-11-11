@@ -156,8 +156,6 @@ to {
 							<span class="icon"> <i class="icon-align-justify"></i>
 							</span>
 							<h5>Contractor Payment</h5>
-							<a href="#ViewDetails" data-toggle="modal" tabindex="-1"><span
-								class="label label-important">View</span></a>
 
 						</div>
 						<div class="widget-content nopadding">
@@ -398,50 +396,6 @@ to {
 			<%} %>
 		</div>
 </div>
-<%if(request.getParameter("ppid")!=null){ %>
- <div class="modal hide fade" id="ViewDetails" role="dialog"
-			style="width: 55%; margin-left: -28%;">
-			<div class="modal-dialog">
-
-				<!-- Modal content-->
-
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">CONTRACTOR PAYMENT DETAILS</h4>
-					</div>
-					<div class="modal-body">
-						<div class="widget-box">
-							<div class="widget-title">
-								<span class="icon"><i class="icon-th"></i></span>
-								<h5>Data table</h5>
-							</div>
-							<div class="widget-content nopadding">
-								<table class="table table-bordered data-table">
-									<thead>
-										<tr>
-											<th>Date</th>
-											<th>Particular</th>
-											<th>Credit</th>
-											<th>Debit</th>
-											<th>Balance</th>
-										</tr>
-									</thead>
-									<tbody>
-
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-
-			</div>
-		</div>
-		<%} %>
 
 		<div id="myModal" class="modal hide fade" role="dialog"
 			style="width: 55%; margin-left: -28%;">
@@ -493,7 +447,7 @@ to {
 							</div>
 
 							<div class="control-group">
-								<label class="control-label"> (-)Total Loading Charges:</label>
+								<label class="control-label"> (+)Total Loading Charges:</label>
 								<div class="controls">
 
 									<div class="input-prepend"> 
@@ -753,7 +707,7 @@ to {
 							
 							document.getElementById("loadingCount").innerHTML=myData[3];
 						    document.getElementById("totalLoadCharge").value=myData[4];
-						    totalAmount= +myData[2] + +myData[4];
+						    totalAmount= +myData[2] - +myData[4];
 							}
 						else
 							{

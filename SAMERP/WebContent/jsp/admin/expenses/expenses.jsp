@@ -279,7 +279,6 @@ display: none;}
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Payment Mode</th>
-                  <th>Vehicle</th>
                   <th>Vehicle Reading</th>
                   <th>Qty In Litres(s)</th>
                   <th>Expenses Type</th>
@@ -310,11 +309,9 @@ display: none;}
                   if(vrmData!=null){%>
                   <td style="text-align: center" ><%=vrmData.split(",")[0] %></td>
                   <td style="text-align: center"><%=vrmData.split(",")[1] %></td>
-                  <td style="text-align: center"><%=vrmData.split(",")[2] %></td>
                   <%}else{ %>
                   <td style="text-align: center" >-</td>
                   <td style="text-align: center">-</td>
-                   <td style="text-align: center">-</td>
                   <%} %>
                  
                   <td style="text-align: center"><%=getexpitr.next() %></td>
@@ -391,23 +388,6 @@ display: none;}
 	                     <input type="checkbox" id="revertCheck" onclick="onUamount()">Reverted
 	         			</div>
 	        	</div>
-	        	<script type="text/javascript">
-	        	function onUamount()
-	        	{
-	        		if(document.getElementById('uAmount').readOnly==false)
-	        			{
-	        			document.getElementById('uAmount').value=firstAmount;
-	        			document.getElementById('oldAmount').value="0";
-	        			document.getElementById('uAmount').readOnly=true;
-	        			}
-	        		else
-	        			{
-	        			window.firstAmount=document.getElementById('uAmount').value;
-	        			document.getElementById('oldAmount').value=firstAmount;
-	        			document.getElementById('uAmount').readOnly=false;
-	        			}
-	        		
-	        	}</script>
 	        	<div class="control-group">
 	                  <label class="control-label">Payment Mode</label>
 	                  <div class="controls">
@@ -575,6 +555,22 @@ display: none;}
 		</div>
 
 <script>
+function onUamount()
+{
+	if(document.getElementById('uAmount').readOnly==false)
+		{
+		document.getElementById('uAmount').value=firstAmount;
+		document.getElementById('oldAmount').value="0";
+		document.getElementById('uAmount').readOnly=true;
+		}
+	else
+		{
+		window.firstAmount=document.getElementById('uAmount').value;
+		document.getElementById('oldAmount').value=firstAmount;
+		document.getElementById('uAmount').readOnly=false;
+		}
+	
+}
 function displayBank(id, id1){
 	var x = document.getElementById(id);
 	var y = document.getElementById(id1);
