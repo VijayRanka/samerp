@@ -275,7 +275,7 @@ public class ContractorPayment extends HttpServlet {
 		else{
 			if(!contCharges.isEmpty())
 			{
-					out.print(","+contCharges.size());
+					out.print("1,0,0,"+contCharges.size());
 					Iterator itr2=contCharges.iterator();
 					while(itr2.hasNext())
 					{
