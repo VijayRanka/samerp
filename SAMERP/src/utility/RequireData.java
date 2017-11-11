@@ -614,6 +614,36 @@ public class RequireData
 	
 	// vijay start
 	
+		public List getPettyCashDetailsDash()
+		{
+			SysDate sd=new SysDate();
+			String demo="SELECT petty_cash_details.credit,petty_cash_details.debit,debtor_master.type,petty_cash_details"
+					+ ".balance FROM `petty_cash_details`,debtor_master WHERE debtor_master.id=petty_cash_details."
+					+ "debtor_id AND date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'";
+			if(!gd.getData(demo).isEmpty())
+			{
+				List demoList=gd.getData(demo);
+				return demoList;
+			}
+			
+			return null;
+		}
+			public List getbadDetailsDash()
+			{
+				SysDate sd=new SysDate();
+				String demo="SELECT account_details.acc_aliasname,bank_account_details."
+						+ "credit,bank_account_details.debit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance"
+						+ " FROM `bank_account_details`, debtor_master,account_details WHERE account_details.acc_id=bank_account_details"
+						+ ".bid AND debtor_master.id=bank_account_details.debter_id"
+						+ " AND date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'";
+				if(!gd.getData(demo).isEmpty())
+				{
+					List demoList=gd.getData(demo);
+					return demoList;
+				}
+				
+				return null;
+			}
 			
 			public List getMaterialSupplyData()
 			{
@@ -639,8 +669,8 @@ public class RequireData
 			public List getExpensesDetailsDash()
 			{
 				SysDate sd=new SysDate();
-				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`, `reason`,"
-						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details` FROM "
+				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
+						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
 						+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
 						+ "and expenses_master.debtor_id=debtor_master.id and expenses_master.date='"+sd.todayDate().toString().split("-")[2]+"-"+sd.todayDate().toString().split("-")[1]+"-"+sd.todayDate().toString().split("-")[0]+"' order by date";
 				List demoList=gd.getData(demo);
@@ -661,12 +691,12 @@ public class RequireData
 			public String getVRM(String expId)
 			{
 				String returnString="";
-				String demo="SELECT vehicle_details.vehicle_aliasname,vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
+				String demo="SELECT vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
 						+ "vehicle_reading_master,vehicle_details WHERE vehicle_reading_master.vehicle_id=vehicle_details.vehicle_id "
 						+ "and vehicle_reading_master.expenses_master_id="+expId;
 				if(!gd.getData(demo).isEmpty())
 					{
-					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1)+","+gd.getData(demo).get(2);
+					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1);
 						return returnString;
 					}
 				else 

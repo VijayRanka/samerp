@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
+import utility.SysDate;
 
 public class Sales extends HttpServlet {
 
@@ -27,26 +28,170 @@ public class Sales extends HttpServlet {
 		GenericDAO gd = new GenericDAO();
 		RequireData rd11=new RequireData();
 		
-		String searchVehicle = request.getParameter("searchVehicle");		
+		String searchVehicle = request.getParameter("searchVehicle");
+		
+		//ajax for geting update data
+		
+		if(request.getParameter("getUpdateData")!=null){
+			
+			String id=request.getParameter("id");
+			String getUpdDetails="SELECT sale_master.date, client_details.client_organization_name,sale_master.chalan_no, "
+					+ "sale_master.debtor_id,sale_master.vehicle_details,sale_master.vehicle_deposit FROM `sale_master`,client_details WHERE "
+					+ "client_details.client_id=sale_master.client_id AND sale_master.id="+id;
+			if(!gd.getData(getUpdDetails).isEmpty())
+			{
+				out.print("1,");
+				List demoList=gd.getData(getUpdDetails);
+				Iterator itr=demoList.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object orgName=itr.next();
+					Object chalanNo=itr.next();
+					Object debtorId=itr.next();
+					Object vehDetails=itr.next();
+					Object vehDeposit=itr.next();
+					out.print(date+","+orgName+","+chalanNo+",");
+					
+					if(debtorId.toString().equals("0"))
+					{					
+						out.print(vehDetails);
+					}
+					else
+					{
+						String getDebtorType="SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtorId;
+						out.print(gd.getData(getDebtorType).get(0).toString().split("_")[1]);	
+					}
+					out.print(","+vehDeposit);	
+				}	
+			}			
+		}
+		if(request.getParameter("UpdateData")!=null)
+		{
+			int getstatus=0;
+			boolean status=false;
+			String uId=request.getParameter("uId");
+			String uChalan=request.getParameter("uSelfChalan");
+			String oldAmount=request.getParameter("oldAmount");
+			String uAmount=request.getParameter("uAmount");
+			String vehicleNo=request.getParameter("uVehDetails");
+			
+			boolean amountStatusClear=false;
+			RequireData rd=new RequireData();
+			SysDate sd=new SysDate();
+			String todDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
+			
+			
+			//update the data
+				//int demoId=Integer.parseInt(gd.getData(expUpdId).get(0).toString());
+				String query2="";
+				if(!oldAmount.equals("0"))
+				{
+					if(Integer.parseInt(uAmount)-Integer.parseInt(oldAmount)<0)
+						{
+							boolean successFirst=rd.pCashEntry(todDate, 0, Integer.parseInt(oldAmount), "1");
+							if(successFirst)
+							{
+								String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type="
+										+ "(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE "
+										+ "vehicle_details.vehicle_number='"+vehicleNo+"')";
+								String debtorId=gd.getData(getDebtorId).get(0).toString();
+								boolean successSecond=rd.pCashEntry(todDate, Integer.parseInt(uAmount), 0, debtorId);
+								if(successSecond)
+								{
+									request.setAttribute("status", "Updated Petty Cash And Expense");
+								}
+							query2="UPDATE `sale_master` SET `chalan_no`='"+uChalan+"',`vehicle_deposit`="+uAmount+" WHERE sale_master.id="+uId;
+							}
+							
+						}
+					else if(Integer.parseInt(uAmount)-Integer.parseInt(oldAmount)>0)
+						{
+							
+								int pcStatus=rd.checkPCStatus(Integer.parseInt(uAmount));
+								if(pcStatus==0)
+								{
+									request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+								
+								}
+								else if(pcStatus==-1)
+								{
+									request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+								}
+								else if(pcStatus==1)
+								{
+									amountStatusClear=true;
+								}
+								
+							if(amountStatusClear)
+							{
+								boolean successFirst=rd.pCashEntry(todDate, 0, Integer.parseInt(oldAmount), "1");
+								if(successFirst)
+								{
+									String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type="
+											+ "(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE "
+											+ "vehicle_details.vehicle_number='"+vehicleNo+"')";
+									String debtorId=gd.getData(getDebtorId).get(0).toString();
+									boolean successSecond=rd.pCashEntry(todDate, Integer.parseInt(uAmount), 0, debtorId);
+									if(successSecond)
+									{
+										request.setAttribute("status", "Updated Petty Cash And Expense");
+									}
+								}
+								query2="UPDATE `sale_master` SET `chalan_no`='"+uChalan+"',`vehicle_deposit`="+uAmount+" WHERE sale_master.id="+uId;
+
+								
+							}
+							
+						}
+				}
+				else{
+					
+					query2="UPDATE `sale_master` SET `chalan_no`='"+uChalan+"' WHERE sale_master.id="+uId;
+					System.out.println(query2);
+				}
+				
+				getstatus=gd.executeCommand(query2);
+				System.out.println("after upd");
+				if(getstatus!=0)
+				{
+					status=true;
+					System.out.println("Successfully Updated In Sale");
+					request.setAttribute("status", "Data Updated Successfully");
+				}
+
+				if(status)
+				{
+					request.setAttribute("status", "Updated Successfully");
+					RequestDispatcher reqDis=request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
+					reqDis.forward(request, response);
+				}
+				
+		}
+			
 
 		// ajax to search vehicle		
-		if (searchVehicle != null){ 
+		if (searchVehicle != null)
+		{ 
 			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT'";
 			List list = gd.getData(query);			
 			Iterator itr = list.iterator();
-			while (itr.hasNext()) {
+			while (itr.hasNext()) 
+			{
 				out.print(itr.next() + ",");
 			}
 		}
 		
 		// ajax to search product
-		if(request.getParameter("q")!=null){
+		if(request.getParameter("q")!=null)
+		{
 			
 			String query="SELECT `id`,`name`,`gstper` FROM `product_master` WHERE `name` LIKE '"+request.getParameter("q")+"%'";
 			List details = gd.getData(query);
 
 			Iterator itr = details.iterator();
-			while (itr.hasNext()) {
+			while (itr.hasNext()) 
+			{
 				out.print(itr.next() + ",");
 			}
 		}
@@ -61,7 +206,6 @@ public class Sales extends HttpServlet {
 			String vehicleNo=request.getParameter("vehicleNo");
 			String vehicleDeposit=request.getParameter("deposit");
 			String po_no=request.getParameter("poNo");
-			String helperChargers=request.getParameter("helperChargers");
 			String vehicleReading=request.getParameter("reading");
 			String vehicleAmount=request.getParameter("amount");
 			String counter =request.getParameter("counter");
@@ -78,9 +222,6 @@ public class Sales extends HttpServlet {
 			}
 			if(vehicleDeposit.equals("")){
 				vehicleDeposit="0";
-			}
-			if(helperChargers.equals("")){
-				helperChargers="0";
 			}
 			if(vehicleReading.equals("")){
 				vehicleReading="0";
@@ -127,13 +268,13 @@ public class Sales extends HttpServlet {
 				if(!debtorId.isEmpty()){
 					System.out.println(debtorId.get(0));
 					insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
-							+ " `debtor_id`,`vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
-									+ "'"+date+"','"+chalan_no+"',"+loading_charges+","+debtorId.get(0)+","+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+							+ " `debtor_id`,`vehicle_deposit`, `po_no`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
+									+ "'"+date+"','"+chalan_no+"',"+loading_charges+","+debtorId.get(0)+","+vehicleDeposit+",'"+po_no+"',"+count+");";
 				}
 				else{
 					insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
-							+ " `vehicle_details`, `vehicle_deposit`, `po_no`, `helper_charges`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
-									+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+vehicleDeposit+",'"+po_no+"',"+helperChargers+","+count+");";
+							+ " `vehicle_details`, `vehicle_deposit`, `po_no`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
+									+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+vehicleDeposit+",'"+po_no+"',"+count+");";
 				}
 				
 				gd.executeCommand(insertQuery);

@@ -16,6 +16,51 @@ public class demou {
 		RequireData rd=new RequireData();
 		SysDate sd=new SysDate();
 		
+		
+		String singleDate="2017-11-08";
+		String getDataExp="SELECT exp_id,`date`, `name`, `amount`, `payment_mode`,"
+					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+					+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
+					+ "and expenses_master.debtor_id=debtor_master.id and "
+					+ "expenses_master.date='"+singleDate+"'";
+		
+		if(!gd.getData(getDataExp).isEmpty())
+		{
+			List demoList=gd.getData(getDataExp);
+			Iterator itr=demoList.iterator();
+			while(itr.hasNext())
+			{
+				Object id=itr.next();
+				Object date=itr.next();
+				Object name=itr.next();
+				Object amount=itr.next();
+				Object payMode=itr.next();
+				Object expType=itr.next();
+				Object debtorType=itr.next();
+				Object cDetails=itr.next();
+				Object description=itr.next();
+				
+				System.out.print(date+","+name+","+amount+","+payMode+",");
+				
+				String vrmData=rd.getVRM(id.toString());
+				if(vrmData!=null)
+				{
+					System.out.print(vrmData.split(",")[0]+","+vrmData.split(",")[1]+",");
+				}
+				else{
+					System.out.print("-,-,");
+				}
+				
+				System.out.print(expType+","+debtorType+",");
+				if(cDetails!=null)
+					System.out.print(cDetails+",");
+				else
+					System.out.print("-,");
+				System.out.print(description+",");
+				
+			}
+		}
+		
 		/*String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
 		List getDateExistDetailList=gd.getData(getDateExistDetail);
 		Iterator traverseDS=getDateExistDetailList.iterator();
@@ -34,11 +79,11 @@ public class demou {
 			}
 			
 		}*/
-		System.out.println(rd.getProductListContractor("1"));
+		/*System.out.println(rd.getProductListContractor("1"));
 		List demoList=rd.getProductListContractor("1");
 		  List countList=(List)demoList.get(0);
 		  System.out.println(countList);
-		
+		*/
 		/*String startDate="2017-10-29";
 		String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 		String contId="1";
