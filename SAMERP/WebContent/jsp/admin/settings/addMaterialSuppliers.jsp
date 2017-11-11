@@ -65,7 +65,7 @@
     to {bottom: 0; opacity: 0;}
 }
 </style>
-<body onload="setFocusToTextBox()">
+<body onload="myFunction()">
 
 <!--Header-part-->
 <div id="header">
@@ -204,8 +204,7 @@
 									<%
 									String product,RawMaterial;
 										while (itr.hasNext()) {
-												String id1 = itr.next().toString();		
-											
+												String id1 = itr.next().toString();																							
 									%>
 									<tr class="gradeX">
 										<td id="<%=id1%>"><%=count%></td>
@@ -223,7 +222,7 @@
 										<%} %>
 														
 										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> |
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td>
+										<a href="/SAMERP/AddSupplyMaterial?deleteId=<%=id1%>">Delete</a></td>
 									</tr>
 									<%
 										count++;
@@ -248,7 +247,7 @@
 		style="width: 50%; margin-left: -28%;">
 		<div class="modal-dialog">
 
-			<!-- Modal content-->
+		<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -260,10 +259,7 @@
 						<div class="control-group">
 							<label class="control-label">Suppliers Business Name:</label>
 							<div class="controls">
-								<input type="hidden" id="Updateid" name="Updateid" />
-								<input type="hidden" id="old_sup_alias" name="old_sup_alias" />
-								<input type="hidden" id="update_material_type" name="material_type" />
-								 
+								<input type="hidden" id="Updateid" name="Updateid" /> 
 								<input type="text" name="suppbusinesname" id="update_business_name"
 									class="span4" placeholder="Suppliers-Business Name"
 									onkeyup="this.value=this.value.toUpperCase()"
@@ -299,13 +295,13 @@
 							</div>
 						</div>
 						<div class="control-group">
-									<label class="control-label">Opening Balance :</label>
-									<div class="controls">
-										<input type="number" name="openingbalance" id="opening_balance" class="span4"
-											placeholder="Opening Balance" pattern="[0-9]*" required/>
-									</div>
-								</div>
-						
+							<label class="control-label">Suppliers Opening Balance:</label>
+							<div class="controls">
+								<input type="text" name="opening_balance" id="opening_balance"
+									class="span4" placeholder="Suppliers Opening Balance" pattern="[0-9]*"
+									required />
+							</div>
+						</div>
 						
 						<div class="form-actions" style="padding-left: 450px">
 							<button type="submit" name="save" class="btn btn-success">Update</button>
@@ -318,90 +314,6 @@
 
 		</div>
 	</div>
-	
-	
-	<%
-		String error = "";
-
-		if (request.getAttribute("error") != null) {
-			error = request.getAttribute("error").toString();
-		}
-	%>
-
-		<div class="modal fade" id="Insert_time" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 style="color: red;" class="modal-title">Error</h4>
-						</div>
-						<div class="modal-body">
-							<form class="form-horizontal" action="#" method="post" name="form4">
-								<div class="form-group">
-									<div class="widget-content nopadding">
-										<div class="control-group">
-		
-											<h4>Supplier Business Name already Exist...</h4>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<input type="button" class="btn btn-primary" id="submitbtn"
-											data-dismiss="modal" value="OK" />
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-				<div class="modal hide fade" id="DeleteConfirmBox" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title"><span style="color:red">Confirm Delete</span></h4>
-						</div>
-						
-						<div class="modal-body">
-							<div class="alert alert-warning" style="margin-top: 18px;">
-			  				<i class="icon-exclamation-sign" style="font-size: 2em;"></i> &nbsp; <strong style="font-size: 15px;">Are you sure you want to Delete this record?</strong>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<form action="/SAMERP/AddSupplyMaterial">
-							<input type="hidden" id="deleteId" name="delete">
-								<a href=""></a><input type="submit" class="btn btn-primary" id="ok" value="OK" name="ok" />
-								<input type="button" class="btn btn-danger" data-dismiss="modal" on value="Cancel"/>
-							</form>
-						</div>
-					</div>	
-				</div>
-			</div>
-			
-			<div class="modal fade" id="error-msg-delete" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h4 style="color: red;" class="modal-title">Error</h4>
-							</div>
-							<div class="modal-body">
-								<form class="form-horizontal" action="#" method="post" name="form4">
-									<div class="form-group">
-										<div class="widget-content nopadding">
-											<div class="control-group">
-			
-												<h4> Cannot delete the Selected record as it is linked with some other records..!! </h4>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<input type="button" class="btn btn-primary" id="submitbtn"
-												data-dismiss="modal" value="OK" />
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-
 
 	<!--end-main-container-part-->
 
@@ -414,56 +326,31 @@
 <!--end-Footer-part-->
 
 <script type="text/javascript">
-
-/* function searchName(id1) {
-	alert(id1);
+/* 
+function searchName(id1) {
+	
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			alert(demoStr);
+			//"WebContent/jsp/admin/settings/addMaterialSuppliers.jsp"
 			document.getElementById("Updateid").value = demoStr[0];
 			document.getElementById("update_business_name").value = demoStr[1];
 			document.getElementById("update_suppname").value = demoStr[2];
 			document.getElementById("update_address").value = demoStr[3];
 			document.getElementById("update_contact").value = demoStr[4];
-			document.getElementById("opening_balancee").value = demoStr[5];		
+			document.getElementById("opening_balance").value = demoStr[5];
 					
 			}
 		};
 	xhttp.open("POST","/SAMERP/AddSupplyMaterial?Updateid="+id1, true);
 	xhttp.send();
 	
+	
 }
  */
-
- function searchName(id1) {
- 	
- 	var xhttp;
- 	xhttp = new XMLHttpRequest();
- 	xhttp.onreadystatechange = function() {
- 		if (this.readyState == 4 && this.status == 200) {
- 			
- 			var demoStr = this.responseText.split(",");
- 			document.getElementById("Updateid").value = demoStr[0];
- 			document.getElementById("update_business_name").value = demoStr[1];
- 			document.getElementById("update_suppname").value = demoStr[2];
- 			document.getElementById("update_address").value = demoStr[3];
- 			document.getElementById("update_contact").value = demoStr[4];
- 			document.getElementById("opening_balance").value = demoStr[5];
- 			
- 			alert(demoStr[1]);
- 			
- 			}
- 		};
- 	xhttp.open("POST","/SAMERP/AddSupplyMaterial?Updateid="+id1, true);
- 	xhttp.send();
- 	
- 	
- }
- 
 function myFunction() {
     var x = document.getElementById("snackbar")
     x.className = "show";
@@ -471,28 +358,20 @@ function myFunction() {
 }
 
 function showModal(){
-	var error = <%= request.getAttribute("error") %>;
 	var someVarName = localStorage.getItem("someVarName");
-		if(error==2)
+	if(someVarName>0)
 		{
-			$('#Insert_time').modal('show');
+			$('#myModal').modal('show');
 		}
-		else if(error==3)
-		{
-			
-			$('#error-msg-delete').modal('show');	
-		}
-		localStorage.setItem('someVarName', null);
+	localStorage.setItem('someVarName', null);
 }
 
 function setFocusToTextBox()
 {
-	document.getElementById("update_business_name").focus();	
-	showModal(); 
-	myFunction();
-	 
+	document.getElementById("update_business_name").focus();
+	showModal();   	
+	 myFunction();
 }
-
 
 
 </script>
@@ -519,16 +398,5 @@ function setFocusToTextBox()
 <script src="/SAMERP/config/js/matrix.popover.js"></script> 
 <script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
 <script src="/SAMERP/config/js/matrix.tables.js"></script> 
-
-<script type="text/javascript">
-
-
-function getDeleteId(id1)
-{
-	document.getElementById("deleteId").value=id1;
-	
-}
-</script>
 </body>
-
 </html>

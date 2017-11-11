@@ -2,6 +2,9 @@ package admin.settings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 @WebServlet("/AddHandLoan")
 public class AddHandLoan extends HttpServlet {
@@ -101,7 +105,47 @@ public class AddHandLoan extends HttpServlet {
 			String delete_query="";
 		}
 		
+		if(request.getParameter("updateHandLoanDetails")!=null)
+		{
+			String updateId=request.getParameter("updateHandLoanDetails");
+			System.out.println("up:"+updateId);
+			RequireData rq=new RequireData();
+			List list=rq.selectHandLoanDetails(updateId);
+			System.out.println("Data List:"+list);
+			Iterator itr=list.iterator();
+			while(itr.hasNext())
+			{
+				out.println(itr.next()+",");
+			}
+					
+		}
 		
+		if(request.getParameter("handloan")!=null)
+		{ 
+			int status=0;
+				
+			String name=request.getParameter("name");				
+			String mobileNo=request.getParameter("mobileno");							
+			String date=request.getParameter("requiredate");	
+			String amount=request.getParameter("paidAmt");				
+			String paymode=request.getParameter("payMode");
+			String chequeNo=request.getParameter("chequeNo");
+			String aliasname="HL_"+name.replace(" ", "_")+"_"+mobileNo;	
+
+			String updateId=request.getParameter("Updateid");
+			System.out.println("update id:"+updateId);
+			
+			String update_query="UPDATE handloan_master,handloan_details SET handloan_master.name='"+name+"',handloan_master.mob_no='"+mobileNo+"', handloan_details.date='"+date+"',handloan_details.credit='"+amount+"',handloan_details.mode='"+paymode+"',handloan_details.particulars='"+chequeNo+"' WHERE handloan_master.id=handloan_details.handloan_id AND handloan_details.handloan_id='"+updateId+"'";
+			System.out.println("update:"+update_query);
+			 status=gd.executeCommand(update_query);
+			if(status==0)
+			{
+				System.out.println("Updated Successfully ");
+				request.setAttribute("status", "Updated  Successfully");
+			}
+			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addHandLoan.jsp");
+			rd.forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
