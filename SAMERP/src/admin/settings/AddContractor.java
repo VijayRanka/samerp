@@ -23,6 +23,7 @@ public class AddContractor extends HttpServlet {
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
 		GenericDAO gd=new GenericDAO();
+		String id=request.getParameter("delete");
 
 		if(request.getParameter("submit")!=null)
 		{
@@ -65,7 +66,7 @@ public class AddContractor extends HttpServlet {
 						if(i>0)
 						{
 							System.out.println("Inserted Successfully");
-							request.setAttribute("status1", "Inserted Successfully");
+							request.setAttribute("status", "Inserted Successfully");
 						}
 						else
 						{
@@ -87,21 +88,20 @@ public class AddContractor extends HttpServlet {
 				
 		}
 		
-		if(request.getParameter("deleteId")!=null)
-		{
-			String id=request.getParameter("deleteId");
-			String query="delete from `contractor_master` where `id`="+id+"";
-			int i=gd.executeCommand(query);
+		if(id==null)
+		{		
+			String query="DELETE FROM contractor_master WHERE contractor_master.id='"+id+"'";
+			int i=gd.executeCommand(query);			
+			if(i==1)
+			{
+				System.out.println("Deleted Successfully");				
+			}
 			
-			if(i>0)
-			{
-				System.out.println("Deleted Successfully");
-				request.setAttribute("status1", "Deleted Successfully");
-			}
-			else
-			{
-				System.out.println("Please try Again");
-			}
+		}
+		else
+		{
+			
+			request.setAttribute("error", "3");
 			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addContractor.jsp");
 			rd.forward(request, response);
 		}
@@ -109,7 +109,6 @@ public class AddContractor extends HttpServlet {
 		if(request.getParameter("Updateid")!=null)
 		{
 			String RowId=request.getParameter("Updateid");
-			System.out.println("id 1:"+RowId);
 			RequireData rd=new RequireData();
 			List demoList=rd.updateContactorDetails(RowId);
 			Iterator itr=demoList.iterator();
@@ -122,8 +121,7 @@ public class AddContractor extends HttpServlet {
 		if(request.getParameter("save")!=null)
 		{
 			
-			String id=request.getParameter("Updateid");
-			System.out.println("id 2:"+id);
+			String id1=request.getParameter("Updateid");
 			String update_name=request.getParameter("name");
 			String update_contact_no=request.getParameter("contact_no");
 			String update_address=request.getParameter("address");
@@ -153,14 +151,13 @@ public class AddContractor extends HttpServlet {
 				{
 					/*String debtor_query="update `debtor_master` set `type`='"+up_aliasname+"'";
 					gd.executeCommand(debtor_query);*/
-					String query="update `contractor_master` set `name`='"+update_name+"',`contact_no`='"+update_contact_no+"',`address`='"+update_address+"',`due_balance`='"+update_duebalance+"',`aliasname`='"+up_aliasname+"' where `id`="+id+"";
-					System.out.println("update:"+query);
+					String query="update `contractor_master` set `name`='"+update_name+"',`contact_no`='"+update_contact_no+"',`address`='"+update_address+"',`due_balance`='"+update_duebalance+"',`aliasname`='"+up_aliasname+"' where `id`="+id1+"";
 					int i=gd.executeCommand(query);
 					
 					if(i>0)
 					{
 						System.out.println("updated Successfully");
-						request.setAttribute("status1", "update Successfully");
+						request.setAttribute("status", "update Successfully");
 						
 					}
 					else

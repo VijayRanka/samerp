@@ -133,7 +133,7 @@
             <div class="control-group">
               <label class="control-label">Opening Balance:</label>
               <div class="controls">
-                <input type="text" name="opening_balance" id="opening_balanceid" class="span6" placeholder="Opening Balance" pattern="[0-9]*" required/>
+                <input type="text" name="opening_balance" class="span6" placeholder="Opening Balance" pattern="[0-9]*" required/>
               </div>
             </div>
             
@@ -179,7 +179,15 @@
                   <td style="text-align: center"><%=i %><% i++; %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
-                  <td style="text-align: center"><%=itr.next() %></td>
+                  
+                  <% Object contactno2= itr.next(); 
+										if(contactno2==null){
+										%>
+											<td style="text-align: center">-</td>
+										<%}else{ %>
+											<td style="text-align: center"><%=contactno2 %></td>
+										<%} %>
+                  
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
@@ -310,7 +318,7 @@ function searchOrganization(id) {
 			document.getElementById("contact_no2").value = demoStr[4];
 			document.getElementById("email_id").value = demoStr[5];
 			document.getElementById("opening_balanceid").value = demoStr[6];
-			
+			alert(demoStr[6]);
 			}
 		};
 	xhttp.open("POST","/SAMERP/AddOrganization?organization_id="+id, true);

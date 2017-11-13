@@ -4,6 +4,22 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+ <servlet>
+    <servlet-name>JcbPocReport</servlet-name>
+    <servlet-class>admin.JcbPocWork.JcbPocReport</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JcbPocReport</servlet-name>
+    <url-pattern>/JcbPocReport.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>JcbPocPaymentReceived</servlet-name>
+    <servlet-class>admin.JcbPocWork.JcbPocPaymentReceived</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JcbPocPaymentReceived</servlet-name>
+    <url-pattern>/JcbPocPaymentReceived.do</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>AddCustomer</servlet-name>
     <servlet-class>admin.settings.AddCustomer</servlet-class>

@@ -1,6 +1,3 @@
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.text.DateFormat"%>
 <%@page import="utility.SysDate"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
@@ -80,8 +77,8 @@
 <!--start-top-serch-->
 
 <div id="search">
-<% if(request.getAttribute("status")!=null){ %>
-<div id="snackbar"><%=request.getAttribute("status")%></div>
+<% if(request.getAttribute("status1")!=null){ %>
+<div id="snackbar"><%=request.getAttribute("status1")%></div>
 <%} %>
 
   <button type="submit" class="tip-bottom">LOGOUT</button>
@@ -122,7 +119,14 @@
 								<div class="form-group">
 									<div class="widget-content nopadding">
 				
-				   
+										<%
+											String totalR = "";
+											if (request.getParameter("ppid") != null) {
+												totalR = rq.getTotalRemaining(request.getParameter("ppid"));
+											}
+										%>
+				
+				
 										<div class="control-group" style="">
 											<label class="control-label">Name: </label>
 											<div class="controls">
@@ -141,10 +145,11 @@
 											<label class="control-label">Date :</label>
 											<div class="controls">
 												<%
-						                		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-						                		String requiredDate = df.format(new Date()).toString();
+													SysDate date1 = new SysDate();
+													String[] demo1 = date1.todayDate().split("-");
+													String reqdate = demo1[2] + "-" + demo1[1] + "-" + demo1[0];
 												%>
-												<input type="date" name="date" value="<%=requiredDate%>">
+												<input type="date" name="date" value="<%=reqdate%>">
 											</div>
 										</div>
 				
@@ -169,7 +174,7 @@
 											<label class="control-label">Cheque Number : </label>
 											<div class="controls">
 												<input type="text" placeholder="Cheque Number" name="chequeNo"
-													id="chequeno" />
+													id="chequeNo" />
 											</div>
 										</div>
 				
@@ -255,8 +260,7 @@
 										<td><%=itr.next()%></td>
 										
 										<td><a href="#update" data-toggle="modal"
-											onclick="searchName(<%=id1%>)">Update</a> / <a
-											href="/SAMERP/AddHandLoan?deleteId=<%=id1%>">Delete</a></td>
+											onclick="searchName(<%=id1%>)">Update</a> </td>
 									</tr>
 									<%
 										count++;
@@ -286,43 +290,61 @@
 				<div class="form-group">
 					<div class="widget-content nopadding">
 
+						<%
+							String total = "";
+							if (request.getParameter("ppid") != null) {
+								total = rq.getTotalRemaining(request.getParameter("ppid"));
+							}
+						%>
+
+
 						<div class="control-group" style="">
 							<label class="control-label">Name: </label>
 							<div class="controls">
-							<input type="hidden" id="Updateid" name="Updateid" />
-								<input type="text" name="name"  id="update_name" placeholder="Name" class="span3" onkeyup="this.value=this.value.toUpperCase()" required />
+							<input type="hidden" name="Updateid" id="Updateid">
+								<input type="text" name="name" id="update_name" placeholder="Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 							</div>
 						</div>
 						
 						<div class="control-group" style="">
 							<label class="control-label">Mobile No: </label>
 							<div class="controls">
-								<input type="text" name="mobileno" id="update_mobno" placeholder="Mobile No" class="span3" maxlength="10" required />
+								<input type="text" name="mobileno" id="update_mobileno" placeholder="Mobile No"	maxlength="10"  pattern="[0-9]*" required />
 							</div>
 						</div>
-						
-						<div class="control-group">
-											<label class="control-label">Date :</label>
-											<div class="controls">
 
-												<input type="date" name="requiredate" id="updatedate1" class="span3">
-											</div>
-										</div>
-				
+						<div class="control-group">
+							<label class="control-label">Date :</label>
+							<div class="controls">
+								<%
+									SysDate date= new SysDate();
+									String[] demo = date.todayDate().split("-");
+									String rqdate = demo[2] + "-" + demo[1] + "-" + demo[0];
+								%>
+								<input type="date" name="date" id="update_date" value="<%=rqdate%>" required>
+							</div>
+						</div>
 
 						<div class="control-group" style="">
 							<label class="control-label">Amount : </label>
 							<div class="controls">
-								<input type="text" name="paidAmt" id="update_amount" placeholder="Amount" 	class="span3" required />
+								<input type="text" name="paidAmt" id="update_amount" placeholder="Amount" 	pattern="[0-9]*" required />
+							</div>
+						</div>
+						
+						<div class="control-group" style="">
+							<label class="control-label">AliasName: </label>
+							<div class="controls">
+								<input type="text" name="aliasname" id="update_aliasname" placeholder="AliasName" 	pattern="[a-z A-Z _ 0-9]*" required />
 							</div>
 						</div>
 
 						<div class="control-group" style="">
 							<label class="control-label">Payment Mode : </label>
 							<div class="controls">
-								<input type="radio" value="Cash" style="margin-left: 1%;" name="payMode"  id="update_payid" onclick="displayBank()" checked="checked" />Cash
-								 <input type="radio" value="Cheque" style="margin-left: 1%;" name="payMode"	id="update_payid" onclick="displayBank('bankDetails', 'chequeDetails')" />
-								Cheque <input type="radio" value="Transfer"	style="margin-left: 1%;" name="payMode"	id="update_payid" onclick="displayBank('bankDetails')" /> Transfer
+								<input type="radio" value="Cash" style="margin-left: 1%;"  id="payid" name="payMode" readonly onclick="bankDetails()" checked="checked" />Cash
+								 <input type="radio" value="Cheque" style="margin-left: 1%;"  id="payid" name="payMode"	readonly onclick="bankDetails('bankDetails1', 'chequeDetails1')" />
+								Cheque <input type="radio" value="Transfer"	style="margin-left: 1%;"  id="payid" name="payMode"	readonly onclick="bankDetails('bankDetails')" /> Transfer
 							</div>
 						</div>
 
@@ -330,7 +352,7 @@
 							style="display: none;">
 							<label class="control-label">Cheque Number : </label>
 							<div class="controls">
-								<input type="text" placeholder="Cheque Number" name="chequeNo" class="span3"
+								<input type="text" placeholder="Cheque Number" readonly name="chequeNo"
 									id="chequeNo" />
 							</div>
 						</div>
@@ -339,11 +361,11 @@
 						<div class="control-group" id="bankDetails" style="display: none;">
 							<label class="control-label">Bank Details : </label>
 							<div class="controls" style="width: 44%;">
-								<select name="bankInfo" id="bankInfo" class="span3">
+								<select name="bankInfo" id="bankInfo" readonly>
 									<option value="">Select Bank Account</option>
 									<%
 										List List = rq.getBank();
-										Iterator itr5 = List.iterator();
+										Iterator itr5 = List1.iterator();
 										while (itr5.hasNext()) {
 									%>
 									<option value="<%=itr5.next()%>"><%=itr5.next()%></option>
@@ -353,13 +375,6 @@
 								</select>
 							</div>
 						</div>
-						
-						<div class="control-group" style="">
-							<label class="control-label">AliasName: </label>
-							<div class="controls">
-								<input type="text" name="aliasname" id="aliasname" placeholder="AliasName" class="span3"	required />
-							</div>
-						</div>
 
 					</div>
 				</div>
@@ -367,9 +382,8 @@
 				<input type="hidden" name="supid2" id="supid2" />
 
 				<div class="modal-footer">
-					<input type="submit" id="handloanbtn" name="handloan"
-						class="btn btn-primary" value="Submit" /> 
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					<input type="submit" name="update" class="btn btn-primary" value="Submit" style="margin-right: 10px;"/>
+					 <a href="/SAMERP/index.jsp" class="btn btn-danger" data-dismiss="modal">Cancel</a>
 				</div>
 
 			</form>
@@ -380,35 +394,34 @@
 	<script type="text/javascript">
 	
 	function searchName(id1) {
-
+		
 		var xhttp;
 		xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
-				//"WebContent/jsp/admin/settings/addHandLoan.jsp"
+				
 				var demoStr = this.responseText.split(",");
+			
 				document.getElementById("Updateid").value = demoStr[0];
 				document.getElementById("update_name").value = demoStr[1];
-				document.getElementById("update_mobno").value = demoStr[2];
-				var date = new Date(demoStr[3]);
+				document.getElementById("update_mobileno").value = demoStr[2];
 				
-			    var d = date.getDate();
-			    var m = date.getMonth() + 1;
-			    var y = date.getFullYear();
-			    var getd=y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
-				
-				
-				alert(getd);
-				document.getElementById("updatedate1").value = getd ;
+				var date=new Date(demoStr[3]);
+				 var d = date.getDate();
+				    var m = date.getMonth() + 1;
+				    var y = date.getFullYear();
+				    var getdate=('' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d));
+				    
+				    document.getElementById("update_date").value = getdate;
+				    
 				document.getElementById("update_amount").value = demoStr[4];
-				document.getElementById("update_payid").value = demoStr[5];
-				document.getElementById("chequeNo").value = demoStr[6];
-				document.getElementById("aliasname").value = demoStr[7];
-				
+				document.getElementById("update_aliasname").value = demoStr[5];
+				document.getElementById("payid").value = demoStr[6];
+				document.getElementById("chequeNo").value = demoStr[7];
 				
 				}
 			};
-		xhttp.open("POST","/SAMERP/AddHandLoan?updateHandLoanDetails="+id1, true);
+		xhttp.open("POST","/SAMERP/AddHandLoan?Updateid="+id1, true);
 		xhttp.send();
 		
 		
@@ -443,6 +456,58 @@
 		}
 	}
 
+function showModal(){
+	var someVarName = localStorage.getItem("someVarName");
+	
+	var error = document.getElementById("error").value;
+
+	if(error==2)
+	{
+		$('#Insert_time').modal('show');
+	}	
+	
+	if(someVarName>0)
+		{
+			$('#update').modal('show');
+		}
+	localStorage.setItem('someVarName', null);
+}
+
+function setFocusToTextBox()
+{
+	document.getElementById("updatecname").focus();
+	showModal();   	
+	 myFunction();
+}
+
+function bankDetails(id, id1){
+	var x = document.getElementById(id);
+	var y = document.getElementById(id1);
+	
+	if( x==null ){
+		document.getElementById("chequeNo1").required=false;
+		document.getElementById("bankInfo1").required=false;
+		
+		document.getElementById("chequeDetails1").style.display = "none";
+		document.getElementById("bankDetails1").style.display = "none";
+		
+	}
+	else if(x!=null && y!=null){
+		x.style.display = "block";
+		y.style.display = "block";
+		
+		document.getElementById("chequeNo1").required=true;
+		document.getElementById("bankInfo1").required=true;
+	}
+	else{	
+
+		document.getElementById("chequeNo1").required=false;
+		document.getElementById("chequeDetails1").style.display = "none";
+		
+		x.style.display = "block";
+		document.getElementById("bankInfo1").required=true;
+	}
+}
 
 
 </script>

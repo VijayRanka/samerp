@@ -91,7 +91,7 @@ transition: all 0.3s;
  */
 
 </style>
-<body onload="myFunction()">
+<body onload="setFocusToTextBox()">
 
 <!--Header-part-->
 <div id="header">
@@ -206,7 +206,8 @@ transition: all 0.3s;
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
-                  <td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="searchName(<%=accId %>)" data-toggle="modal"><i class="icon-pencil"></i></a>|<a class="tip" title="Delete" href="/SAMERP/AddAccountDetails?deleteId=<%=accId%>"><i class="icon-remove"></i></a></td>
+                  <td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="searchName(<%=accId %>)" data-toggle="modal"><i class="icon-pencil"></i></a>|
+                  <a onclick="getDeleteId(<%=accId%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
                 </tr>
                 <%}} %>
               </tbody>
@@ -282,6 +283,59 @@ transition: all 0.3s;
   </div>
 </div>
 
+<div class="modal fade" id="DeleteConfirmBox" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Error</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" action="/SAMERP/AddAccountDetails" method="post" name="form4">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+														<input type="hidden" id="deleteid" name="delete"/>
+														
+												<h4> Are you sure want to delete the selected row...!!</h4>
+											</div>
+										</div>
+										<div class="modal-footer">			
+															
+											<input type="submit" class="btn btn-primary" id="submitbtn" value="OK" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+			<div class="modal fade" id="error-msg-delete" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Error</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" action="#" method="post" name="form4">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+			
+												<h4> Cannot delete the Selected record as it is linked with some other records..!! </h4>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<input type="button" class="btn btn-primary" id="submitbtn"
+												data-dismiss="modal" value="OK" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
 <!--Footer-part-->
 
 <div class="row-fluid">
@@ -290,28 +344,6 @@ transition: all 0.3s;
 
 <!--end-Footer-part-->
 
-<script src="/SAMERP/config/js/excanvas.min.js"></script> 
-<script src="/SAMERP/config/js/jquery.min.js"></script>
- 
-<script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
-<script src="/SAMERP/config/js/bootstrap.min.js"></script>
-<script src="/SAMERP/config/js/jquery.flot.min.js"></script> 
-<script src="/SAMERP/config/js/jquery.flot.resize.min.js"></script> 
-<script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
-<script src="/SAMERP/config/js/fullcalendar.min.js"></script> 
-<script src="/SAMERP/config/js/matrix.js"></script> 
-<script src="/SAMERP/config/js/matrix.dashboard.js"></script> 
-<script src="/SAMERP/config/js/jquery.gritter.min.js"></script> 
-<script src="/SAMERP/config/js/matrix.interface.js"></script> 
-<script src="/SAMERP/config/js/matrix.chat.js"></script> 
-<script src="/SAMERP/config/js/jquery.validate.js"></script> 
-<script src="/SAMERP/config/js/matrix.form_validation.js"></script> 
-<script src="/SAMERP/config/js/jquery.wizard.js"></script> 
-<script src="/SAMERP/config/js/jquery.uniform.js"></script> 
-<script src="/SAMERP/config/js/select2.min.js"></script> 
-<script src="/SAMERP/config/js/matrix.popover.js"></script> 
-<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
-<script src="/SAMERP/config/js/matrix.tables.js"></script> 
 <script>
 function myFunction() {
 	document.getElementById("bankName").focus();
@@ -319,6 +351,37 @@ function myFunction() {
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
+
+
+
+function showModal(){
+	var someVarName = localStorage.getItem("someVarName");
+
+	var error=<%=request.getAttribute("error") %>;
+
+	if(error==2)
+	{
+		$('#Insert_time').modal('show');
+	}
+	else if(error==3)
+	{
+		$('#error-msg-delete').modal('show');
+	}
+	if(someVarName>0)
+		{
+			$('#updateAccDetails').modal('show');
+		}
+	localStorage.setItem('someVarName', null);
+}
+
+function setFocusToTextBox()
+{
+	document.getElementById("bankName").focus();
+	showModal();   	
+	 myFunction();
+}
+
+
 function searchName(id) {
 	var xhttp;
 	xhttp = new XMLHttpRequest();
@@ -339,6 +402,36 @@ function searchName(id) {
 }
 
 </script>
+
+<script src="/SAMERP/config/js/excanvas.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
+<script src="/SAMERP/config/js/bootstrap.min.js"></script>
+<script src="/SAMERP/config/js/jquery.flot.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.flot.resize.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
+<script src="/SAMERP/config/js/fullcalendar.min.js"></script> 
+<script src="/SAMERP/config/js/matrix.js"></script> 
+<script src="/SAMERP/config/js/matrix.dashboard.js"></script> 
+<script src="/SAMERP/config/js/jquery.gritter.min.js"></script> 
+<script src="/SAMERP/config/js/matrix.interface.js"></script> 
+<script src="/SAMERP/config/js/matrix.chat.js"></script> 
+<script src="/SAMERP/config/js/jquery.validate.js"></script> 
+<script src="/SAMERP/config/js/matrix.form_validation.js"></script> 
+<script src="/SAMERP/config/js/jquery.wizard.js"></script> 
+<script src="/SAMERP/config/js/jquery.uniform.js"></script> 
+<script src="/SAMERP/config/js/select2.min.js"></script> 
+<script src="/SAMERP/config/js/matrix.popover.js"></script> 
+<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
+<script src="/SAMERP/config/js/matrix.tables.js"></script> 
+
+
+<script type="text/javascript">
+	function getDeleteId(id1)
+	{
+	 document.getelementById("deleteid").value=id1;
+	}
+	 </script>
 
 
 </body>
