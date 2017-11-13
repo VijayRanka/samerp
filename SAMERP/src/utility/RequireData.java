@@ -43,7 +43,7 @@ public class RequireData
 				}
 				
 				public List getVehicleList() {
-					String Vehicle_query="SELECT `vehicle_id`,`vehicle_aliasname` FROM `vehicle_details`";
+					String Vehicle_query="SELECT `vehicle_id`,`vehicle_aliasname`FROM `vehicle_details` WHERE `vehicle_type`='JCB' OR `vehicle_type`='POCLAIN'";
 					List VehicleList=gd.getData(Vehicle_query);
 					return VehicleList;
 				}
@@ -60,6 +60,11 @@ public class RequireData
 				public List getJcbPocBillDetail() {
 					String JcbPocBillDetail_query="SELECT jcbpoc_invoice.id,customer_master.intcustid,customer_master.custname,jcbpoc_invoice.date,jcbpoc_invoice.bill_amount FROM `jcbpoc_invoice`,`customer_master` WHERE `jcbpoc_invoice`.status=0 AND `customer_master`.intcustid=`jcbpoc_invoice`.cust_id ORDER BY jcbpoc_invoice.id DESC";
 					List JcbPocWorkList=gd.getData(JcbPocBillDetail_query);
+					return JcbPocWorkList;
+				}
+				public List getJcbPocPaymentList() {
+					String JcbPocWorkDetail_query="SELECT `id`,`date`, `description`, `amount`, `pay_mode`,(SELECT account_details.acc_aliasname FROM account_details WHERE jcbpoc_payment.bank_id=account_details.acc_id)AS alias, `cheque_no` FROM `jcbpoc_payment`,account_details WHERE jcbpoc_payment.status=0 ORDER BY `jcbpoc_payment`.`id` DESC";
+					List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
 					return JcbPocWorkList;
 				}
 			//--himanshu end
@@ -206,12 +211,6 @@ public class RequireData
 				return List;
 			}
 			
-			public List getBank()
-			{
-				String query = "SELECT `acc_id`, `acc_aliasname` FROM `account_details`";
-				List List = gd.getData(query);
-				return List;
-			}
 			
 			public List getVehicleDetails(){
 				String q = "SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_type='TRANSPORT'";
@@ -987,6 +986,12 @@ public class RequireData
 				return debterId;
 			}
 			
+			public List getBank()
+			{
+				String query = "SELECT `acc_id`, `acc_aliasname` FROM `account_details`";
+				List List = gd.getData(query);
+				return List;
+			}
 			
 			//-- common methods end
 	
