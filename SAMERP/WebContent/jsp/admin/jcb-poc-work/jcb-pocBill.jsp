@@ -259,8 +259,9 @@
 						for (; demoStr[i];) {
 							text += "<option id="+demoStr[i];
 							i++;
-							text += " value="+demoStr[i]+">"
-									+ demoStr[i] + "</option>";
+							text += " value="+demoStr[i]+">";
+							i++
+							text += demoStr[i] + "</option>";
 							i++;
 						}
 						document.getElementById("browsers").innerHTML = text;
