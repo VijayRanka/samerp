@@ -181,8 +181,8 @@
   							<td> <%=i %></td>
 	                      	<td id="<%=vehicleId%>"><%=vehicleType%></td>
 	                        <td><%=vehicleNumber%></td>
-	                        <td> <a href="/SAMERP/AddVehicles?deleteid=<%=vehicleId%>" >Delete</a> / <a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)">Update</a></td>
-                     	</tr>
+	                        <td><a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)">Update</a>|
+                     	<a onclick="getDeleteId(<%=vehicleId%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td></tr>
              <%
                      	i++;
                  }
@@ -262,6 +262,58 @@
 		</div>
 	</div>
 
+            <div class="modal fade" id="DeleteConfirmBox" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Error</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" action="/SAMERP/AddVehicles" method="post" name="form4">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+														<input type="hidden" id="deleteid" name="delete"/>
+														
+												<h4> Are you sure want to delete the selected row...!!</h4>
+											</div>
+										</div>
+										<div class="modal-footer">			
+															
+											<input type="submit" class="btn btn-primary" id="submitbtn" value="OK" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+			<div class="modal fade" id="error-msg-delete" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Error</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" action="#" method="post" name="form4">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+			
+												<h4> Cannot delete the Selected record as it is linked with some other records..!! </h4>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<input type="button" class="btn btn-primary" id="submitbtn"
+												data-dismiss="modal" value="OK" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
             
 
 
@@ -306,8 +358,13 @@ function searchName(id) {
 
 function showModal(){
 	var someVarName = localStorage.getItem("someVarName");
-	 
-	if(someVarName>0)
+	var error=<%=request.getAttribute("error")%>;
+	
+	if(error==2)
+	{
+		$('#error-msg-delete').modal('show');	
+	}
+	else if(someVarName>0)
 	{
 		$('#update').modal('show');
 		
@@ -395,5 +452,13 @@ function getSetSelect(id,value)
 <script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
 <script src="/SAMERP/config/js/fullcalendar.min.js"></script>
+<script type="text/javascript">
+	function getDeleteId(id1)
+	{
+		
+	 document.getElementById("deleteid").value=id1;
+	 
+	}
+	 </script>
 </body>
 </html>
