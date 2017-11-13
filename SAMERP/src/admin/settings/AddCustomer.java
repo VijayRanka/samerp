@@ -16,33 +16,16 @@ import dao.General.GenericDAO;
 import utility.RequireData;
 import utility.SysDate;
 
-/**
- * Servlet implementation class AddCustomer
- */
 @WebServlet("/AddCustomer")
 public class AddCustomer extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AddCustomer() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out=response.getWriter();
 		GenericDAO dao = new GenericDAO();
 		
 		String Customer_query="SELECT `intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate` FROM `customer_master` where `intcustid`="+request.getParameter("q");
-		System.out.println(Customer_query);
 		List CustomerList=dao.getData(Customer_query);
 		System.out.println(CustomerList);
-		
 		Iterator itr = CustomerList.iterator();
 		while (itr.hasNext()) {
 			out.print(itr.next() + ",");
@@ -50,9 +33,7 @@ public class AddCustomer extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// Add Customer
@@ -157,7 +138,7 @@ public class AddCustomer extends HttpServlet {
 		if (checkContactNo != null) {
 			query="SELECT `contactno` FROM `customer_master` WHERE `contactno`="+checkContactNo;
 			details=dao.getData(query);
-			System.out.println(details+"<<<<<<<<<<");
+			
 			Iterator itr = details.iterator();
 			while (itr.hasNext()) {
 				out.print(itr.next() + "~");
@@ -167,7 +148,7 @@ public class AddCustomer extends HttpServlet {
 			String checkCustid = request.getParameter("checkCustid");
 			query="SELECT `contactno` FROM `customer_master` WHERE `contactno`="+checkContactNoUpdate+" AND `intcustid`<>"+checkCustid;
 			details=dao.getData(query);
-			System.out.println(details+"<<<<<<<<<<");
+			
 			Iterator itr = details.iterator();
 			while (itr.hasNext()) {
 				out.print(itr.next() + "~");
@@ -275,15 +256,12 @@ public class AddCustomer extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
-	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out=response.getWriter();
 		GenericDAO dao = new GenericDAO();
 		
 		String Customer_query="DELETE FROM `customer_master` WHERE `intcustid`="+request.getParameter("q");
-		System.out.println(Customer_query);
+		
 		int Customer_result = dao.executeCommand(Customer_query);
 
 		if (Customer_result == 1) {

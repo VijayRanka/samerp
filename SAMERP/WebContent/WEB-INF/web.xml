@@ -4,13 +4,21 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <servlet-name>CheckInfo</servlet-name>
-    <servlet-class>admin.checkInfo.CheckInfo</servlet-class>
+ <servlet>
+    <servlet-name>JcbPocReport</servlet-name>
+    <servlet-class>admin.JcbPocWork.JcbPocReport</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CheckInfo</servlet-name>
-    <url-pattern>/checkInfo</url-pattern>
+    <servlet-name>JcbPocReport</servlet-name>
+    <url-pattern>/JcbPocReport.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>JcbPocPaymentReceived</servlet-name>
+    <servlet-class>admin.JcbPocWork.JcbPocPaymentReceived</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JcbPocPaymentReceived</servlet-name>
+    <url-pattern>/JcbPocPaymentReceived.do</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>AddCustomer</servlet-name>
@@ -199,5 +207,13 @@
   <servlet-mapping>
     <servlet-name>PTCash</servlet-name>
     <url-pattern>/PTCash</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CheckInfo</servlet-name>
+    <servlet-class>admin.checkInfo.CheckInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckInfo</servlet-name>
+    <url-pattern>/checkInfo</url-pattern>
   </servlet-mapping>
 </web-app>

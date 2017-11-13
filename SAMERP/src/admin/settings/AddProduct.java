@@ -23,6 +23,7 @@ public class AddProduct extends HttpServlet {
 		
 		PrintWriter out=response.getWriter();
 		response.setContentType("text/html");
+		String product_id=request.getParameter("delete");
 		
 		GenericDAO gd=new GenericDAO();
 		RequireData rq=new RequireData();
@@ -69,22 +70,21 @@ public class AddProduct extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
-		if(request.getParameter("deleteId")!=null)
+		if(product_id==null)
 		{
-			String id=request.getParameter("deleteId");
-			String query1="DELETE FROM product_master WHERE id="+id+"";
-			int i=gd.executeCommand(query1);
-			
-			if(i>0)
+				
+			String query1="DELETE FROM product_master WHERE product_master.id='"+product_id+"'";
+			int i=gd.executeCommand(query1);			
+			if(i==1)
 			{
 				System.out.println("deleted Successfully");
-				request.setAttribute("status", "Deleted Successfully");
-				
-			}
-			else
-			{
-				System.out.println("please try Again");
-			}
+				request.setAttribute("status", "Deleted Successfully");				
+			}			
+		}
+		else
+		{
+			
+			request.setAttribute("error", "3");
 			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addProduct.jsp");
 			rd.forward(request, response);
 		}

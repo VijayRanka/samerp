@@ -247,9 +247,10 @@ function CustomerSearchProject(str) {
 				var i = 0
 				for (; demoStr[i];) {
 					text += "<option id="+demoStr[i];
-			i++;
-			text += " value="+demoStr[i]+">"
-							+ demoStr[i] + "</option>";
+					i++;
+					text += " value="+demoStr[i]+">";
+					i++
+					text += demoStr[i] + "</option>";
 					i++;
 				}
 				document.getElementById("browsersProject").innerHTML = text;

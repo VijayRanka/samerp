@@ -36,7 +36,29 @@ public class JcbPocDetails extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		GenericDAO dao = new GenericDAO();
 		
+		String query = "";
+		int result=0;
+
+		List details = null;
+		
+		String jcbPocSelectList = request.getParameter("jcbPocSelectList");
+		
+		if (jcbPocSelectList != null) {
+			query="SELECT vehicle_details.vehicle_aliasname,customer_master.`custname`,jcbpoc_master.bucket_hr,"
+					+ "jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel FROM `jcbpoc_master`,"
+					+ "customer_master,vehicle_details WHERE "
+					+ "jcbpoc_master.status=0 AND jcbpoc_master.intcustid=customer_master.intcustid AND "
+					+ "jcbpoc_master.intvehicleid=vehicle_details.vehicle_id AND jcbpoc_master.data='"+jcbPocSelectList+"' ORDER BY jcbpoc_master.intjcbpocid DESC";
+			details=dao.getData(query);
+			Iterator itr = details.iterator();
+			while (itr.hasNext()) {
+				out.print(itr.next() + "~");
+
+			}
+		}
 	}
 
 	/**
@@ -216,7 +238,7 @@ public class JcbPocDetails extends HttpServlet {
 			}
 		}
 		if (CustomerSearch != null){
-			query="SELECT `intcustid`,`custname` FROM `customer_master` WHERE `custname` LIKE '"+CustomerSearch+"%' UNION SELECT `intcustid`,`contactno` FROM customer_master WHERE `contactno` LIKE '"+CustomerSearch+"%'";
+			query="SELECT `intcustid`,`custname`,`contactno` FROM `customer_master` WHERE `custname` LIKE '"+CustomerSearch+"%' UNION SELECT `intcustid`,`contactno`,`custname` FROM customer_master WHERE `contactno` LIKE '"+CustomerSearch+"%'";
 			details = dao.getData(query);
 
 			Iterator itr = details.iterator();

@@ -376,6 +376,17 @@
                		<th style="text-align: right; ">Total Amount</th>
                		<td id="totalAmount" style="text-align: center; ">  </td>
                </tr>
+               
+               <tr>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<td>  </td>
+               		<th style="text-align: right; ">Total Amount with GST</th>
+               		<td id="totalAmountGST" style="text-align: center; ">  </td>
+               </tr>               
               </tbody>
             </table>
            </form>
@@ -744,15 +755,16 @@ function getAllCheckBoxes(){
 		
 		var iCount=document.getElementById("iCount").value;
 		var grandTotal=0;
+		var tAmount=0;
+		var tGst=0;
 		if(iCount>0){
 			for (var i = 1; i <= iCount; i++) {
 				var qty = document.getElementById('tdId'+i).children[5].innerHTML.trim();
 				var rate = document.getElementById('tdId'+i).children[6].innerHTML.trim();
 				var gstper = document.getElementById('tdId'+i).children[7].innerHTML.trim();
-				var total=qty*rate;
-				var gst=(total*gstper)/100;
-				grandTotal+=total+gst;
-				alert(grandTotal);
+				tAmount+=qty*rate;
+				tGst+=(qty*rate*gstper)/100;
+				grandTotal+=(qty*rate)+(qty*rate*gstper)/100;
 				var dataCount=document.getElementById('tdId'+i).children[1].rowSpan;
 				for(var j=1;j<dataCount;j++)
 				{
@@ -761,22 +773,23 @@ function getAllCheckBoxes(){
 					var rate1 = document.getElementById('innerTR_'+i+"_"+j).children[2].innerHTML.trim()
 					var gstper1 = document.getElementById('innerTR_'+i+"_"+j).children[3].innerHTML.trim()
 					var innerTotal=(qty1*rate1)+(qty1*rate1*gstper1)/100;
+					tGst+=(qty1*rate1*gstper1)/100;
+					tAmount+=qty1*rate1;
 					grandTotal+=innerTotal;
-					alert(grandTotal);
-// 					var total1=qty1*rate1;
-// 					var gst1=(total1*gstper1)/100;
-// 					var innerTotal=total1+gst1;
-// 					grandTotal+=innerTotal;
-// 					alert(innerTotal);
 				}	
 			}
 			
-			document.getElementById('totalAmount').innerHTML=grandTotal;
+			document.getElementById('totalAmount').innerHTML=tAmount;
+			document.getElementById('totalAmountGST').innerHTML=grandTotal;
+			inWords();
 		}
+		alert(tGST);
 
 		document.getElementById('chalanSubmitBtn').disabled=false;		
 	}
 	else{
+		document.getElementById('totalAmount').innerHTML="";
+		document.getElementById('totalAmountGST').innerHTML="";
 		document.getElementById('chalanSubmitBtn').disabled=true;
 	}
 	
@@ -886,7 +899,7 @@ function snackBar() {
 
 function inWords()
 {
-    var str = document.getElementById("totalamt").innerHTML;
+    var str = document.getElementById("totalAmount").innerHTML;
     var splt = str.split("");
     var rev = splt.reverse();
     var once = ['Zero', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine'];

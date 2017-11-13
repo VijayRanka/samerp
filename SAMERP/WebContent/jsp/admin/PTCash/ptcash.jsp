@@ -122,9 +122,9 @@
 		<!--breadcrumbs-->
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" class="tip-bottom"
+				<a href="/SAMERP/dashboard.jsp" class="tip-bottom"
 					data-original-title="Go to Home"><i class="icon-home"> </i>
-					Home</a> <a href="#" class="current">PT Cash</a>
+					Home</a> <a href="#" class="current">Petty Cash</a>
 			</div>
 		</div>
 		<!--End-breadcrumbs-->
@@ -132,7 +132,18 @@
 			<hr>
 			<div class="row-fluid">
 				<div class="span12">
-					<div class="widget-box">
+				
+		<div class="widget-box">
+          <div class="widget-title">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#tab1">Petty Cash</a></li>
+              <li><a data-toggle="tab" href="#tab2">Hand Loan Bank</a></li>
+            </ul>
+          </div>
+          <div class="widget-content tab-content">
+            <div id="tab1" class="tab-pane active">
+            <!-- tab 1 start -->
+									<div class="widget-box">
 					<div class="widget-title">
 							<span class="icon"> <i class="icon-align-justify"></i>
 							</span>
@@ -181,21 +192,22 @@
 						<table id="HandLoan-details-table" style="margin-top: -10px;">
 															
 								<tr>
-								<div>
-								<label class="control-label">Hand Loan:</label>
+								
+								<td><label class="control-label">Hand Loan:</label></td>
 								<div class="controls controls-row">
-           								 <input type="text"  list="getName" autocomplete="off" placeholder="HandLoan Name" id="hlName,0" name="hlName,0" <%if(request.getAttribute("hName")!=null) {%> value="<%=request.getAttribute("hName") %>" <%} %> onfocus="searchName(this.value)" style="width: 170px;margin-right: 10px;" class="span2">
+           								 <td><input type="text"  list="getName" autocomplete="off" placeholder="HandLoan Name" id="hlName,0" name="hlName,0" <%if(request.getAttribute("hName")!=null) {%> value="<%=request.getAttribute("hName") %>" <%} %> onfocus="searchName(this.value)" style="width: 170px;margin-left:15px;margin-right: 10px;" class="span2"></td>
            								 <datalist id="getName"></datalist>
-           								 <input type="text" name="hlAmt,0" id="hlAmt,0" <%if(request.getAttribute("amt")!=null) {%> value="<%=request.getAttribute("amt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;
-           								 <span class="badge badge-inverse" onclick="InsertRow()"><i class="icon-plus"></i></span>
+           								 <td><input type="text" name="hlAmt,0" id="hlAmt,0" <%if(request.getAttribute("amt")!=null) {%> value="<%=request.getAttribute("amt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;</td>
+           								 <td><span class="badge badge-inverse" onclick="InsertRow()"><i class="icon-plus"></i></span></td>
+           								 <td>
+           								 <div id="removeH" style="display: none;">
            								 <span class="badge badge-inverse" onclick="RemoveRow()"><i class="icon-minus"></i></span>
-           								 <a href="#paymentEntry" data-toggle="modal">
+           								 </div></td>
+           								 <td><a href="#paymentEntry" data-toggle="modal">
 											<span class="badge badge-inverse">Add HandLoan</span>
-										 </a>
-           								 <button type="button" value="Add More" onclick="" class="add-more-button">+</button>
-           								 <button type="button" value="Remove" style="display: none;" onclick="" class="remove-button">-</button>
-        						  </div>
-        						  </div>      						  
+										 </a></td>
+           							</div>
+     						  
         						  
 										<!-- <div class="controls" style="display:none;">
 											<select name="entName" id="entName">
@@ -209,18 +221,21 @@
 							<table id="bank-details-table" style="margin-top: -10px;">
 															
 								<tr>
-								<div>
-								<label class="control-label">Bank Name:</label>
+								
+								<td><label class="control-label">ATM Cash:</label></td>
 								<div class="controls controls-row">
-           								 <input type="text"  list="getBankName" autocomplete="off" placeholder="Bank Name" id="bName,0" name="bName,0" <%if(request.getAttribute("bName")!=null) {%> value="<%=request.getAttribute("bName") %>" <%} %> onfocus="searchBankName(this.value)" style="width: 170px;margin-right: 10px;" class="span2">
+           								<td> <input type="text"  list="getBankName" autocomplete="off" placeholder="Bank Name" id="bName,0" name="bName,0" <%if(request.getAttribute("bName")!=null) {%> value="<%=request.getAttribute("bName") %>" <%} %> onfocus="searchBankName(this.value)" style="width: 170px;margin-left:15px;margin-right: 10px;" class="span2"></td>
            								 <datalist id="getBankName"></datalist>
-           								 <input type="text" name="bAmt,0" id="bAmt,0" <%if(request.getAttribute("bAmt")!=null) {%> value="<%=request.getAttribute("bAmt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;
-           								 <span class="badge badge-inverse" onclick="InsertBankRow()"><i class="icon-plus"></i></span>
-           								 <span class="badge badge-inverse" onclick="RemoveBankRow()"><i class="icon-minus"></i></span>
-           								 <button type="button" value="Add More" onclick="" class="add-more-button">+</button>
-           								 <button type="button" id="removeBank" value="Remove" style="display: none;" onclick="" class="remove-button">-</button>
-        						  </div>
-        						  </div>      						  
+           								 <td><input type="text" name="bAmt,0" id="bAmt,0" <%if(request.getAttribute("bAmt")!=null) {%> value="<%=request.getAttribute("bAmt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;</td>
+           								 
+           								 
+           								 	 <td><span class="badge badge-inverse" onclick="InsertBankRow()"><i class="icon-plus"></i></span></td>
+	           								 <td><div id="removeBank" style="display: none;">
+	           								 	<span class="badge badge-inverse"  onclick="RemoveBankRow()"><i class="icon-minus"></i></span>
+	           								 </div></td>
+	           							
+           						 	</div>
+        						  
         						  
 								</tr>
 						</table>
@@ -228,11 +243,9 @@
 						
 	
 								<div class="control-group">
-									<label class="control-label"> ATM Cash Amount:</label>
 									<div class="controls">
-										<input type="text" id="atmCash" name="amount" class="span4" placeholder="Amount" pattern="[0-9]*" />
-										<input type="text" class="span4" name="count" id="count" placeholder="Total" value="0" readonly />
-										<input type="text" class="span4" name="bankCount" id="bankCount" placeholder="Total" value="0" readonly />
+										<input type="hidden" class="span4" name="count" id="count" placeholder="Total" value="0" readonly />
+										<input type="hidden" class="span4" name="bankCount" id="bankCount" placeholder="Total" value="0" readonly />
 									</div>
 								</div>
 
@@ -251,17 +264,15 @@
 							</form>
 						</div>
 					</div>
-				</div>
-			</div>
-			
-			
-			<div class="row-fluid">
+					
+					
+								<div class="row-fluid">
 				<div class="span14">
 
 					<div class="widget-box">
 						<div class="widget-title">
 							<span class="icon"><i class="icon-th"></i></span>
-							<h5>Contractor Details</h5>
+							<h5>Petty Cash Details</h5>
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">
@@ -269,27 +280,58 @@
 									<tr>
 										<th>Sr.No</th>
 										<th>Date</th>
-										<th>Hand Loan</th>
-										<th>Bank Name</th>
-										<th>ATM Cash Amount</th>
-										<th>Pay Received</th>
-										<th>Total</th>
-										<th>Action</th>
+										<th>Particulars</th>
+										<th>Debit</th>
+										<th>Credit</th>
+										<th>Balance</th>
 									</tr>
 								</thead>
 								<%
-								
-								
+									RequireData rd=new RequireData();
+									List pettyDetails=rd.getPettyCashDetails();
+									Iterator itr=pettyDetails.iterator();
+									int count=1;
 								%>
 								<tbody>
-							
+								<% 
+								while(itr.hasNext())
+								{itr.next();%>
+									<tr>
+										<td><%=count %></td>
+										<td><%=itr.next()%></td>
+										<td><%=itr.next()%></td>
+										<td><%=itr.next()%></td>
+										<td><%=itr.next()%></td>
+										<td><%=itr.next()%></td>
+									</tr>
+								<%count++; }%>
 								</tbody>
 							</table>
 						</div>
 					</div>
 
 				</div>
+			</div>            
+            
+            <!-- tab 1 end -->  
+            </div>
+            <div id="tab2" class="tab-pane">
+             <!-- tab 2 start -->
+             
+             <!-- tab 2 start -->
+            </div>
+            
+          </div>
+        </div>
+				
+				
+				
+
+				</div>
 			</div>
+			
+			
+
 
 		</div>
 	</div>
@@ -516,8 +558,8 @@ function InsertBankRow()
     var cell3 = row.insertCell(2);
     
   
-    cell1.innerHTML = "<input type='text'  list='getBankName' autocomplete='off' placeholder='Bank Name' id='bName,"+nameCount+"' name='bName,"+nameCount+"' onfocus='searchBankName(this.value)' class='span2' style='width: 170px;margin-top: 10px;margin-left:200px;margin-right: 10px;'>";
-    cell2.innerHTML = "<input type='text' style='width:83px;margin-top: 10px;' name='hlAmt,"+nameCount+"' id='hlAmt"+nameCount+"' placeholder='Amount' />";
+    cell2.innerHTML = "<input type='text'  list='getBankName' autocomplete='off' placeholder='Bank Name' id='bName,"+bankNameCount+"' name='bName,"+bankNameCount+"' onfocus='searchBankName(this.value)' class='span2' style='width: 170px;margin-top: 10px;margin-left:15px;margin-right: 10px;'>";
+    cell3.innerHTML = "<input type='text' style='width:83px;margin-top: 10px;' name='bAmt,"+bankNameCount+"' id='bAmt"+bankNameCount+"' placeholder='Amount' />";
     bankNameCount++; 
     bankCounter++;
     document.getElementById("bankCount").value=bankCounter;
@@ -542,6 +584,7 @@ function RemoveBankRow() {
 
 
 function InsertRow() {
+	document.getElementById("removeH").style="display:block";
 	var insertTable = document.getElementById("HandLoan-details-table");
     var Row = insertTable.rows;
     var numRows = Row.length;
@@ -551,8 +594,8 @@ function InsertRow() {
     var cell3 = row.insertCell(2);
     
   
-    cell1.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='HandLoan Name' id='hlName,"+nameCount+"' name='hlName,"+nameCount+"' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-top:10px;margin-left:200px;margin-right: 10px;'>";
-    cell2.innerHTML = "<input type='text' style='width:83px;margin-top:10px;' name='bAmt,"+nameCount+"' id='bAmt,"+nameCount+"' placeholder='Amount' />";
+    cell2.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='HandLoan Name' id='hlName,"+nameCount+"' name='hlName,"+nameCount+"' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-top:10px;margin-left:15px;margin-right: 10px;'>";
+    cell3.innerHTML = "<input type='text' style='width:83px;margin-top:10px;' name='hlAmt,"+nameCount+"' id='hlAmt,"+nameCount+"' placeholder='Amount' />";
     nameCount++; 
     counter++;
     document.getElementById("count").value=counter;
@@ -567,6 +610,11 @@ function RemoveRow() {
     }
     nameCount--;
     counter--;
+    if(counter==0)
+    {
+    	document.getElementById("removeH").style="display:none";
+    	
+    }
     document.getElementById("count").value=counter;
 }
 
@@ -626,23 +674,21 @@ function searchBankName(valu)
 			
 			xhttp = new XMLHttpRequest();
 			
-			xhttp.onreadystatechange = function() {
+			xhttp.onreadystatechange = function() 
+			{
 				
-				if (this.readyState == 4 && this.status == 200) {
+				if (this.readyState == 4 && this.status == 200) 
+				{
 					
 					var demoStr = this.responseText;
 					//alert(demoStr);
 					document.getElementById("getBankName").innerHTML = demoStr;
-					}
-				};
+				}
+			};
 			xhttp.open("POST", "/SAMERP/PTCash?findBankName="+valu, true);
 			xhttp.send();
 					
 }
-
-
-
-
 </script>
 
 
