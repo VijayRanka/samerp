@@ -24,10 +24,8 @@ public class AddCustomer extends HttpServlet {
 		GenericDAO dao = new GenericDAO();
 		
 		String Customer_query="SELECT `intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate` FROM `customer_master` where `intcustid`="+request.getParameter("q");
-		System.out.println(Customer_query);
 		List CustomerList=dao.getData(Customer_query);
 		System.out.println(CustomerList);
-		
 		Iterator itr = CustomerList.iterator();
 		while (itr.hasNext()) {
 			out.print(itr.next() + ",");
@@ -140,7 +138,7 @@ public class AddCustomer extends HttpServlet {
 		if (checkContactNo != null) {
 			query="SELECT `contactno` FROM `customer_master` WHERE `contactno`="+checkContactNo;
 			details=dao.getData(query);
-			System.out.println(details+"<<<<<<<<<<");
+			
 			Iterator itr = details.iterator();
 			while (itr.hasNext()) {
 				out.print(itr.next() + "~");
@@ -150,7 +148,7 @@ public class AddCustomer extends HttpServlet {
 			String checkCustid = request.getParameter("checkCustid");
 			query="SELECT `contactno` FROM `customer_master` WHERE `contactno`="+checkContactNoUpdate+" AND `intcustid`<>"+checkCustid;
 			details=dao.getData(query);
-			System.out.println(details+"<<<<<<<<<<");
+			
 			Iterator itr = details.iterator();
 			while (itr.hasNext()) {
 				out.print(itr.next() + "~");
@@ -263,7 +261,7 @@ public class AddCustomer extends HttpServlet {
 		GenericDAO dao = new GenericDAO();
 		
 		String Customer_query="DELETE FROM `customer_master` WHERE `intcustid`="+request.getParameter("q");
-		System.out.println(Customer_query);
+		
 		int Customer_result = dao.executeCommand(Customer_query);
 
 		if (Customer_result == 1) {

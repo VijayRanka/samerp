@@ -94,6 +94,9 @@ to {
 	opacity: 0;
 }
 }
+.table td {
+   text-align: center;   
+}
 </style>
 <body onload="loadFunction()">
 
@@ -272,8 +275,8 @@ to {
 										<td><%=bucket_rate%></td>
 										<td><%=breaker_rate%></td>
 										<td><a href="#update" data-toggle='modal'
-											onclick='getSr(<%=custid%>)'>Update</a> / <a
-											href="" onclick="DeleteCustomer(<%=custid%>)">Delete</a></td>
+											onclick='getSr(<%=custid%>)'><i class="icon-pencil"></i></a> / 
+											<a href="" onclick="DeleteCustomer(<%=custid%>)"><i class="icon-remove"></i></a></td>
 										
 									</tr>
 									<%

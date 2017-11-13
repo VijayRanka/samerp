@@ -219,16 +219,19 @@ public class AddSupplyMaterial extends HttpServlet {
 		
 		if(request.getParameter("save")!=null)
 		{
-			
 			String id=request.getParameter("Updateid");
+			System.out.println("update id:"+id);
+			System.out.println("hello");
 			
+			System.out.println("update id:"+id);
 			String supbname=request.getParameter("suppbusinesname");
 			String supname=request.getParameter("suppname");
 			String supaddress=request.getParameter("address");
 			String supcontactno=request.getParameter("contact");
 			String type1=request.getParameter("material_type");
 			String oldAlias = request.getParameter("old_sup_alias");
-			
+			String opening_balance=request.getParameter("opening_balance");
+			System.out.println("opening:"+opening_balance);
 			String alias1="";
     		if(type1.equals("1"))
     		{
@@ -238,8 +241,9 @@ public class AddSupplyMaterial extends HttpServlet {
     			alias1 = "SP_"+supbname;
     		}
 			
-			String query="update `material_supply_master` set `supplier_business_name`='"+supbname+"',`supplier_name`='"+supname+"',`supplier_address`='"+supaddress+"',`supplier_contactno`='"+supcontactno+"', `supplier_alias`='"+alias1+"' where `supplier_business_id`="+id+"";
+			String query="UPDATE material_supply_master SET material_supply_master.supplier_business_name='"+supbname+"',material_supply_master.supplier_name='"+supname+"',material_supply_master.supplier_address='"+supaddress+"',material_supply_master.supplier_contactno='"+supcontactno+"',material_supply_master.supplier_opening_balance='"+opening_balance+"' WHERE material_supply_master.supplier_business_id="+id+"";
 			
+			System.out.println("update query:"+query);
 			int i=gd.executeCommand(query);
 			
 			if(i>0)
