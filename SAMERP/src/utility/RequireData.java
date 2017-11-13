@@ -300,6 +300,12 @@ public class RequireData
 		return list;
 	}
 	
+	public List getPettyCashDetails() {
+		String query="SELECT petty_cash_details.id,petty_cash_details.date,debtor_master.type,petty_cash_details.debit,petty_cash_details.credit,petty_cash_details.balance FROM petty_cash_details,debtor_master WHERE petty_cash_details.debtor_id=debtor_master.id ORDER BY petty_cash_details.id DESC";
+		List list=gd.getData(query);
+		return list;
+	}
+	
 	
 	//--omkar end
 	
