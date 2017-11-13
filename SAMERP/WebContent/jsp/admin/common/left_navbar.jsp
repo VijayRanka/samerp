@@ -35,7 +35,7 @@
     <li><a href="/SAMERP/jsp/admin/manufacture/purchaseRawMaterial.jsp"><i class="fa fa-th"></i> <span>Manufacture</span></a></li>
     <li><a href="/SAMERP/jsp/admin/productPurchase/productPurchase.jsp"><i class="fa fa-th"></i> <span>Purchase</span></a></li>
     <li><a href="/SAMERP/jsp/admin/expenses/expenses.jsp"><i class="fa fa-money"></i> <span>Expenses</span></a> </li>
-    <li><a href="/SAMERP/jsp/admin/PTCash/ptcash.jsp"><i class="fa fa-money"></i> <span>PTCash</span></a> </li>
+    <li><a href="/SAMERP/jsp/admin/PTCash/ptcash.jsp"><i class="fa fa-money"></i> <span>Petty Cash</span></a> </li>
     <li><a href="#"><i class="fa fa-fullscreen"></i> <span>Work Details</span></a></li>
     <li><a href="#"><i class="fa fa-pencil"></i> <span>Report</span></a></li>
   </ul>
