@@ -93,9 +93,9 @@
              </div>
             </div>
           <div class="collapse" id="collapseOne">
-           <div class="widget-content nopadding	">
+          <div class="widget-content nopadding">
             <table class="table table-bordered data-table">
-              <div class="controls"style="float: right;position: relative;right: 280px;">
+            <div class="controls" style="float: right;position: relative;right: 280px;">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
               <% SysDate sd=new SysDate();
               String[] sdDemo=sd.todayDate().split("-");
@@ -105,60 +105,65 @@
               <thead>
                 <tr>
                   <th>S.No.</th>
+                  <th>Date</th>
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Payment Mode</th>
-                  <th>Reason</th>
-                  <th>Vehicle</th>
                   <th>Vehicle Reading</th>
                   <th>Qty In Litres(s)</th>
                   <th>Expenses Type</th>
                   <th>Debtor Type</th>
-                  <th>Other Details</th>
+                  <th>Cheque Details</th>
+                  <th>Description</th>
                 </tr>
               </thead>
               <tbody id="expenseDataTable">
 	              <%
-	                List getExpData=rd.getExpensesDetailsDash();
-	            	if(!getExpData.isEmpty()){
+	             
+	              List getExpData=rd.getExpensesDetailsDash();
+	            	if(getExpData!=null){
 	            	Iterator getexpitr=getExpData.iterator();
 	            	int i=1;
 	            	while(getexpitr.hasNext()){ Object dataId=getexpitr.next();
 	              %>
                 <tr id="tRow<%=i%>">
                   <td style="text-align: center"><%=i %></td>
-                  <%getexpitr.next(); %>
                   <td style="text-align: center"><%=getexpitr.next() %></td>
                   <td style="text-align: center"><%=getexpitr.next() %></td>
                   <td style="text-align: center"><%=getexpitr.next() %></td>
                   <td style="text-align: center"><%=getexpitr.next() %></td>
+                  
  
                   <% String vrmData=rd.getVRM(dataId.toString());
                   if(vrmData!=null){%>
                   <td style="text-align: center" ><%=vrmData.split(",")[0] %></td>
                   <td style="text-align: center"><%=vrmData.split(",")[1] %></td>
-                  <td style="text-align: center"><%=vrmData.split(",")[2] %></td>
                   <%}else{ %>
                   <td style="text-align: center" >-</td>
                   <td style="text-align: center">-</td>
-                   <td style="text-align: center">-</td>
                   <%} %>
-                
+                 
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
                   
                   <% Object detailsdata=getexpitr.next(); %>
-                  <td style="text-align: center"><%if(detailsdata.equals("")){ %>-<%} else{%><%=detailsdata %><%} %></td>
-                  <td style="text-align: center"> <%=getexpitr.next() %></td>
+                  <td style="text-align: center"" ><%if(detailsdata.equals("")){ %>-<%} else{%><%=detailsdata %><%} %></td>
                   
                   <% Object otherdetailsdata=getexpitr.next(); %>
                   <td style="text-align: center"><%if(otherdetailsdata.equals("")){ %>-<%} else{%><%=otherdetailsdata %><%} %></td>
+                  <td style="text-align: center"><%=getexpitr.next() %></td>
                 </tr>
                 <%i++;}} %>
-                
-                
-                
               </tbody>
             </table>
           </div>
+          
+          
+          
+          
+          
+          
+          
+           
           </div>
           
       <!-- daily expenses end  -->
@@ -176,71 +181,100 @@
             </a> 
           </div>
           <div class="collapse" id="collapseTwo">
-           <div class="widget-content nopadding	">
+           <div class="widget-box">
+          <div class="widget-title">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#tab1">Petty Cash</a></li>
+              <li><a data-toggle="tab" href="#tab2">Bank Amount</a></li>
+            </ul>
+          </div>
+          <div class="widget-content tab-content">
+            <div id="tab1" class="tab-pane active">
+              <!-- petty cash Table -->
+              <div class="widget-content nopadding">
             <table class="table table-bordered data-table">
-              <div class="controls"style="float: right;position: relative;right: 280px;">
+            <div class="controls"style="float: right;position: relative;right: 280px;">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
-              <% sdDemo=sd.todayDate().split("-");
-              %>
                 <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
                 </div> 
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Name</th>
-                  <th>Amount</th>
-                  <th>Payment Mode</th>
-                  <th>Reason</th>
-                  <th>Vehicle</th>
-                  <th>Vehicle Reading</th>
-                  <th>Qty In Litres(s)</th>
-                  <th>Expenses Type</th>
-                  <th>Debtor Type</th>
-                  <th>Other Details</th>
+                  <th>Credit</th>
+                  <th>Debit</th>
+                  <th>Type</th>
+                  <th>Balance</th>
                 </tr>
               </thead>
               <tbody id="expenseDataTable">
-	              <%
-	                getExpData=rd.getExpensesDetailsDash();
-	            	if(!getExpData.isEmpty()){
-	            	Iterator getexpitr=getExpData.iterator();
-	            	int i=1;
-	            	while(getexpitr.hasNext()){ Object dataId=getexpitr.next();
-	              %>
-                <tr id="tRow<%=i%>">
+              <% List demo=rd.getPettyCashDetailsDash();
+              if(demo!=null)
+              {
+            	  Iterator pettyList=demo.iterator();
+            	  int i=1;
+            	  while(pettyList.hasNext()){
+              %>
+                <tr id="tRow">
                   <td style="text-align: center"><%=i %></td>
-                  <%getexpitr.next(); %>
-                  <td style="text-align: center"><%=getexpitr.next() %></td>
-                  <td style="text-align: center"><%=getexpitr.next() %></td>
-                  <td style="text-align: center"><%=getexpitr.next() %></td>
-                  <td style="text-align: center"><%=getexpitr.next() %></td>
- 
-                  <% String vrmData=rd.getVRM(dataId.toString());
-                  if(vrmData!=null){%>
-                  <td style="text-align: center" ><%=vrmData.split(",")[0] %></td>
-                  <td style="text-align: center"><%=vrmData.split(",")[1] %></td>
-                  <td style="text-align: center"><%=vrmData.split(",")[2] %></td>
-                  <%}else{ %>
-                  <td style="text-align: center" >-</td>
-                  <td style="text-align: center">-</td>
-                   <td style="text-align: center">-</td>
-                  <%} %>
-                
-                  
-                  <% Object detailsdata=getexpitr.next(); %>
-                  <td style="text-align: center"><%if(detailsdata.equals("")){ %>-<%} else{%><%=detailsdata %><%} %></td>
-                  <td style="text-align: center"> <%=getexpitr.next() %></td>
-                  
-                  <% Object otherdetailsdata=getexpitr.next(); %>
-                  <td style="text-align: center"><%if(otherdetailsdata.equals("")){ %>-<%} else{%><%=otherdetailsdata %><%} %></td>
+                  <td style="text-align: center"><%=pettyList.next() %></td>
+                  <td style="text-align: center"><%=pettyList.next() %></td>
+                  <td style="text-align: center"><%=pettyList.next() %></td>
+                  <td style="text-align: center"><%=pettyList.next() %></td>
                 </tr>
                 <%i++;}} %>
-                
-                
-                
               </tbody>
             </table>
           </div>
+              
+              
+              
+            </div>
+            <div id="tab2" class="tab-pane">
+              <!-- Bannk amount Table -->
+              
+              <div class="widget-content nopadding">
+            <table class="table table-bordered data-table">
+            <div class="controls" style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                </div> 
+              <thead>
+                <tr>
+                  <th>S.No.</th>
+                  <th>Bank</th>
+                  <th>Credit</th>
+                  <th>Debit</th>
+                  <th>Particulars</th>
+                  <th>Type</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="expenseDataTable">
+              <% List badDetailsDash=rd.getbadDetailsDash();
+              if(badDetailsDash!=null)
+              {
+            	  Iterator badList=badDetailsDash.iterator();
+            	  int i=1;
+            	  while(badList.hasNext()){
+              %>
+                <tr id="tRow">
+                  <td style="text-align: center"><%=i %></td>
+                  <td style="text-align: center"><%=badList.next() %></td>
+                  <td style="text-align: center"><%=badList.next() %></td>
+                  <td style="text-align: center"><%=badList.next() %></td>
+                  <td style="text-align: center"><%=badList.next() %></td>
+                  <td style="text-align: center"><%=badList.next() %></td>
+                  <td style="text-align: center"><%=badList.next() %></td>
+                </tr>
+                <%i++;}} %>
+              </tbody>
+            </table>
+          </div>
+              
+            </div>
+          </div>
+        </div>
+           
           </div>
           
           
@@ -466,7 +500,7 @@ function getExpData(value)
 			else{
 				var count=1;
 				var wholeData="";
-				for(var i=0;i<demoStr.length-2;i=i+9){
+				for(var i=0;i<demoStr.length-2;i=i+10){
 					
 			wholeData+="<tr>"+
 			"<td style='text-align: center'>"+count+"</td>"+
@@ -479,6 +513,7 @@ function getExpData(value)
 			"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
 			"<td style='text-align: center'' >"+demoStr[i+7]+"</td>"+
 			"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+			"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
 			"<tr>";
 			count++;
 				}

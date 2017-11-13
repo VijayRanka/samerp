@@ -291,7 +291,8 @@ transition: all 0.3s;
 <!--end-Footer-part-->
 
 <script src="/SAMERP/config/js/excanvas.min.js"></script> 
-<script src="/SAMERP/config/js/jquery.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.min.js"></script>
+ 
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
 <script src="/SAMERP/config/js/bootstrap.min.js"></script>
 <script src="/SAMERP/config/js/jquery.flot.min.js"></script> 

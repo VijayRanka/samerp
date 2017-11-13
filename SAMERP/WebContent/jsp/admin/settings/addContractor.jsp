@@ -407,7 +407,7 @@ function setFocusToTextBox()
 				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
 		</div>
 	</div>
-<script src="/SAMERP/config/js/jquery.min.js"></script>
+	<script src="/SAMERP/config/js/jquery.min.js"></script>
 	<script src="/SAMERP/config/js/jquery.ui.custom.js"></script>
 	<script src="/SAMERP/config/js/bootstrap.min.js"></script>
 	<script src="/SAMERP/config/js/jquery.uniform.js"></script>
