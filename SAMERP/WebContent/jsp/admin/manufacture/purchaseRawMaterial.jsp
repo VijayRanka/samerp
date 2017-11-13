@@ -1,4 +1,9 @@
 
+
+
+
+
+
 	<%@page import="utility.SysDate"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
@@ -103,7 +108,7 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" title="Go to Home" class="tip-bottom"><i
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i
 					class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Form
 					elements</a> <a href="#" class="current">Purchase Raw Material</a>
 			</div>

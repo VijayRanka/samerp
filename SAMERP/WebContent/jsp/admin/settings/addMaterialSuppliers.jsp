@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
-<title>SAMERP PROJECT</title>
+<title>sidhu SAMERP PROJECT</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/SAMERP/config/css/jquery.mobile-1.4.5.css">
@@ -65,7 +65,7 @@
     to {bottom: 0; opacity: 0;}
 }
 </style>
-<body onload="myFunction()">
+<body onload="setFocusToTextBox()">
 
 <!--Header-part-->
 <div id="header">
@@ -204,7 +204,8 @@
 									<%
 									String product,RawMaterial;
 										while (itr.hasNext()) {
-												String id1 = itr.next().toString();																							
+												String id1 = itr.next().toString();		
+											
 									%>
 									<tr class="gradeX">
 										<td id="<%=id1%>"><%=count%></td>
@@ -221,8 +222,8 @@
 											<td>RawMaterial</td>
 										<%} %>
 														
-										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> |
-										<a href="/SAMERP/AddSupplyMaterial?deleteId=<%=id1%>">Delete</a></td>
+										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> |
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td>
 									</tr>
 									<%
 										count++;
@@ -243,7 +244,7 @@
 </div>
 
 
-	<div id="myModal" class="modal hide fade" role="dialog"
+	<div id="update" class="modal hide fade" role="dialog"
 		style="width: 50%; margin-left: -28%;">
 		<div class="modal-dialog">
 
@@ -297,17 +298,15 @@
 									required />
 							</div>
 						</div>
-						
 						<div class="control-group">
-									<label class="control-label">Type:</label>
+									<label class="control-label">Opening Balance :</label>
 									<div class="controls">
-										<select name="material_type" ID="material_typeid" class="span4" >
-											<option value="1">Raw Material</option>
-											<option value="2">Product</option>
-										</select>
+										<input type="number" name="openingbalance" id="opening_balance" class="span4"
+											placeholder="Opening Balance" pattern="[0-9]*" required/>
 									</div>
 								</div>
-
+						
+						
 						<div class="form-actions" style="padding-left: 450px">
 							<button type="submit" name="save" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -319,6 +318,87 @@
 
 		</div>
 	</div>
+	
+	
+		<div class="modal fade" id="Insert_time" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 style="color: red;" class="modal-title">Error</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal" action="#" method="post" name="form4">
+								<div class="form-group">
+									<div class="widget-content nopadding">
+										<div class="control-group">
+		
+											<h4>Supplier Business Name already Exist...</h4>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<input type="button" class="btn btn-primary" id="submitbtn"
+											data-dismiss="modal" value="OK" />
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="DeleteConfirmBox" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Error</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" action="/SAMERP/AddSupplyMaterial" method="post" name="form4">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+														<input type="hidden" id="deleteid" name="delete"/>
+														
+												<h4> Are you sure want to delete the selected row...!!</h4>
+											</div>
+										</div>
+										<div class="modal-footer">			
+															
+											<input type="submit" class="btn btn-primary" id="submitbtn" value="OK" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+			<div class="modal fade" id="error-msg-delete" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Error</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal" action="#" method="post" name="form4">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+			
+												<h4> Cannot delete the Selected record as it is linked with some other records..!! </h4>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<input type="button" class="btn btn-primary" id="submitbtn"
+												data-dismiss="modal" value="OK" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
 
 	<!--end-main-container-part-->
 
@@ -332,31 +412,30 @@
 
 <script type="text/javascript">
 
-function searchName(id1) {
-	
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			
-			var demoStr = this.responseText.split(",");
-			alert(demoStr);
-			document.getElementById("Updateid").value = demoStr[0];
-			document.getElementById("update_business_name").value = demoStr[1];
-			document.getElementById("update_suppname").value = demoStr[2];
-			document.getElementById("update_address").value = demoStr[3];
-			document.getElementById("update_contact").value = demoStr[4];
-			document.getElementById("update_material_type").value = demoStr[5];
-			document.getElementById("old_sup_alias").value = demoStr[6];
-					
-			}
-		};
-	xhttp.open("POST","/SAMERP/AddSupplyMaterial?Updateid="+id1, true);
-	xhttp.send();
-	
-	
-}
-
+ function searchName(id1) {
+ 
+ 	var xhttp;
+ 	xhttp = new XMLHttpRequest();
+ 	xhttp.onreadystatechange = function() {
+ 		if (this.readyState == 4 && this.status == 200) {
+ 			
+ 			var demoStr = this.responseText.split(",");
+ 			
+ 			document.getElementById("Updateid").value = demoStr[0];
+ 			document.getElementById("update_business_name").value = demoStr[1];
+ 			document.getElementById("update_suppname").value = demoStr[2];
+ 			document.getElementById("update_address").value = demoStr[3];
+ 			document.getElementById("update_contact").value = demoStr[4];
+ 			document.getElementById("opening_balance").value = demoStr[5];
+ 			alert(demoStr[1]);
+ 			}	
+ 		};
+ 	xhttp.open("POST","/SAMERP/AddSupplyMaterial?UpdData="+id1, true);
+ 	xhttp.send();
+ 	
+ 	
+ }
+ 
 function myFunction() {
     var x = document.getElementById("snackbar")
     x.className = "show";
@@ -364,20 +443,32 @@ function myFunction() {
 }
 
 function showModal(){
+	var error = <%= request.getAttribute("error") %>;
 	var someVarName = localStorage.getItem("someVarName");
-	if(someVarName>0)
-		{
-			$('#myModal').modal('show');
-		}
+		
+	if(error==2)
+	{
+		$('#Insert_time').modal('show');
+	}
+	else if(error==3)
+	{
+		$('#error-msg-delete').modal('show');	
+	}
+	else if(someVarName>0)
+	{
+		$('#update').modal('show');
+	}
 	localStorage.setItem('someVarName', null);
 }
 
 function setFocusToTextBox()
 {
-	document.getElementById("update_business_name").focus();
-	showModal();   	
-	 myFunction();
+	document.getElementById("update_business_name").focus();	
+	showModal(); 
+	myFunction();
+	 
 }
+
 
 
 </script>
@@ -404,5 +495,16 @@ function setFocusToTextBox()
 <script src="/SAMERP/config/js/matrix.popover.js"></script> 
 <script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
 <script src="/SAMERP/config/js/matrix.tables.js"></script> 
+
+<script type="text/javascript">
+
+
+function getDeleteId(id1)
+{
+	document.getElementById("deleteid").value=id1;
+	
+}
+</script>
 </body>
+
 </html>

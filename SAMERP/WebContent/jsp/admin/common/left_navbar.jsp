@@ -4,7 +4,7 @@
     <li><a href="/SAMERP/index.jsp"><i class="fa fa-home"></i> <span>Dashboard</span></a> </li>
     <li> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp"> <i class="icon-dashboard"></i><span class="label label-success"></span>JCB & POKLAND  <!-- Dashboard --></a> </li>
     <li><a href="/SAMERP/jsp/admin/settings/addDailyStock.jsp"><i class="fa fa-inbox"></i> <span>Add Daily Stock</span></a></li>
-    <li class="submenu"> <a href="#"><i class="fa fa-th-list"></i> <span>Settings</span> <span class="label label-important">10</span></a>
+    <li class="submenu"> <a href="#"><i class="fa fa-th-list"></i> <span>Settings</span> <span class="label label-important">11</span></a>
       <ul>
       	<li><a href="/SAMERP/jsp/admin/settings/addContractor.jsp">Add Contractor</a></li>
       	<li><a href="/SAMERP/jsp/admin/settings/addVehicles.jsp">Add Vehicles</a></li>
@@ -16,6 +16,9 @@
         <li><a href="/SAMERP/jsp/admin/settings/addCustomer.jsp">Add Customer (JCB/POC)</a></li>    
         <li><a href="/SAMERP/jsp/admin/settings/addOrganization.jsp">Add Organization</a></li>
         <li><a href="/SAMERP/jsp/admin/settings/addRates.jsp">Add Rates</a></li>
+        <li><a href="/SAMERP/jsp/admin/settings/addHandLoan.jsp">Add HandLoan</a></li>
+        
+      
 
       </ul>
     </li>
@@ -32,7 +35,7 @@
     <li><a href="/SAMERP/jsp/admin/manufacture/purchaseRawMaterial.jsp"><i class="fa fa-th"></i> <span>Manufacture</span></a></li>
     <li><a href="/SAMERP/jsp/admin/productPurchase/productPurchase.jsp"><i class="fa fa-th"></i> <span>Purchase</span></a></li>
     <li><a href="/SAMERP/jsp/admin/expenses/expenses.jsp"><i class="fa fa-money"></i> <span>Expenses</span></a> </li>
-    <li><a href="/SAMERP/jsp/admin/PTCash/ptcash.jsp"><i class="fa fa-money"></i> <span>PTCash</span></a> </li>
+    <li><a href="/SAMERP/jsp/admin/PTCash/ptcash.jsp"><i class="fa fa-money"></i> <span>Petty Cash</span></a> </li>
     <li><a href="#"><i class="fa fa-fullscreen"></i> <span>Work Details</span></a></li>
     <li><a href="#"><i class="fa fa-pencil"></i> <span>Report</span></a></li>
   </ul>

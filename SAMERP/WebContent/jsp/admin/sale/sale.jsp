@@ -223,10 +223,10 @@ margin-top: 5px;
                 <input type="text" placeholder="Purchase Order Number" style="width: 300px;" name="poNo" onkeyup="this.value=this.value.toUpperCase()"/>
               </div>
               
-              <label class="control-label" style="margin-top: -50px; margin-left: 490px;">Helper Chargers :</label>
+<!--               <label class="control-label" style="margin-top: -50px; margin-left: 490px;">Helper Chargers :</label>
               <div class="controls">
                 <input type="number" placeholder="Helper Chargers" style="width: 300px; margin-top: -50px; margin-left: 490px;" name="helperChargers" />
-              </div>
+              </div> -->
             </div>  
             
             <div class="control-group" style="height: 50px;">              
@@ -452,7 +452,7 @@ margin-top: 5px;
 								<td><%=itr3.next()%></td>
 								<td><%=itr3.next()%></td>
 								<td><%=itr3.next()%></td>
-								<td rowspan="<%=span%>" ><%-- <a class="tip" title="Update" href="#update" data-toggle="modal" onclick="updateRecord(<%=sid%>)"><i class="icon-pencil"></i></a> | --%> 
+								<td rowspan="<%=span%>" > <a class="tip" title="Update" href="#update" data-toggle="modal" onclick="getUpdateData(<%=sid%>)"><i class="icon-pencil"></i></a> |
 														<a class="tip" title="Delete" onclick="getDeleteId('<%=sid%>')" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a>
 								</td>
 
@@ -528,7 +528,7 @@ margin-top: 5px;
 <!-- ************************************* MODEL END ************************************* -->
 
 <!-- ************************************* MODEL START ************************************* -->
-<div class="modal hide fade" id="update" role="dialog" style="width: 65%; margin-left:-33%; margin-top: 20px; ">
+<!-- <div class="modal hide fade" id="update" role="dialog" style="width: 65%; margin-left:-33%; margin-top: 20px; ">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -551,6 +551,110 @@ margin-top: 5px;
 			</div>	
 		</div>
 	</div>
+</div> -->
+
+<div class="modal hide fade zoom-out" id="update" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+   <form class="form-horizontal" action="/SAMERP/Sales" method="post">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Data</h4>
+      </div>
+      <div class="modal-body" id="showModal">
+	     
+	        <div class="form-group">
+			<div class="widget-content nopadding">
+	        	<div class="control-group">
+	                  <label class="control-label">Date</label>
+	                  <div class="controls">
+	                	<input type="hidden" id="uId" name="uId"/>
+	                    <input type="date" id="uDate" name="uDate" disabled="disabled"/>
+	         			</div>
+	        	</div>
+	        	
+	        	<div class="control-group">
+	                  <label class="control-label">Organisation Name</label>
+	                  <div class="controls">
+	                    <input type="text" id="uOrgName"  disabled="disabled"/>
+	         			</div>
+	        	</div>
+	        	<div class="control-group">
+	                  <label class="control-label">Self Chalan No</label>
+	                  <div class="controls">
+	                    <input type="text" id="uSelfChalan" name="uSelfChalan" />
+	         			</div>
+	        	</div>
+	        	<div class="control-group">
+	                  <label class="control-label">Vehicle Details</label>
+	                  <div class="controls">
+	                    <input type="text" id="uVehDetails" name="uVehDetails" readonly="readonly" />
+	         			</div>
+	        	</div>
+	        	
+	        	<div class="control-group">
+	                  <label class="control-label">Deposit Amount</label>
+	                  <div class="controls">
+	                     <input type="text" id="uAmount" name="uAmount" readonly="readonly"/>
+	                      <input type="hidden" id="oldAmount" name="oldAmount" value="0" />
+	                     <input type="checkbox" id="revertCheck" onclick="onUamount()">Reverted
+	         			</div>
+	        	</div>
+	        	<script type="text/javascript">
+	        	function onUamount()
+	        	{
+	        		if(document.getElementById('uAmount').readOnly==false)
+	        			{
+	        			document.getElementById('uAmount').value=firstAmount;
+	        			document.getElementById('oldAmount').value="0";
+	        			document.getElementById('uAmount').readOnly=true;
+	        			}
+	        		else
+	        			{
+	        			window.firstAmount=document.getElementById('uAmount').value;
+	        			document.getElementById('oldAmount').value=firstAmount;
+	        			document.getElementById('uAmount').readOnly=false;
+	        			}
+	        		
+	        	}
+	        	function getUpdateData(id)
+	        	{
+	        		document.getElementById('oldAmount').value="0";
+	        		document.getElementById('uAmount').readOnly=true;
+	        		document.getElementById('revertCheck').checked=false;
+	        		document.getElementById('uniform-revertCheck').children[0].setAttribute("class","");
+	        		var xhttp;
+	        		xhttp = new XMLHttpRequest();
+	        			xhttp.onreadystatechange = function() {
+	        				if (this.readyState == 4 && this.status == 200) {
+	        					var demoStr = this.responseText.split(",");
+	        					if(demoStr[0]==1)
+	        						{
+	        						document.getElementById('uId').value=id;
+	        						document.getElementById('uDate').value=demoStr[1];
+	        						document.getElementById('uOrgName').value=demoStr[2];
+	        						document.getElementById('uSelfChalan').value=demoStr[3];
+	        						document.getElementById('uVehDetails').value=demoStr[4];
+	        						document.getElementById('uAmount').value=demoStr[5];
+	        						}
+	        				}
+	        			};
+
+	        			xhttp.open("POST", "/SAMERP/Sales?getUpdateData=1&id=" + id, true);
+	        			xhttp.send();
+	        	}
+	        	</script>
+	        	
+		      </div>
+	      	</div>
+      </div> 
+      <div class="modal-footer">
+        <button type="submit" name="UpdateData" class="btn btn-primary" style="margin-right:5px;">Save changes</button> 
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>    
+          </div>
+    </div>
+   </form>
+  </div>
 </div>
 <!-- ************************************* MODEL END ************************************* -->
 
@@ -848,8 +952,6 @@ function addMaterialByThirdParty()
 	document.getElementById("productName").value="";
 	document.getElementById("qty").value="";
 	document.getElementById("rate").value="";
-	document.getElementById("chalanNo_third").value="";
-	document.getElementById("supplierName").value="";
 	document.getElementById("gstSarthak").value="";
 	document.getElementById("gst").value="";
 	

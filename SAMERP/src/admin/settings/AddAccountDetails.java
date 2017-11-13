@@ -39,6 +39,8 @@ public class AddAccountDetails extends HttpServlet {
 	{
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
+		GenericDAO gd= new GenericDAO();
+		String acc_id=request.getParameter("delete");
 		
 		if(request.getParameter("updateid")!=null)
 		{
@@ -54,6 +56,8 @@ public class AddAccountDetails extends HttpServlet {
 		}
 		if(request.getParameter("Update")!=null)
 		{
+			AddAccountDetails aad=new AddAccountDetails();
+			
 			String bId=request.getParameter("modalId");
 			String bName=request.getParameter("modalbName");
 			String branch=request.getParameter("modalBranch");
@@ -62,14 +66,18 @@ public class AddAccountDetails extends HttpServlet {
 			String alias=request.getParameter("modalAlias");
 			String oldAlias=request.getParameter("oldAlias");
 			int status=0;
-			GenericDAO gd= new GenericDAO();
+			
+			
+			String firstLetter=aad.getFirstLetters(bName);
+			String space="_";
+			String finalAlias=firstLetter+space+accNo;
 			
 			String updateAccountDetails="UPDATE `account_details` SET `bank_name`='"+bName+"',`branch`='"+branch+"',`acc_no`='"+accNo+"'"
-					+ ",`acc_aliasname`='"+alias+"' WHERE acc_id="+bId+"";
+					+ ",`acc_aliasname`='"+finalAlias+"' WHERE acc_id="+bId+"";
 			status=gd.executeCommand(updateAccountDetails);
 			if(status==1)
 			{
-				String updateDebtorMaster="UPDATE `debtor_master` SET `type`='"+alias+"' WHERE type='"+oldAlias+"'";
+				String updateDebtorMaster="UPDATE `debtor_master` SET `type`='"+finalAlias+"' WHERE type='"+oldAlias+"'";
 				int status1=gd.executeCommand(updateDebtorMaster);
 				if(status1>0)
 				{
@@ -85,7 +93,7 @@ public class AddAccountDetails extends HttpServlet {
 		
 		if(request.getParameter("insertAccDetails")!=null)
 		{
-			GenericDAO gd=new GenericDAO();
+			
 			AddAccountDetails aad=new AddAccountDetails();
 			//out.print("hello");
 			
@@ -136,20 +144,22 @@ public class AddAccountDetails extends HttpServlet {
 		
 		}
 		
-		if(request.getParameter("deleteId")!=null)
+		if(acc_id==null)
 		{
-			GenericDAO gd=new GenericDAO();
-			int delstatus=0;
-			String deleteQuery="Delete from `account_details` where acc_id="+request.getParameter("deleteId");
-			delstatus=gd.executeCommand(deleteQuery);
-			if(delstatus!=0)
+			int i;			
+			String deleteQuery="DELETE FROM account_details WHERE account_details.acc_id='"+acc_id+"'";
+			i=gd.executeCommand(deleteQuery);
+			if(i==1)
 			{
 				System.out.println("successfully deleted in suppliers material");
-				request.setAttribute("status", "Deleted Successfully");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addAccountDetails.jsp");
-				rd.forward(request, response);
-			}
-			
+				
+			}			
+		}
+		else
+		{
+			request.setAttribute("error", "3");
+			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addAccountDetails.jsp");
+			rd.forward(request, response);
 		}
 		
 	}
