@@ -5,6 +5,14 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
+    <servlet-name>CheckInfo</servlet-name>
+    <servlet-class>admin.checkInfo.CheckInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckInfo</servlet-name>
+    <url-pattern>/checkInfo</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>AddCustomer</servlet-name>
     <servlet-class>admin.settings.AddCustomer</servlet-class>
   </servlet>
