@@ -32,7 +32,6 @@ public class AddHandLoan extends HttpServlet {
 			int status=0;		
 			String name=request.getParameter("name");				
 			String mobileNo=request.getParameter("mobileno");	
-			System.out.println("mobileNo");
 			String aliasname="HL_"+name.replace(" ", "_")+"_"+mobileNo;				
 			String date=request.getParameter("date");				
 			String amount=request.getParameter("paidAmt");				
@@ -56,7 +55,6 @@ public class AddHandLoan extends HttpServlet {
 			if(paymode.equals("Cash"))
 			{
 				String insert_query1="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
-				System.out.println("cash:"+insert_query1);
 				status=gd.executeCommand(insert_query1);
 				
 			}else if(paymode.equals("Cheque"))
@@ -66,7 +64,6 @@ public class AddHandLoan extends HttpServlet {
 				gd.executeCommand(insert_bank1);
 				
 				String insert_query2="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`particulars`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+chequeNo+"','"+amount+"')";
-				System.out.println("cheque:"+insert_query2);
 				status=gd.executeCommand(insert_query2);
 				
 			}else if(paymode.equals("Transfer"))
@@ -76,7 +73,6 @@ public class AddHandLoan extends HttpServlet {
 				gd.executeCommand(insert_bank2);
 				
 				String insert_query3="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
-				System.out.println("transfer:"+insert_query3);
 				status=gd.executeCommand(insert_query3);
 			}
 			
@@ -99,16 +95,13 @@ public class AddHandLoan extends HttpServlet {
 			
 		}
 		
-		System.out.println("update id:"+request.getParameter("Updateid"));
 			
 		if(request.getParameter("Updateid")!=null)
 		{
 			String updateid=request.getParameter("Updateid");
-			System.out.println("updateId:"+updateid);
 			RequireData rd=new RequireData();
 			List list=rd.updateHandLoanDetails(updateid);
 			
-			System.out.println("query:"+list);
 			
 			Iterator itr1=list.iterator();
 			while(itr1.hasNext())
@@ -128,7 +121,6 @@ public class AddHandLoan extends HttpServlet {
 			String amount=request.getParameter("paidAmt");			
 			String aliasname="HL_"+name.replace(" ", "_")+"_"+mobileNo;	
 			String paymode=request.getParameter("payMode");
-			System.out.println("paymode:"+paymode);
 			String chequeNo=request.getParameter("chequeNo");
 			
 			System.out.println(name+","+mobileNo+","+date+","+amount+","+aliasname+","+paymode+","+chequeNo);
@@ -138,7 +130,6 @@ public class AddHandLoan extends HttpServlet {
 							+ "handloan_master.alias_name='"+aliasname+"',handloan_details.mode='"+paymode+"',"
 									+ "handloan_details.particulars='"+chequeNo+"'"
 											+ " WHERE handloan_master.id=handloan_details.handloan_id AND handloan_details.id='"+updateid+"'";
-			System.out.println(update_query);
 			
 			int i=gd.executeCommand(update_query);
 			

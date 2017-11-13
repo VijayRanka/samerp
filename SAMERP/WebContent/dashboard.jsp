@@ -155,15 +155,7 @@
                 <%i++;}} %>
               </tbody>
             </table>
-          </div>
-          
-          
-          
-          
-          
-          
-          
-           
+          </div>          
           </div>
           
       <!-- daily expenses end  -->
@@ -224,9 +216,7 @@
                 <%i++;}} %>
               </tbody>
             </table>
-          </div>
-              
-              
+          </div>             
               
             </div>
             <div id="tab2" class="tab-pane">

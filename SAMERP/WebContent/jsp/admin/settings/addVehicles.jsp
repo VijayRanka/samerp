@@ -63,6 +63,9 @@
     from {top: 50px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }
+.table td {
+   text-align: center;   
+}
 
 </style>
 </head>
@@ -181,8 +184,8 @@
   							<td> <%=i %></td>
 	                      	<td id="<%=vehicleId%>"><%=vehicleType%></td>
 	                        <td><%=vehicleNumber%></td>
-	                        <td><a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)">Update</a>|
-                     	<a onclick="getDeleteId(<%=vehicleId%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td></tr>
+	                        <td><a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)"><i class="icon-pencil"></i></a>/
+                     	<a onclick="getDeleteId(<%=vehicleId%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td></tr>
              <%
                      	i++;
                  }
@@ -386,27 +389,6 @@ function myFunction() {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
-/* function getRateText(){
-	if(document.getElementById("vehicle_type").value=="TRUCK"){
-		document.getElementById("rateText").disabled=true;
-		document.getElementById("required1").innerHTML="";
-	} 
-	else{
-		document.getElementById("rateText").disabled=false;
-		document.getElementById("required1").innerHTML="*";
-	}
-}
-
-function getRateText1(){
-	if(document.getElementById("Updatevehicle_type").value=="TRUCK"){
-		document.getElementById("UpdateRateText").disabled=true;
-		document.getElementById("required2").innerHTML="";
-	} 
-	else{
-		document.getElementById("UpdateRateText").disabled=false;
-		document.getElementById("required2").innerHTML="*";
-	}
-} */
 
 function setSelectValue(){
 	

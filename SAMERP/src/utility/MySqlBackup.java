@@ -26,7 +26,9 @@ public class MySqlBackup {
 
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             Date date = new Date();
-            String filepath = database + "-(" + dateFormat.format(date) + ").sql";
+
+            String filepath = database + " database -(" + dateFormat.format(date) + ").sql";
+
 
             String batchCommand = "";
             if (password != "") {

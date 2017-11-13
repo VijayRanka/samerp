@@ -66,6 +66,9 @@
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+.table td {
+   text-align: center;   
+}
 </style>
 </head>
 
@@ -224,8 +227,8 @@
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
-										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> / 
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td>
+										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;

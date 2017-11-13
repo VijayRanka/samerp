@@ -98,6 +98,9 @@ to {
 	opacity: 0;
 }
 }
+.table td {
+   text-align: center;   
+}
 </style>
 </head>
 
@@ -268,8 +271,8 @@ to {
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>										
 										<td><a href="#myModal" data-toggle="modal"
-											onclick="searchName(<%=id1%>)">Update</a> / <a
-											href="/SAMERP/AddRawMaterial?deleteId=<%=id1%>">Delete</a></td>
+											onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
+											<a href="/SAMERP/AddRawMaterial?deleteId=<%=id1%>"><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;
