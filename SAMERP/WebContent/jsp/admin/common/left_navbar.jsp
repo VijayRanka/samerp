@@ -2,6 +2,7 @@
 <div id="sidebar"><a href="#" class="visible-phone"><i class="fa fa-home"></i> Dashboard</a>
   <ul>
     <li><a href="/SAMERP/index.jsp"><i class="fa fa-home"></i> <span>Dashboard</span></a> </li>
+    <li> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp"> <i class="icon-dashboard"></i><span class="label label-success"></span>JCB & POKLAND  <!-- Dashboard --></a> </li>
     <li><a href="/SAMERP/jsp/admin/settings/addDailyStock.jsp"><i class="fa fa-inbox"></i> <span>Add Daily Stock</span></a></li>
     <li class="submenu"> <a href="#"><i class="fa fa-th-list"></i> <span>Settings</span> <span class="label label-important">10</span></a>
       <ul>
@@ -27,7 +28,6 @@
       
     </ul>
     </li>
-    <li><a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp"><i class="fa fa-inbox"></i> <span>JCB-POC Work</span></a> </li>
     <li><a href="/SAMERP/jsp/admin/sale/sale.jsp"><i class="fa fa-inbox"></i> <span>Sale</span></a> </li>
     <li><a href="/SAMERP/jsp/admin/manufacture/purchaseRawMaterial.jsp"><i class="fa fa-th"></i> <span>Manufacture</span></a></li>
     <li><a href="/SAMERP/jsp/admin/productPurchase/productPurchase.jsp"><i class="fa fa-th"></i> <span>Purchase</span></a></li>
