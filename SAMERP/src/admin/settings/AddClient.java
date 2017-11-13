@@ -36,6 +36,7 @@ public class AddClient extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
 		GenericDAO gd=new GenericDAO();
+		String delete_client=request.getParameter("delete");
 		
 		if(request.getParameter("insert")!=null)
 		{
@@ -140,24 +141,27 @@ public class AddClient extends HttpServlet {
 		
 		}
 		
-		if(request.getParameter("delete")!=null)
+		
+		if(delete_client==null)
 		{
-			String delete_client=request.getParameter("delete");
-			String delete="delete from `client_details` where `client_id`="+delete_client+"";
+			
+			String delete="DELETE FROM client_details WHERE client_details.client_id='"+delete_client+"'";
 			System.out.println("Delete Query:"+delete);
 			int data=gd.executeCommand(delete);
 			if(data==1)
 			{
 				System.out.println("Deleted Successfully");
-				request.setAttribute("status","Deleted Successfully");
 				
-			}else
-			{
-				System.out.println("Please try again");
 				
 			}
+			
+		}else
+		{
+			request.setAttribute("error", "3");
 			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addClient.jsp");
 			rd.forward(request, response);
+			
+			
 		}
 		
 		if(request.getParameter("Updateid")!=null)

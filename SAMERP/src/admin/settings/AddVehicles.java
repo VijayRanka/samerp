@@ -30,6 +30,7 @@ public class AddVehicles extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		GenericDAO gd = new GenericDAO();
+		String deleteId = request.getParameter("delete");
 		
 		if(request.getParameter("insertSubmitBtn")!=null)
 		{
@@ -68,20 +69,22 @@ public class AddVehicles extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
-		if(request.getParameter("deleteid")!=null)
+		
+		if(deleteId==null)
 		{
-			String deleteId = request.getParameter("deleteid");	
-			String deleteVehicleQuery= "delete from vehicle_details where vehicle_id="+deleteId;
+						
+			String deleteVehicleQuery= "DELETE FROM vehicle_details WHERE vehicle_details.vehicle_id='"+deleteId+"'";
 			int deletestatus = gd.executeCommand(deleteVehicleQuery);
 			
-			if(deletestatus==1){
+			if(deletestatus==1)
+			{
 				System.out.println("delete vehicle successful");
-				request.setAttribute("status", "Vehicle Deleted Successfully");
-			}else{
-				System.out.println("delete vehicle fail");
-				request.setAttribute("status", "Vehicle Delete Fail");
-			}
-			
+				
+			}		
+		}
+		else
+		{
+			request.setAttribute("error", "2");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addVehicles.jsp");
 			rd.forward(request, response);
 		}

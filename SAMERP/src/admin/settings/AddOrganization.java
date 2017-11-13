@@ -71,6 +71,7 @@ public class AddOrganization extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
+		System.out.println("organization id:"+request.getParameter("deleteId"));
 		if(request.getParameter("deleteId")!=null)
 		{
 			int delstatus=0;
