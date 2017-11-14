@@ -720,7 +720,7 @@ public class RequireData
 			}
 			public List getDebtorList()
 			{
-				String demo="select * from debtor_master";
+				String demo="select * from debtor_master where status=0";
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
@@ -975,7 +975,7 @@ public class RequireData
 						return 1;  //
 				}
 				else{
-					return -2;
+					return 2;
 				}
 			}
 			
