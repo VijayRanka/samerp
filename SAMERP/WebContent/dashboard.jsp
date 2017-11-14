@@ -59,8 +59,8 @@
       <!-- loop for all of them goes here -->
        <!--  <li class="bg_ls"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Supply & Sale</a> </li>
 		<li class="bg_lo"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Work Details</a> </li> -->
+		<li class="bg_ly"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp"> <i class="icon-dashboard"></i><span class="label label-success"></span>JCB & POKLAND  <!-- Dashboard --></a> </li>
 		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/expenses/expenses.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Expense</a> </li>
-		<li class="bg_ly"> <a href="#"> <i class="icon-money"></i><span class="label label-success"></span>JCB POC Payment</a> </li>
 		<li class="bg_lb"> <a href="/SAMERP/jsp/admin/productPurchase/productSupplierPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Product Payment</a> </li>
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Raw Payment</a> </li>
 		<li class="bg_lo"> <a href="/SAMERP/jsp/admin/sale/salePayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Sale Payment</a> </li>
@@ -155,15 +155,7 @@
                 <%i++;}} %>
               </tbody>
             </table>
-          </div>
-          
-          
-          
-          
-          
-          
-          
-           
+          </div>          
           </div>
           
       <!-- daily expenses end  -->
@@ -224,9 +216,7 @@
                 <%i++;}} %>
               </tbody>
             </table>
-          </div>
-              
-              
+          </div>             
               
             </div>
             <div id="tab2" class="tab-pane">
@@ -291,7 +281,28 @@
             </a> 
           </div>
           <div class="collapse" id="collapseThree">
-            <div class="widget-content"> This box is now open </div>
+            
+            <div class="widget-content nopadding	">
+            <table class="table table-bordered data-table">
+              <div class="controls"style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getJcbPocData(this.value)">
+              </div> 
+              <thead>
+                <tr>
+                  <th>S.No.</th>
+                  <th>Vehicle Name</th>
+                  <th>Customer Name</th>
+                  <th>Bucket Hr</th>
+                  <th>Breaker Hr</th>
+                  <th>Deposit</th>
+                  <th>Diesel Amount</th>
+                </tr>
+              </thead>
+              <tbody id="jcbpocDataTable">
+              </tbody>
+            </table>
+            </div>
           </div>
           
       <!-- jcb poc details end -->
@@ -486,7 +497,44 @@
 </div>
 <!--end-Footer-part--> 
 <script type="text/javascript">
-
+//***************************************** JCB |POC************************************************************
+function getJcbPocData(value)
+{
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split("~");
+			if(demoStr=="")
+			document.getElementById("jcbpocDataTable").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+			else{
+				var count=1;
+				var wholeData="";
+				
+				for(var i=0;i<demoStr.length-2;i=i+6){
+						
+					wholeData+="<tr>"+
+					"<td style='text-align: center'>"+count+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+					"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+// 					"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+					"<tr>";
+					count++;
+				}
+			
+			document.getElementById("jcbpocDataTable").innerHTML=wholeData;
+			}
+		}
+	};
+	xhttp.open("GET", "/SAMERP/JcbPocDetails.do?jcbPocSelectList=" + value, true);
+	xhttp.send();
+	
+	}
+//******************************************************END JCB POC******************************************************
 var demoStr=0;
 function getExpData(value)
 {

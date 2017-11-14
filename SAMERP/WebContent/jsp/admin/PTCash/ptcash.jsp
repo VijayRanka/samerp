@@ -821,23 +821,21 @@ function searchBankName(valu)
 			
 			xhttp = new XMLHttpRequest();
 			
-			xhttp.onreadystatechange = function() {
+			xhttp.onreadystatechange = function() 
+			{
 				
-				if (this.readyState == 4 && this.status == 200) {
+				if (this.readyState == 4 && this.status == 200) 
+				{
 					
 					var demoStr = this.responseText;
 					//alert(demoStr);
 					document.getElementById("getBankName").innerHTML = demoStr;
-					}
-				};
+				}
+			};
 			xhttp.open("POST", "/SAMERP/PTCash?findBankName="+valu, true);
 			xhttp.send();
 					
 }
-
-
-
-
 </script>
 
 

@@ -93,6 +93,9 @@ to {
 	opacity: 0;
 }
 }
+.table td {
+   text-align: center;   
+}
 </style>
 <body onload="setFocusToTextBox()">
 
@@ -263,8 +266,8 @@ to {
 							
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
-										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)">Update</a>
-										/ <a href="/SAMERP/AddEmployee?deleteId=<%=empid%>">Delete</a></td>
+										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil"></i></a>
+										/ <a href="/SAMERP/AddEmployee?deleteId=<%=empid%>"><i class="icon-remove"></i></a></td>
 							
 						</tr>
 						<%

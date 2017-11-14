@@ -94,6 +94,9 @@ to {
 	opacity: 0;
 }
 }
+.table td {
+   text-align: center;   
+}
 </style>
 <body onload="loadFunction()">
 
@@ -272,8 +275,8 @@ to {
 										<td><%=bucket_rate%></td>
 										<td><%=breaker_rate%></td>
 										<td><a href="#update" data-toggle='modal'
-											onclick='getSr(<%=custid%>)'>Update</a> / <a
-											href="" onclick="DeleteCustomer(<%=custid%>)">Delete</a></td>
+											onclick='getSr(<%=custid%>)'><i class="icon-pencil"></i></a> / 
+											<a href="" onclick="DeleteCustomer(<%=custid%>)"><i class="icon-remove"></i></a></td>
 										
 									</tr>
 									<%
@@ -408,40 +411,54 @@ to {
 							<table id="display-textfeild" style="margin: 0 auto;">
 								<tr>
 									<td>
-										Project Name :
-										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" required>
+										<label>Project Name :</label>
+										<div class="controls">
+										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" style="margin-left: 105px;margin-top: -30px;" required>
 										<input type="hidden" name="custid_project" id="custid_project" >
+										</div>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										Opening Balance :
+										<label style=" margin-left: -23px;">Opening Balance :</label>
+										<div class="controls" style="margin-left: 100px;margin-top: -28px;">
 										<input type="radio" name="radios" value="1" checked="checked" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cash
 										<input type="radio" name="radios" value="2" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cheque
+										</div>
 									</td>
 								</tr>
 								<tr>
+								<%
+									RequireData rq=new RequireData();
+								List list=rq.getBank();
+								Iterator itr=list.iterator();
+								while(itr.hasNext())
+								{
+									String id=itr.next().toString();
+								
+													
+								%>
 									<td style="float: right;">
-										<input type="text" name="openingBal" id="openingBal" onkeypress="return isNumber(event)" placeholder="Deposit">
+										<input type="text" name="openingBal" id="openingBal" onkeypress="return isNumber(event)" placeholder="Deposit" style="margin-top: 13px;">
 										<var class="control-group hide" id="selectBankProject">
-											Select Bank :
-												<select class="">
-													<option>First option</option>
-													<option>Second option</option>
-													<option>Third option</option>
-													<option>Fourth option</option>
-													<option>Fifth option</option>
-													<option>Sixth option</option>
-													<option>Seventh option</option>
-													<option>Eighth option</option>
+											<label>Select Bank :</label>
+												<select name="bank_name" id="bank_id">
+												<option value="<%=id%>"><%=itr.next()%></option>
+													
 												</select>
 										</var>
 									</td>
+									<%} %>
+									
 								</tr>
+								
 								<tr>
 									<td>
 										<var class="control-group hide" id="selectBankChequeProject">
-											Cheque No :<input type="text" class="" placeholder="Cheque No" />
+											Cheque No :
+											
+											<input type="text" class="" placeholder="Cheque No" />
+											
 										</var>
 									</td>
 								</tr>
@@ -605,9 +622,10 @@ function CustomerSearch(str) {
 				var i = 0
 				for (; demoStr[i];) {
 					text += "<option id="+demoStr[i];
-			i++;
-			text += " value="+demoStr[i]+">"
-							+ demoStr[i] + "</option>";
+					i++;
+					text += " value="+demoStr[i]+">";
+					i++
+					text += demoStr[i] + "</option>";
 					i++;
 				}
 				document.getElementById("browsers").innerHTML = text;

@@ -50,7 +50,6 @@ public class AddOrganization extends HttpServlet {
 		
 			String insertQuery="INSERT INTO organization_details(organization_name, organization_address, organization_contactno1,organization_contactno2, organization_email,organization_op_balance) VALUES ('"+organizationname+"','"+address+"','"+contactno1+"','"+contactno2+"','"+email+"','"+opening_balance+"');";
 					
-			System.out.println("insert :"+insertQuery);
 			status=gd.executeCommand(insertQuery);
 			
 			/*//banck account details
@@ -71,6 +70,7 @@ public class AddOrganization extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
+		System.out.println("organization id:"+request.getParameter("deleteId"));
 		if(request.getParameter("deleteId")!=null)
 		{
 			int delstatus=0;
