@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
-import utility.SecureCode;
 
 /**
  * Servlet implementation class CheckInfo
@@ -154,7 +153,6 @@ public class CheckInfo extends HttpServlet {
 		{
 			String key=request.getParameter("activationKey");
 			GenericDAO gd=new GenericDAO();
-			SecureCode sd=new SecureCode();
 			if(key.charAt(3)=='4' && key.charAt(8)=='V')
 			{
 				String statusChange="UPDATE `user_master` SET status=1 WHERE roll=1";
