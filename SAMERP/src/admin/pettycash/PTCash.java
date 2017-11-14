@@ -35,6 +35,27 @@ public class PTCash extends HttpServlet {
 			int status=0;
 			
 			
+			
+			if(request.getParameter("getBankTableData")!=null)
+			{
+				String date=request.getParameter("getBankTableData");
+				String query="SELECT bank_account_details.id,account_details.acc_aliasname,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,account_details,debtor_master WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date='"+date+"'";
+				//out.println("working");
+				List getBankDetails=gd.getData(query);
+				Iterator itr=getBankDetails.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					Object bankName=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object particulars=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(bankName+","+debit+","+credit+","+particulars+","+type+","+balance+",");
+				}
+			}
 			if(request.getParameter("getTableData")!=null)
 			{
 				String date=request.getParameter("getTableData");
@@ -50,7 +71,7 @@ public class PTCash extends HttpServlet {
 					Object type=itr.next();
 					Object balance=itr.next();
 					
-					out.println();
+					out.print(debit+","+credit+","+type+","+balance+",");
 				}
 			}
 			if(request.getParameter("insertPetty")!=null)
