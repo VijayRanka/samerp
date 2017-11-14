@@ -187,7 +187,7 @@
             <table class="table table-bordered data-table">
             <div class="controls"style="float: right;position: relative;right: 280px;">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getPettyData(this.value)">
                 </div> 
               <thead>
                 <tr>
@@ -198,7 +198,7 @@
                   <th>Balance</th>
                 </tr>
               </thead>
-              <tbody id="expenseDataTable">
+              <tbody id="pettyDataTable">
               <% List demo=rd.getPettyCashDetailsDash();
               if(demo!=null)
               {
@@ -536,6 +536,32 @@ function getJcbPocData(value)
 	}
 //******************************************************END JCB POC******************************************************
 var demoStr=0;
+
+function getPettyData(val)
+{
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText/* .split(",") */;
+			if(demoStr=="")
+			{
+				document.getElementById("pettyDataTable").innerHTML="<tr><td colspan='5'>No Records Found!</td></tr>";
+			}
+			else
+			{
+				var count=1;
+				var wholeData="";
+				alert(demoStr);
+				
+			}
+				
+		}
+	};
+	xhttp.open("POST", "/SAMERP/PTCash?getTableData="+val, true);
+	xhttp.send();
+
+}
 function getExpData(value)
 {
 	var xhttp;
