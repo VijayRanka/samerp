@@ -67,6 +67,9 @@
     from {top: 30px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }
+.table td {
+   text-align: center;   
+}
 </style>
 <body onload="myFunction()">
 

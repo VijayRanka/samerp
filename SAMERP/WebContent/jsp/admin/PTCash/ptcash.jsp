@@ -143,7 +143,7 @@
           <div class="widget-content tab-content">
             <div id="tab1" class="tab-pane active">
             <!-- tab 1 start -->
-									<div class="widget-box">
+					<div class="widget-box">
 					<div class="widget-title">
 							<span class="icon"> <i class="icon-align-justify"></i>
 							</span>
@@ -198,10 +198,10 @@
            								 <td><input type="text"  list="getName" autocomplete="off" placeholder="HandLoan Name" id="hlName,0" name="hlName,0" <%if(request.getAttribute("hName")!=null) {%> value="<%=request.getAttribute("hName") %>" <%} %> onfocus="searchName(this.value)" style="width: 170px;margin-left:15px;margin-right: 10px;" class="span2"></td>
            								 <datalist id="getName"></datalist>
            								 <td><input type="text" name="hlAmt,0" id="hlAmt,0" <%if(request.getAttribute("amt")!=null) {%> value="<%=request.getAttribute("amt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;</td>
-           								 <td><span class="badge badge-inverse" onclick="InsertRow()"><i class="icon-plus"></i></span></td>
+           								 <td><span class="badge badge-inverse" id="addH" onclick="InsertRow()"><i class="icon-plus"></i></span></td>
            								 <td>
            								 <div id="removeH" style="display: none;">
-           								 <span class="badge badge-inverse" onclick="RemoveRow()"><i class="icon-minus"></i></span>
+           								 <span class="badge badge-inverse" id="removeH" onclick="RemoveRow()"><i class="icon-minus"></i></span>
            								 </div></td>
            								 <td><a href="#paymentEntry" data-toggle="modal">
 											<span class="badge badge-inverse">Add HandLoan</span>
@@ -229,9 +229,9 @@
            								 <td><input type="text" name="bAmt,0" id="bAmt,0" <%if(request.getAttribute("bAmt")!=null) {%> value="<%=request.getAttribute("bAmt") %>" <%} %> placeholder="Amount" style="width: 100px;" class="span2">&nbsp;&nbsp;</td>
            								 
            								 
-           								 	 <td><span class="badge badge-inverse" onclick="InsertBankRow()"><i class="icon-plus"></i></span></td>
+           								 	 <td><span class="badge badge-inverse" id="addB" onclick="InsertBankRow()"><i class="icon-plus"></i></span></td>
 	           								 <td><div id="removeBank" style="display: none;">
-	           								 	<span class="badge badge-inverse"  onclick="RemoveBankRow()"><i class="icon-minus"></i></span>
+	           								 	<span class="badge badge-inverse"  id="removeB" onclick="RemoveBankRow()"><i class="icon-minus"></i></span>
 	           								 </div></td>
 	           							
            						 	</div>
@@ -315,10 +315,95 @@
             
             <!-- tab 1 end -->  
             </div>
+            
             <div id="tab2" class="tab-pane">
              <!-- tab 2 start -->
              
-             <!-- tab 2 start -->
+             <div class="widget-box">
+					<div class="widget-title">
+							<span class="icon"> <i class="icon-align-justify"></i>
+							</span>
+							<h5>Hand Loan From Bank</h5>
+						</div>
+						
+						<div class="widget-content nopadding">
+							<form class="form-horizontal" action="/SAMERP/PTCash" method="post" name="handloan">
+								<div class="form-group">
+									<div class="widget-content nopadding">
+				
+										<div class="control-group" style="">
+											<label class="control-label">Name: </label>
+											<div class="controls">
+												<input type="text" id="namep" name="namep" list="getHandLoanName" autocomplete="off" placeholder="Name" onfocus="handLoanName(this.value)" oninput="getDetails(this.value)" onkeyup="this.value=this.value.toUpperCase()"  required />
+												<input type="text" id="namepnew" name="namepnew"  autocomplete="off" placeholder="Name" onkeyup="this.value=this.value.toUpperCase()"  style="display:none;"/>
+												<input type="text" id="status" name="status"  value="Old" placeholder="Name" />
+												<datalist id="getHandLoanName"></datalist>
+												<span class="badge badge-inverse" id="addNewH" onclick="newHandLoaner()" title="Add New"><i class="icon-plus"></i></span>
+											</div>
+										</div>
+										
+										<div class="control-group" style="">
+											<label class="control-label">Mobile No: </label>
+											<div class="controls">
+												<input type="text" id="mobilenop" name="mobilenop" placeholder="Mobile No"	maxlength="10" readonly required />
+											</div>
+										</div>
+				
+										<div class="control-group">
+											<label class="control-label">Date :</label>
+											<div class="controls">
+												<input type="date" name="datep" value="<%=requireddate%>">
+											</div>
+										</div>
+				
+										<div class="control-group" style="">
+											<label class="control-label">Amount : </label>
+											<div class="controls">
+												<input type="text" id="paidAmtp" name="paidAmtp" placeholder="Amount" 	required />
+											</div>
+										</div>
+				
+										<div class="control-group" style="">
+											<label class="control-label">Payment Mode : </label>
+											<div class="controls">
+												 <input type="radio" value="Cheque" style="margin-left: 1%;" name="payModep"	onclick="displayBank('bankDetails', 'chequeDetails')" checked/>
+												Cheque <input type="radio" value="Transfer"	style="margin-left: 1%;" name="payModep"	onclick="displayBank('bankDetails')" /> Transfer
+											</div>
+										</div>
+				
+										<div class="control-group" id="chequeDetails" style="">
+											<label class="control-label">Cheque Number : </label>
+											<div class="controls">
+												<input type="text" placeholder="Cheque Number" name="chequeNop" id="chequeNo" />
+											</div>
+										</div>
+				
+				
+										<div class="control-group" id="bankDetails" style="">
+											<label class="control-label">Bank Details : </label>
+											<div class="controls" style=" width: 220px";">
+												<input type="text"  list="getBankName" autocomplete="off" placeholder="Bank Name" id="bName,0" name="bNamep" <%if(request.getAttribute("bName")!=null) {%> value="<%=request.getAttribute("bName") %>" <%} %> onfocus="searchBankName(this.value)" style="" class="span12"></td>
+           								 	<datalist id="getBankName"></datalist>
+											</div>
+										</div>
+				
+									</div>
+								</div>
+				
+								<input type="hidden" name="supid2" id="supid2" />
+				
+								<div class="modal-footer" style="120px;">
+									<input type="submit" id="handloanbtn" name="handloanpagebtn" class="btn btn-primary" value="Submit" style="margin-right: 10px;"/> 
+									<a href="/SAMERP/dashboard.jsp" class="btn btn-danger" data-dismiss="modal" style="margin-right: 404px;">Exit</a>
+								</div>
+				
+							</form>
+						</div>
+						
+						
+			</div>
+             
+             <!-- tab 2 end -->
             </div>
             
           </div>
@@ -348,13 +433,7 @@
 				<div class="form-group">
 					<div class="widget-content nopadding">
 
-						<%
-							String totalR = "";
-							if (request.getParameter("ppid") != null) {
-								totalR = rq.getTotalRemaining(request.getParameter("ppid"));
-							}
-						%>
-
+						
 
 						<div class="control-group" style="">
 							<label class="control-label">Name: </label>
@@ -393,8 +472,6 @@
 							<label class="control-label">Payment Mode : </label>
 							<div class="controls">
 								<input type="radio" value="Cash" style="margin-left: 1%;" name="payMode" onclick="displayBank()" checked="checked" />Cash
-								 <input type="radio" value="Cheque" style="margin-left: 1%;" name="payMode"	onclick="displayBank('bankDetails', 'chequeDetails')" />
-								Cheque <input type="radio" value="Transfer"	style="margin-left: 1%;" name="payMode"	onclick="displayBank('bankDetails')" /> Transfer
 							</div>
 						</div>
 
@@ -414,11 +491,11 @@
 								<select name="bankInfo" id="bankInfo">
 									<option value="">Select Bank Account</option>
 									<%
-										List List1 = rq.getBank();
-										Iterator itr6 = List1.iterator();
-										while (itr6.hasNext()) {
+										List List2 = rq.getBank();
+										Iterator itr7 = List2.iterator();
+										while (itr7.hasNext()) {
 									%>
-									<option value="<%=itr6.next()%>"><%=itr6.next()%></option>
+									<option value="<%=itr7.next()%>"><%=itr7.next()%></option>
 									<%
 										}
 									%>
@@ -459,6 +536,69 @@ var nameCount=1;
 var bankNameCount=1;
 var counter=0;
 var bankCounter=0;
+
+function newHandLoaner()
+{
+	var newName=document.getElementById('namepnew');
+	newName.style="display:block";
+	newName.required = true;
+	document.getElementById('namep').removeAttribute("required");
+	document.getElementById('namep').style="display:none";
+	document.getElementById('status').value="New";
+	document.getElementById('mobilenop').removeAttribute("readonly");
+	document.getElementById('addNewH').style="display:none";
+	
+}
+
+function getDetails(val)
+{
+	var opts = document.getElementById('getHandLoanName').childNodes;
+	for (var i = 0; i < opts.length; i++) {
+		 if (opts[i].value === val) 
+		 {
+			 var xhttp;
+				xhttp = new XMLHttpRequest();
+				
+				xhttp.onreadystatechange = function() {
+					
+					if (this.readyState == 4 && this.status == 200) 
+					{
+						
+							var demoStr = this.responseText/* .split(",") */;
+							
+							//alert(demoStr);
+							 document.getElementById("mobilenop").value = demoStr;
+							document.getElementById("paidAmtp").focus(); 
+					}
+						
+					
+				};
+				xhttp.open("POST", "/SAMERP/PTCash?details="+val, true);
+				xhttp.send(); 
+				break;
+		 }
+	}
+	
+}
+function handLoanName(val)
+{
+	var xhttp;
+	
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function() {
+		
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText;
+			//alert(demoStr);
+			document.getElementById("getHandLoanName").innerHTML = demoStr;
+			}
+		};
+	xhttp.open("POST", "/SAMERP/PTCash?findHanLoanName="+val, true);
+	xhttp.send();
+	
+}
 function totalPetty(val)
 {
 	var prevBalance=document.getElementById('previous_balance').value;
@@ -530,6 +670,10 @@ function myFunction() {
 		    x.className = "show";
 		    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 		}
+		
+		document.getElementById("addH").style.cursor = "pointer";
+		document.getElementById("addB").style.cursor = "pointer";
+		
 	
 	//for shownig insufficient balance error
 	<%-- var bankExit = <%=request.getAttribute("bankExit") %>
@@ -549,6 +693,7 @@ function InsertBankRow()
 {
 	
 	document.getElementById("removeBank").style="display:block";
+	document.getElementById("removeB").style.cursor = "pointer";
 	var insertTable = document.getElementById("bank-details-table");
     var Row = insertTable.rows;
     var numRows = Row.length;
@@ -585,6 +730,8 @@ function RemoveBankRow() {
 
 function InsertRow() {
 	document.getElementById("removeH").style="display:block";
+	document.getElementById("removeH").style.cursor = "pointer";
+	
 	var insertTable = document.getElementById("HandLoan-details-table");
     var Row = insertTable.rows;
     var numRows = Row.length;
@@ -674,23 +821,21 @@ function searchBankName(valu)
 			
 			xhttp = new XMLHttpRequest();
 			
-			xhttp.onreadystatechange = function() {
+			xhttp.onreadystatechange = function() 
+			{
 				
-				if (this.readyState == 4 && this.status == 200) {
+				if (this.readyState == 4 && this.status == 200) 
+				{
 					
 					var demoStr = this.responseText;
 					//alert(demoStr);
 					document.getElementById("getBankName").innerHTML = demoStr;
-					}
-				};
+				}
+			};
 			xhttp.open("POST", "/SAMERP/PTCash?findBankName="+valu, true);
 			xhttp.send();
 					
 }
-
-
-
-
 </script>
 
 

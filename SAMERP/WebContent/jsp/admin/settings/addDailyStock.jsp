@@ -68,6 +68,7 @@
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
 </style>
 <body onload="myFunction()">
 

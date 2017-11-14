@@ -122,7 +122,7 @@ public class AddEmployee extends HttpServlet {
 			
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			
-			System.out.println("update :"+updatestatus);
+			
 			if(updatestatus!=0)
 			{
 				System.out.println("update Empolyee Successfully");

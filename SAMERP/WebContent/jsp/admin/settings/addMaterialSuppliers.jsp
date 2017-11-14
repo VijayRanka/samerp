@@ -222,8 +222,8 @@
 											<td>RawMaterial</td>
 										<%} %>
 														
-										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> |
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td>
+										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> /
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;
@@ -260,7 +260,7 @@
 						<div class="control-group">
 							<label class="control-label">Suppliers Business Name:</label>
 							<div class="controls">
-								<input type="hidden" id="Updateid" name="Updateid" />
+								<input type="text" id="Updateid" name="Updateid" />
 								<input type="hidden" id="old_sup_alias" name="old_sup_alias" />
 								<input type="hidden" id="update_material_type" name="material_type" />
 								 
@@ -301,7 +301,7 @@
 						<div class="control-group">
 									<label class="control-label">Opening Balance :</label>
 									<div class="controls">
-										<input type="number" name="openingbalance" id="opening_balance" class="span4"
+										<input type="number" name="opening_balance" id="opening_balance" class="span4"
 											placeholder="Opening Balance" pattern="[0-9]*" required/>
 									</div>
 								</div>
@@ -421,13 +421,13 @@
  			
  			var demoStr = this.responseText.split(",");
  			
- 			document.getElementById("Updateid").value = demoStr[0];
+ 			document.getElementById("Updateid").value =id1;
  			document.getElementById("update_business_name").value = demoStr[1];
  			document.getElementById("update_suppname").value = demoStr[2];
  			document.getElementById("update_address").value = demoStr[3];
  			document.getElementById("update_contact").value = demoStr[4];
  			document.getElementById("opening_balance").value = demoStr[5];
- 			alert(demoStr[1]);
+ 		
  			}	
  		};
  	xhttp.open("POST","/SAMERP/AddSupplyMaterial?UpdData="+id1, true);

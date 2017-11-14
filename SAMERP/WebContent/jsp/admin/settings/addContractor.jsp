@@ -65,6 +65,9 @@
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+.table td {
+   text-align: center;   
+}
 </style>
 <body onload="setFocusToTextBox()">
 
@@ -206,13 +209,13 @@
 									%>
 									<tr class="gradeX">
 										<td id="<%=id1%>"><%=count%></td>
+										<td ><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
-										<td><%=itr.next()%></td>
-										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> / 
-											<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td>
+										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
+											<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;
@@ -386,6 +389,12 @@
 	
 
 	<script type="text/javascript">
+	
+	function myFunction() {
+	    var x = document.getElementById("snackbar")
+	    x.className = "show";
+	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
 
 function searchName(id1) {
 	
@@ -395,7 +404,6 @@ function searchName(id1) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-	//	"WebContent/jsp/admin/settings/AddContractor.jsp"
 			document.getElementById("Updateid").value = demoStr[0];
 			document.getElementById("updatecname").value = demoStr[1];
 			document.getElementById("updatecontactno").value = demoStr[2];
