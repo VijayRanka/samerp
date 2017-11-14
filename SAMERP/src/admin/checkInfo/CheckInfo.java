@@ -57,7 +57,6 @@ public class CheckInfo extends HttpServlet {
 				{
 					String name=request.getParameter("username").trim();
 					HttpSession session= request.getSession();
-					System.out.println("*****Login Here Normal Admin Model******");
 					session.setAttribute("username", name);
 		    		RequestDispatcher rd= request.getRequestDispatcher("/dashboard.jsp");
 			    	rd.forward(request, response);	
@@ -95,7 +94,6 @@ public class CheckInfo extends HttpServlet {
 			  		Iterator itr=allList.iterator();
 			  		while(itr.hasNext())
 				  	{
-			  			System.out.println(name+","+pass+",");
 			  			String uname=itr.next().toString();
 			  			String upass=itr.next().toString();
 			  			int roll=Integer.parseInt(itr.next().toString());
@@ -103,7 +101,6 @@ public class CheckInfo extends HttpServlet {
 			  			String act=itr.next().toString();
 				  		if(name.equals(uname) && pass.equals(upass))
 				  		{
-				  			System.out.println("name is true "+name);
 				  			if(intStatus==1)
 				  			{
 				  				if(act.charAt(3)=='4' && act.charAt(8)=='V')
