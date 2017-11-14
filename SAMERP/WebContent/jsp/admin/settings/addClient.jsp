@@ -96,6 +96,9 @@ to {
 	opacity: 0;
 }
 }
+.table td {
+   text-align: center;   
+}
 </style>
 </head>
 
@@ -114,9 +117,9 @@ to {
 	<div id="search">
 
 		<%
-			if (request.getAttribute("status1") != null) {
+			if (request.getAttribute("status") != null) {
 		%>
-		<div id="snackbar"><%=request.getAttribute("status1")%></div>
+		<div id="snackbar"><%=request.getAttribute("status")%></div>
 		<%
 			}
 		%>
@@ -174,7 +177,7 @@ to {
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label">Client Contact No1:</label>
+									<label class="control-label">Client Contact No:</label>
 									<div class="controls">
 										<input type="text" name="contactno1" id="validateno1"
 											class="span6" placeholder="Client ContactNo1 "
@@ -184,12 +187,12 @@ to {
 								</div>
 
 								<div class="control-group">
-									<label class="control-label">Client Contact No2:</label>
+									<label class="control-label">GSTIN:</label>
 									<div class="controls">
-										<input type="text" name="contactno2" id="validateno2"
-											class="span6" placeholder="Client ContactNo2 "
+										<input type="text" name="gstin" id="gstinid"
+											class="span6" placeholder="GSTIN "
 											onkeyup="this.value=this.value.toUpperCase()"
-											pattern="[0-9]*" maxlength="10" required />
+											pattern="[0-9]*" required />
 									</div>
 								</div>
 
@@ -248,8 +251,8 @@ to {
 										<th>client_id</th>
 										<th>client_orgnization_name</th>
 										<th>client_name</th>
-										<th>client_contactno1</th>
-										<th>client_contactno2</th>
+										<th>client_contactno</th>
+										<th>gstin</th>
 										<th>client_email</th>
 										<th>client_address</th>
 										<th>client_balance_amount</th>
@@ -277,8 +280,8 @@ to {
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
-										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)">Update</a> / 
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'>Delete</a></td>
+										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;
@@ -330,7 +333,7 @@ to {
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label">Client Contact No1:</label>
+							<label class="control-label">Client Contact No:</label>
 							<div class="controls">
 								<input type="text" name="contactno1" id="Updatecontactno1"
 									class="span4" placeholder="Client ContactNo1 "
@@ -339,7 +342,7 @@ to {
 						</div>
 
 						<div class="control-group">
-							<label class="control-label">Client Contact No2:</label>
+							<label class="control-label">GSTIN:</label>
 							<div class="controls">
 								<input type="text" name="contactno2" id="Updatecontactno2"
 									class="span4" placeholder="Client ContactNo2 " maxlength="10" 
@@ -466,6 +469,14 @@ to {
 					</div>
 				</div>
 	<!--  modal end -->
+	
+	<div class="row-fluid">
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+	
 	<script type="text/javascript">
 
 function searchName(id1) {
@@ -485,7 +496,7 @@ function searchName(id1) {
 			document.getElementById("Updateemail").value = demoStr[5];
 			document.getElementById("Updateaddress").value = demoStr[6];
 			document.getElementById("Updatebamount").value = demoStr[7];
-			alert(demoStr[1]);
+			
 			
 			}
 		};

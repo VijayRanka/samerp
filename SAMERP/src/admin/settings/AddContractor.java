@@ -37,7 +37,7 @@ public class AddContractor extends HttpServlet {
 				List cheackname=null;
 				if(alias_name!=null)
 				{
-					String query1="select `name` from `contractor_master` where `name`='"+name+"'";
+					String query1="select `aliasname` from `contractor_master` where `aliasname`='"+replacealiasname+"'";
 					cheackname=gd.getData(query1);
 				}
 				
@@ -46,7 +46,7 @@ public class AddContractor extends HttpServlet {
 					char x= alias_name.charAt(0);
 					if(x==' ')
 					{
-						request.setAttribute("status", "please Enter Correct Name");
+						request.setAttribute("status", "Aliasname is Already Present!");
 						RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addContractor.jsp");
 						rd.forward(request, response);
 					}
@@ -130,27 +130,19 @@ public class AddContractor extends HttpServlet {
 			String up_aliasname=update_aliasname.replace(' ', '_');
 			boolean check=false;
 			
-			List cheackAliasName=null;
-			if(update_aliasname!=null)
+			
+			/*if(update_aliasname!=null)
 			{
-				String query1="select `name` from `contractor_master` where `name`='"+update_name+"'";
+				String query1="select `aliasname` from `contractor_master` where `aliasname`='"+up_aliasname+"'";
 				cheackAliasName=gd.getData(query1);
 				check=cheackAliasName.contains(update_name);
 			
-			}
-			if(check)
-			{
-				char x=update_aliasname.charAt(0);
-				if(x==' ')
-				{
-					request.setAttribute("status", "please Enter Correct Name");
-					RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addContractor.jsp");
-					rd.forward(request, response);
-				}
-				else
-				{
+			}*/
+				
 					/*String debtor_query="update `debtor_master` set `type`='"+up_aliasname+"'";
 					gd.executeCommand(debtor_query);*/
+					
+			
 					String query="update `contractor_master` set `name`='"+update_name+"',`contact_no`='"+update_contact_no+"',`address`='"+update_address+"',`due_balance`='"+update_duebalance+"',`aliasname`='"+up_aliasname+"' where `id`="+id1+"";
 					int i=gd.executeCommand(query);
 					
@@ -169,18 +161,12 @@ public class AddContractor extends HttpServlet {
 					rd.forward(request, response);
 				}
 			}
-			else
-			{
-				request.setAttribute("error","2");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addContractor.jsp");
-				rd.forward(request, response);
-				
-			}
 			
 			
-		}
+			
 		
-	}
+		
+	
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
