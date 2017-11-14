@@ -226,7 +226,7 @@
             <table class="table table-bordered data-table">
             <div class="controls" style="float: right;position: relative;right: 280px;">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getBankData(this.value)">
                 </div> 
               <thead>
                 <tr>
@@ -239,7 +239,7 @@
                   <th>Balance</th>
                 </tr>
               </thead>
-              <tbody id="expenseDataTable">
+              <tbody id="bankDataTable">
               <% List badDetailsDash=rd.getbadDetailsDash();
               if(badDetailsDash!=null)
               {
@@ -537,13 +537,53 @@ function getJcbPocData(value)
 //******************************************************END JCB POC******************************************************
 var demoStr=0;
 
+function getBankData(val)
+{
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			if(demoStr=="")
+			{
+				document.getElementById("bankDataTable").innerHTML="<tr><td colspan='7'>No Records Found!</td></tr>";
+			}
+			else
+			{
+				var count=1;
+				var wholeData="";
+				 
+				 for(var i=0;i<=demoStr.length-2;i=i+6)
+				{
+					wholeData+="<tr>"+
+					"<td style='text-align: center'>"+count+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+					"</tr>"
+					count++;
+				} 
+				document.getElementById("bankDataTable").innerHTML=wholeData; 
+				
+			}
+				
+		}
+	};
+	xhttp.open("POST", "/SAMERP/PTCash?getBankTableData="+val, true);
+	xhttp.send();
+
+}
+
 function getPettyData(val)
 {
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			var demoStr = this.responseText/* .split(",") */;
+			var demoStr = this.responseText.split(",");
 			if(demoStr=="")
 			{
 				document.getElementById("pettyDataTable").innerHTML="<tr><td colspan='5'>No Records Found!</td></tr>";
@@ -551,8 +591,21 @@ function getPettyData(val)
 			else
 			{
 				var count=1;
-				var wholeData="";
-				alert(demoStr);
+				//alert(demoStr.length);
+				 var wholeData="";
+				 
+				 for(var i=0;i<=demoStr.length-2;i=i+4)
+				{
+					wholeData+="<tr>"+
+					"<td style='text-align: center'>"+count+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+					"</tr>"
+					count++;
+				} 
+				document.getElementById("pettyDataTable").innerHTML=wholeData;
 				
 			}
 				
