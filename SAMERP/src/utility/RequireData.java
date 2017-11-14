@@ -993,6 +993,21 @@ public class RequireData
 				return List;
 			}
 			
+/*			public List getPettyCashDetailsDash(){
+				List List = gd.getData("");
+				return List;
+			}
+			
+			public List getbadDetailsDash(){
+				List List = gd.getData("");
+				return List;
+			}
+			public List getPettyCashDetails(){
+				List List = gd.getData("");
+				return List;
+			}*/
+			
+			
 			//-- common methods end
 	
 }
