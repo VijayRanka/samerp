@@ -228,19 +228,22 @@ function getBillReportData() {
 				for(var i=0;i<demoStr.length-2;i=i+5){
 						
 					wholeData+="<tr>"+
-					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
-					"<td style='text-align: center' >"+demoStr[i+4]+"%</td>";
+					"<td>"+demoStr[i]+"</td>"+
+					"<td>"+demoStr[i+1]+"</td>";
+					var billdate=demoStr[i+2].split("-");
+					billdate=billdate[2]+"-"+billdate[1]+"-"+billdate[0];
+					
+					wholeData+="<td>"+billdate+"</td>"+
+					"<td>"+demoStr[i+3]+"</td>"+
+					"<td>"+demoStr[i+4]+"%</td>";
 					var gst=demoStr[i+4];
 					gst=gst/2;
 					gst=gst/100;
 					var cgst=Math.round((demoStr[i+3]*gst) * 100) / 100;
 					var sgst=Math.round((demoStr[i+3]*gst) * 100) / 100;
-					wholeData+="<td style='text-align: center' >"+cgst+"</td>"+
-					"<td style='text-align: center' >"+sgst+"</td>"+
-					"<td style='text-align: center' >"+Math.round((parseFloat(demoStr[i+3]) + parseFloat(cgst) + parseFloat(sgst)) * 100) / 100+"</td>"+
+					wholeData+="<td >"+cgst+"</td>"+
+					"<td>"+sgst+"</td>"+
+					"<td>"+Math.round((parseFloat(demoStr[i+3]) + parseFloat(cgst) + parseFloat(sgst)) * 100) / 100+"</td>"+
 					"<tr>";
 					count++;
 				}
@@ -351,12 +354,13 @@ function DoOnCellHtmlData(cell, row, col, data) {
     	'#createBillTable tbody tr th{'+
     		'border: 1px;'+
     		'border-style: groove;'+
+    		'font-size: x-small;'+
     	'}'+
     	'h2,h3,h6{'+
     		'margin:-3px 0;'+
     	'}'+
        '</style>';
-       htmlToPrint +="<table style=\"margin: 0 auto;\" id=\"createBillTable\"><thead><tr><th  colspan=\"8\"><h2 style=\"color: #ff704d\">SAMRUDDHI EARTHMOVERS</h2></th></tr><tr><th colspan=\"6\"><h3 style=\"margin-left: 35%;\">EARTH WORK CONTRACTORS</h3></th><th colspan=\"2\" style=\"vertical-align: bottom;\"><h6>From : <var style=\"color: #ff704d;\">"+from+"</var>  To : <var style=\"color: #ff704d;\">"+to+"</var></h6></th></tr><tr style=\"border-top: 1px; border-top-style: groove;\"><th colspan=\"8\"><h6>A/P-Naigaon(Shivalaya Bunglow),Tal-Haveli,Dist-Pune.Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com</h6></th></tr></thead><tbody><tr><th>Invoice No</th><th>Customer Name</th><th>Date</th><th>Taxable Amount</th><th>GST</th><th>CGST Amount</th><th>SGST Amount</th><th>Total Amount</th></tr></tbody>";
+       htmlToPrint +="<table style=\"margin: 0 auto;\" id=\"createBillTable\"><thead><tr><th  colspan=\"8\"><h2 style=\"color: #ff704d\">SAMRUDDHI EARTHMOVERS</h2></th></tr><tr><th colspan=\"6\"><h3 style=\"margin-left: 35%;    font-size: larger;\">EARTH WORK CONTRACTORS</h3></th><th colspan=\"2\" style=\"vertical-align: bottom;\"><h6>From : <var style=\"color: #ff704d;\">"+from+"</var>  To : <var style=\"color: #ff704d;\">"+to+"</var></h6></th></tr><tr style=\"border-top: 1px; border-top-style: groove;\"><th colspan=\"8\"><h6>A/P-Naigaon(Shivalaya Bunglow),Tal-Haveli,Dist-Pune.Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com</h6></th></tr></thead><tbody><tr><th>Invoice No</th><th>Customer Name</th><th>Date</th><th>Taxable Amount</th><th>GST</th><th>CGST Amount</th><th>SGST Amount</th><th>Total Amount</th></tr></tbody>";
        htmlToPrint += divToPrint.outerHTML+"</table>";
 	   newWin= window.open("");
 	   newWin.document.write(htmlToPrint);

@@ -25,13 +25,9 @@
 	}
 
 	#loginbox{
-		background-image: url("/SAMERP/config/img/secure3.jpg");	 
-	    background-size:cover;
-	    background-position : center;
-	   
-		 float: left;
+		float:right;
 		 position: relative;
-		 left:120px; 
+		 bottom:135px; 
 	}
 #snackbar {
 	    visibility: hidden;
@@ -74,9 +70,209 @@
     from {top: 50px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }
+#loginbox form {
+    width: 100%;}
+    
+#loginbox .control-group {
+    padding: 2px 0;
+    margin-bottom: 0px;
+}
+#loginbox .main_input_box input {
+    background-color: rgba(0, 0, 0, 0.29);
+    height: 30px;
+    vertical-align: top;
+    border: 0px;
+    display: inline-block;
+    width: 75%;
+    line-height: 22px;
+    margin-bottom: 3px;
+    border-radius: 50px;
+    text-align: center;
+}
+
+#loginbox .main_input_box input {
+    color: #090909;
+    background-color: rgba(188, 185, 185, 0.23);
+    height: 30px;
+    vertical-align: top;
+    border: 1px solid;
+    display: inline-block;
+    width: 75%;
+    line-height: 22px;
+    margin-bottom: 3px;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 16px;
+}
+#loginbox .form-actions {
+    position: relative;
+    padding: 0px 0px 0px;
+    border: none;
+    bottom: 10px;
+}
+#loginbox .controls {
+    padding: 0px 45px;
+}
+
+
 
 	</style>
 
+
+    </head>
+<body onload="startFun()">
+<% if(request.getAttribute("status")!=null){ if(session.getAttribute("sAdmin")!=null){session.removeAttribute("sAdmin");}%>
+		<div id="snackbar"><%=request.getAttribute("status")%></div>
+	<%} %>
+        <div id="loginbox" > 
+        <%System.out.println("In Login.jsp"); %>           
+            <form id="loginform"  class="form-vertical" action="/SAMERP/checkInfo" method="post" style="background: none; border: black; ">
+				 <div class="control-group normal_text"  style="background: none;position: relative; left: 130px">
+				  <h3 style="border-radius: 10px; width: 165px; background-color: #fef121; color: #000000;">Login Here</h3></div>
+                <div class="control-group input1">
+                    <div class="controls" >
+                        <div class="main_input_box"  >
+                            <input type="text" autocomplete="off" name="username" id="usernameid" placeholder="Username" required style="font-size: 16px;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group input2">
+                    <div class="controls">
+                        <div class="main_input_box">
+                            <input type="password" autocomplete="off" name="userpass" id="userpassid" placeholder="Password" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                  <span class ="pull-center"><input type="button" onclick="hello()" class="btn btn-success" name="Login"  value="Login" style=" background-color: #fef121; position: relative; float: right; right: 250px; border-radius: 50px;color: black;" /> </span>
+                    <span class ="pull-center"><a href="#" class="flip-link btn btn-info" id="to-recover" style="position: relative; float: right; right: 50px; border-radius: 50px;color: black;background-color: #fef121;">Lost password?</a></span>
+                    </div>
+            </form>
+        </div>
+	<script type="text/javascript">
+	function hello()
+	{
+		var uName=document.getElementById("usernameid").value;
+		var uPass=document.getElementById("userpassid").value;
+			var xhttp = new XMLHttpRequest();
+			
+			xhttp.onreadystatechange = function() {
+				
+				if (this.readyState == 4 && this.status == 200) {
+					
+					var demoStr = this.responseText;
+					if(demoStr=="activation")
+						 $("#activation").modal();
+					else if(demoStr=="wUser")
+						 $("#loginfail").modal();
+					else if(demoStr=="dnp")
+						 $("#ServiceProvider").modal();
+					else if(demoStr=="missingKey")
+						 $("#ServiceProvider").modal();
+					else if(demoStr=="success")
+						{
+						var input=document.createElement("input");
+						input.type="hidden";
+						input.name="fullyCheck";
+						input.value="fullyCheck";
+						document.getElementById("loginform").appendChild(input);
+						document.getElementById("loginform").submit();
+						}
+				}
+				};
+			xhttp.open("POST", "/SAMERP/checkInfo?checkDetails=1&uName="+uName+"&uPass="+uPass, true);
+			xhttp.send(); 
+		
+	}
+	
+	
+	
+	
+	</script>
+	
+		<div class="modal hide fade" id="loginfail" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+					<h4 class="modal-title">LogIn</h4>
+				</div>
+		<div class="modal-body">
+				<div class="alert alert-danger"  style="margin-top: 18px;">
+  				 <i class="fa fa-times-circle-o" style="font-size:2em;"></i><strong style="font-size:1.2em;"> Incorrect Username & Password...</strong> 
+				</div>
+	</div>
+	<div class="modal-footer">
+		<form>
+			<input type="button" class="btn btn-primary" data-dismiss="modal"
+				value="OK" id="ok" name="ok" />
+		</form>
+	</div>
+	</div>
+	</div>
+	</div>
+	
+	<div class="modal hide fade" id="ServiceProvider" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Wrong Authorization</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="alert alert-danger" style="margin-top: 18px;">
+						<i class="fa fa-times-circle-o" style="font-size: 2em;"></i><strong
+							style="font-size: 1.2em;"> Not Registerd any user.
+							Please contact to Vendor ! or Please contact to Support
+							department of Vertical Software <br> Contact No. - 8390859090.
+						</strong>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<form>
+						<input type="button" class="btn btn-primary" data-dismiss="modal"
+							value="OK" id="ok" name="ok" />
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal hide fade" id="activation" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Activation Phase:</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="control-group" id="Block">
+						<label class="control-label offset1">Enter Activation Key
+							:</label>
+						<div class="controls">
+							<input type="text" class="span4" id="actKey" name="activationKey"
+								style="position: relative; left: 10px;"
+								onblur=document.getElementById( 'actId').innerHTML="" />
+							<p id="actId"
+								style="color: red; float: right; position: relative; right: 75px; top: 5px; font-weight: bold;"></p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer" id="mdFoot">
+
+					<button type="button" onclick="checkKey()" name="Activate"
+						class="btn btn-success">Activate</button>
+					<button type="button" class="btn btn-danger pull-center"
+						data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	 <script src="/MSaleERP/config/js/jquery.min.js"></script> <script
+		src="/MSaleERP/config/js/matrix.login.js"></script> <script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
 <script type="text/javascript">
 
 function setFocusToTextBox() {
@@ -87,7 +283,7 @@ function setFocusToTextBox() {
 	window.onhashchange=function(){window.location.hash="no-back-button";}
 
 }
-function showActivation(){
+
 
 	if(document.getElementById("activation")!=null)
 		$('#activation').modal('show');
@@ -257,12 +453,11 @@ function showWrongAuthentication(){
         
     </body>
 <script type="text/javascript">
+=======
+>>>>>>> refs/remotes/origin/master
 function startFun()
 {
 	showsnack();
-	showModal();
-	showActivation();
-	showWrongAuthentication();
 	}
 
 $('#lofinfail').on('shown.bs.modal', function () {
@@ -274,6 +469,7 @@ $('#ServiceProvider').on('shown.bs.modal', function () {
 $('#activation').on('shown.bs.modal', function () {
     $('#actKey').focus();
 }) 
+
 function showsnack()
 {
 	if(document.getElementById("snackbar")==null)
@@ -286,6 +482,7 @@ function showsnack()
 	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 	}
 	}
+	
 function checkKey()
 {
 	if(document.getElementById("actKey").value=="")
@@ -297,7 +494,7 @@ else
 {
 	var key=document.getElementById("actKey").value;
 	var request=new XMLHttpRequest();
-	var url="/SAMERP/LoginAction.do?Activate=1&activationKey="+key;  
+	var url="/SAMERP/checkInfo?Activate=1&activationKey="+key;  
 
 	try{  
 			request.onreadystatechange=function()
@@ -328,11 +525,6 @@ else
 	
 	}
 }
-	
-
-	
-	
-
 
 </script>
 </html>

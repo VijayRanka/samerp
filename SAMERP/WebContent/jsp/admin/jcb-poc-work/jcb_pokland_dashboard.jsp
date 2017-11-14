@@ -63,7 +63,7 @@
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/settings/addCustomer.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Add Customer</a> </li>
 		<li class="bg_lo"> <a href="#"> <i class="icon-money"></i><span class="label label-success"></span>Add Project</a> </li>
       	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocBill.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Create Bill</a> </li>
-      	<li class="bg_lb"> <a href="#"> <i class="icon-money"></i><span class="label label-success"></span>Report</a> </li>
+      	<li class="bg_lb"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocReport.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Report</a> </li>
       </ul>
     </div>
 <!--End-Action boxes-->    

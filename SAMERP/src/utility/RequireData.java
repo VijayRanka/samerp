@@ -344,6 +344,13 @@ public class RequireData
 		return list;
 	}
 	
+	public List getHandLoanDetailsInPetty()
+	{
+		String query="SELECT handloan_details.id,handloan_details.date,handloan_master.alias_name,handloan_details.debit,handloan_details.credit,handloan_details.mode,handloan_details.particulars,handloan_details.balance FROM handloan_master,handloan_details WHERE handloan_details.handloan_id=handloan_master.id ORDER BY handloan_details.id DESC";
+		List list=gd.getData(query);
+		return list;
+	}
+	
 	
 	//--omkar end
 	
@@ -727,7 +734,7 @@ public class RequireData
 			}
 			public List getDebtorList()
 			{
-				String demo="select * from debtor_master";
+				String demo="select * from debtor_master where status=0";
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
@@ -982,7 +989,7 @@ public class RequireData
 						return 1;  //
 				}
 				else{
-					return -2;
+					return 2;
 				}
 			}
 			
@@ -1042,6 +1049,21 @@ public class RequireData
 				List List = gd.getData(query);
 				return List;
 			}
+			
+/*			public List getPettyCashDetailsDash(){
+				List List = gd.getData("");
+				return List;
+			}
+			
+			public List getbadDetailsDash(){
+				List List = gd.getData("");
+				return List;
+			}
+			public List getPettyCashDetails(){
+				List List = gd.getData("");
+				return List;
+			}*/
+			
 			
 			//-- common methods end
 	

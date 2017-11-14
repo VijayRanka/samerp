@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 //@WebServlet("/PTCash")
 public class PTCash extends HttpServlet {
@@ -30,10 +31,49 @@ public class PTCash extends HttpServlet {
 			response.setContentType("text/html");
 			PrintWriter out=response.getWriter();
 			GenericDAO gd=new GenericDAO();
-						
+			RequireData rd=new RequireData();			
 			int status=0;
 			
 			
+			
+			if(request.getParameter("getBankTableData")!=null)
+			{
+				String date=request.getParameter("getBankTableData");
+				String query="SELECT bank_account_details.id,account_details.acc_aliasname,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,account_details,debtor_master WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date='"+date+"'";
+				//out.println("working");
+				List getBankDetails=gd.getData(query);
+				Iterator itr=getBankDetails.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					Object bankName=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object particulars=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(bankName+","+debit+","+credit+","+particulars+","+type+","+balance+",");
+				}
+			}
+			if(request.getParameter("getTableData")!=null)
+			{
+				String date=request.getParameter("getTableData");
+				//out.println("working");
+				String query="SELECT petty_cash_details.id,petty_cash_details.debit,petty_cash_details.credit,debtor_master.type,petty_cash_details.balance FROM petty_cash_details,debtor_master WHERE petty_cash_details.debtor_id=debtor_master.id AND petty_cash_details.date='"+date+"'";
+				List getPettyDetails=gd.getData(query);
+				Iterator itr=getPettyDetails.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(debit+","+credit+","+type+","+balance+",");
+				}
+			}
 			if(request.getParameter("insertPetty")!=null)
 			{
 				String pettyDate=request.getParameter("date");
@@ -177,7 +217,186 @@ public class PTCash extends HttpServlet {
 			}
 			
 				
+			
+			if(request.getParameter("handloanpagebtn")!=null)
+			{
+				int status1=0;		
+				String name=request.getParameter("namep");
+				String newName=request.getParameter("namepnew");
+				
+				String mobileNo=request.getParameter("mobilenop");	
+				String aliasname="HL_"+name.replace(" ", "_")+"_"+mobileNo;
+				String newAlias="HL_"+newName.replace(" ", "_")+"_"+mobileNo;
+				String date=request.getParameter("datep");				
+				String amount=request.getParameter("paidAmtp");				
+				String paymode=request.getParameter("payModep");
+				String chequeNo=request.getParameter("chequeNop");
+				String bank_name=request.getParameter("bNamep");
+				String stus=request.getParameter("status");
+				
+				//out.println("working"+bank_name);
+				
+				//System.out.println("inside btn");
+				
+				
+				if(stus.equals("New"))
+				{
+					System.out.println("inside new");
+					String HL_MasterDetails="INSERT INTO handloan_master(name,mob_no,alias_name) VALUES('"+newName+"','"+mobileNo+"','"+newAlias+"')";
+					status1=gd.executeCommand(HL_MasterDetails);
 					
+					String debtor_master="insert into `debtor_master`(`type`) values('"+newAlias+"')";
+					gd.executeCommand(debtor_master);
+					
+					if(paymode.equals("Cheque"))
+					{
+						System.out.println("inside new cheque");
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ((SELECT MAX(id) FROM handloan_master),'"+date+"',"+amount+","+0+",'CHEQUE','"+chequeNo+"',"+amount+")";
+						int insertStatus=gd.executeCommand(insertHandLoanDetails);
+						if(insertStatus>0)
+						{
+							System.out.println("inside new cheque sucess");
+							String getBankBalance="SELECT bank_account_details.bid,bank_account_details.balance FROM bank_account_details,account_details WHERE bank_account_details.bid=account_details.acc_id AND account_details.acc_aliasname='"+bank_name+"' ORDER BY bank_account_details.id DESC LIMIT 1";
+							List bankBalance=gd.getData(getBankBalance);
+							int newBankBalance=Integer.parseInt(amount)+(int)bankBalance.get(1);
+							int debtorId=rd.getDebtorId(newAlias);
+							
+							String insertBankDetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+									+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN CHEQUE',"+debtorId+","+newBankBalance+")";
+							int bankStatus=gd.executeCommand(insertBankDetails);
+							if(bankStatus>0)
+							{
+								System.out.println(amount+" New Cheque Inserted "+newBankBalance);
+								request.setAttribute("status", "Rs."+amount+" HandLoan Added in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
+							}
+							
+						}
+					}
+					else if(paymode.equals("Transfer"))
+					{
+						System.out.println("inside new transfer");
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ((SELECT MAX(id) FROM handloan_master),'"+date+"',"+amount+","+0+",'TRANSFER','-',"+amount+")";
+						int insertStatus=gd.executeCommand(insertHandLoanDetails);
+						if(insertStatus>0)
+						{
+							System.out.println("inside new transfer success");
+							String getBankBalance="SELECT bank_account_details.bid,bank_account_details.balance FROM bank_account_details,account_details WHERE bank_account_details.bid=account_details.acc_id AND account_details.acc_aliasname='"+bank_name+"' ORDER BY bank_account_details.id DESC LIMIT 1";
+							System.out.println(getBankBalance);
+							List bankBalance=gd.getData(getBankBalance);
+							int newBankBalance=Integer.parseInt(amount)+(int)bankBalance.get(1);
+							int debtorId=rd.getDebtorId(newAlias);
+							
+							String insertBankDetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+									+ "VALUES ("+bankBalance.get(0)+",'"+date+"',"+0+","+amount+",'HANDLOAN TRANSFER',"+debtorId+","+newBankBalance+")";
+							int bankStatus=gd.executeCommand(insertBankDetails);
+							if(bankStatus>0)
+							{
+								System.out.println(amount+" New Transfer Inserted "+newBankBalance);
+								request.setAttribute("status", "Rs."+amount+" HandLoan Transfer in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
+							}
+							
+						}
+						
+					}
+					
+				}
+				else if(stus.equals("Old"))
+				{
+					String getHandloadDetailsBalance="SELECT handloan_details.handloan_id,handloan_details.balance FROM handloan_details,handloan_master WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+aliasname+"' ORDER BY handloan_details.id DESC LIMIT 1";
+					List handLoanDetailsBalance=gd.getData(getHandloadDetailsBalance);
+					int newHandLoanBalance=Integer.parseInt(amount)+(int)handLoanDetailsBalance.get(1);
+					
+					if(paymode.equals("Cheque"))
+					{
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ("+handLoanDetailsBalance.get(0)+",'"+date+"',"+amount+","+0+",'CHEQUE','"+chequeNo+"',"+newHandLoanBalance+")";
+						int insertStatus=gd.executeCommand(insertHandLoanDetails);
+						if(insertStatus>0)
+						{
+							String getBankBalance="SELECT bank_account_details.bid,bank_account_details.balance FROM bank_account_details,account_details WHERE bank_account_details.bid=account_details.acc_id AND account_details.acc_aliasname='"+bank_name+"' ORDER BY bank_account_details.id DESC LIMIT 1";
+							List bankBalance=gd.getData(getBankBalance);
+							int newBankBalance=Integer.parseInt(amount)+(int)bankBalance.get(1);
+							int debtorId=rd.getDebtorId(aliasname);
+							
+							String insertBankDetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+									+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN CHEQUE',"+debtorId+","+newBankBalance+")";
+							int bankStatus=gd.executeCommand(insertBankDetails);
+							if(bankStatus>0)
+							{
+								System.out.println(newHandLoanBalance+" Old Cheque Inserted "+newBankBalance);
+								
+								request.setAttribute("status", "Rs."+amount+" HandLoan Added in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
+							}
+							
+						}
+						
+					}
+					else if(paymode.equals("Transfer"))
+					{
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ("+handLoanDetailsBalance.get(0)+",'"+date+"',"+amount+","+0+",'TRANSFER','',"+newHandLoanBalance+")";
+						int insertStatus=gd.executeCommand(insertHandLoanDetails);
+						if(insertStatus>0)
+						{
+							String getBankBalance="SELECT bank_account_details.bid,bank_account_details.balance FROM bank_account_details,account_details WHERE bank_account_details.bid=account_details.acc_id AND account_details.acc_aliasname='"+bank_name+"' ORDER BY bank_account_details.id DESC LIMIT 1";
+							List bankBalance=gd.getData(getBankBalance);
+							int newBankBalance=Integer.parseInt(amount)+(int)bankBalance.get(1);
+							int debtorId=rd.getDebtorId(aliasname);
+							
+							String insertBankDetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+									+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN TRANSFER',"+debtorId+","+newBankBalance+")";
+							int bankStatus=gd.executeCommand(insertBankDetails);
+							if(bankStatus>0)
+							{
+								System.out.println(newHandLoanBalance+" Old Transfer Inserted "+newBankBalance);
+								request.setAttribute("status", "Rs."+amount+" HandLoan Transfer in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
+							}
+						}
+						
+					}
+					
+				}
+				
+				
+				
+				
+				
+				
+				
+			}
+			
+			if(request.getParameter("details")!=null)
+			{
+				String name=request.getParameter("details");
+				String getDetails="SELECT mob_no FROM handloan_master WHERE name='"+name+"'";
+				List details=gd.getData(getDetails);
+				out.print(details.get(0));
+			}
+				
+			if(request.getParameter("findHanLoanName")!=null)
+			{
+				String name=request.getParameter("findHanLoanName");
+				String query="SELECT id,name FROM handloan_master";
+				List getHandloadName=gd.getData(query);
+				Iterator itr=getHandloadName.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					out.println("<option>"+itr.next()+"</option>");
+				}
+				
+			}
+				
 			if(request.getParameter("handloanbtn")!=null)
 			{
 				
