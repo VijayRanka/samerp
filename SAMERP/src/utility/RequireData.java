@@ -713,7 +713,7 @@ public class RequireData
 			}
 			public List getDebtorList()
 			{
-				String demo="select * from debtor_master";
+				String demo="select * from debtor_master where status=0";
 				List demoList=gd.getData(demo);
 				return demoList;
 			}

@@ -528,16 +528,20 @@ public class Expenses extends HttpServlet {
 					int pcStatus=rd.checkPCStatus(amount);
 					if(pcStatus==0)
 					{
-						request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+						request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_0");
 					
 					}
 					else if(pcStatus==-1)
 					{
-						request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+						request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_-1");
 					}
 					else if(pcStatus==1)
 					{
 						amountStatusClear=true;
+					}
+					else if(pcStatus==-2)
+					{
+						request.setAttribute("payError", "YOU HAVEN'T ADDED PETI-CASH YET_c_-2");
 					}
 					
 				}
@@ -546,11 +550,16 @@ public class Expenses extends HttpServlet {
 					int badStatus=rd.checkBankBalance(amount,bankInfo);
 					if(badStatus==0)
 							{
-								request.setAttribute("status", "You have insufficient balance in your Bank");
+						System.out.println("0");
+								request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANk_b_0");
 							}
 					else if(badStatus==-1)
 					{
-						request.setAttribute("status", "You have insufficient balance in your Bank");
+						request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
+					}
+					else if(badStatus==-2)
+					{
+						request.setAttribute("payError", "YOU HAVEN'T ADDED ADDED AMOUNT IN BANK YET_b_-2");
 					}
 					else if(badStatus==1)
 					{

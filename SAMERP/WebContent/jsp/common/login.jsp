@@ -118,40 +118,6 @@
 
 	</style>
 
-<script type="text/javascript">
-
-function setFocusToTextBox() {
-	document.getElementById("usernameid").focus();
-	window.history.forward();
-	window.location.hash="no-back-button";
-	window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
-	window.onhashchange=function(){window.location.hash="no-back-button";}
-
-}
-function showActivation(){
-
-	if(document.getElementById("activation")!=null)
-		$('#activation').modal('show');
-}
-
-function showModal(){
-
-	setFocusToTextBox();
-	var error = document.getElementById("error").value;
-		
-		if(error==1)
-		{
-			//alert("Sasasa");
-			$('#lofinfail').modal('show');
-		}	
-}
-function showWrongAuthentication(){
-	
-	if(document.getElementById("ServiceProvider")!=null)
-			$('#ServiceProvider').modal('show');
-}
-
-</script>
 
     </head>
 <body onload="startFun()">
@@ -206,13 +172,12 @@ function showWrongAuthentication(){
 					else if(demoStr=="success")
 						{
 						var input=document.createElement("input");
+						input.type="hidden";
 						input.name="fullyCheck";
 						input.value="fullyCheck";
 						document.getElementById("loginform").appendChild(input);
 						document.getElementById("loginform").submit();
 						}
-						 
-					
 				}
 				};
 			xhttp.open("POST", "/SAMERP/checkInfo?checkDetails=1&uName="+uName+"&uPass="+uPass, true);
@@ -309,12 +274,19 @@ function showWrongAuthentication(){
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 <script type="text/javascript">
+
+function setFocusToTextBox() {
+	document.getElementById("usernameid").focus();
+	window.history.forward();
+	window.location.hash="no-back-button";
+	window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+	window.onhashchange=function(){window.location.hash="no-back-button";}
+
+}
+
 function startFun()
 {
 	showsnack();
-	showModal();
-	showActivation();
-	showWrongAuthentication();
 	}
 
 $('#lofinfail').on('shown.bs.modal', function () {
@@ -382,11 +354,6 @@ else
 	
 	}
 }
-	
-
-	
-	
-
 
 </script>
 </html>

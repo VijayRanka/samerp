@@ -8,10 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<html lang="en">
-<head>
-<title>SAMERP PROJECT</title>
+<title>EXPENSES</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
@@ -553,6 +550,33 @@ display: none;}
 			</div>
 
 		</div>
+		<div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; display: inherit; "> Warning </h4> </i> 
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+					<div class="alert">
+		              <h4 id="payStatus"> Insufficient balance in your Bank Account..!!  </h4> </div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" href="#" class="btn btn-primary" id="pettyCashOk" tabindex="1" data-dismiss="modal">OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" class="btn btn-danger" tabindex="2">Cancel</button>
+				
+			</div>
+	
+		</form>
+	</div>
+</div>
 
 <script>
 function onUamount()
@@ -600,6 +624,48 @@ function displayBank(id, id1){
 	}
 }
 function myFunction() {
+	<%if(request.getAttribute("payError")!=null){%>
+	var payError = "<%=request.getAttribute("payError") %>";
+	
+	if(payError.split("_")[1]==='c')
+		{
+		
+			if(payError.split("_")[2]==='0')
+					{
+				$('#payStatus').text(payError.split("_")[0]);
+				$('#pettyCashError').modal('show');
+					}
+			
+			if(payError.split("_")[2]==='-1')
+					{
+				$('#payStatus').text(payError.split("_")[0]);
+				$('#pettyCashError').modal('show');
+					}
+			if(payError.split("_")[2]==='-2')
+					{
+				$('#payStatus').text(payError.split("_")[0]);
+				$('#pettyCashError').modal('show');
+					}
+		}
+		else if(payError.split("_")[1]==='b')
+		{
+				if(payError.split("_")[2]==='0')
+						{
+					$('#payStatus').text(payError.split("_")[0]);
+					$('#pettyCashError').modal('show');
+						}
+				if(payError.split("_")[2]==='-1')
+						{
+					$('#payStatus').text(payError.split("_")[0]);
+					$('#pettyCashError').modal('show');
+						}
+				if(payError.split("_")[2]==='-2')
+						{
+					$('#payStatus').text(payError.split("_")[0]);
+					$('#pettyCashError').modal('show');
+						}
+		}
+	<%}%>
 	document.getElementById("expenses_type_name").focus();
     var x = document.getElementById("snackbar");
     if(x!=null)
@@ -1001,6 +1067,9 @@ $('#update').on('shown.bs.modal', function () {
 $('#addDebtor').on('shown.bs.modal', function () {
 	document.getElementById("debtor").value="";
     $('#debtor').focus();
+})
+$('#pettyCashError').on('shown.bs.modal', function () {
+    $('#pettyCashOk').focus();
 })
 </script> 
 </html>
