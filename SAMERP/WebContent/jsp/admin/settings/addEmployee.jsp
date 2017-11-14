@@ -15,88 +15,60 @@
 <link rel="stylesheet" href="/SAMERP/config/css/fullcalendar.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link href="/SAMERP/config/font-awesome/css/font-awesome.css"
-	rel="stylesheet" />
+<link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="/SAMERP/config/css/jquery.gritter.css" />
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
-</head>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
+
 <style>
 #snackbar {
-	visibility: hidden;
-	min-width: 250px;
-	margin-left: -125px;
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	border-radius: 2px;
-	padding: 16px;
-	position: fixed;
-	z-index: 1;
-	left: 50%;
-	bottom: 30px;
-	font-size: 15px;
-	border-radius: 50px 50px;
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50px;
+    font-size: 15px;
+    border-radius:50px 50px;
 }
 
 #snackbar.show {
-	visibility: visible;
-	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-@
--webkit-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
-}
-@
-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
-}
-
-}
-@
--webkit-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
-
-}
-@
-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 .table td {
    text-align: center;   
 }
 </style>
+</head>
+
 <body onload="setFocusToTextBox()">
 
 	<!--Header-part-->
@@ -205,7 +177,7 @@ to {
 								
 									<button type="submit" name="submit"
 										class="btn btn-success"
-										style="position: relative; right: 700px; float: right;">Submit</button>
+										style="position: relative; right: 685px; float: right;">Submit</button>
 									<a href="/SAMERP/index.jsp"><button type="button"
 											class="btn btn-danger "
 											style="position: relative; right: 550px; float: right;">Exit</button></a>
@@ -338,7 +310,7 @@ to {
 											<%
 												}
 											%>
-										</select><input type="hidden" id="old_contractor_vehicle" name="old_contractor_vehicle">
+										</select><input type="text" id="old_contractor_vehicle" name="old_contractor_vehicle">
 									</div>
 									<%
 										}
@@ -355,7 +327,7 @@ to {
 								</div>
 							
 								<div class='modal-footer' >
-							<button type="submit" name="insertemployee" class="btn btn-success">Update</button>
+							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 							</form>
@@ -371,8 +343,8 @@ to {
 
 	<div class="row-fluid">
 		<div id="footer" class="span12">
-			2013 &copy; Matrix Admin. Brought to you by <a
-				href="http://themedesigner.in">Themedesigner.in</a>
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
 		</div>
 	</div>
 

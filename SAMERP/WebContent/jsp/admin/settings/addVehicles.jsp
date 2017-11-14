@@ -17,7 +17,6 @@
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="/SAMERP/config/css/fullcalendar.css" />
 <link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
-
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
 <style>
@@ -69,6 +68,7 @@
 
 </style>
 </head>
+
 <body onload="setFocusToTextBox()">
 
 <!--Header-part-->
@@ -139,8 +139,27 @@
               </div>
             </div>
             
+            <div class="control-group">
+					<label class="control-label">Trip Allowance:</label>
+						<div class="controls">
+							<input type="text" name="trip_allowance" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Trip Allowance" style="width: 257px;" pattern="[0-9]*" required />
+						</div>
+					</div>
+					
+			<div class="control-group">
+					<label class="control-label">Helper Charges:</label>
+						<div class="controls">
+							<input type="text" name="helper_charges" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" style="width: 257px;" pattern="[0-9]*" required />
+						</div>
+					</div>
+            <div class="control-group">
+							<label class="control-label">Driver Charges:</label>
+								<div class="controls">
+										<input type="text" name="driver_charges"  class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" style="width: 257px;" pattern="[0-9]*" required />
+								</div>
+							</div>
             <div class="form-actions" align="center">
-              <button type="submit" id="submitbtn" name="insertSubmitBtn" class="btn btn-success">Submit</button> &nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="submit" id="submitbtn" name="insertSubmitBtn" class="btn btn-success" style="background:#1196c1;">Submit</button> &nbsp;&nbsp;&nbsp;&nbsp;
               <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
             </div>
             
@@ -161,6 +180,9 @@
                   <th>Sr. No.</th>
                   <th>Vehicle Type</th>
                   <th>Vehicle Number</th>
+                  <th>Trip Allowance</th>
+                  <th>Helper Charges</th>
+                  <th>Driver Charges</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -179,11 +201,17 @@
                 	String vehicleId = itr.next().toString();
                 	String vehicleType = itr.next().toString();
                 	String vehicleNumber = itr.next().toString();
+                	String tripAllowance=itr.next().toString();
+                	String helperChagres=itr.next().toString();
+                	String driverCharges=itr.next().toString();
               %>            
                     	<tr class="gradeX">
   							<td> <%=i %></td>
 	                      	<td id="<%=vehicleId%>"><%=vehicleType%></td>
 	                        <td><%=vehicleNumber%></td>
+	                        <td><%=tripAllowance%></td>
+	                        <td><%=helperChagres%></td>
+	                        <td><%=driverCharges%></td>
 	                        <td><a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)"><i class="icon-pencil"></i></a>/
                      	<a onclick="getDeleteId(<%=vehicleId%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td></tr>
              <%
@@ -241,20 +269,31 @@
 				              </div>
 				            </div>
 				            
+				     <div class="control-group">
+							<label class="control-label">Trip Allowance:</label>
+								<div class="controls">
+								<input type="text" name="trip_allowance" id="trip_allowanceid" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Trip Allowance" pattern="[0-9]*" required />
+								</div>
+							</div>
+					
+					<div class="control-group">
+							<label class="control-label">Helper Charges:</label>
+								<div class="controls">
+										<input type="text" name="helper_charges" id="helper_chargesid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" pattern="[0-9]*" required />
+								</div>
+							</div>
+						<div class="control-group">
+							<label class="control-label">Driver Charges:</label>
+								<div class="controls">
+										<input type="text" name="driver_charges" id="driver_chargesid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" pattern="[0-9]*" required />
+								</div>
+							</div>
+							
+							
 				             
-				             <!-- <div class="control-group">
-				              <label class="control-label"><span id="required2" style="color: red;"></span>Rate : </label>
-				              <div class="controls">
-				                <div class="input-append">
-				                <input type="hidden" name="oldRate" id="oldRate"/>
-				                  <input type="text" placeholder="0000" required class="span2" style="width: 230px;" id="UpdateRateText" name="UpdaterateText" disabled="disabled">
-				                  <span class="add-on"><i class="fa fa-inr" style="font-size: 1.5em;"></i></span> </div>
-				              </div>
-				            </div> -->
-			            
 				            <div class="modal-footer">
-									<input type="submit" id="submitbtn" name="updateSubmitBtn" class="btn btn-primary" value="Update" />
-									<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Cancel"/>
+									<input type="submit" id="submitbtn" name="updateSubmitBtn" class="btn btn-primary" style="background:#1196c1;" value="Update" />
+									<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Close"/>
 							</div>
 						</div>
 					</div>
@@ -335,9 +374,7 @@ function searchName(id) {
 			document.getElementById("Updatevehicle_id").value = demoStr[0];
 			document.getElementById("Updatevehicle_type").value = demoStr[1];
 			document.getElementById("oldvehicle_type").value = document.getElementById("Updatevehicle_type").value;
-			getSetSelect("s2id_Updatevehicle_type", demoStr[1]);
-			
-			document.getElementById("oldvehicle_alias").value = demoStr[3];
+			getSetSelect("s2id_Updatevehicle_type", demoStr[1]);			
 			
 			var vehicleNumber = demoStr[2].split("-");
 			
@@ -345,6 +382,13 @@ function searchName(id) {
 			document.getElementById("Updatevehicleno2").value = vehicleNumber[1];
 			document.getElementById("Updatevehicleno3").value = vehicleNumber[2];
 			document.getElementById("Updatevehicleno4").value = vehicleNumber[3];
+			
+			document.getElementById("trip_allowanceid").value = demoStr[3];
+			document.getElementById("helper_chargesid").value = demoStr[4];
+			document.getElementById("driver_chargesid").value = demoStr[5];
+			
+			document.getElementById("oldvehicle_alias").value = demoStr[6];
+			
 	
 			
 			//document.getElementById("UpdateRateText").value = demoStr[3];
@@ -412,10 +456,12 @@ function getSetSelect(id,value)
 </script>
 
 <!--Footer-part-->
-
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
 
 <!--end-Footer-part-->
 

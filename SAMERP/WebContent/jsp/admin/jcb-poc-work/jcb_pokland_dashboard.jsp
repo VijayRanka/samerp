@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JCB & POKLAND  Dashboard</title>
+<title>SAMERP PROJECT</title>
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
@@ -115,8 +115,12 @@
 
 <!--Footer-part-->
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 <!--end-Footer-part--> 
 
 <script src="/SAMERP/config/js/jquery.min.js"></script> 

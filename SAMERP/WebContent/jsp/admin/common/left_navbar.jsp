@@ -22,12 +22,13 @@
 
       </ul>
     </li>
-    <li class="submenu"> <a href="#"><i class="fa fa-th-list"></i> <span>Payment</span> <span class="label label-important">4</span></a>
+    <li class="submenu"> <a href="#"><i class="fa fa-th-list"></i> <span>Payment</span> <span class="label label-important">5</span></a>
     <ul>
     	<li><a href="/SAMERP/jsp/admin/productPurchase/productSupplierPayment.jsp"> Product Payment</a> </li>
 		<li><a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> Raw Payment</a> </li>
 		<li><a href="/SAMERP/jsp/admin/sale/salePayment.jsp">Sale Payment</a> </li>
       	<li><a href="/SAMERP/jsp/admin/payment/contractorPayment.jsp">Contractor Payment</a> </li>
+      	<li><a href="/SAMERP/jsp/admin/payment/driverPayment.jsp">Driver Payment</a> </li>
       
     </ul>
     </li>

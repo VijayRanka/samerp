@@ -18,9 +18,8 @@
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="/SAMERP/config/css/jquery.gritter.css" />
 <link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
-
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-</head>
+
 <style>
 #snackbar {
     visibility: hidden;
@@ -34,7 +33,7 @@
     position: fixed;
     z-index: 1;
     left: 50%;
-    bottom: 30px;
+    top: 50px;
     font-size: 15px;
     border-radius:50px 50px;
 }
@@ -46,28 +45,31 @@
 }
 
 @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
 @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
 @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 .table td {
    text-align: center;   
 }
+
 </style>
+</head>
+
 <body onload="setFocusToTextBox()">
 
 <!--Header-part-->
@@ -140,7 +142,7 @@
             </div>
             
             <div class="form-actions" >
-            <button type="submit" name="insertorganizer" class="btn btn-success" style="position:relative; right:700px; float:right;">Submit</button>
+            <button type="submit" name="insertorganizer" class="btn btn-success" style="background:#1196c1;" style="position:relative; right:700px; float:right;">Submit</button>
               <a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger " style="position:relative; right:550px;   float:right;">Exit</button></a>
             </div>  
           </form>
@@ -265,7 +267,7 @@
 					            </div>
 				            	            
 				            <div class="modal-footer">
-									<input type="submit" id="org_submitbtn" name="org_submitbtn" class="btn btn-primary" value="Update" />
+									<input type="submit" id="org_submitbtn" style="background:#1196c1;" name="org_submitbtn" class="btn btn-primary" value="Update" />
 									<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Cancel"/>
 							</div>
 						</div>
@@ -279,8 +281,12 @@
 <!--Footer-part-->
 
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 
 <!--end-Footer-part-->
 

@@ -8,9 +8,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<html lang="en">
-<head>
 <title>SAMERP PROJECT</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -347,10 +344,12 @@ display: none;}
 <!--end-main-container-part-->
 
 <!--Footer-part-->
-
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
 
 <!--end-Footer-part-->
 <div class="modal hide fade zoom-out" id="update" role="dialog" aria-labelledby="myModalLabel">

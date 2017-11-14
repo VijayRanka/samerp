@@ -241,6 +241,15 @@ function showWrongAuthentication(){
    <%} %>
         
         
+        <div class="row-fluid">
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+        
+        
+        
         <script src="/MSaleERP/config/js/jquery.min.js"></script>  
         <script src="/MSaleERP/config/js/matrix.login.js"></script> 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
