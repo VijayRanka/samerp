@@ -391,7 +391,7 @@
             </table>
            </form>
          </div>
-         <button  id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" disabled="disabled" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
+         <button  id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
          <hr style="border-top-color: #c5bbbb;">
       </div>
       
@@ -785,7 +785,7 @@ function getAllCheckBoxes(){
 		}
 		alert(tGST);
 
-		document.getElementById('chalanSubmitBtn').disabled=false;		
+		//document.getElementById('chalanSubmitBtn').disabled=false;		
 	}
 	else{
 		document.getElementById('totalAmount').innerHTML="";
@@ -1026,7 +1026,7 @@ function inWords()
     var print =finalOutput +" Only";
     document.getElementById("print_inwords").innerHTML = print;
 }
-
+/* sarang */
 </script>
 
 
