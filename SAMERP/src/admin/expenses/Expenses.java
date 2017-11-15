@@ -119,8 +119,12 @@ public class Expenses extends HttpServlet {
 			String particulars="cash";
 			
 			String query="insert into bank_account_details(bid,date,debit,particulars) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"')";
-		     bankstatus=gd.executeCommand(query);
-		    if(bankstatus!=0)
+		  
+			System.out.println("cash deposite:"+query);
+			
+			bankstatus=gd.executeCommand(query);
+		   
+		     if(bankstatus!=0)
 		    {
 		    	System.out.println("Inserted Successfully");
 		    	request.setAttribute("status", "Inserted Successfully");

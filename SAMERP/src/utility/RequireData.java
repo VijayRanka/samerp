@@ -69,14 +69,14 @@ public class RequireData
 		
 	public List getVehiclesData()
 			{
-				String vehicleDetailsQuery = "select vehicle_id, vehicle_type, vehicle_number from vehicle_details order by vehicle_id desc;";
+				String vehicleDetailsQuery = "select vehicle_id, vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges from vehicle_details order by vehicle_id desc;";
 				List vehicleDetailsData = gd.getData(vehicleDetailsQuery);
 				return vehicleDetailsData;
 			}
 			
 			public List getVehicleRowData(String RowId)
 			{
-				String vehicleRowDataQuery = "select vehicle_id, vehicle_type, vehicle_number, vehicle_aliasname from vehicle_details where vehicle_id="+RowId+"; ";
+				String vehicleRowDataQuery = "select vehicle_id, vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges,vehicle_aliasname from vehicle_details where vehicle_id="+RowId+"; ";
 				List vehicleDetailsData = gd.getData(vehicleRowDataQuery);
 				return vehicleDetailsData;
 			}
@@ -355,6 +355,20 @@ public class RequireData
 	//--omkar end
 	
 	// sandeep start
+	
+	public List getDriverPayment()
+	{
+		String driverPayment="SELECT driver_helper_payment_master.id,driver_helper_payment_master.debter_id,driver_helper_payment_master.date, driver_helper_payment_master.credit,driver_helper_payment_master.debit, driver_helper_payment_master.etra_charges,driver_helper_payment_master.particular,driver_helper_payment_master.type,driver_helper_payment_master.balance FROM driver_helper_payment_master";
+		List list=gd.getData(driverPayment);
+		return list;
+	}
+	
+	public List getContractorVeh(String id)
+	{
+		String work_with="";
+		List list=gd.getData(work_with);
+		return list;
+	}
 	
 	public List updateHandLoanDetails(String handloanid)
 	{
