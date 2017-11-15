@@ -48,7 +48,7 @@ public class RequireData
 					return JcbPocWorkList;
 				}
 				public List getCustomerListForPay() {
-					String Customer_query="SELECT customer_master.intcustid,customer_master.custname FROM customer_master,jcbpoc_master WHERE customer_master.intcustid=jcbpoc_master.intcustid AND jcbpoc_master.status=0 GROUP BY intcustid DESC";
+					String Customer_query="SELECT customer_master.intcustid,customer_master.custname FROM customer_master,jcbpoc_payment WHERE customer_master.intcustid=jcbpoc_payment.cust_id GROUP BY intcustid DESC";
 					List CustomerList=gd.getData(Customer_query);
 					return CustomerList;
 				}
@@ -58,9 +58,34 @@ public class RequireData
 					return JcbPocWorkList;
 				}
 				public List getJcbPocPaymentList() {
-					String JcbPocWorkDetail_query="SELECT `id`,`date`, `description`, `amount`, `pay_mode`,(SELECT account_details.acc_aliasname FROM account_details WHERE jcbpoc_payment.bank_id=account_details.acc_id)AS alias, `cheque_no` FROM `jcbpoc_payment`,account_details WHERE jcbpoc_payment.status=0 ORDER BY `jcbpoc_payment`.`id` DESC";
+					String JcbPocWorkDetail_query="SELECT date,description,bill_amount,amount,total_balance FROM `jcbpoc_payment` WHERE status=0 ORDER BY id DESC";
 					List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
 					return JcbPocWorkList;
+				}
+				public String getTotalRemainingBalance(String custId, String billAmt, String amt)
+				{
+					String query = "SELECT `total_balance` FROM `jcbpoc_payment` WHERE  cust_id="+custId+" ORDER BY jcbpoc_payment.`id` DESC LIMIT 1";
+					String balance = gd.getData(query).toString();
+					balance=balance.substring(1, balance.length() - 1);
+					
+					double billAmount=0;
+					double amount=0;
+					double finalBalance=0;
+					if (balance != "" && !balance.isEmpty()) {
+						finalBalance=Double.valueOf(balance);
+					}
+					if (billAmt != "") {
+						billAmount=Double.valueOf(billAmt);
+						finalBalance=finalBalance+billAmount;
+						balance=String.valueOf(finalBalance);
+					}
+					if (amt != "") {
+						amount=Double.valueOf(amt);
+						finalBalance=finalBalance-amount;
+						balance=String.valueOf(finalBalance);
+					}
+					
+					return balance;
 				}
 			//--himanshu end
 
