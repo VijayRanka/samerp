@@ -127,6 +127,16 @@ public class AddCustomer extends HttpServlet {
 				String debtorId = String.valueOf(rd.getDebtorId(contactno));;
 				
 				rd.pCashEntry(transactionDate, debit, credit, debtorId);
+				
+//				============================Payment Entry=========================================================
+				String amt="";
+				String balance=rd.getTotalRemainingBalance(custid_project, openingBal, amt);
+				
+				query = "INSERT INTO `jcbpoc_payment`(`cust_id`, `description`, `bill_amount`, `total_balance`, `date`) VALUES "
+						+ "("+custid_project+",'OPENING BALANCE','"+openingBal+"','"+balance+"','"+transactionDate+"')";
+				System.out.println(">>>"+query);
+				dao.executeCommand(query);
+				
 			}
 			if (project_result == 1) {
 				out.println("Project Inserted Successfully");

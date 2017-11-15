@@ -8,10 +8,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vertical Software</title>
-<html lang="en">
-<head>
-<title>Petty Cash</title>
+<title>SAMERP PROJECT</title>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
@@ -423,6 +421,7 @@
 										<th>Mode</th>
 										<th>Cheque No.</th>
 										<th>Balance</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<%
@@ -443,6 +442,7 @@
 										<td><%=handLoan.next()%></td>
 										<td><%=handLoan.next()%></td>
 										<td><%=handLoan.next()%></td>
+										<td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="" data-toggle="modal"><i class="icon-pencil"></i></a></td>
 									</tr>
 								<%hCount++; }%>
 								</tbody>
@@ -576,10 +576,11 @@
 
 	<div class="row-fluid">
 		<div id="footer" class="span12">
-			2013 &copy; Matrix Admin. Brought to you by <a
-				href="http://themedesigner.in">Themedesigner.in</a>
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
 		</div>
 	</div>
+
 
 
 <script type="text/javascript">

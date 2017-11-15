@@ -44,7 +44,7 @@ public class AddEmployee extends HttpServlet {
 			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
 			
 			String other=request.getParameter("other");
-			String aliasname="EMP_"+employeename+'_'+WorkWith;
+			String aliasname="EMP_"+employeename.replace(" ", "_")+'_'+WorkWith;
 			int status=0;
 			String insertQuery="";
 			
@@ -106,23 +106,30 @@ public class AddEmployee extends HttpServlet {
 			}
 		}
 		
-		if(request.getParameter("insertemployee")!=null)
+		if(request.getParameter("update")!=null)
 		{
 			String Emp_id=request.getParameter("Updateid");
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
 			String work_with= request.getParameter("contractorVehicle_alias");
+			
+			String query="SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_workwith='"+work_with+"'";
+			String workwith=gd.getData(query).get(0).toString();
+			System.out.println("work:"+workwith);
+			
 			String other = request.getParameter("other");
 			
-			String update_aliasname="EMP_"+work_with;
+			String update_aliasname="EMP_"+employee_name.replace(" ", "_")+"_"+workwith;
+			
+			System.out.println("up:"+update_aliasname);
 			
 			String up_aliasname="";
 
-			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_other='"+other+"'  where emp_id='"+Emp_id+"';";
+			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_other='"+other+"',aliasname='"+update_aliasname+"'  where emp_id='"+Emp_id+"';";
 			
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			
-			
+			System.out.println("update :"+updatestatus);
 			if(updatestatus!=0)
 			{
 				System.out.println("update Empolyee Successfully");
@@ -132,8 +139,8 @@ public class AddEmployee extends HttpServlet {
 				System.out.println("update Empolyee fail");
 				request.setAttribute("status", "Empolyee Update Fail");
 			}
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
-			rd.forward(request, response);
+			RequestDispatcher req = request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
+			req.forward(request, response);
 			
 			
 		}
