@@ -70,6 +70,20 @@ public class JcbPocPaymentReceived extends HttpServlet {
 				int credit = Integer.parseInt(payAmount);
 				debtorId = String.valueOf(rd.getDebtorId(contactno));;
 				rd.pCashEntry(transactionDate, debit, credit, debtorId);
+				
+//				============================Payment Entry=========================================================
+				String payAmt="";
+				String balance=rd.getTotalRemainingBalance(custId, payAmt, payAmount);
+				
+				query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `amount`, `total_balance`, `date`, `pay_mode`, `debtorId`) VALUES "
+						+ "("+custId+",'"+payDescription+"','"+payAmount+"','"+balance+"','"+transactionDate+"','"+payMode+"',"+debtorId+")";
+				result = dao.executeCommand(query);
+
+				if (result == 1) {
+					response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
+				} else {
+					out.print("something wrong");
+				}
 			}
 			if (payAmount != "" && radios.equals("2") || radios.equals("3")) {
 				query="SELECT `contactno` FROM `customer_master` WHERE `intcustid`="+custId;
@@ -81,18 +95,22 @@ public class JcbPocPaymentReceived extends HttpServlet {
 				int credit = Integer.parseInt(payAmount);
 				debtorId = String.valueOf(rd.getDebtorId(contactno));;
 				rd.badEntry(payBank, transactionDate, debit, credit, particular, debtorId);
+				
+//				============================Payment Entry=========================================================
+				String payAmt="";
+				String balance=rd.getTotalRemainingBalance(custId, payAmt, payAmount);
+				
+				query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `amount`, `total_balance`, `date`, `pay_mode`,`bank_id`, `cheque_no`, `debtorId`) VALUES "
+						+ "("+custId+",'"+payDescription+"','"+payAmount+"','"+balance+"','"+transactionDate+"','"+payMode+"',"+payBank+",'"+payCheque+"',"+debtorId+")";
+				result = dao.executeCommand(query);
+
+				if (result == 1) {
+					response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
+				} else {
+					out.print("something wrong");
+				}
 			}
 		
-			query = "INSERT INTO `jcbpoc_payment`( `description`, `amount`, `date`, `pay_mode`, `bank_id`, `cheque_no`, `debtorId`) VALUES "
-					+ "('"+payDescription+"','"+payAmount+"','"+payDate+"','"+payMode+"',"+payBank+",'"+payCheque+"',"+debtorId+")";
-
-			result = dao.executeCommand(query);
-
-			if (result == 1) {
-				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
-			} else {
-				out.print("something wrong");
-			}
 		}
 //	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@	UPDATE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		if (custUpdateId != null) {
