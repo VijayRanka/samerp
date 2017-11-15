@@ -42,6 +42,54 @@ public class Expenses extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
+		//get data between two dates
+		if(request.getParameter("getDateData")!=null)
+		{
+			GenericDAO gd=new GenericDAO();
+			RequireData rd=new RequireData();
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
+					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+					+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
+					+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+firstDate+"' and '"+lastDate+"' order by date";
+			if(!gd.getData(demo).isEmpty())
+			{
+				List demoList=gd.getData(demo);
+				Iterator itr=demoList.iterator();
+				while(itr.hasNext())
+				{
+					Object id=itr.next();
+					Object date=itr.next();
+					Object name=itr.next();
+					Object amount=itr.next();
+					Object payMode=itr.next();
+					Object expType=itr.next();
+					Object debtorType=itr.next();
+					Object cDetails=itr.next();
+					Object description=itr.next();
+					
+					out.print(id+","+date+","+name+","+amount+","+payMode+",");
+					
+					String vrmData=rd.getVRM(id.toString());
+					if(vrmData!=null)
+					{
+						out.print(vrmData.split(",")[0]+","+vrmData.split(",")[1]+",");
+					}
+					else{
+						out.print("-,-,");
+					}
+					
+					out.print(expType+","+debtorType+",");
+					if(cDetails!=null)
+						out.print(cDetails+",");
+					else
+						out.print("-,");
+					out.print(description+",");
+				}
+			}
+			
+		}
 		
 		//get exp data for ajax table
 		if(request.getParameter("getTableData")!=null)

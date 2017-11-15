@@ -695,10 +695,13 @@ public class RequireData
 			}
 			public List getExpensesDetails()
 			{
+				SysDate sd=new SysDate();
+				String startDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01";
+				String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
 						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
 						+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
-						+ "and expenses_master.debtor_id=debtor_master.id order by date";
+						+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+startDate+"' and '"+lastDate+"' order by date";
 				List demoList=gd.getData(demo);
 				return demoList;
 			}

@@ -11,20 +11,6 @@
 <title>EXPENSES</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
-<link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/colorpicker.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" /> -->
-
-
-
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
@@ -269,44 +255,72 @@ display: none;}
             <table class="table table-bordered data-table">
             
             <div class="controls" style="float: right;position: relative;right: 280px;">
-              <span  style="position: relative;bottom: 5px;"><b id="dateFun">Start Date:</b></span>
+              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
               <% sdDemo=sd.todayDate().split("-");
               %>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
-                <button type="button" onclick="hello()">hello</button>
+                <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
+                  <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
+                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
+                </div> 
                 <script>
-                var x;
-                function getExpData(value)
+                var firstDate="";
+            	var lastDate="";
+                function getData(value,id)
                 {
                 	
-                	if(x!=null){
-                		var lastDate=value;
-                		alert(lastDate+","+x);
-                	}
-                	else
+                	if(id==1)
                 		{
-                		
-                		document.getElementById("dateFun").innerHTML="Final Date";
-                		x=value;
-                		
+                		firstDate=value;
+                		}
+                	else if(id==2)
+                		{
+                		if(firstDate=="")
+                			firstDate=document.getElementById("fromDate").value;
+                		lastDate=value;
+                		var xhttp;
+                		xhttp = new XMLHttpRequest();
+                		xhttp.onreadystatechange = function() {
+                			if (this.readyState == 4 && this.status == 200) {
+                				var demoStr = this.responseText.split(",");
+                				if(demoStr=="")
+                					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+                				else{
+                				var a="";
+                				var count=1;
+                				for(var i=0;i<demoStr.length-1;i=i+11)
+                					{
+                					 a+= "<tr>"+
+                					"<td style='text-align: center'>"+count+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+                					"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+                					"<td style='text-align: center'' >"+demoStr[i+7]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+                					" <td style='text-align: center'>"+
+                					"<a data-toggle='modal' href='#update' onclick='getUpdateData("+demoStr[i]+")'>Update</a></td>"+
+                					"<tr>";
+                					count++;
+                					}
+                				document.getElementById("wholeDataList").innerHTML=a;
+                				}
+                			
+                			}
+                				
+                			};
+                		xhttp.open("POST", "/SAMERP/Expenses.do?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+                		xhttp.send();
                 		}
                 }
-                function hello()
-                {
-                	alert(x);
-                }
-                
-                
                 </script>
-                </div> 
-                <div class="controls" style="float: right;position: relative;right: 280px;">
-                <input name="date" type="text" placeholder="Dates"><span style="font-size: 20px;position: relative;right: 15px;bottom: 2px">x</span>
-                </div> 
-                
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Date</th>
+                  <th style="width:80px">Date</th>
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Payment Mode</th>
@@ -319,7 +333,7 @@ display: none;}
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="wholeDataList">
 	              <%
 	             
 	              List getExpData=rd.getExpensesDetails();
@@ -400,7 +414,7 @@ display: none;}
 	        	</div>
 	        	
 	        	<div class="control-group">
-	                  <label class="control-label">Name</label>
+	                 		 <label class="control-label">Name</label>
 	                  <div class="controls">
 	                    <input type="text" id="uName" name="uName" onkeyup="this.value=this.value.toUpperCase()"/>
 	         			</div>
@@ -621,6 +635,7 @@ function displayBank(id, id1){
 	}
 }
 function myFunction() {
+	
 	<%if(request.getAttribute("payError")!=null){%>
 	var payError = "<%=request.getAttribute("payError") %>";
 	
@@ -676,6 +691,7 @@ function myFunction() {
 	    x.className = "show";
 	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     	}
+    document.getElementById("DataTables_Table_0_wrapper").children[0].children[0].setAttribute("style","width:150px;");
     
 }
 
