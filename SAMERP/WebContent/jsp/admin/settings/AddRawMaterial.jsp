@@ -19,92 +19,60 @@
 <link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link href="/SAMERP/config/font-awesome/css/font-awesome.css"
-	rel="stylesheet" />
-	<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
-	
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
+<link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 
 <style>
 #snackbar {
-	visibility: hidden;
-	min-width: 250px;
-	margin-left: -125px;
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	border-radius: 2px;
-	padding: 16px;
-	position: fixed;
-	z-index: 1;
-	left: 50%;
-	bottom: 30px;
-	font-size: 15px;
-	border-radius: 50px 50px;
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50px;
+    font-size: 15px;
+    border-radius:50px 50px;
 }
 
 #snackbar.show {
-	visibility: visible;
-	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-@
--webkit-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
-}
-@
-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
-}
-
-}
-@
--webkit-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
-
-}
-@
-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 .table td {
    text-align: center;   
 }
+
 </style>
 </head>
-
-
 
 <body onload=" setFocusToTextBox()">
 
@@ -227,7 +195,7 @@ to {
 								</div>
 								
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="insert" class="btn btn-success">Submit</button>&nbsp;&nbsp;&nbsp;
+									<button type="submit" name="insert" class="btn btn-success" style="background:#1196c1;">Submit</button>&nbsp;&nbsp;&nbsp;
 									<button type="button" class="btn btn-danger">Cancel</button>
 								</div>
 							</form>
@@ -326,7 +294,7 @@ to {
 						
 						</div>
 						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="save" class="btn btn-success">Update</button>
+							<button type="submit" name="save" class="btn btn-success" style="background:#1196c1;">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 						
@@ -336,6 +304,14 @@ to {
 			</div>
 
 		</div>
+		
+		<div class="row-fluid">
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+		
 	
 <script type="text/javascript">
 	function searchName(id1) {
@@ -382,8 +358,7 @@ function setFocusToTextBox()
 }
 </script>
 
-	<!--end-Footer-part-->
-
+	
 	<script src="/SAMERP/config/js/jquery.min.js"></script>
 	<script src="/SAMERP/config/js/jquery.ui.custom.js"></script>
 	<script src="/SAMERP/config/js/bootstrap.min.js"></script>

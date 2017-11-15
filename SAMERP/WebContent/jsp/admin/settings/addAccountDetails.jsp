@@ -18,13 +18,10 @@
 <link rel="stylesheet" href="/SAMERP/config/css/jquery.gritter.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" />
 <link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
-
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
-	
-</head>
-<style>
+<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">	
 
+<style>
 #snackbar {
     visibility: hidden;
     min-width: 250px;
@@ -37,7 +34,7 @@
     position: fixed;
     z-index: 1;
     left: 50%;
-    bottom: 30px;
+    top: 50px;
     font-size: 15px;
     border-radius:50px 50px;
 }
@@ -49,28 +46,30 @@
 }
 
 @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
 @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
 @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 .table td {
    text-align: center;   
 }
 </style>
+</head>
+
 <body onload="setFocusToTextBox()">
 
 <!--Header-part-->
@@ -319,8 +318,12 @@
 <!--Footer-part-->
 
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 
 <!--end-Footer-part-->
 

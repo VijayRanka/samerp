@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Product Payment</title>
+<title>SAMERP PROJECT</title>
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
@@ -307,8 +307,12 @@
 </div>
 <!--Footer-part-->
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 <!--end-Footer-part--> 
 
 <%-- <div class="modal hide fade zoom-out" id="viewBalanceDetails" style=" margin-left: -36%; width: 70%;" role="dialog" >

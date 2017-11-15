@@ -13,96 +13,63 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
-<link rel="stylesheet"
-	href="/SAMERP/config/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link href="/SAMERP/config/font-awesome/css/font-awesome.css"
-	rel="stylesheet" />
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
-
+<link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
+	
 <style>
 #snackbar {
-	visibility: hidden;
-	min-width: 250px;
-	margin-left: -125px;
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	border-radius: 2px;
-	padding: 16px;
-	position: fixed;
-	z-index: 1;
-	left: 50%;
-	bottom: 30px;
-	font-size: 15px;
-	border-radius: 50px 50px;
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50px;
+    font-size: 15px;
+    border-radius:50px 50px;
 }
 
 #snackbar.show {
-	visibility: visible;
-	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-@
--webkit-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
-}
-@
-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
-}
-
-}
-@
--webkit-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
-
-}
-@
-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 .table td {
    text-align: center;   
 }
 </style>
 </head>
-
-
 
 <body onload="setFocusToTextBox()">
 
@@ -192,7 +159,7 @@ to {
 										<input type="text" name="gstin" id="gstinid"
 											class="span6" placeholder="GSTIN "
 											onkeyup="this.value=this.value.toUpperCase()"
-											pattern="[0-9]*" required />
+											pattern="[a-z A-Z 0-9]*" required />
 									</div>
 								</div>
 
@@ -344,8 +311,8 @@ to {
 						<div class="control-group">
 							<label class="control-label">GSTIN:</label>
 							<div class="controls">
-								<input type="text" name="contactno2" id="Updatecontactno2"
-									class="span4" placeholder="Client ContactNo2 " maxlength="10" 
+								<input type="text" name="gstin" id="gstinid"
+									class="span4" placeholder="GSTIN " pattern="[a-z A-Z 0-9]*"
 									onkeyup="this.value=this.value.toUpperCase()" required />
 							</div>
 						</div>
@@ -492,7 +459,7 @@ function searchName(id1) {
 			document.getElementById("old_coname").value = demoStr[1];
 			document.getElementById("Updatecname").value = demoStr[2];
 			document.getElementById("Updatecontactno1").value = demoStr[3];
-			document.getElementById("Updatecontactno2").value = demoStr[4];
+			document.getElementById("gstinid").value = demoStr[4];
 			document.getElementById("Updateemail").value = demoStr[5];
 			document.getElementById("Updateaddress").value = demoStr[6];
 			document.getElementById("Updatebamount").value = demoStr[7];
