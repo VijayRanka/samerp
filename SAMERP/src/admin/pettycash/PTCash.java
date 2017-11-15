@@ -36,6 +36,40 @@ public class PTCash extends HttpServlet {
 			
 			
 			
+			if(request.getParameter("loanDetails")!=null)
+			{
+				String alias=request.getParameter("loanDetails");
+				String query="SELECT handloan_details.date,handloan_details.debit,handloan_details.credit,handloan_details.mode,handloan_details.particulars,handloan_details.balance FROM handloan_master,handloan_details WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"'";
+				List getDetails=gd.getData(query);
+				Iterator itr=getDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object mode=itr.next();
+					Object particular=itr.next();
+					Object balance=itr.next();
+					
+					out.print(date+","+debit+","+credit+","+mode+","+particular+","+balance+",");
+				}
+				
+			}
+			
+			if(request.getParameter("findHandLoanName")!=null)
+			{
+				String hName=request.getParameter("findHandLoanName");
+				String query="SELECT alias_name FROM handloan_master";
+				List getHandLoanAlias=gd.getData(query);
+				Iterator itr=getHandLoanAlias.iterator();
+				while(itr.hasNext())
+				{
+					out.println("<option>"+itr.next()+"</option>");
+				}
+				
+			}
+			
+			
 			if(request.getParameter("getBankTableData")!=null)
 			{
 				String date=request.getParameter("getBankTableData");

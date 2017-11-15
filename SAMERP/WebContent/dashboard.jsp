@@ -193,8 +193,8 @@
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Credit</th>
                   <th>Debit</th>
+                  <th>Credit</th>
                   <th>Type</th>
                   <th>Balance</th>
                 </tr>
@@ -233,8 +233,8 @@
                 <tr>
                   <th>S.No.</th>
                   <th>Bank</th>
-                  <th>Credit</th>
                   <th>Debit</th>
+                  <th>Credit</th>
                   <th>Particulars</th>
                   <th>Type</th>
                   <th>Balance</th>
@@ -478,6 +478,43 @@
         </div>
           </div>
      <!-- vehicle details end  -->
+     
+     <!-- Handloan details start -->
+     	
+     	 <div class="widget-title"> <a href="#collapseFive" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
+            <h5>HandLoan Details By Name</h5>
+            
+            </a> 
+          </div>
+          <div class="collapse" id="collapseFive">
+            
+            <div class="widget-content nopadding	">
+            <table class="table table-bordered data-table">
+              <div class="controls"style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b>Select Name:</b></span>
+                <input name="handLoanAlias" autocomplete="off" list="getHandLoanName" id="handLoanAlias" type="text" oninput="getDetails(this.value)" onfocus="getHandLoanAlias(this.value)">
+                <datalist id="getHandLoanName"></datalist>
+              </div> 
+              <thead>
+                <tr>
+                  <th>S.No.</th>
+                  <th>Date</th>
+                  <th>Debit</th>
+                  <th>Credit</th>
+                  <th>Mode</th>
+                  <th>Cheque No.</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="handLoanDataTable">
+              
+              </tbody>
+            </table>
+            </div>
+          </div>
+     
+     
+     <!-- Handloan details end -->
           
         </div>
       </div>
@@ -537,6 +574,80 @@ function getJcbPocData(value)
 	}
 //******************************************************END JCB POC******************************************************
 var demoStr=0;
+
+function getDetails(val)
+{
+	var opts = document.getElementById('getHandLoanName').childNodes;
+	for (var i = 0; i < opts.length; i++) {
+		 if (opts[i].value === val) 
+		 {
+			 var xhttp;
+				xhttp = new XMLHttpRequest();
+				
+				xhttp.onreadystatechange = function() {
+					
+					if (this.readyState == 4 && this.status == 200) 
+					{
+						
+							var demoStr = this.responseText.split(",") ;
+							//alert(demoStr);
+							if(demoStr=="")
+							{
+								document.getElementById("handLoanDataTable").innerHTML="<tr><td colspan='7'>No Records Found!</td></tr>";
+							}
+							else
+							{
+								var count=1;
+								var wholeData="";
+								
+								for(var i=0;i<=demoStr.length-2;i=i+6)
+								{
+									wholeData+="<tr>"+
+									"<td style='text-align: center'>"+count+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+									"</tr>"
+									count++;
+								} 
+								document.getElementById("handLoanDataTable").innerHTML=wholeData; 
+								
+								
+							}
+							
+							 
+					}
+						
+					
+				};
+				xhttp.open("POST", "/SAMERP/PTCash?loanDetails="+val, true);
+				xhttp.send(); 
+				break;
+		 }
+	}
+}
+
+function getHandLoanAlias(val)
+{
+	var xhttp;
+	
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function() {
+		
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText;
+			//alert(demoStr);
+			document.getElementById("getHandLoanName").innerHTML = demoStr;
+			}
+		};
+	xhttp.open("POST", "/SAMERP/PTCash?findHandLoanName="+val, true);
+	xhttp.send();
+}
 
 function getBankData(val)
 {
