@@ -23,9 +23,9 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-</head>
-<style>
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 
+<style>
 #snackbar {
     visibility: hidden;
     min-width: 250px;
@@ -38,7 +38,7 @@
     position: fixed;
     z-index: 1;
     left: 50%;
-    bottom: 30px;
+    top: 50px;
     font-size: 15px;
     border-radius:50px 50px;
 }
@@ -50,26 +50,31 @@
 }
 
 @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
 @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
 @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+.table td {
+   text-align: center;   
 }
 
 </style>
+</head>
+
 <body onload="myFunction()">
 
 <!--Header-part-->
@@ -154,7 +159,7 @@
                 </div>
          		
               <div class="form-actions" id="addCancel" align="center" style="display: none">
-                <input class="btn btn-success" name="insertAccDetails" type="button" value="Add Stock" onclick="getInsertData()" />
+                <input class="btn btn-success" name="insertAccDetails" type="button" style="background:#1196c1;" value="Add Stock" onclick="getInsertData()" />
                 <input class="btn btn-danger" type="button" value="Cancel" />
               </div>
               
@@ -172,8 +177,12 @@
 <!--Footer-part-->
 
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 
 <!--end-Footer-part-->
 <script>

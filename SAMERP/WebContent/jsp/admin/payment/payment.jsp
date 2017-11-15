@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>PAYMENT</title>
+<title>samerp project</title>
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
@@ -18,7 +18,7 @@
 <body>
 <!--Header-part-->
 <div id="header">
-  <h1><a href="/SAMERP/index.jsp">Matrix Admin</a></h1>
+  <h1><a href="/SAMERP/index.jsp">SAMERP PROJECT</a></h1>
 </div>
 <!--close-Header-part--> 
 <!--top-Header-menu-->
@@ -133,8 +133,12 @@
 </div>
 <!--Footer-part-->
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 <!--end-Footer-part--> 
 <!-- modal toggle starts here -->
 <div class="modal hide fade" id="payit" role="dialog">

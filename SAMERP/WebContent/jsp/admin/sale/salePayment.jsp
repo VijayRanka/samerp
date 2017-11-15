@@ -391,7 +391,7 @@
             </table>
            </form>
          </div>
-         <button  id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" disabled="disabled" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
+         <button  id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
          <hr style="border-top-color: #c5bbbb;">
       </div>
       
@@ -406,8 +406,12 @@
 
 <!--Footer-part-->
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 <!--end-Footer-part--> 
 
 <!-- #################    MODEL START  ################################ -->
@@ -785,7 +789,7 @@ function getAllCheckBoxes(){
 		}
 		alert(tGST);
 
-		document.getElementById('chalanSubmitBtn').disabled=false;		
+		//document.getElementById('chalanSubmitBtn').disabled=false;		
 	}
 	else{
 		document.getElementById('totalAmount').innerHTML="";
@@ -1026,7 +1030,7 @@ function inWords()
     var print =finalOutput +" Only";
     document.getElementById("print_inwords").innerHTML = print;
 }
-
+/* sarang */
 </script>
 
 

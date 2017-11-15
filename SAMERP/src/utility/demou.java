@@ -15,6 +15,9 @@ public class demou {
 		GenericDAO gd=new GenericDAO();
 		RequireData rd=new RequireData();
 		SysDate sd=new SysDate();
+		SecureCode ed=new SecureCode();
+		String h="12345VHJA";
+		System.out.println(h.charAt(5)=='V');
 			
 	}
 }

@@ -585,9 +585,13 @@ to {
 </div>
 <%} %>
 
-	<div class="row-fluid">
-  <div id="footer" class="span12"> 2017&copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+<div class="row-fluid">
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 
 		<script type="text/javascript"> 
 		
@@ -740,6 +744,8 @@ to {
 			
 		}
 		
+		
+		
 		function selectChecks(id)
 		{
 			//  document.getElementById(id);   alert();
@@ -826,9 +832,36 @@ to {
 				 document.getElementById('payButton').disabled=false;
 				setRates(arrayAmount,1);
 			}
-			checkDataBelow();
-			
+			checkDataBelow();	
 		}
+		
+		function checkDataBelow()
+		{
+			var count=document.getElementById("megaCount").value;
+			forAll=1;
+			for(var i=1;i<=count;i++)
+				{
+				if(document.getElementById("check_"+i).checked==false)
+					{
+						
+						forAll++;
+					}
+				}
+			if(forAll-1==count)
+				{
+				document.getElementById('totalProdCharge').innerHTML="";
+				document.getElementById('totalQueryCharge').innerHTML="";
+				document.getElementById('payButton').disabled=true;
+				
+				document.getElementById('payButton').style.cursor="not-allowed";
+				if(myArray.length>0)
+				{
+				myArray=[];
+				}
+				} 
+			
+		}		
+		
 		function setRates(arrayAmt,value)
 		{
 			if(value==1)
@@ -867,32 +900,7 @@ to {
 					
 				}
 		}
-		function checkDataBelow()
-		{
-			var count=document.getElementById("megaCount").value;
-			forAll=1;
-			for(var i=1;i<=count;i++)
-				{
-				if(document.getElementById("check_"+i).checked==false)
-					{
-						
-						forAll++;
-					}
-				}
-			if(forAll-1==count)
-				{
-				document.getElementById('totalProdCharge').innerHTML="";
-				document.getElementById('totalQueryCharge').innerHTML="";
-				document.getElementById('payButton').disabled=true;
-				
-				document.getElementById('payButton').style.cursor="not-allowed";
-				if(myArray.length>0)
-				{
-				myArray=[];
-				}
-				} 
-			
-		}
+
 		
 		function displayBank(id, id1){
 			var x = document.getElementById(id);

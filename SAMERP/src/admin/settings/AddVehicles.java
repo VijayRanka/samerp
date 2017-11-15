@@ -46,7 +46,12 @@ public class AddVehicles extends HttpServlet {
 			String vehicleNo = vehicleNo1+"-"+vehicleNo2+"-"+vehicleNo3+"-"+vehicleNo4;
 			String vehicleAlias = vehicleType +"_"+vehicleNo1+"-"+vehicleNo2+"-"+vehicleNo3+"-"+vehicleNo4;
 			
-			String insertVehicleQuery = "insert into vehicle_details(vehicle_type, vehicle_number, vehicle_aliasname) values ('"+vehicleType+"', '"+vehicleNo+"', '"+vehicleAlias+"');";
+			
+			String trip_allowance=request.getParameter("trip_allowance");
+			String helper_charges=request.getParameter("helper_charges");
+			String driver_charges=request.getParameter("driver_charges");
+			
+			String insertVehicleQuery = "insert into vehicle_details(vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges,vehicle_aliasname) values ('"+vehicleType+"', '"+vehicleNo+"','"+trip_allowance+"','"+helper_charges+"','"+driver_charges+"','"+vehicleAlias+"');";
 			
 			String insertDebt="INSERT INTO `debtor_master`(`type`) VALUES ('"+vehicleAlias+"')";
 			int xx=gd.executeCommand(insertDebt);
@@ -119,7 +124,11 @@ public class AddVehicles extends HttpServlet {
 			String vehicleNum = Updatevehicleno1+"-"+Updatevehicleno2+"-"+Updatevehicleno3+"-"+Updatevehicleno4;
 			String updateVehicleAlias = vehicleType +"_"+Updatevehicleno1+"-"+Updatevehicleno2+"-"+Updatevehicleno3+"-"+Updatevehicleno4;
 			
-			String updateVehicleQuery1 = "update vehicle_details set vehicle_number='"+vehicleNum+"', vehicle_type='"+vehicleType+"', `vehicle_aliasname`='"+updateVehicleAlias+"'  where vehicle_id='"+vehicleId+"';";
+			String update_trip_allowance=request.getParameter("trip_allowance");
+			String update_helper_charges=request.getParameter("helper_charges");
+			String update_driver_charges=request.getParameter("driver_charges");
+			
+			String updateVehicleQuery1 = "update vehicle_details set vehicle_number='"+vehicleNum+"', vehicle_type='"+vehicleType+"',trip_allowance='"+update_trip_allowance+"',helper_charges='"+update_helper_charges+"',driver_charges='"+update_driver_charges+"', `vehicle_aliasname`='"+updateVehicleAlias+"'  where vehicle_id='"+vehicleId+"';";
 			int updatestatus1 = gd.executeCommand(updateVehicleQuery1);
 			
 			if(updatestatus1>=1){

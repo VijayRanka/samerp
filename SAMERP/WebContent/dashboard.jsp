@@ -65,6 +65,7 @@
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Raw Payment</a> </li>
 		<li class="bg_lo"> <a href="/SAMERP/jsp/admin/sale/salePayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Sale Payment</a> </li>
       	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/payment/contractorPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Contractor Payment</a> </li>
+    	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/payment/driverPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Driver Payment</a> </li>
       </ul>
     </div>
 <!--End-Action boxes-->    
@@ -187,18 +188,18 @@
             <table class="table table-bordered data-table">
             <div class="controls"style="float: right;position: relative;right: 280px;">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getPettyData(this.value)">
                 </div> 
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Credit</th>
                   <th>Debit</th>
+                  <th>Credit</th>
                   <th>Type</th>
                   <th>Balance</th>
                 </tr>
               </thead>
-              <tbody id="expenseDataTable">
+              <tbody id="pettyDataTable">
               <% List demo=rd.getPettyCashDetailsDash();
               if(demo!=null)
               {
@@ -226,20 +227,20 @@
             <table class="table table-bordered data-table">
             <div class="controls" style="float: right;position: relative;right: 280px;">
               <span  style="position: relative;bottom: 5px;"><b>Date:</b></span>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getBankData(this.value)">
                 </div> 
               <thead>
                 <tr>
                   <th>S.No.</th>
                   <th>Bank</th>
-                  <th>Credit</th>
                   <th>Debit</th>
+                  <th>Credit</th>
                   <th>Particulars</th>
                   <th>Type</th>
                   <th>Balance</th>
                 </tr>
               </thead>
-              <tbody id="expenseDataTable">
+              <tbody id="bankDataTable">
               <% List badDetailsDash=rd.getbadDetailsDash();
               if(badDetailsDash!=null)
               {
@@ -477,6 +478,43 @@
         </div>
           </div>
      <!-- vehicle details end  -->
+     
+     <!-- Handloan details start -->
+     	
+     	 <div class="widget-title"> <a href="#collapseFive" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
+            <h5>HandLoan Details By Name</h5>
+            
+            </a> 
+          </div>
+          <div class="collapse" id="collapseFive">
+            
+            <div class="widget-content nopadding	">
+            <table class="table table-bordered data-table">
+              <div class="controls"style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b>Select Name:</b></span>
+                <input name="handLoanAlias" autocomplete="off" list="getHandLoanName" id="handLoanAlias" type="text" oninput="getDetails(this.value)" onfocus="getHandLoanAlias(this.value)">
+                <datalist id="getHandLoanName"></datalist>
+              </div> 
+              <thead>
+                <tr>
+                  <th>S.No.</th>
+                  <th>Date</th>
+                  <th>Debit</th>
+                  <th>Credit</th>
+                  <th>Mode</th>
+                  <th>Cheque No.</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="handLoanDataTable">
+              
+              </tbody>
+            </table>
+            </div>
+          </div>
+     
+     
+     <!-- Handloan details end -->
           
         </div>
       </div>
@@ -536,6 +574,159 @@ function getJcbPocData(value)
 	}
 //******************************************************END JCB POC******************************************************
 var demoStr=0;
+
+function getDetails(val)
+{
+	var opts = document.getElementById('getHandLoanName').childNodes;
+	for (var i = 0; i < opts.length; i++) {
+		 if (opts[i].value === val) 
+		 {
+			 var xhttp;
+				xhttp = new XMLHttpRequest();
+				
+				xhttp.onreadystatechange = function() {
+					
+					if (this.readyState == 4 && this.status == 200) 
+					{
+						
+							var demoStr = this.responseText.split(",") ;
+							//alert(demoStr);
+							if(demoStr=="")
+							{
+								document.getElementById("handLoanDataTable").innerHTML="<tr><td colspan='7'>No Records Found!</td></tr>";
+							}
+							else
+							{
+								var count=1;
+								var wholeData="";
+								
+								for(var i=0;i<=demoStr.length-2;i=i+6)
+								{
+									wholeData+="<tr>"+
+									"<td style='text-align: center'>"+count+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+									"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+									"</tr>"
+									count++;
+								} 
+								document.getElementById("handLoanDataTable").innerHTML=wholeData; 
+								
+								
+							}
+							
+							 
+					}
+						
+					
+				};
+				xhttp.open("POST", "/SAMERP/PTCash?loanDetails="+val, true);
+				xhttp.send(); 
+				break;
+		 }
+	}
+}
+
+function getHandLoanAlias(val)
+{
+	var xhttp;
+	
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function() {
+		
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText;
+			//alert(demoStr);
+			document.getElementById("getHandLoanName").innerHTML = demoStr;
+			}
+		};
+	xhttp.open("POST", "/SAMERP/PTCash?findHandLoanName="+val, true);
+	xhttp.send();
+}
+
+function getBankData(val)
+{
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			if(demoStr=="")
+			{
+				document.getElementById("bankDataTable").innerHTML="<tr><td colspan='7'>No Records Found!</td></tr>";
+			}
+			else
+			{
+				var count=1;
+				var wholeData="";
+				 
+				 for(var i=0;i<=demoStr.length-2;i=i+6)
+				{
+					wholeData+="<tr>"+
+					"<td style='text-align: center'>"+count+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+					"</tr>"
+					count++;
+				} 
+				document.getElementById("bankDataTable").innerHTML=wholeData; 
+				
+			}
+				
+		}
+	};
+	xhttp.open("POST", "/SAMERP/PTCash?getBankTableData="+val, true);
+	xhttp.send();
+
+}
+
+function getPettyData(val)
+{
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			if(demoStr=="")
+			{
+				document.getElementById("pettyDataTable").innerHTML="<tr><td colspan='5'>No Records Found!</td></tr>";
+			}
+			else
+			{
+				var count=1;
+				//alert(demoStr.length);
+				 var wholeData="";
+				 
+				 for(var i=0;i<=demoStr.length-2;i=i+4)
+				{
+					wholeData+="<tr>"+
+					"<td style='text-align: center'>"+count+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+					"</tr>"
+					count++;
+				} 
+				document.getElementById("pettyDataTable").innerHTML=wholeData;
+				
+			}
+				
+		}
+	};
+	xhttp.open("POST", "/SAMERP/PTCash?getTableData="+val, true);
+	xhttp.send();
+
+}
 function getExpData(value)
 {
 	var xhttp;

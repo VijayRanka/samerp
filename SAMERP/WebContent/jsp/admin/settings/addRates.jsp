@@ -22,7 +22,8 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-</head>
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
+
 <style>
 
 #snackbar {
@@ -71,6 +72,8 @@
    text-align: center;   
 }
 </style>
+</head>
+
 <body onload="myFunction()">
 
 <!--Header-part-->
@@ -162,10 +165,13 @@
 
 
 <!--Footer-part-->
-
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
+
 
 <!--end-Footer-part-->
 <script>

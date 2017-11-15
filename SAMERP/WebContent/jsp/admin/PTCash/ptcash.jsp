@@ -8,10 +8,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vertical Software</title>
-<html lang="en">
-<head>
-<title>Petty Cash</title>
+<title>SAMERP PROJECT</title>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
@@ -336,7 +334,7 @@
 											<div class="controls">
 												<input type="text" id="namep" name="namep" list="getHandLoanName" autocomplete="off" placeholder="Name" onfocus="handLoanName(this.value)" oninput="getDetails(this.value)" onkeyup="this.value=this.value.toUpperCase()"  required />
 												<input type="text" id="namepnew" name="namepnew"  autocomplete="off" placeholder="Name" onkeyup="this.value=this.value.toUpperCase()"  style="display:none;"/>
-												<input type="text" id="status" name="status"  value="Old" placeholder="Name" />
+												<input type="hidden" id="status" name="status"  value="Old" placeholder="Name" />
 												<datalist id="getHandLoanName"></datalist>
 												<span class="badge badge-inverse" id="addNewH" onclick="newHandLoaner()" title="Add New"><i class="icon-plus"></i></span>
 											</div>
@@ -402,6 +400,60 @@
 						
 						
 			</div>
+			
+			<div class="row-fluid">
+				<div class="span14">
+
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon"><i class="icon-th"></i></span>
+							<h5>Hand Loan Details</h5>
+						</div>
+						<div class="widget-content nopadding">
+							<table class="table table-bordered data-table">
+								<thead>
+									<tr>
+										<th>Sr.No</th>
+										<th>Date</th>
+										<th>Name</th>
+										<th>Debit</th>
+										<th>Credit</th>
+										<th>Mode</th>
+										<th>Cheque No.</th>
+										<th>Balance</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<%
+									List handLoanDetails=rd.getHandLoanDetailsInPetty();
+									Iterator handLoan=handLoanDetails.iterator();
+									int hCount=1;
+								%>
+								<tbody>
+								<% 
+								while(handLoan.hasNext())
+								{handLoan.next();%>
+									<tr>
+										<td><%=hCount %></td>
+										<td><%=handLoan.next()%></td>
+										<td><%=handLoan.next()%></td>
+										<td><%=handLoan.next()%></td>
+										<td><%=handLoan.next()%></td>
+										<td><%=handLoan.next()%></td>
+										<td><%=handLoan.next()%></td>
+										<td><%=handLoan.next()%></td>
+										<td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="" data-toggle="modal"><i class="icon-pencil"></i></a></td>
+									</tr>
+								<%hCount++; }%>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+			</div>  
+			
+			
              
              <!-- tab 2 end -->
             </div>
@@ -524,10 +576,11 @@
 
 	<div class="row-fluid">
 		<div id="footer" class="span12">
-			2013 &copy; Matrix Admin. Brought to you by <a
-				href="http://themedesigner.in">Themedesigner.in</a>
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
 		</div>
 	</div>
+
 
 
 <script type="text/javascript">
