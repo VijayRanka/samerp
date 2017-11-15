@@ -541,7 +541,7 @@ display: none;}
 
 					</div>
 						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="Bank_Deposite" class="btn btn-success">Update</button>
+							<button type="submit" name="Bank_Deposite" class="btn btn-success">Submit</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 						

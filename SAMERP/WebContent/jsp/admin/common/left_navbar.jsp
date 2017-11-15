@@ -1,10 +1,10 @@
 <!--sidebar-menu-->
 <div id="sidebar"><a href="#" class="visible-phone"><i class="fa fa-home"></i> Dashboard</a>
   <ul>
-    <li><a href="/SAMERP/dashboard.jsp"><i class="fa fa-home"></i> <span>Dashboard</span></a> </li>
+    <li><a href="/SAMERP/dashboard.jsp"><i class="icon icon-home"></i><span>Dashboard</span></a> </li>
     <li> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp"> <i class="icon-dashboard"></i><span class="label label-success"></span>JCB & POKLAND  <!-- Dashboard --></a> </li>
     <li><a href="/SAMERP/jsp/admin/settings/addDailyStock.jsp"><i class="fa fa-inbox"></i> <span>Add Daily Stock</span></a></li>
-    <li class="submenu"> <a href="#"><i class="fa fa-th-list"></i> <span>Settings</span> <span class="label label-important">11</span></a>
+    <li class="submenu"> <a href="#"><i class="icon-cog"></i> <span>Settings</span> <span class="label label-important">11</span></a>
       <ul>
       	<li><a href="/SAMERP/jsp/admin/settings/addContractor.jsp">Add Contractor</a></li>
       	<li><a href="/SAMERP/jsp/admin/settings/addVehicles.jsp">Add Vehicles</a></li>

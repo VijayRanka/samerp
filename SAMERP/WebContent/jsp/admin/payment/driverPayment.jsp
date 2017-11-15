@@ -109,8 +109,9 @@
 								<th>Date</th>
 								<th>Credit</th>
 								<th>Debit</th>
+								<th>Extra Charges</th>
 								<th>Particular</th>
-								<th>Type</th>
+								<th>Type</th>								
 								<th>Balance</th>
 
 							</tr>
@@ -134,6 +135,17 @@
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
+							<%
+							String Driver="";
+							String Helper="";
+							String type=itr.next().toString();
+							if(type.equals("1"))
+							{
+							%>
+							<td>Driver</td>
+							<%}else{ %>
+							<td>Helper</td>
+							<%} %>
 							<td><%=itr.next() %></td>
 
 						</tbody>
