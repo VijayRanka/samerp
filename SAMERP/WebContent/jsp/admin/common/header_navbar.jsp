@@ -85,7 +85,7 @@ function clock(){
   <a type="button" href="#logOutPopup" data-toggle="modal" class="btn btn-danger"><i class="icon-signout"></i> Logout</a></span>
 </form>
 </div>
-<!--close-top-serch-->
+<!--close-top-search-->
 
 <div class="modal hide fade" id="logOutPopup" role="dialog">
 	<div class="modal-dialog">
@@ -105,8 +105,6 @@ function clock(){
 					<input type="button" class="btn btn-danger" data-dismiss="modal" on value="Cancel"/>
 					</form>
 					</div>
-					
-				</form>
 			</div>
 				
 			</div>
