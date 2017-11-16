@@ -1,10 +1,4 @@
-
-
-
-
-
-
-	<%@page import="utility.SysDate"%>
+<%@page import="utility.SysDate"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="utility.RequireData"%>
