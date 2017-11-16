@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 /**
  * Servlet implementation class JcbPocBill
@@ -27,6 +28,7 @@ public class JcbPocBill extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		GenericDAO dao = new GenericDAO();
+		RequireData rd=new RequireData();
 
 		String query = "";
 		int result=0;
@@ -140,9 +142,22 @@ public class JcbPocBill extends HttpServlet {
 						String jcbpocIdPrint=request.getParameter("jcbpocIdPrint"+i);
 						
 						query="UPDATE `jcbpoc_master` SET `status`='1',`invoice_id`="+invoiceId+" WHERE `intjcbpocid`="+jcbpocIdPrint;
-						result = dao.executeCommand(query);
+						dao.executeCommand(query);
 					}
-					response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocBill.jsp");
+//		============================Payment Entry=========================================================
+					String amt="";
+					String balance=rd.getTotalRemainingBalance(customerInvoice, payAmtPrintTxt, amt);
+					
+					query = "INSERT INTO `jcbpoc_payment`(`cust_id`, `bill_id`, `description`, `bill_amount`, `total_balance`, `date`) VALUES "
+							+ "("+customerInvoice+","+invoiceId+",'Invoice No-"+invoiceId+"','"+payAmtPrintTxt+"','"+balance+"','"+invoiceDate+"')";
+					System.out.println(">>>"+query);
+					result = dao.executeCommand(query);
+					
+					if (result == 1) {
+						response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocBill.jsp");
+					}else{
+						out.print("something wrong IN Inserting");
+					}
 				} else {
 					out.print("something wrong IN Inserting");
 				}

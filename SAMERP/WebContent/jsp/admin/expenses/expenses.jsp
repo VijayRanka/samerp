@@ -8,26 +8,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<html lang="en">
-<head>
+
 <title>SAMERP PROJECT</title>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
-<link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/colorpicker.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" /> -->
-
-
-
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
@@ -143,7 +128,6 @@ display: none;}
           <div class="widget-title">
             <ul class="nav nav-tabs">
               <li class="active"><a data-toggle="tab" href="#tab1">Expenses</a></li>
-              <li><a data-toggle="tab" href="#tab3">Peti-Cash</a></li>
             </ul>
           </div>
           <div class="widget-content tab-content">
@@ -201,7 +185,6 @@ display: none;}
                 <option value="<%=itr.next() %>"><%=itr.next() %></option>
                 <%itr.next();}} %>
                 </select>
-                <div><a tabindex="-1" data-toggle="modal" href="#addDebtor"><span class="badge badge-inverse" style="margin-top: 5px"><icon class="icon-plus"></icon></span></a></div>
               </div>
             </div>
             <div class="control-group">
@@ -272,10 +255,74 @@ display: none;}
           </div>
           <div class="widget-content nopadding">
             <table class="table table-bordered data-table">
+            
+            <div class="controls" style="float: right;position: relative;right: 280px;">
+              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
+              <% sdDemo=sd.todayDate().split("-");
+              %>
+                <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
+                  <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
+                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
+                </div> 
+                <script>
+                var firstDate="";
+            	var lastDate="";
+                function getData(value,id)
+                {
+                	
+                	if(id==1)
+                		{
+                		firstDate=value;
+                		}
+                	else if(id==2)
+                		{
+                		if(firstDate=="")
+                			firstDate=document.getElementById("fromDate").value;
+                		lastDate=value;
+                		var xhttp;
+                		xhttp = new XMLHttpRequest();
+                		xhttp.onreadystatechange = function() {
+                			if (this.readyState == 4 && this.status == 200) {
+                				var demoStr = this.responseText.split(",");
+                				if(demoStr=="")
+                					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+                				else{
+                				var a="";
+                				var count=1;
+                				for(var i=0;i<demoStr.length-1;i=i+11)
+                					{
+                					 a+= "<tr>"+
+                					"<td style='text-align: center'>"+count+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+                					"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+                					"<td style='text-align: center'' >"+demoStr[i+7]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+                					"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+                					" <td style='text-align: center'>"+
+                					"<a data-toggle='modal' href='#update' onclick='getUpdateData("+demoStr[i]+")'>Update</a></td>"+
+                					"<tr>";
+                					count++;
+                					}
+                				document.getElementById("wholeDataList").innerHTML=a;
+                				}
+                			
+                			}
+                				
+                			};
+                		xhttp.open("POST", "/SAMERP/Expenses.do?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+                		xhttp.send();
+                		}
+                }
+                </script>
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Date</th>
+                  <th style="width:80px">Date</th>
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Payment Mode</th>
@@ -288,7 +335,7 @@ display: none;}
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="wholeDataList">
 	              <%
 	             
 	              List getExpData=rd.getExpensesDetails();
@@ -330,12 +377,7 @@ display: none;}
           </div>
         </div>
             </div>
-            <div id="tab2" class="tab-pane">
-              <p> waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
-            </div>
-            <div id="tab3" class="tab-pane">
-              <p>full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </p>
-            </div>
+            
           </div>
         </div>
   	</div>
@@ -347,10 +389,12 @@ display: none;}
 <!--end-main-container-part-->
 
 <!--Footer-part-->
-
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
 
 <!--end-Footer-part-->
 <div class="modal hide fade zoom-out" id="update" role="dialog" aria-labelledby="myModalLabel">
@@ -374,7 +418,7 @@ display: none;}
 	        	</div>
 	        	
 	        	<div class="control-group">
-	                  <label class="control-label">Name</label>
+	                 		 <label class="control-label">Name</label>
 	                  <div class="controls">
 	                    <input type="text" id="uName" name="uName" onkeyup="this.value=this.value.toUpperCase()"/>
 	         			</div>
@@ -447,38 +491,6 @@ display: none;}
   </div>
 </div>
 
-<div class="modal hide fade zoom-out" id="addDebtor" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-   <form class="form-horizontal" action="/SAMERP/Expenses.do" method="post">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add Debtor</h4>
-      </div>
-      <div class="modal-body" id="showModal">
-	     
-	        <div class="form-group">
-			<div class="widget-content nopadding">
-	        	<div class="control-group">
-	                  <label class="control-label">Debtor Type</label>
-	                  <div class="controls">
-	                       <input type="text" id="debtor" name="debtor" onkeypress="return getAdd(event)" onkeyup="this.value=this.value.toUpperCase()" onblur="document.getElementById('warning').innerHTML='';"/>
-	         				<span id="warning" style="color:red; display: none;"></span>
-	         			</div>
-	        	</div>
-		      </div>
-	      	</div>
-      </div> 
-      <div class="modal-footer">
-        <button type="button" id="addDebt" onclick="addDebtoryList()" class="btn btn-primary" style="margin-right:5px;">Add</button> 
-          <button type="button" id="closeButt" class="btn btn-default" data-dismiss="modal" onclick="document.getElementById('debtor').value=''">Close</button>    
-          </div>
-
-	
-    </div>
-   </form>
-  </div>
-</div>
 
 <div id="bankcashid" class="modal hide fade" role="dialog"
 		style="width: 55%; margin-left: -28%;">
@@ -543,7 +555,7 @@ display: none;}
 
 					</div>
 						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="Bank_Deposite" class="btn btn-success">Update</button>
+							<button type="submit" name="Bank_Deposite" class="btn btn-success">Submit</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 						
@@ -553,6 +565,33 @@ display: none;}
 			</div>
 
 		</div>
+		<div class="modal hide fade zoom-out" id="pettyCashError" role="dialog" style="width: 50%; margin-left: -25%;" >
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal"></a>
+		<i style=" font-size: 180%; color: #ec971f;" class="icon-warning-sign"> <h4 style="color: #ec971f; display: inherit; "> Warning </h4> </i> 
+	</div>
+	
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="" method="post" name="">
+			<div class="form-group">
+				<div class="widget-content nopadding" style=" margin-top: 3%; margin-left: 5%; margin-right: 5%;">
+					
+					<div align="center" class="control-group">
+					<div class="alert">
+		              <h4 id="payStatus"> Insufficient balance in your Bank Account..!!  </h4> </div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" href="#" class="btn btn-primary" id="pettyCashOk" tabindex="1" data-dismiss="modal">OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" class="btn btn-danger" tabindex="2">Cancel</button>
+				
+			</div>
+	
+		</form>
+	</div>
+</div>
 
 <script>
 function onUamount()
@@ -600,6 +639,55 @@ function displayBank(id, id1){
 	}
 }
 function myFunction() {
+	
+	<%if(request.getAttribute("payError")!=null){%>
+	var payError = "<%=request.getAttribute("payError") %>";
+	
+	if(payError.split("_")[1]==='c')
+		{
+		
+			if(payError.split("_")[2]==='0')
+					{
+				document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+				$('#payStatus').text(payError.split("_")[0]);
+				$('#pettyCashError').modal('show');
+					}
+			
+			if(payError.split("_")[2]==='-1')
+					{
+				document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+				$('#payStatus').text(payError.split("_")[0]);
+				$('#pettyCashError').modal('show');
+					}
+			if(payError.split("_")[2]==='-2')
+					{
+				document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+				$('#payStatus').text(payError.split("_")[0]);
+				$('#pettyCashError').modal('show');
+					}
+		}
+		else if(payError.split("_")[1]==='b')
+		{
+				if(payError.split("_")[2]==='0')
+						{
+					document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+					$('#payStatus').text(payError.split("_")[0]);
+					$('#pettyCashError').modal('show');
+						}
+				if(payError.split("_")[2]==='-1')
+						{
+					document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+					$('#payStatus').text(payError.split("_")[0]);
+					$('#pettyCashError').modal('show');
+						}
+				if(payError.split("_")[2]==='-2')
+						{
+					document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/settings/addAccountDetails.jsp'");
+					$('#payStatus').text(payError.split("_")[0]);
+					$('#pettyCashError').modal('show');
+						}
+		}
+	<%}%>
 	document.getElementById("expenses_type_name").focus();
     var x = document.getElementById("snackbar");
     if(x!=null)
@@ -607,6 +695,7 @@ function myFunction() {
 	    x.className = "show";
 	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     	}
+    document.getElementById("DataTables_Table_0_wrapper").children[0].children[0].setAttribute("style","width:150px;");
     
 }
 
@@ -998,9 +1087,8 @@ $('#update').on('shown.bs.modal', function () {
 $('#update').on('shown.bs.modal', function () {
     $('#uName').focus();
 }) 
-$('#addDebtor').on('shown.bs.modal', function () {
-	document.getElementById("debtor").value="";
-    $('#debtor').focus();
+$('#pettyCashError').on('shown.bs.modal', function () {
+    $('#pettyCashOk').focus();
 })
 </script> 
 </html>

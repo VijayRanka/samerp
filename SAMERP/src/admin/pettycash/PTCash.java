@@ -35,6 +35,79 @@ public class PTCash extends HttpServlet {
 			int status=0;
 			
 			
+			
+			if(request.getParameter("loanDetails")!=null)
+			{
+				String alias=request.getParameter("loanDetails");
+				String query="SELECT handloan_details.date,handloan_details.debit,handloan_details.credit,handloan_details.mode,handloan_details.particulars,handloan_details.balance FROM handloan_master,handloan_details WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"'";
+				List getDetails=gd.getData(query);
+				Iterator itr=getDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object mode=itr.next();
+					Object particular=itr.next();
+					Object balance=itr.next();
+					
+					out.print(date+","+debit+","+credit+","+mode+","+particular+","+balance+",");
+				}
+				
+			}
+			
+			if(request.getParameter("findHandLoanName")!=null)
+			{
+				String hName=request.getParameter("findHandLoanName");
+				String query="SELECT alias_name FROM handloan_master";
+				List getHandLoanAlias=gd.getData(query);
+				Iterator itr=getHandLoanAlias.iterator();
+				while(itr.hasNext())
+				{
+					out.println("<option>"+itr.next()+"</option>");
+				}
+				
+			}
+			
+			
+			if(request.getParameter("getBankTableData")!=null)
+			{
+				String date=request.getParameter("getBankTableData");
+				String query="SELECT bank_account_details.id,account_details.acc_aliasname,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,account_details,debtor_master WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date='"+date+"'";
+				//out.println("working");
+				List getBankDetails=gd.getData(query);
+				Iterator itr=getBankDetails.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					Object bankName=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object particulars=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(bankName+","+debit+","+credit+","+particulars+","+type+","+balance+",");
+				}
+			}
+			if(request.getParameter("getTableData")!=null)
+			{
+				String date=request.getParameter("getTableData");
+				//out.println("working");
+				String query="SELECT petty_cash_details.id,petty_cash_details.debit,petty_cash_details.credit,debtor_master.type,petty_cash_details.balance FROM petty_cash_details,debtor_master WHERE petty_cash_details.debtor_id=debtor_master.id AND petty_cash_details.date='"+date+"'";
+				List getPettyDetails=gd.getData(query);
+				Iterator itr=getPettyDetails.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(debit+","+credit+","+type+","+balance+",");
+				}
+			}
 			if(request.getParameter("insertPetty")!=null)
 			{
 				String pettyDate=request.getParameter("date");
@@ -197,7 +270,7 @@ public class PTCash extends HttpServlet {
 				
 				//out.println("working"+bank_name);
 				
-				System.out.println("inside btn");
+				//System.out.println("inside btn");
 				
 				
 				if(stus.equals("New"))
@@ -212,7 +285,7 @@ public class PTCash extends HttpServlet {
 					if(paymode.equals("Cheque"))
 					{
 						System.out.println("inside new cheque");
-						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ('SELECT MAX(id) FROM handloan_master','"+date+"',"+amount+","+0+",'CHEQUE','"+chequeNo+"',"+amount+")";
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ((SELECT MAX(id) FROM handloan_master),'"+date+"',"+amount+","+0+",'CHEQUE','"+chequeNo+"',"+amount+")";
 						int insertStatus=gd.executeCommand(insertHandLoanDetails);
 						if(insertStatus>0)
 						{
@@ -228,6 +301,10 @@ public class PTCash extends HttpServlet {
 							if(bankStatus>0)
 							{
 								System.out.println(amount+" New Cheque Inserted "+newBankBalance);
+								request.setAttribute("status", "Rs."+amount+" HandLoan Added in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
 							}
 							
 						}
@@ -252,6 +329,10 @@ public class PTCash extends HttpServlet {
 							if(bankStatus>0)
 							{
 								System.out.println(amount+" New Transfer Inserted "+newBankBalance);
+								request.setAttribute("status", "Rs."+amount+" HandLoan Transfer in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
 							}
 							
 						}
@@ -282,6 +363,11 @@ public class PTCash extends HttpServlet {
 							if(bankStatus>0)
 							{
 								System.out.println(newHandLoanBalance+" Old Cheque Inserted "+newBankBalance);
+								
+								request.setAttribute("status", "Rs."+amount+" HandLoan Added in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
 							}
 							
 						}
@@ -304,6 +390,10 @@ public class PTCash extends HttpServlet {
 							if(bankStatus>0)
 							{
 								System.out.println(newHandLoanBalance+" Old Transfer Inserted "+newBankBalance);
+								request.setAttribute("status", "Rs."+amount+" HandLoan Transfer in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+								
+								RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+								rq.forward(request, response);
 							}
 						}
 						

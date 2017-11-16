@@ -18,9 +18,8 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/jquery.gritter.css" />
 <link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
-
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-</head>
+
 <style>
 #snackbar {
     visibility: hidden;
@@ -34,7 +33,7 @@
     position: fixed;
     z-index: 1;
     left: 50%;
-    bottom: 30px;
+    top: 50px;
     font-size: 15px;
     border-radius:50px 50px;
 }
@@ -46,25 +45,30 @@
 }
 
 @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
 }
 
 @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
 @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+.table td {
+   text-align: center;   
 }
 </style>
+</head>
+
 <body onload="setFocusToTextBox()">
 
 <!--Header-part-->
@@ -101,7 +105,7 @@
 						<div class="widget-title">
 							<span class="icon"> <i class="icon-align-justify"></i>
 							</span>
-							<h5>Add Data</h5>
+							<h5>Add Material Supplier</h5>
 						</div>
 						<div class="widget-content nopadding">
 							<form action="/SAMERP/AddSupplyMaterial" method="post" class="form-horizontal">
@@ -157,7 +161,7 @@
 									</div>
 								</div>
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="insertsupply" class="btn btn-success">Submit</button>
+									<button type="submit" name="insertsupply" class="btn btn-success" style="background:#1196c1;">Submit</button>
 								 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 
 								</div>
@@ -174,7 +178,7 @@
 					<div class="widget-box">
 						<div class="widget-title">
 							<span class="icon"><i class="icon-th"></i></span>
-							<h5>client Details</h5>
+							<h5>Material Supplier Details</h5>
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">
@@ -260,7 +264,7 @@
 						<div class="control-group">
 							<label class="control-label">Suppliers Business Name:</label>
 							<div class="controls">
-								<input type="text" id="Updateid" name="Updateid" />
+								<input type="hidden" id="Updateid" name="Updateid" />
 								<input type="hidden" id="old_sup_alias" name="old_sup_alias" />
 								<input type="hidden" id="update_material_type" name="material_type" />
 								 
@@ -308,7 +312,7 @@
 						
 						
 						<div class="form-actions" style="padding-left: 450px">
-							<button type="submit" name="save" class="btn btn-success">Update</button>
+							<button type="submit" name="save" class="btn btn-success" style="background:#1196c1;">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 					</form>
@@ -405,8 +409,11 @@
 <!--Footer-part-->
 
 <div class="row-fluid">
-  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
 
 <!--end-Footer-part-->
 

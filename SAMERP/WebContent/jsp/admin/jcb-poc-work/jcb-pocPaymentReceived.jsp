@@ -5,7 +5,7 @@
 <%@page import="utility.SysDate"%>
 <html lang="en">
 <head>
-<title>Matrix Admin</title>
+<title>SAMERP PROJECT</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -160,23 +160,19 @@
 										<th>Sr no.</th>
 										<th>Date</th>
 										<th>Description</th>
-										<th>Amount</th>
-										<th>Pay Mode</th>
-										<th>Bank Name</th>
-										<th>Cheque No</th>
-										<th>Action</th>
-									</tr>
+										<th>Credit</th>
+										<th>Debit</th>
+										<th>Total Balance</th>
+									</tr>	
 								</thead>
 								<%
 									List details = rd.getJcbPocPaymentList();
 									int srno = 0;
 									String id="";
 									String date = "";
-									String description = "";
-									String amount = "";
-									String pay_mode = "";
-									Object acc_aliasname = "";
-									String cheque_no = "";
+									Object description = "";
+									Object amount = "";
+									Object pay_mode = "";
 
 									if (details != null) {
 										Iterator itr2 = details.iterator();
@@ -187,27 +183,30 @@
 												srno++;
 												id = itr2.next().toString();
 												date = itr2.next().toString();
-												description = itr2.next().toString();
-												amount = itr2.next().toString();
-												pay_mode = itr2.next().toString();
-												acc_aliasname=itr2.next();
-												if(acc_aliasname==null){
-													acc_aliasname="";
+												description = itr2.next();
+												amount = itr2.next();
+												pay_mode = itr2.next();
+												if(description == null){
+													description="";
 												}
-												cheque_no=itr2.next().toString();
+												if(amount == null){
+													amount="";
+												}
+												if(pay_mode == null){
+													pay_mode="";
+												}
 									%>
+									
+									
 									<tr class="gradeX">
 										<td><%=srno%></td>
+										<td><%=id%></td>
 										<td><%=date%></td>
 										<td><%=description%></td>
 										<td><%=amount%></td>
 										<td><%=pay_mode%></td>
-										<td><%=acc_aliasname%></td>
-										<td><%=cheque_no%></td>
-										<td><a href="#update" data-toggle='modal'
-											onclick='getSr(<%=id%>)'>Update</a> / <a
-											href="/SAMERP/JcbPocDetails.do?deleteid=<%=id%>">Delete</a></td>
 									</tr>
+
 									<%
 										}
 										}
@@ -230,10 +229,11 @@
 	<!--Footer-part-->
 	<div class="row-fluid">
 		<div id="footer" class="span12">
-			2013 &copy; Matrix Admin. Brought to you by <a
-				href="http://themedesigner.in">Themedesigner.in</a>
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
 		</div>
 	</div>
+
 	<!--end-Footer-part-->
 <script type="text/javascript">
 function isNumber(evt) {

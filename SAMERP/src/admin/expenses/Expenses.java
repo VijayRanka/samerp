@@ -42,6 +42,54 @@ public class Expenses extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
+		//get data between two dates
+		if(request.getParameter("getDateData")!=null)
+		{
+			GenericDAO gd=new GenericDAO();
+			RequireData rd=new RequireData();
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
+					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+					+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
+					+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+firstDate+"' and '"+lastDate+"' order by date";
+			if(!gd.getData(demo).isEmpty())
+			{
+				List demoList=gd.getData(demo);
+				Iterator itr=demoList.iterator();
+				while(itr.hasNext())
+				{
+					Object id=itr.next();
+					Object date=itr.next();
+					Object name=itr.next();
+					Object amount=itr.next();
+					Object payMode=itr.next();
+					Object expType=itr.next();
+					Object debtorType=itr.next();
+					Object cDetails=itr.next();
+					Object description=itr.next();
+					
+					out.print(id+","+date+","+name+","+amount+","+payMode+",");
+					
+					String vrmData=rd.getVRM(id.toString());
+					if(vrmData!=null)
+					{
+						out.print(vrmData.split(",")[0]+","+vrmData.split(",")[1]+",");
+					}
+					else{
+						out.print("-,-,");
+					}
+					
+					out.print(expType+","+debtorType+",");
+					if(cDetails!=null)
+						out.print(cDetails+",");
+					else
+						out.print("-,");
+					out.print(description+",");
+				}
+			}
+			
+		}
 		
 		//get exp data for ajax table
 		if(request.getParameter("getTableData")!=null)
@@ -106,40 +154,6 @@ public class Expenses extends HttpServlet {
 			}
 			
 		}
-		if(request.getParameter("addDebtorList")!=null)
-		{
-			String debtor=request.getParameter("debtor").trim();
-			boolean status=false;
-			GenericDAO gd=new GenericDAO();
-			int i=0;
-			
-			String check="SELECT `type` FROM `debtor_master`";
-			List checkDemo=gd.getData(check);
-			Iterator itr=checkDemo.iterator();
-			while(itr.hasNext())
-			{
-				if(itr.next().toString().equals(debtor))
-					status=true;
-			}
-			if(status)
-				out.println("0,Debtor Already Present");
-			else
-			{
-				String insertQuery="INSERT INTO `debtor_master`(`type`) VALUES ('"+debtor+"')";
-				i=gd.executeCommand(insertQuery);
-				if(i>0)
-				{
-					System.out.println("inserted Success");
-					String getDataList="SELECT `id`, `type` FROM `debtor_master` WHERE type='"+debtor+"'";
-					if(!gd.getData(getDataList).isEmpty())
-					{
-						System.out.println("1,"+gd.getData(getDataList).get(0)+","+gd.getData(getDataList).get(1)+",Debtor Added Successfully");
-					out.println("1,"+gd.getData(getDataList).get(0)+","+gd.getData(getDataList).get(1));
-					}
-				}
-			}
-		}
-		
 		
 		//insert cash deposite to bank
 		if(request.getParameter("Bank_Deposite")!=null)
@@ -153,8 +167,12 @@ public class Expenses extends HttpServlet {
 			String particulars="cash";
 			
 			String query="insert into bank_account_details(bid,date,debit,particulars) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"')";
-		     bankstatus=gd.executeCommand(query);
-		    if(bankstatus!=0)
+		  
+			System.out.println("cash deposite:"+query);
+			
+			bankstatus=gd.executeCommand(query);
+		   
+		     if(bankstatus!=0)
 		    {
 		    	System.out.println("Inserted Successfully");
 		    	request.setAttribute("status", "Inserted Successfully");
@@ -253,12 +271,12 @@ public class Expenses extends HttpServlet {
 								int pcStatus=rd.checkPCStatus(Integer.parseInt(uAmount));
 								if(pcStatus==0)
 								{
-									request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+									request.setAttribute("payError", "You don't have enough balance in your Peti Cash_c_0");
 								
 								}
 								else if(pcStatus==-1)
 								{
-									request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+									request.setAttribute("payError", "You don't have enough balance in your Peti Cash_c_-1");
 								}
 								else if(pcStatus==1)
 								{
@@ -271,11 +289,11 @@ public class Expenses extends HttpServlet {
 								int badStatus=rd.checkBankBalance(Integer.parseInt(uAmount),uDebtorType);
 								if(badStatus==0)
 										{
-											request.setAttribute("status", "You have insufficient balance in your Bank");
+											request.setAttribute("payError", "You have insufficient balance in your Bank_b_0");
 										}
 								else if(badStatus==-1)
 								{
-									request.setAttribute("status", "You have insufficient balance in your Bank");
+									request.setAttribute("payError", "You have insufficient balance in your Bank_b_-1");
 								}
 								else if(badStatus==1)
 								{
@@ -502,7 +520,6 @@ public class Expenses extends HttpServlet {
 		{
 			try{
 				GenericDAO gd=new GenericDAO();
-				int getstatus=0;
 				boolean status=false;
 				String expType=request.getParameter("expType");
 				String name=request.getParameter("name");
@@ -515,8 +532,6 @@ public class Expenses extends HttpServlet {
 				String vehicleLtrQt=request.getParameter("vehicleLtrQty");
 				String vehicleReading=request.getParameter("vehicleReading");
 				String[] arrayOfString = date.split("-");
-				String details=request.getParameter("reason");
-				String other_details=request.getParameter("other_details");
 				
 				//fetching the query
 				String getExpId="";
@@ -528,29 +543,39 @@ public class Expenses extends HttpServlet {
 					int pcStatus=rd.checkPCStatus(amount);
 					if(pcStatus==0)
 					{
-						request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+						request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_0");
 					
 					}
 					else if(pcStatus==-1)
 					{
-						request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+						request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_-1");
 					}
 					else if(pcStatus==1)
 					{
 						amountStatusClear=true;
 					}
+					else if(pcStatus==2)
+					{
+						request.setAttribute("payError", "YOU HAVEN'T ADDED PETI-CASH YET_c_-2");
+					}
 					
 				}
 				else
 				{
+					
 					int badStatus=rd.checkBankBalance(amount,bankInfo);
 					if(badStatus==0)
 							{
-								request.setAttribute("status", "You have insufficient balance in your Bank");
+						
+								request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANk_b_0");
 							}
 					else if(badStatus==-1)
 					{
-						request.setAttribute("status", "You have insufficient balance in your Bank");
+						request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
+					}
+					else if(badStatus==2)
+					{
+						request.setAttribute("payError", "YOU HAVEN'T ADDED ADDED AMOUNT IN BANK YET_b_-2");
 					}
 					else if(badStatus==1)
 					{
