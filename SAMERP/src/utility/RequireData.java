@@ -669,6 +669,11 @@ public class RequireData
 			List supplierList = gd.getData(supplierListQuery);
 			return supplierList;
 		}
+		
+		public List getClientData(int client_id)
+		{
+			return gd.getData("SELECT client_organization_name, client_address,gstin FROM client_details WHERE client_id="+client_id);
+		}		
 	//--sarang end
 	
 	// vijay start

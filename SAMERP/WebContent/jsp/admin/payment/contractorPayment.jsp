@@ -751,6 +751,8 @@ to {
 			var getInitial;
 			var status=false;
 			var count=document.getElementById("megaCount").value;
+			alert(count);
+
 			for(var i=1;i<=count;i++)
 				{
 				
