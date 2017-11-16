@@ -106,6 +106,12 @@
 .modal.fade.in {
     top: 5%;
 }
+.createBillSarthak{
+    position: relative;
+    max-height: 510px;
+    padding: 15px;
+    overflow-y: auto;
+}
 </style>
 
 </head>
@@ -597,9 +603,126 @@
 		</form>
 	</div>
 </div>
+<div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;height: 600px">
+  <div class="modal-dialog" role="document">
+   <form class="form-horizontal" action="/SAMERP/Expenses.do" method="post">
+    <div class="modal-content">
+      <div class="modal-body createBillSarthak" id="showModal">
+	     
+	        <table style="margin: 0 auto; width: 800px;" id="createBillTable">
+				<thead>
+					<tr>
+						<th colspan="12"><h2 style="color: #ff704d; margin: 0px; ">SARTHAK ENTERPRISES</h2></th>
+					</tr>
+					<tr>
+						<th colspan="12" ><h4 style="margin: 0px;">Mannufacture RCC Pipe & Chember</h4></th>
+					</tr>
+					<tr style="border-top: 1px; border-top-style: groove;">
+						<th colspan="12">A/P-Naigaon,Tal-Haveli,Dist-Pune 412110. Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com</h2></th>
+					</tr>
+<!-- 					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th colspan="4" style="padding-left: 68px;">STATE: MAHARASHTRA </th>
+						<th colspan="2" style="padding-right: 40px;"> STATE CODE: 27</th>
+					</tr> -->					
+	<!-- 				.Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com -->
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="8" style="border: 0;">To,</td>
+						<td colspan="4">Bill No : <%=maxid+1 %></td>
+					</tr>
+					<%
+					String clientId = request.getParameter("ppid");
+					List clientInfo=null;
+					String name=null;
+					String address=null;
+					String gstin=null;
+					if(clientId!=null){
+						clientInfo=rd.getClientData(Integer.parseInt(clientId));
+						System.out.println(clientInfo);
+						name=clientInfo.get(0).toString();
+						address = clientInfo.get(1).toString();
+						if(clientInfo.get(2)!=null){
+							gstin=clientInfo.get(2).toString();
+						}else
+							gstin=" ";
+					}	
+					
+
+					
+					%>
+					<tr>
+						<td colspan="3" style="border: 0;"><%=name %></td>
+						<td colspan="5" style="border: 0;">GSTIN : <%=gstin %></td>
+						<td colspan="4">Date : <%=requiredDate %></td>
+					</tr>
+					<tr>
+					<td colspan="8" style="border: 0;"><%=address %></td>
+						<td colspan="4">GSTIN : 27ALTPC9493M1Z3</td>
+					</tr>
+					<tr>
+						<th>Sr.No</th>
+						<th>Date</th>
+						<th>Challan No</th>
+						<th>Description</th>
+						<th>HSN Code</th>
+						<th>GST(%)</th>
+						<th>Qty</th>
+						<th>Rate</th>
+						<th>Taxable Amount</th>
+						<th>CGST</th>
+						<th>SGST</th>
+						<th>Total Amount</th>
+					</tr>
+					<tbody id="saleDetailsData">
+					</tbody>
+					
+					
+ 					<tr>
+ 						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th style="text-align: right;">Taxable Amount</th>
+						<th colspan="3" style="text-align: center;"><i id="totalAmount_1" ></th>
+					</tr>
+					<tr>
+						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th style="text-align: right;">CGST</th>
+						<th colspan="3" style="text-align: center;"><i id="CGST_1" ></th>
+					</tr>
+					<tr>
+						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th style="text-align: right;">SGST</th>
+						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
+					</tr>
+					<tr>
+						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th style="text-align: right;" >Total Amount</th>
+						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
+					</tr>
+
+					<tr>
+						<th colspan="12" style="text-align: right;">(In Words)&nbsp;:- <i id="print_inwords"></i></th>
+					</tr>
+					<tr>
+						<th colspan="12" style="text-align: right; height: 70px;" valign="bottom">For Sarthak Enterprises</th>
+					</tr>
+				</tbody>
+			</table>
+      </div> 
+      <div class="modal-footer">
+        <button type="submit" name="UpdateData" class="btn btn-primary" style="margin-right:5px;">Save changes</button> 
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>    
+          </div>
+    </div>
+   </form>
+  </div>
+</div>
 
 
-	<div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;">
+
+	<%-- <div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;">
 	 	<div class="modal-dialog">
 			<table style="margin: 0 auto; width: 800px;" id="createBillTable">
 				<thead>
@@ -669,48 +792,8 @@
 						<th>SGST</th>
 						<th>Total Amount</th>
 					</tr>
-					<tr>
-						<td>1</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
+					<tbody id="saleDetailsData">
+					</tbody>
 					
 					
  					<tr>
@@ -737,7 +820,7 @@
 					<tr>
 						<th colspan="12" style="text-align: right;">(In Words)&nbsp;:- <i id="print_inwords"></i></th>
 					</tr>
-
+1
 					<tr>
 						<th colspan="12" style="text-align: right; height: 70px;" valign="bottom">For Sarthak Enterprises</th>
 					</tr>
@@ -753,9 +836,9 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 
-<!-- 	
+ 	
 <div class="modal hide fade zoom-out" id="checkboxError" role="dialog" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
@@ -780,7 +863,7 @@
 		</form>
 	</div>
 </div>	
-	 -->
+
 
 <script type="text/javascript">
 
@@ -840,22 +923,101 @@ function getAllCheckBoxes(){
 	
 }
 
-
 function selectedChalan(){
+	 document.getElementById("saleDetailsData").innerHTML="";
+	 document.getElementById('checkedChalan').value="";
 	var chalanNo = [];
 	var iCount=document.getElementById("iCount").value;
 	var chalan="";
+	var status=0;
 	for (var i = 1; i <= iCount; i++) {
 		var checkBox=document.getElementById("check_"+i);
 		if(checkBox.checked === true){	
 			var c = document.getElementById('tdId'+i).children[2].innerHTML.trim();
 			chalan+=c+",";
-	
+			status++;
 		}
 	}
-	alert(chalan);
 	document.getElementById('checkedChalan').value=chalan;
+	var mainLength=chalan.split(",").length-1;
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+  			var demoStr = this.responseText.split(",");
+  			
+  			var data1="",data2="",data3="",wholeData="";
+  			var i=0,l=0;
+  			var totalAmount=0;
+  			 for(var j=1;j<=mainLength;j++)
+  				{
+  				 
+  				 var count=l;
+  				 l++;
+  				data1="";data2="";
+  				data1="<tr>"+
+					"<td rowspan='"+demoStr[count]+"' valign='top'>"+j+"</td>"+
+					"<td rowspan='"+demoStr[count]+"' valign='top'>"+demoStr[l++]+"</td>"+
+					"<td rowspan='"+demoStr[count]+"' valign='top'>"+demoStr[l++]+"</td>";
+					for(var k=1;k<=demoStr[count];k++)
+						{
+						
+						
+						
+						if(k==1)
+							{
+							if(totalAmount!=0){
+								if(demoStr[count]>1)
+									{
+									totalAmount+=8*demoStr[count]+4;
+									}
+								}else
+									{
+									totalAmount=8*demoStr[count]+3;
+									
+									}
+							
+							data2+="<td>"+ demoStr[l++] +"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td>"+demoStr[l++]+"</td>"+
+							"<td style='text-align:center' rowspan='"+demoStr[count]+"' valign='bottom'>"+demoStr[totalAmount]+"</td>"+
+						"</tr>";
+							}
+						else{
+							data2+="<tr>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+								"<td>"+demoStr[l++]+"</td>"+
+							"</tr>";
+							
+						}
+						}
+					l++;
+					wholeData+=data1+data2;
+				}
+  			 document.getElementById("saleDetailsData").innerHTML=wholeData;
+  			 
+     	}
+     };     
+     xhttp.open('POST', "/SAMERP/SalePayment?dataByChalan=1&chalanNos=" +chalan , true);
+     xhttp.send();
+	if(status>0){
+		$('#createBill').modal('show');
+	}else{
+		$('#checkboxError').modal('show');
+	}
 }
+
 
 function selectChecks(id)
 {
@@ -925,6 +1087,7 @@ function setSelectValue(){
 	var txt = e.options[e.selectedIndex].text;
 	getSetSelect('s2id_clientid', txt);
 	snackBar();
+	
 	
 }
 
