@@ -287,8 +287,8 @@
                   <th>Date</th>
                   <th width="20%">Product Name</th>
                   <th>Quantity</th>
-                  <th>Rate</th>
-                  <th>GST</th>
+                  <th style="width: 140px;">Rate</th>
+                  <th style="width: 80px;">GST</th>
                 </tr>
               </thead>
               <tbody>
@@ -309,7 +309,7 @@
 	              		String span = itr2.next().toString();
 	              %>
 	                <tr id="tdId<%=i%>">
-	                  <td rowspan="<%=span%>"><input id="<%= sid%>" type="checkbox" onclick="selectChecks(this.id)"/></td>
+	                  <td rowspan="<%=span%>"><input id="check_<%=i %>" type="checkbox" onclick="selectChecks(this.id)"/></td>
 	                  <td rowspan="<%=span%>"> <%=i%> </td>
 	                  <td id="mytd<%=i%>" rowspan="<%= span%>"><%=itr2.next() %></td>
 	                  <td rowspan="<%= span%>"><%=itr2.next() %></td>
@@ -342,7 +342,6 @@
 	   			 	 	int rate1=Integer.parseInt(itr3.next().toString());
 	   			 		int gst1=Integer.parseInt(itr3.next().toString());
 						j++;
-	   			 		System.out.println(j);
 	     			  %>	
 	     				<tr id="innerTR_<%=i%>_<%=j%>">
 	     				<td><%=product_name1 %></td>
@@ -367,31 +366,43 @@
                %>
                <input type="hidden" id="iCount" value="<%=i-1%>">
                <tr>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<th style="text-align: right; ">Total Amount</th>
+               		<td style="border-left: 0;">  </td>
+               		<td style="border-left: 0;">  </td>
+               		<td style="border-left: 0;">  </td>
+               		<td style="border-left: 0;">  </td>
+               		<td style="border-left: 0;">  </td>
+               		<td style="border-left: 0;">  </td>
+               		<td style="text-align: right; background-color: #efefef; font-weight: 700">Total Amount</td>
                		<td id="totalAmount" style="text-align: center; ">  </td>
                </tr>
+
+               <tr>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="text-align: right; background-color: #efefef; font-weight: 700">GST</td>
+               		<td id="totalGST" style="text-align: center; ">  </td>
+               </tr> 
                
                <tr>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<td>  </td>
-               		<th style="text-align: right; ">Total Amount with GST</th>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="border: 0">  </td>
+               		<td style="text-align: right;  background-color: #efefef; font-weight: 700"> Total Amount with GST</td>
                		<td id="totalAmountGST" style="text-align: center; ">  </td>
                </tr>               
               </tbody>
             </table>
+            <input type="text" id="checkedChalan" name="checkedChalan">
            </form>
          </div>
-         <button  id="chalanSubmitBtn" onclick="selectedChalan()" class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
+         <button  id="chalanSubmitBtn" onclick="selectedChalan()" disabled="disabled"  class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
          <hr style="border-top-color: #c5bbbb;">
       </div>
       
@@ -486,7 +497,6 @@
 			</div>
 			
 			<input type="hidden" name="clientID1" id="clientID1" />
-			<input type="hidden" id="checkedChalan" name="checkedChalan" >
 			
 			<div class="modal-footer">
 				<input type="submit" name="billSubmit" class="btn green btn-primary" value="Submit" />
@@ -616,12 +626,33 @@
 						<td colspan="8" style="border: 0;">To,</td>
 						<td colspan="4">Bill No : <%=maxid+1 %></td>
 					</tr>
+					<%
+					String clientId = request.getParameter("ppid");
+					List clientInfo=null;
+					String name=null;
+					String address=null;
+					String gstin=null;
+					if(clientId!=null){
+						clientInfo=rd.getClientData(Integer.parseInt(clientId));
+						System.out.println(clientInfo);
+						name=clientInfo.get(0).toString();
+						address = clientInfo.get(1).toString();
+						if(clientInfo.get(2)!=null){
+							gstin=clientInfo.get(2).toString();
+						}else
+							gstin=" ";
+					}	
+					
+
+					
+					%>
 					<tr>
-					<td colspan="8" style="border: 0;"></td>
+						<td colspan="3" style="border: 0;"><%=name %></td>
+						<td colspan="5" style="border: 0;">GSTIN : <%=gstin %></td>
 						<td colspan="4">Date : <%=requiredDate %></td>
 					</tr>
 					<tr>
-					<td colspan="8" style="border: 0;"></td>
+					<td colspan="8" style="border: 0;"><%=address %></td>
 						<td colspan="4">GSTIN : 27ALTPC9493M1Z3</td>
 					</tr>
 					<tr>
@@ -685,22 +716,22 @@
  					<tr>
  						<th colspan="8" style="text-align: right; border: 0;"></th>
 						<th style="text-align: right;">Taxable Amount</th>
-						<th colspan="3" style="text-align: right;"></th>
+						<th colspan="3" style="text-align: center;"><i id="totalAmount_1" ></th>
 					</tr>
 					<tr>
 						<th colspan="8" style="text-align: right; border: 0;"></th>
 						<th style="text-align: right;">CGST</th>
-						<th colspan="3" style="text-align: right;"></th>
+						<th colspan="3" style="text-align: center;"><i id="CGST_1" ></th>
 					</tr>
 					<tr>
 						<th colspan="8" style="text-align: right; border: 0;"></th>
-						<th style="text-align: right;">CGST</th>
-						<th colspan="3" style="text-align: right;"></th>
+						<th style="text-align: right;">SGST</th>
+						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
 					</tr>
 					<tr>
 						<th colspan="8" style="text-align: right; border: 0;"></th>
 						<th style="text-align: right;" >Total Amount</th>
-						<th colspan="3" style="text-align: right;" id="totalamt"><%-- <%=sum %> --%></th>
+						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
 					</tr>
 
 					<tr>
@@ -782,28 +813,92 @@ function getAllCheckBoxes(){
 					grandTotal+=innerTotal;
 				}	
 			}
-			
+			document.getElementById('totalGST').innerHTML=tGst;
+			document.getElementById('CGST_1').innerHTML=tGst/2;
+			document.getElementById('SGST_1').innerHTML=tGst/2;
 			document.getElementById('totalAmount').innerHTML=tAmount;
+			document.getElementById('totalAmount_1').innerHTML=tAmount;
 			document.getElementById('totalAmountGST').innerHTML=grandTotal;
-			inWords();
+			document.getElementById('totalAmountGST_1').innerHTML=grandTotal;
+			document.getElementById('chalanSubmitBtn').disabled=false;
+			
 		}
-		alert(tGST);
-
-		//document.getElementById('chalanSubmitBtn').disabled=false;		
+		inWords();
 	}
 	else{
+		document.getElementById('totalGST').innerHTML="";
 		document.getElementById('totalAmount').innerHTML="";
+		document.getElementById('totalAmount_1').innerHTML="";
 		document.getElementById('totalAmountGST').innerHTML="";
+		document.getElementById('totalAmountGST_1').innerHTML="";
+		
+		document.getElementById('SGST_1').innerHTML="";
+		document.getElementById('CGST_1').innerHTML="";
 		document.getElementById('chalanSubmitBtn').disabled=true;
+		inWords();
 	}
 	
 }
 
+
+function selectedChalan(){
+	var chalanNo = [];
+	var iCount=document.getElementById("iCount").value;
+	var chalan="";
+	for (var i = 1; i <= iCount; i++) {
+		var checkBox=document.getElementById("check_"+i);
+		if(checkBox.checked === true){	
+			var c = document.getElementById('tdId'+i).children[2].innerHTML.trim();
+			chalan+=c+",";
+	
+		}
+	}
+	alert(chalan);
+	document.getElementById('checkedChalan').value=chalan;
+}
+
 function selectChecks(id)
 {
+	var count=id.split("_")[1];
+	var TotalCount=document.getElementById("iCount").value;
+	//alert(TotalCount+" "+count);
+	var grandTotal=0;
+	var tAmount=0;
+	var tGst=0;
 	
-	var iCount=document.getElementById("iCount").value;
-
+	for(var i=1;i<=TotalCount;i++)
+	{
+		var checkBox=document.getElementById("check_"+i);
+		if(checkBox.checked === true){
+			var qty = document.getElementById('tdId'+i).children[5].innerHTML.trim();
+			var rate = document.getElementById('tdId'+i).children[6].innerHTML.trim();
+			var gstper = document.getElementById('tdId'+i).children[7].innerHTML.trim();
+			tAmount+=qty*rate;
+			tGst+=(qty*rate*gstper)/100;
+			grandTotal+=(qty*rate)+(qty*rate*gstper)/100;
+			var dataCount=document.getElementById('tdId'+i).children[1].rowSpan;
+			for(var j=1;j<dataCount;j++)
+			{
+				
+				var qty1 = document.getElementById('innerTR_'+i+"_"+j).children[1].innerHTML.trim()
+				var rate1 = document.getElementById('innerTR_'+i+"_"+j).children[2].innerHTML.trim()
+				var gstper1 = document.getElementById('innerTR_'+i+"_"+j).children[3].innerHTML.trim()
+				var innerTotal=(qty1*rate1)+(qty1*rate1*gstper1)/100;
+				tGst+=(qty1*rate1*gstper1)/100;
+				tAmount+=qty1*rate1;
+				grandTotal+=innerTotal;
+			}
+			document.getElementById('chalanSubmitBtn').disabled=false;
+		}
+		document.getElementById('CGST_1').innerHTML=tGst/2;
+		document.getElementById('SGST_1').innerHTML=tGst/2;
+		document.getElementById('totalAmountGST_1').innerHTML=grandTotal;
+		document.getElementById('totalAmount_1').innerHTML=tAmount;
+		document.getElementById('totalGST').innerHTML=tGst;
+		document.getElementById('totalAmount').innerHTML=tAmount;
+		document.getElementById('totalAmountGST').innerHTML=grandTotal;
+		inWords();
+	}
 }
 
 function setClientId() {	
@@ -847,23 +942,6 @@ function showdata(id){
 	    x.style.display = "block";
 }
 
-function selectedChalan(){
-	var checked = [];
-	$(":checkbox").each(function() {
-	    if(this.checked){
-	    	if(isFinite(this.id))
-		        checked.push(this.id);
-	    } 
-	});
-	document.getElementById("checkedChalan").value=checked;
-	
-	if(checked.length>0){
-		$('#billEntry').modal('show');
-	}else{
-		$('#checkboxError').modal('show');
-	}
-}
-
 function displayBank(id, id1){
 	var x = document.getElementById(id);
 	var y = document.getElementById(id1);
@@ -903,7 +981,7 @@ function snackBar() {
 
 function inWords()
 {
-    var str = document.getElementById("totalAmount").innerHTML;
+    var str = document.getElementById("totalAmountGST").innerHTML;
     var splt = str.split("");
     var rev = splt.reverse();
     var once = ['Zero', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine'];
