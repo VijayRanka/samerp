@@ -1073,6 +1073,7 @@ public class RequireData
 					bankId="null";
 				if(chequeDetails==null)
 					chequeDetails="";
+				
 				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
 						+ " `bankId`, `other_details`, `date`) VALUES "
 						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"',"+bankId+",'"+chequeDetails+"','"+date+"')";

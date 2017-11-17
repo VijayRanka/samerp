@@ -65,11 +65,11 @@
 		<li class="bg_lo"> <a href="#"> <i class="icon-user"></i><span class="label label-success"></span>Work Details</a> </li> -->
 		<li class="bg_ly"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp"> <i class="icon-dashboard"></i><span class="label label-success"></span>JCB & POKLAND  <!-- Dashboard --></a> </li>
 		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/expenses/expenses.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Expense</a> </li>
-		<li class="bg_lb"> <a href="/SAMERP/jsp/admin/productPurchase/productSupplierPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Product Payment</a> </li>
+		<li class="bg_lv"> <a href="/SAMERP/jsp/admin/productPurchase/productSupplierPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Product Payment</a> </li>
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Raw Payment</a> </li>
 		<li class="bg_lo"> <a href="/SAMERP/jsp/admin/sale/salePayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Sale Payment</a> </li>
       	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/payment/contractorPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Contractor Payment</a> </li>
-    	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/payment/driverPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Driver Payment</a> </li>
+    	<li class="bg_lb"> <a href="/SAMERP/jsp/admin/payment/driverPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Driver Payment</a> </li>
       </ul>
     </div>
 <!--End-Action boxes-->    
@@ -77,15 +77,13 @@
 </div>
   <div class="container-fluid">
     <hr>
-Sarang        
+    
      <div class="row-fluid">
       <div class="span12">
         <div class="widget-box collapsible">
         
         
-
-
-      <!-- daily expenses start  vijay ranka part with omkar Y shivadekar and sandeep and  MUKESH Sarang Kamble-->
+ <!-- daily expenses start  vijay ranka part with omkar Y shivadekar and sandeep and  MUKESH Sarang Kamble-->
 
         
           <div class="widget-title"> <a href="#collapseOne" data-toggle="collapse"> <span class="icon"><i class="icon-arrow-right"></i></span>
@@ -466,19 +464,19 @@ Sarang
             	<h4 style=" margin-bottom: 15%; margin-top: 2%; margin-left: 20%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : </h4> 
             </span>    
             
-            <span style="float: right; position: relative; margin-top: -14%; margin-right: 17%;">
+            <span style="float: right; position: relative; margin-top: -14%; margin-right: 2%;">
             	<h4>
             	Trip(s) : <span id="tripCnt">  </span>  <br>
             	Diesel : <span id="dieselCost">  </span> + <span id="dieselExpCost">  </span> <br>
             	Deposit : <span id="depositCost">  </span> <br>
             	Maintenance : <span id="driverCost">  </span> <br>
-            	Driver (D.C. + H.C. + A + Extra) :  
+            	Helper Charges : <span id="helperCharge"> </span> <br> <!-- <input type="text" id="helperCharge" style="width: 5%;"> --> 
+            	Driver (D.C. + A + Extra) :  
  
 	            	<span id="driverCharge"> </span> <!-- <input type="text" id="driverCharge" style="width: 5%;"> --> +
-	            	<span id="helperCharge"> </span> <!-- <input type="text" id="helperCharge" style="width: 5%;"> --> +
 	            	<span id="allowance"> </span> * <span id="allowanceCharge"> </span> <!-- <input type="text" id="allowanceCharge" style="width: 5%;">  --> + 
 	            	<input type="text" id="extraCharge" value="0" maxlength="5" onkeyup="getDates()" pattern="[0-9]{1,5}" style="width: 10%; margin:0;"> =  <span id="totalDPayment">  </span>  &nbsp;&nbsp;&nbsp;
-	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment">
+	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment" style="float: right; margin-right: 3%;">
 	            	<br>
 	            
             	Total : <span id="totalCost">  </span>  
@@ -894,14 +892,16 @@ function showdata(id){
 function setVId(){	
 	document.getElementById("vid").value = document.getElementById("selectVehicle").value;
 	var s = document.getElementById("vid").value;
-	//window.location.replace("?vid="+s);
+	window.location.replace("?vid="+s);
+	
+	//history.pushState('page', 'caption', 'http://localhost:8080/SAMERP/dashboard.jsp?vid='+s);
 	
 	if(s!=""){
 		var f=document.getElementById("vidDrop");
 	    f.action='/SAMERP/dashboard.jsp?vid='+s;
 	    f.method="post";
 	    f.submit();  
-	}
+	} 
 }
 
 var m;
@@ -1035,7 +1035,7 @@ function getDriverExp(sdate, edate)
 				}
 				
 				var extra = $('#extraCharge').val(); 
-				var totalDPayment = +d[0] + +d[1] + +(d[2]*document.getElementById("tripCnt").innerHTML)+ +extra;
+				var totalDPayment = +d[0]+ +(d[2]*document.getElementById("tripCnt").innerHTML)+ +extra;
 				document.getElementById("totalDPayment").innerHTML = totalDPayment;
 				
 				totalCost = +totalCost + +d[3];
@@ -1043,7 +1043,7 @@ function getDriverExp(sdate, edate)
 				document.getElementById("dieselCost").innerHTML = expDCost
 				document.getElementById("dieselExpCost").innerHTML = d[3];
 				document.getElementById("driverCost").innerHTML = d[4];
-				document.getElementById("totalCost").innerHTML = totalCost+  +d[4]+ +totalDPayment; 
+				document.getElementById("totalCost").innerHTML = totalCost+  +d[4]+ +d[1]+ +totalDPayment; 
 				
 			}else{
 				
@@ -1067,13 +1067,18 @@ function isNumber(evt) {
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
         return false;
-    }
+    }	
     return true;
 }
 
 function makeDriverPayment() {
 	
 	var totalDPayment = document.getElementById("totalDPayment").innerHTML;
+	var value = document.getElementById("selectVehicle").value;
+	var extraCharge = document.getElementById("extraCharge").value;
+	var fromDate = document.getElementById("fromDate").value.trim();
+	var toDate = document.getElementById("toDate").value.trim();
+	var hc = document.getElementById("helperCharge").innerHTML;
 	
 	var xhttp;
 	xhttp = new XMLHttpRequest();
@@ -1083,7 +1088,8 @@ function makeDriverPayment() {
 			
 		}
 	};
-	xhttp.open("POST", "/SAMERP/AddVehicles?totalDPayment="+totalDPayment, true);
+	
+	xhttp.open("POST", "/SAMERP/AddVehicles?totalDPayment="+totalDPayment+"&veid="+value+"&extraCharge="+extraCharge+"&sdate="+fromDate+"&edate="+toDate+"&hc="+hc, true);
 	xhttp.send();
 	
 	
