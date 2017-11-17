@@ -432,7 +432,7 @@
 								<tbody>
 								<% 
 								while(handLoan.hasNext())
-								{handLoan.next();%>
+								{Object id=handLoan.next();%>
 									<tr>
 										<td><%=hCount %></td>
 										<td><%=handLoan.next()%></td>
@@ -442,7 +442,7 @@
 										<td><%=handLoan.next()%></td>
 										<td><%=handLoan.next()%></td>
 										<td><%=handLoan.next()%></td>
-										<td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="" data-toggle="modal"><i class="icon-pencil"></i></a></td>
+										<td style="text-align: center"><a class="tip" title="Update" href="#updateModal" onclick="getInfo(<%=id %>)" data-toggle="modal"><i class="icon-pencil"></i></a></td>
 									</tr>
 								<%hCount++; }%>
 								</tbody>
@@ -473,6 +473,78 @@
 		</div>
 	</div>
 
+
+<!-- update modal start -->
+<div class="modal hide fade zoom-out" id="updateModal" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 style="color: red;" class="modal-title">Update HandLoan Details</h4>
+							</div>
+							<form class="form-horizontal" action="/SAMERP/PTCash" method="post" name="form4">
+							<div class="modal-body">
+									<div class="form-group">
+										<div class="widget-content nopadding">
+											<div class="control-group">
+												<label class="control-label">Date</label>
+	    										<div class="controls">
+	                                				<input type="text" id="uDate" name="" readonly>
+	                                				<input type="text" id="detailsId" name="detailsId">
+	                                			</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Name</label>
+	    										<div class="controls">
+	                                				<input type="text" id="uName" name="" readonly>
+	                                				<input type="text" id="handLoanId" name="handLoanId">
+	                                			</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Debit</label>
+	    										<div class="controls">
+	                                				<input type="number" id="dr" name="dr">
+	                                				<input type="number" id="oldDr" name="oldDr">
+	                                			</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Credit</label>
+	    										<div class="controls">
+	                                				<input type="number" id="cr" name="cr">
+	                                				<input type="number" id="oldCr" name="oldCr">
+	                                			</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Mode</label>
+	    										<div class="controls">
+	                                				<input type="text" id="uMode" name="" readonly>
+	                                			</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Cheque No</label>
+	    										<div class="controls">
+	                                				<input type="text" id="chqNo" name="chqNo">
+	                                			</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Balance</label>
+	    										<div class="controls">
+	                                				<input type="text" id="uBalance" name="uBalance" readonly>
+	                                			</div>
+											</div>
+										</div>
+									</div>
+								</div>
+										<div class="modal-footer">			
+											<input type="button" class="btn btn-success" id="" name="updateHandLoan" value="Update" />
+											<input type="button" class="btn btn-danger" data-dismiss="modal" id="submitbtn" value="Cancel" />
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+<!-- update modal end -->
 	
 	<div class="modal hide fade zoom-out" id="paymentEntry" role="dialog">
 		<div class="modal-header">
@@ -589,6 +661,63 @@ var nameCount=1;
 var bankNameCount=1;
 var counter=0;
 var bankCounter=0;
+
+function getInfo(val)
+{
+	var xhttp;
+	
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function() {
+		
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText.split(",");
+			//alert(demoStr);
+			document.getElementById("uDate").value = demoStr[0];
+			document.getElementById("uName").value = demoStr[1];
+			if(demoStr[2]==0)
+			{
+				document.getElementById("dr").readOnly=true;
+			}
+			else
+			{
+				document.getElementById("dr").readOnly=false;
+			}
+			document.getElementById("dr").value = demoStr[2];
+			document.getElementById("oldDr").value = demoStr[2];
+			if(demoStr[3]==0)
+			{
+				document.getElementById("cr").readOnly=true;
+			}
+			else
+			{
+				document.getElementById("cr").readOnly=false;
+			}
+			document.getElementById("cr").value = demoStr[3];
+			document.getElementById("oldCr").value = demoStr[3];
+			
+			document.getElementById("uMode").value = demoStr[4];
+			if(demoStr[5]=="")
+			{
+				document.getElementById("chqNo").readOnly=true;
+			}
+			else
+			{
+				document.getElementById("chqNo").readOnly=false;
+			}
+			document.getElementById("chqNo").value = demoStr[5];
+			document.getElementById("uBalance").value = demoStr[6];
+			document.getElementById("handLoanId").value = demoStr[7];
+			document.getElementById("detailsId").value = demoStr[8];
+			
+			
+			
+			}
+		};
+	xhttp.open("POST", "/SAMERP/PTCash?forUpdate="+val, true);
+	xhttp.send();
+}
 
 function newHandLoaner()
 {
