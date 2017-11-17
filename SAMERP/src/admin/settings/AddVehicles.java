@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -156,13 +158,16 @@ public class AddVehicles extends HttpServlet {
 			String vno = request.getParameter("vno");
 			String sdate = request.getParameter("sdate");
 			String edate = request.getParameter("edate");
-			List l2 = new ArrayList();
+			List l2 = new ArrayList(), l3 = new ArrayList();
 			
 			System.out.println("vno "+ vno);
 			
 			if(vno!=null){
 				String q2="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vno+")";
 				l2 = gd.getData(q2);
+				
+				String q3="SELECT `driver_charges`, `helper_charges`, `trip_allowance` FROM `vehicle_details` WHERE vehicle_id="+vno;
+				l3 = gd.getData(q3);
 			}
 			
 			
@@ -184,9 +189,68 @@ public class AddVehicles extends HttpServlet {
 					}
 				}
 				System.out.println(DieselTotal+ "," + total);
-				out.print(DieselTotal+ "," + total);
+				out.print(l3.get(0) + "," + l3.get(1) + "," + l3.get(2) + "," + DieselTotal+ "," + total);
 				System.out.println("vdata "+l);
 			}
+		}
+		
+		
+		if(request.getParameter("vDate")!=null)
+		{
+			RequireData rd = new RequireData();
+			List vehicleDetailsData1 =rd.getVehicleDetails1(request.getParameter("vDate"));
+            int i1=1;
+            
+            if(vehicleDetailsData1!=null)
+            {
+               Iterator itr = vehicleDetailsData1.iterator();	 
+               int k=1;
+               String s="";
+               while(itr.hasNext())
+               {
+               	String saleId = itr.next().toString();
+               	List saleSup =rd.getSaleSup(saleId);
+               	Iterator itr2 = saleSup.iterator();	
+               	
+               	List saleProductDetails =rd.getSaleProductDetails(saleId);
+               	Iterator itr3 = saleProductDetails.iterator();	
+               	
+               	
+               	Set set = new LinkedHashSet();
+               	
+              	s += ","+itr.next()+",";
+              	s += itr.next()+",";
+              	s += itr.next()+",";
+                
+            	while(itr2.hasNext()){ 
+                	set.add(" "+itr2.next());
+                }
+            	
+            	 for (Object j : set) {
+            		 s +=j+"~";   
+                 } 
+                
+            	 s+=",";
+                while(itr3.hasNext()){
+                	s += itr3.next() + " ( " + itr3.next()+ " ) "+"~";
+                } 
+                
+//	            out.print(","+itr.next());
+          	
+               	i1++; 
+               }
+               out.print(s);
+            }
+            
+		}
+		
+		
+		if(request.getParameter("totalDPayment")!=null)
+		{
+			String totalDPayment = request.getParameter("totalDPayment");
+			
+			//String q="INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `extra_charges`, `particular`, `type`, `balance`) VALUES ()";
+			//List l = gd.getData(q);
 		}
 		
 	}
