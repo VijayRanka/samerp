@@ -664,6 +664,7 @@ margin-top: 5px;
 						<label class="control-label">Client Orgnization Name:</label>
 						<div class="controls">
 							<input type="text" id="coname" name="coname" autofocus class="span3"  onkeyup="this.value=this.value.toUpperCase()" placeholder="Client Orgnization Name" pattern="[a-z A-Z0-9]*" required />
+							
 						</div>
 					</div>
 					<div class="control-group">

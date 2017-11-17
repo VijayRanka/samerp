@@ -56,6 +56,7 @@ public class AddDailyStock extends HttpServlet {
 		}
 		if(request.getParameter("insertData")!=null)
 		{
+			String contIdDS=request.getParameter("contIdDS");
 		String pDate=request.getParameter("partDate");
 		String[] allData=request.getParameter("insertData").split(",");
 		GenericDAO gd=new GenericDAO();
@@ -63,93 +64,87 @@ public class AddDailyStock extends HttpServlet {
 		boolean finalStockStatus=false;
 		boolean existStatus=false;
 		
-		if(pDate.isEmpty())
+		if(!pDate.isEmpty())
 		{
-			System.out.println(pDate);
-		}
-		System.out.println(finalStockStatus);
-		
-		String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
-		List getDateExistDetailList=gd.getData(getDateExistDetail);
-		Iterator traverseDS=getDateExistDetailList.iterator();
-		while(traverseDS.hasNext())
-		{
-			if(pDate.equals(traverseDS.next().toString()))
-				existStatus=true;
-		}
-		
-		if(!existStatus)
-		{
-			/*for(int i=0;i<allData.length;i+=3)
+			String getDateExistDetail="SELECT date FROM `daily_stock_details`,product_master,contractor_master WHERE contractor_master.id="
+					+ "product_master.contractor_id and daily_stock_details.product_id=product_master.id "
+					+ "AND contractor_master.id="+contIdDS+" GROUP BY date ";
+			List getDateExistDetailList=gd.getData(getDateExistDetail);
+			Iterator traverseDS=getDateExistDetailList.iterator();
+			while(traverseDS.hasNext())
 			{
-				String productId=allData[i];
-				String productQty=allData[i+1];
-				String queryQty=allData[i+2];
-				
-				String getProId="SELECT rate_master.production_rate, rate_master.querying_rate FROM rate_master WHERE rate_master.product_id="+productId;
-				if(!gd.getData(getProId).isEmpty())
+				if(pDate.equals(traverseDS.next().toString()))
+					existStatus=true;
+			}
+			
+			if(!existStatus)
+			{
+				for(int i=0;i<allData.length;i+=3)
 				{
-					List demoList=gd.getData(getProId);
+					String productId=allData[i];
+					String productQty=allData[i+1];
+					String queryQty=allData[i+2];
 					
-					if(demoList.get(0).toString().equals("0"))
+					String getProId="SELECT rate_master.production_rate, rate_master.querying_rate FROM rate_master WHERE rate_master.product_id="+productId;
+					if(!gd.getData(getProId).isEmpty())
 					{
-						out.print("4,");
-					}
-					else{
-					
-						//demoList.get(0)+demoList.get(1);
+						List demoList=gd.getData(getProId);
 						
-						if(!productQty.equals("-"))
+						if(demoList.get(0).toString().equals("0"))
 						{
-							String insertQuery="";
-							if(queryQty.equals("-"))
+							out.print("4,");
+						}
+						else{
+						
+							//demoList.get(0)+demoList.get(1);
+							
+							if(!productQty.equals("-"))
 							{
-								insertQuery="INSERT INTO `daily_stock_details`(`product_id`, `product_qty`, "
-										+ "`qty_rate`, `query_qty_rate`, `date`) "
-										+ "VALUES ("+productId+","+productQty+","+demoList.get(0)+","+demoList.get(1)+",'"+pDate+"')";
-							}
-							else{
-								insertQuery="INSERT INTO `daily_stock_details`(`product_id`, `product_qty`, `quering_qty`, "
-										+ "`qty_rate`, `query_qty_rate`, `date`) "
-										+ "VALUES ("+productId+","+productQty+","+queryQty+","+demoList.get(0)+","+demoList.get(1)+",'"+pDate+"')";
-							}
-									
-							int x=gd.executeCommand(insertQuery);
-							if(x>0)
-							{
-								status = true;
-								System.out.println("successfully done");
-							}
-							if(status)
-							{
-								int totalQty=0;
-								String getProQty="SELECT `qty` FROM `final_stock` WHERE product_id="+productId;
-								if(!gd.getData(getProQty).isEmpty())
+								String insertQuery="";
+								if(queryQty.equals("-"))
 								{
-									int oldQty=Integer.parseInt(gd.getData(getProQty).get(0).toString());
-									
-									int addedQty=Integer.parseInt(productQty);
-									
-									totalQty=oldQty+addedQty;
-									
-									String updateFinalStock="UPDATE `final_stock` SET `qty`="+totalQty+" WHERE product_id="+productId;
-									
-									int xx=gd.executeCommand(updateFinalStock);
-									if(xx>0)
+									insertQuery="INSERT INTO `daily_stock_details`(`product_id`, `product_qty`, "
+											+ "`qty_rate`, `query_qty_rate`, `date`) "
+											+ "VALUES ("+productId+","+productQty+","+demoList.get(0)+","+demoList.get(1)+",'"+pDate+"')";
+								}
+								else{
+									insertQuery="INSERT INTO `daily_stock_details`(`product_id`, `product_qty`, `quering_qty`, "
+											+ "`qty_rate`, `query_qty_rate`, `date`) "
+											+ "VALUES ("+productId+","+productQty+","+queryQty+","+demoList.get(0)+","+demoList.get(1)+",'"+pDate+"')";
+								}
+										
+								int x=gd.executeCommand(insertQuery);
+								if(x>0)
+								{
+									status = true;
+									System.out.println("successfully done");
+								}
+								if(status)
+								{
+									int totalQty=0;
+									String getProQty="SELECT `qty` FROM `final_stock` WHERE product_id="+productId;
+									if(!gd.getData(getProQty).isEmpty())
 									{
-										finalStockStatus=true;
+										int oldQty=Integer.parseInt(gd.getData(getProQty).get(0).toString());
+										
+										int addedQty=Integer.parseInt(productQty);
+										
+										totalQty=oldQty+addedQty;
+										
+										String updateFinalStock="UPDATE `final_stock` SET `qty`="+totalQty+" WHERE product_id="+productId;
+										
+										int xx=gd.executeCommand(updateFinalStock);
+										if(xx>0)
+										{
+											finalStockStatus=true;
+										}
 									}
 								}
-								
-								
 							}
 						}
 					}
-						
-					
-					
 				}
-			}*/
+			}
 		}
 		if(finalStockStatus)
 		{

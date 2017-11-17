@@ -299,6 +299,14 @@
           </div>
           <div class="widget-content nopadding">
             <table class="table table-bordered" id="pastPurchaseTable">
+            <div class="controls" style="float: right;position: relative;right: 68px; bottom: 33px">
+              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
+              <% SysDate sd=new SysDate(); String[] sdDemo; sdDemo=sd.todayDate().split("-");
+              %>
+                <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
+                  <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
+                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
+                </div> 
               <thead>
                 <tr>
                   <th>Sr.No.</th>
@@ -747,6 +755,66 @@
 
 window.counter = 0;
 
+//vijay data ajax b/w dates
+
+function getData(value,id)
+{
+	if(document.getElementById("fromDate").value=="" || document.getElementById("toDate").value=="")
+		{
+		alert("Choose Right Date Format");
+		}
+	else{
+		/* var firstDate="";
+		var lastDate="";
+		if(id==1)
+		{
+			firstDate=value;
+			lastDate=document.getElementById("toDate").value;
+		}
+	    else if(id==2)
+		{
+			firstDate=document.getElementById("fromDate").value;
+			lastDate=value;
+		}
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var demoStr = this.responseText.split(",");
+					if(demoStr=="")
+						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+					else{
+					var a="";
+					var count=1;
+					for(var i=0;i<demoStr.length-1;i=i+11)
+						{
+						 a+= "<tr>"+
+						"<td style='text-align: center'>"+count+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+						"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+						"<td style='text-align: center'' >"+demoStr[i+7]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+						" <td style='text-align: center'>"+
+						"<a data-toggle='modal' href='#update' onclick='getUpdateData("+demoStr[i]+")'>Update</a></td>"+
+						"<tr>";
+						count++;
+						}
+					document.getElementById("wholeDataList").innerHTML=a;
+					}
+				
+				}
+					
+				};
+			xhttp.open("POST", "/SAMERP/ProductPurchase?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();*/
+		} 
+}
 
 function myFunction1() {
 	  var input, filter, table, tr, td, i, j, index, num, span1, t;

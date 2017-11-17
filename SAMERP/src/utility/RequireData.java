@@ -92,187 +92,205 @@ public class RequireData
 	
 	// mukesh start
 		
-	public List getVehiclesData()
-			{
-				String vehicleDetailsQuery = "select vehicle_id, vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges from vehicle_details order by vehicle_id desc;";
-				List vehicleDetailsData = gd.getData(vehicleDetailsQuery);
-				return vehicleDetailsData;
-			}
-			
-			public List getVehicleRowData(String RowId)
-			{
-				String vehicleRowDataQuery = "select vehicle_id, vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges,vehicle_aliasname from vehicle_details where vehicle_id="+RowId+"; ";
-				List vehicleDetailsData = gd.getData(vehicleRowDataQuery);
-				return vehicleDetailsData;
-			}
-			
-			public List getSupplierList()
-			{
-				String supplierListQuery = "select supplier_business_id, supplier_business_name from material_supply_master where type=2;";
-				List supplierList = gd.getData(supplierListQuery);
-				return supplierList;
-			}
-			
-			public List getClientList()
-			{
-				String clientListQuery = "select client_id, client_organization_name from client_details;";
-				List clientList = gd.getData(clientListQuery);
-				return clientList;
-			}
-			
-			public List getPurchaseProduct()
-			{
-				String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, material_supply_master.supplier_business_name , "
-						+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
-						+ "material_supply_master, client_details "
-						+ "WHERE material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
-						+ "AND client_details.client_id=product_purchase_master.client_details_id order by product_purchase_master.id DESC";
-				List purchaseList = gd.getData(purchaseQuery);
-				return purchaseList;
-			}
-			
-			
-			public List getProductDetails(String pid)
-			{
-				String pquery = "SELECT `product_name`, `qty`, `rate` FROM `purchased_product_details` WHERE purchased_product_details.product_purchase_master_id="+pid;
-				List pList = gd.getData(pquery);
-				return pList;
-			}
-			
-			public List getCompletePurchaseData()
-			{
-				List finalData = new ArrayList();
+				public List getVehiclesData()
+				{
+					String vehicleDetailsQuery = "select vehicle_id, vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges from vehicle_details order by vehicle_id desc;";
+					List vehicleDetailsData = gd.getData(vehicleDetailsQuery);
+					return vehicleDetailsData;
+				}
 				
-				String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, material_supply_master.supplier_business_name , "
-						+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
-						+ "material_supply_master, client_details "
-						+ "WHERE material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
-						+ "AND client_details.client_id=product_purchase_master.client_details_id";
-				List purchaseList = gd.getData(purchaseQuery);
-				System.out.println(purchaseList);
-
-				Iterator itr = purchaseList.iterator();
-				Iterator itr2 = null;
+				public List getVehicleRowData(String RowId)
+				{
+					String vehicleRowDataQuery = "select vehicle_id, vehicle_type, vehicle_number,trip_allowance,helper_charges,driver_charges,vehicle_aliasname from vehicle_details where vehicle_id="+RowId+"; ";
+					List vehicleDetailsData = gd.getData(vehicleRowDataQuery);
+					return vehicleDetailsData;
+				}
 				
-				while(itr.hasNext()){
-					
-					String pquery = "SELECT `product_name`, `qty`, `rate` FROM `purchased_product_details` WHERE purchased_product_details.product_purchase_master_id="+itr.next();
+				public List getSupplierList()
+				{
+					String supplierListQuery = "select supplier_business_id, supplier_business_name from material_supply_master where type=2;";
+					List supplierList = gd.getData(supplierListQuery);
+					return supplierList;
+				}
+				
+				public List getClientList()
+				{
+					String clientListQuery = "select client_id, client_organization_name from client_details;";
+					List clientList = gd.getData(clientListQuery);
+					return clientList;
+				}
+				
+				public List getPurchaseProduct()
+				{
+					String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, material_supply_master.supplier_business_name , "
+							+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
+							+ "material_supply_master, client_details "
+							+ "WHERE material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
+							+ "AND client_details.client_id=product_purchase_master.client_details_id order by product_purchase_master.id DESC";
+					List purchaseList = gd.getData(purchaseQuery);
+					return purchaseList;
+				}
+				
+				
+				public List getProductDetails(String pid)
+				{
+					String pquery = "SELECT `product_name`, `qty`, `rate` FROM `purchased_product_details` WHERE purchased_product_details.product_purchase_master_id="+pid;
 					List pList = gd.getData(pquery);
+					return pList;
+				}
+				
+				public List getCompletePurchaseData()
+				{
+					List finalData = new ArrayList();
 					
-					finalData.add(itr.next());
-					finalData.add(itr.next());
-					finalData.add(itr.next());
-					finalData.add(itr.next());
-					finalData.add(itr.next());
-					finalData.add(itr.next());
+					String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, material_supply_master.supplier_business_name , "
+							+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
+							+ "material_supply_master, client_details "
+							+ "WHERE material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
+							+ "AND client_details.client_id=product_purchase_master.client_details_id";
+					List purchaseList = gd.getData(purchaseQuery);
+					System.out.println(purchaseList);
+
+					Iterator itr = purchaseList.iterator();
+					Iterator itr2 = null;
 					
-					//s+=","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next();
-					
-					itr2 = pList.iterator();
-					
-					while(itr2.hasNext()){
-						finalData.add(itr2.next());
-						finalData.add(itr2.next());
-						finalData.add(itr2.next());
+					while(itr.hasNext()){
 						
-						//s+=","+itr2.next()+","+itr2.next()+","+itr2.next();
+						String pquery = "SELECT `product_name`, `qty`, `rate` FROM `purchased_product_details` WHERE purchased_product_details.product_purchase_master_id="+itr.next();
+						List pList = gd.getData(pquery);
+						
+						finalData.add(itr.next());
+						finalData.add(itr.next());
+						finalData.add(itr.next());
+						finalData.add(itr.next());
+						finalData.add(itr.next());
+						finalData.add(itr.next());
+						
+						//s+=","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next();
+						
+						itr2 = pList.iterator();
+						
+						while(itr2.hasNext()){
+							finalData.add(itr2.next());
+							finalData.add(itr2.next());
+							finalData.add(itr2.next());
+							
+							//s+=","+itr2.next()+","+itr2.next()+","+itr2.next();
+						}
+						
 					}
 					
+					System.out.println(finalData);
+					return finalData;
 				}
-				
-				System.out.println(finalData);
-				return finalData;
-			}
-				
-			public List getChalanDetails(String ppid){
-				List chalanList=new ArrayList();
-				if(!ppid.equals("")){
-					String chalanQuery = "SELECT id , `product_count`, `chalan_no`, `date` , `vehicle_no`, `material_supply_master_id` FROM "
-							+ "`product_purchase_master` WHERE  material_supply_master_id="+ppid+" and product_purchase_master.bill_check_status=0";
-					chalanList = gd.getData(chalanQuery);
-				}
-				return chalanList;
-			}
-			
-			public List getChalanProductDetails(String pid)
-			{
-				String cpquery = "SELECT `product_name`, `qty`, `rate` FROM `purchased_product_details` WHERE purchased_product_details.product_purchase_master_id="+pid;
-				List cpList = gd.getData(cpquery);
-				return cpList;
-			}
-			
-			public String getMaxId()
-			{
-				String query = "SELECT max(id) FROM `supplier_bill_details`";
-				List list = gd.getData(query);
-				String s = list.get(0).toString();
-				return s;
-			}
-			
-			public String getTotalRemaining( String supid)
-			{
-				String query = "SELECT `id`, `total_remaining` FROM `total_supplier_payment_master` WHERE id=(SELECT MAX(id) FROM total_supplier_payment_master WHERE supplier_id="+supid+")";
-				List list = gd.getData(query);
-				String s = list.get(1).toString();
-				return s;
-			}
-			
-			public List getSupplierPaymentDetails(String pid)
-			{
-				String query = "SELECT total_supplier_payment_master.id, `supplier_id`, `date`, (SELECT supplier_bill_details.billno FROM supplier_bill_details "
-						+ "WHERE total_supplier_payment_master.bill_id=supplier_bill_details.id) AS bill_no , `bill_amt`, `paid_amt`,(SELECT supplier_payment_master.mode"
-						+ " FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id) AS mode, (SELECT "
-						+ "supplier_payment_master.cheque_no FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id)"
-						+ " AS cheque_no, (SELECT account_details.acc_aliasname FROM account_details, supplier_payment_master WHERE"
-						+ " account_details.acc_id=supplier_payment_master.description AND total_supplier_payment_master.payment_id=supplier_payment_master.id) "
-						+ "AS bank_details, `total_remaining`FROM `total_supplier_payment_master` WHERE total_supplier_payment_master.supplier_id="+pid+" "
-								+ "ORDER BY total_supplier_payment_master.id DESC";
-				List List = gd.getData(query);
-				return List;
-			}
-			
-			
-			public List getVehicleDetails(){
-				String q = "SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_type='TRANSPORT'";
-				List l = gd.getData(q);
-				return l;
-			}
-			
-			public List getVehicleDetails(String vid){
-				List l = new ArrayList<>();
-				System.out.println("vid "+vid);
-				if(!vid.equals("")){
-					String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, sale_master.debtor_id, "
-							+ "sale_master.vehicle_deposit  FROM sale_master, client_details WHERE "
-							+ "sale_master.debtor_id=(SELECT debtor_master.id FROM debtor_master WHERE "
-							+ "debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vid+")) "
-							+ "AND client_details.client_id=sale_master.client_id";
-					l = gd.getData(q);
 					
+				public List getChalanDetails(String ppid){
+					List chalanList=new ArrayList();
+					if(!ppid.equals("")){
+						String chalanQuery = "SELECT id , `product_count`, `chalan_no`, `date` , `vehicle_no`, `material_supply_master_id` FROM "
+								+ "`product_purchase_master` WHERE  material_supply_master_id="+ppid+" and product_purchase_master.bill_check_status=0";
+						chalanList = gd.getData(chalanQuery);
+					}
+					return chalanList;
 				}
-				return l;
-			}
-			
-			public List getSaleSup(String saleId){
-				String q = "SELECT  `supplier_name` FROM `sale_details_master` WHERE sale_details_master.sale_master_id="+saleId;
-				List l = gd.getData(q);
-				return l;
-			}
-			
-			
-			public List getSaleProductDetails(String saleId){
-				String q = "SELECT   `qty`, `product_name` FROM `sale_details_master` WHERE sale_details_master.sale_master_id="+saleId;
-				List l = gd.getData(q);
-				return l;
-			}
-			
-			public List getDieselAmt(String saleId){
-				String q = "SELECT expenses_master.amount FROM expenses_master WHERE expenses_master.exp_id=(SELECT exp_master_id FROM vehicles_ride_details WHERE sales_id="+saleId+")";
-				List l = gd.getData(q);
-				return l;
-			}
-			
-
+				
+				public List getChalanProductDetails(String pid)
+				{
+					String cpquery = "SELECT `product_name`, `qty`, `rate` FROM `purchased_product_details` WHERE purchased_product_details.product_purchase_master_id="+pid;
+					List cpList = gd.getData(cpquery);
+					return cpList;
+				}
+				
+				public String getMaxId()
+				{
+					String query = "SELECT max(id) FROM `supplier_bill_details`";
+					List list = gd.getData(query);
+					String s = list.get(0).toString();
+					return s;
+				}
+				
+				public String getTotalRemaining( String supid)
+				{
+					String query = "SELECT `id`, `total_remaining` FROM `total_supplier_payment_master` WHERE id=(SELECT MAX(id) FROM total_supplier_payment_master WHERE supplier_id="+supid+")";
+					List list = gd.getData(query);
+					String s = list.get(1).toString();
+					return s;
+				}
+				
+				public List getSupplierPaymentDetails(String pid)
+				{
+					String query = "SELECT total_supplier_payment_master.id, `supplier_id`, `date`, (SELECT supplier_bill_details.billno FROM supplier_bill_details "
+							+ "WHERE total_supplier_payment_master.bill_id=supplier_bill_details.id) AS bill_no , `bill_amt`, `paid_amt`,(SELECT supplier_payment_master.mode"
+							+ " FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id) AS mode, (SELECT "
+							+ "supplier_payment_master.cheque_no FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id)"
+							+ " AS cheque_no, (SELECT account_details.acc_aliasname FROM account_details, supplier_payment_master WHERE"
+							+ " account_details.acc_id=supplier_payment_master.description AND total_supplier_payment_master.payment_id=supplier_payment_master.id) "
+							+ "AS bank_details, `total_remaining`FROM `total_supplier_payment_master` WHERE total_supplier_payment_master.supplier_id="+pid+" "
+									+ "ORDER BY total_supplier_payment_master.id DESC";
+					List List = gd.getData(query);
+					return List;
+				}
+				
+				
+				public List getVehicleDetails(){
+					String q = "SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_type='TRANSPORT'";
+					List l = gd.getData(q);
+					return l;
+				}
+				
+				
+				public List getVehicleDetails1(String vdate){
+					List l = new ArrayList<>();
+					//System.out.println("vid "+vid);
+						String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, debtor_master.type"
+								+ " FROM sale_master, client_details, debtor_master WHERE client_details.client_id=sale_master.client_id AND "
+								+ "debtor_master.id=sale_master.debtor_id AND sale_master.date='"+vdate+"'";
+						l = gd.getData(q);
+					return l;
+				}
+				
+				
+				public List getVehicleDetails(String vid){
+					List l = new ArrayList<>();
+					System.out.println("vid "+vid);
+					if(!vid.equals("")){
+						String q = "SELECT sale_master.id, sale_master.date, client_details.client_organization_name, sale_master.debtor_id, "
+								+ "sale_master.vehicle_deposit  FROM sale_master, client_details WHERE "
+								+ "sale_master.debtor_id=(SELECT debtor_master.id FROM debtor_master WHERE "
+								+ "debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vid+")) "
+								+ "AND client_details.client_id=sale_master.client_id";
+						l = gd.getData(q);
+						
+					}
+					return l;
+				}
+				
+				public List getSaleSup(String saleId){
+					String q = "SELECT  `supplier_name` FROM `sale_details_master` WHERE sale_details_master.sale_master_id="+saleId;
+					List l = gd.getData(q);
+					return l;
+				}
+				
+				
+				public List getSaleProductDetails(String saleId){
+					String q = "SELECT   `qty`, `product_name` FROM `sale_details_master` WHERE sale_details_master.sale_master_id="+saleId;
+					List l = gd.getData(q);
+					return l;
+				}
+				
+				public List getDieselAmt(String saleId){
+					String q = "SELECT expenses_master.amount FROM expenses_master WHERE expenses_master.exp_id=(SELECT exp_master_id FROM vehicles_ride_details WHERE sales_id="+saleId+")";
+					List l = gd.getData(q);
+					return l;
+				}
+				
+				
+				public List getDriverCharges(String vehicle){
+					String q = "SELECT  `driver_charges`, `helper_charges`, `trip_allowance` FROM `vehicle_details` WHERE vehicle_number='"+vehicle+"'";
+					List l = gd.getData(q);
+					return l;
+				}
+				
 	
 	//--mukesh end
 	
@@ -635,7 +653,7 @@ public class RequireData
 			
 			String sale_query="SELECT sale_master.id,sale_master.product_count,client_details.client_organization_name,sale_master.chalan_no,"
 					+ "sale_master.date,sale_master.vehicle_details,sale_master.debtor_id,sale_master.vehicle_deposit FROM "
-					+ "sale_master,client_details WHERE sale_master.client_id=client_details.client_id";
+					+ "sale_master,client_details WHERE sale_master.client_id=client_details.client_id AND sale_master.status=0";
 
 			List list=gd.getData(sale_query);
 			return list;		
@@ -744,7 +762,7 @@ public class RequireData
 				String startDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01";
 				String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
-						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`,bankId, `reason` FROM "
 						+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
 						+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+startDate+"' and '"+lastDate+"' order by date";
 				List demoList=gd.getData(demo);
@@ -880,8 +898,11 @@ public class RequireData
 			
 			public List getContTransactions(String contId)
 			{
+				SysDate sd=new SysDate();
+				String startDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01";
+				String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 		
-				String getDetails="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId;
+				String getDetails="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId+" and date BETWEEN '"+startDate+"' and '"+lastDate+"'";
 				if(!gd.getData(getDetails).isEmpty())
 				{
 					List demoList=gd.getData(getDetails);
@@ -1056,6 +1077,7 @@ public class RequireData
 					bankId="null";
 				if(chequeDetails==null)
 					chequeDetails="";
+				
 				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
 						+ " `bankId`, `other_details`, `date`) VALUES "
 						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"',"+bankId+",'"+chequeDetails+"','"+date+"')";

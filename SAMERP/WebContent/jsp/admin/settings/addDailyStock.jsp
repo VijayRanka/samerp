@@ -139,7 +139,7 @@
                   <label class="control-label">Date</label>
                   <div class="controls">
                   <%SysDate sd=new SysDate();%>
-                    <input type="date" name="" value="<%=sd.todayDate().toString().split("-")[2]+"-"+sd.todayDate().toString().split("-")[1]+"-"+sd.todayDate().toString().split("-")[0] %>" id="partDate"/>
+                    <input type="date" value="<%=sd.todayDate().toString().split("-")[2]+"-"+sd.todayDate().toString().split("-")[1]+"-"+sd.todayDate().toString().split("-")[0] %>" id="partDate"/>
                   </div>
                 </div>
                 <div class="control-group">
@@ -160,6 +160,8 @@
          		
               <div class="form-actions" id="addCancel" align="center" style="display: none">
                 <input class="btn btn-success" name="insertAccDetails" type="button" value="Add Stock" onclick="getInsertData()" />
+
+                
                 <input class="btn btn-danger" type="button" value="Cancel" />
               </div>
               
@@ -220,6 +222,11 @@ function getInsertData()
 		}
 	var partDate=document.getElementById("partDate").value;
 	
+	if(partDate=="")
+	alert("Please Select Right Format Of Date!");
+	else
+	{
+	var contractorId=document.getElementById("contractor").value;
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -227,6 +234,7 @@ function getInsertData()
 			var demoStr = this.responseText.split(",");
 			if(demoStr[0]==1)
 				{
+				document.getElementById("buttonSave").disabled==true;
 				alert("Updated Successfully");
 				getProductList(document.getElementById("contractor").value);
 				}
@@ -241,11 +249,17 @@ function getInsertData()
 				alert("Assign Rates First");
 				getProductList(document.getElementById("contractor").value);
 				}
+			else if(demoStr[0]==5)
+			{
+			alert("Assign Right Date");
+			document.getElementById("date").focus();
+			}
 				
 		}
 		};
-	xhttp.open("POST","/SAMERP/AddDailyStock?insertData="+allValue+"&partDate="+partDate, true);
-	xhttp.send(); 
+	xhttp.open("POST","/SAMERP/AddDailyStock?insertData="+allValue+"&partDate="+partDate+"&contIdDS="+contractorId, true);
+	xhttp.send();
+	}
 	}
 function selectText() {
 	containerid="demoId";
@@ -296,6 +310,7 @@ function getProductList(value){
 					document.getElementById("addCancel").setAttribute("style","display:block");
 					document.getElementById("countDown").value=j-1;
 					document.getElementById("myDataTable").innerHTML=tableStr;
+					document.getElementById("buttonSave").disabled==false;
 					document.getElementById("dailyQty1").focus();
 				}
 				}

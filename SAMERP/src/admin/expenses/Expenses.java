@@ -50,7 +50,7 @@ public class Expenses extends HttpServlet {
 			String firstDate=request.getParameter("fromDate");
 			String lastDate=request.getParameter("toDate");
 			String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
-					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`,bankId, `reason` FROM "
 					+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
 					+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+firstDate+"' and '"+lastDate+"' order by date";
 			if(!gd.getData(demo).isEmpty())
@@ -66,8 +66,9 @@ public class Expenses extends HttpServlet {
 					Object payMode=itr.next();
 					Object expType=itr.next();
 					Object debtorType=itr.next();
-					Object cDetails=itr.next();
-					Object description=itr.next();
+					String cDetails=itr.next().toString();
+					String bankInfo=itr.next().toString();
+					String description=itr.next().toString();
 					
 					out.print(id+","+date+","+name+","+amount+","+payMode+",");
 					
@@ -81,11 +82,18 @@ public class Expenses extends HttpServlet {
 					}
 					
 					out.print(expType+","+debtorType+",");
-					if(cDetails!=null)
+					if(!cDetails.equals(""))
 						out.print(cDetails+",");
 					else
 						out.print("-,");
+					if(!bankInfo.equals("0"))
+						out.print(rd.getBankById(bankInfo)+",");
+					else
+						out.print("-,");
+					if(!description.equals(""))
 					out.print(description+",");
+					else
+						out.print("-,");
 				}
 			}
 			
@@ -271,16 +279,20 @@ public class Expenses extends HttpServlet {
 								int pcStatus=rd.checkPCStatus(Integer.parseInt(uAmount));
 								if(pcStatus==0)
 								{
-									request.setAttribute("payError", "You don't have enough balance in your Peti Cash_c_0");
+									request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_0");
 								
 								}
 								else if(pcStatus==-1)
 								{
-									request.setAttribute("payError", "You don't have enough balance in your Peti Cash_c_-1");
+									request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_-1");
 								}
 								else if(pcStatus==1)
 								{
 									amountStatusClear=true;
+								}
+								else if(pcStatus==2)
+								{
+									request.setAttribute("payError", "YOU HAVE NOT ADDED YOUR PETI CASH_c_-1");
 								}
 								
 							}
@@ -289,15 +301,19 @@ public class Expenses extends HttpServlet {
 								int badStatus=rd.checkBankBalance(Integer.parseInt(uAmount),uDebtorType);
 								if(badStatus==0)
 										{
-											request.setAttribute("payError", "You have insufficient balance in your Bank_b_0");
+											request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_0");
 										}
 								else if(badStatus==-1)
 								{
-									request.setAttribute("payError", "You have insufficient balance in your Bank_b_-1");
+									request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
 								}
 								else if(badStatus==1)
 								{
 									amountStatusClear=true;
+								}
+								else if(badStatus==2)
+								{
+									request.setAttribute("payError", "YOU HAVE NOT ADD MONEY IN YOUR BANK_b_2");
 								}
 								
 							}
