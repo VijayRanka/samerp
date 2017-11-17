@@ -118,6 +118,40 @@
 
 	</style>
 
+<script type="text/javascript">
+
+function setFocusToTextBox() {
+	document.getElementById("usernameid").focus();
+	window.history.forward();
+	window.location.hash="no-back-button";
+	window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+	window.onhashchange=function(){window.location.hash="no-back-button";}
+
+}
+function showActivation(){
+
+	if(document.getElementById("activation")!=null)
+		$('#activation').modal('show');
+}
+
+function showModal(){
+
+	setFocusToTextBox();
+	var error = document.getElementById("error").value;
+		
+		if(error==1)
+		{
+			//alert("Sasasa");
+			$('#lofinfail').modal('show');
+		}	
+}
+function showWrongAuthentication(){
+	
+	if(document.getElementById("ServiceProvider")!=null)
+			$('#ServiceProvider').modal('show');
+}
+
+</script>
 
     </head>
 <body onload="startFun()">
@@ -178,6 +212,8 @@
 						document.getElementById("loginform").appendChild(input);
 						document.getElementById("loginform").submit();
 						}
+						 
+					
 				}
 				};
 			xhttp.open("POST", "/SAMERP/checkInfo?checkDetails=1&uName="+uName+"&uPass="+uPass, true);
@@ -274,190 +310,12 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 <script type="text/javascript">
-
-function setFocusToTextBox() {
-	document.getElementById("usernameid").focus();
-	window.history.forward();
-	window.location.hash="no-back-button";
-	window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
-	window.onhashchange=function(){window.location.hash="no-back-button";}
-
-}
-
-
-	if(document.getElementById("activation")!=null)
-		$('#activation').modal('show');
-}
-
-function showModal(){
-
-	setFocusToTextBox();
-	var error = document.getElementById("error").value;
-		
-		if(error==1)
-		{
-			//alert("Sasasa");
-			$('#lofinfail').modal('show');
-		}	
-}
-function showWrongAuthentication(){
-	
-	if(document.getElementById("ServiceProvider")!=null)
-			$('#ServiceProvider').modal('show');
-}
-
-</script>
-
-    </head>
-<body onload="startFun()">
-<% if(request.getAttribute("status")!=null){ if(session.getAttribute("sAdmin")!=null){session.removeAttribute("sAdmin");}%>
-		<div id="snackbar"><%=request.getAttribute("status")%></div>
-	<%} %>
-        <div id="loginbox" > 
-        <%System.out.println("In Login.jsp"); %>           
-            <form id="loginform"  class="form-vertical" action="LoginAction.do" method="post" >
-				 <div class="control-group normal_text"> <h3 style="color: white;">Login Here</h3></div>
-                <div class="control-group">
-                    <div class="controls" >
-                        <div class="main_input_box"  >
-                            <span class="add-on bg_lg" style="height:20px"><i class="icon-user" > </i></span><input type="text" autocomplete="off" name="username" id="usernameid" placeholder="Username" required/>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <div class="main_input_box">
-                            <span class="add-on bg_ly" style="height:20px"><i class="icon-lock"></i></span><input type="password" autocomplete="off" name="userpass" id="userpassid" placeholder="Password" required/>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions">
-                  <span class ="pull-center"><input type="submit"  class="btn btn-success" name="Login"  value="Login" style="position: relative; float: right; right: 250px;" /> </span>
-                    <span class ="pull-center"><a href="#" class="flip-link btn btn-info" id="to-recover" style="position: relative; float: right; right: 50px;">Lost password?</a></span>
-                    
-                    <%
-                    	
-                    String error = "";
-                    
-          			if(request.getAttribute("fail")!=null){
-          				error = request.getAttribute("fail").toString();
-          			}
-                    
-                    %>
-                    <input type="hidden" name="error" id="error" value="<%=error %>" /> 
-                   
-                </div>
-            </form>
-            <form id="recoverform" action="#" class="form-vertical">
-				<p class="normal_text">Enter your e-mail address below and we will send you instructions how to recover a password.</p>
-				
-                    <div class="controls">
-                        <div class="main_input_box">
-                            <span class="add-on bg_lo" style="height: 20px;" ><i class="icon-envelope" ></i></span><input type="text" placeholder="E-mail address" />
-                        </div>
-                    </div>
-               
-                <div class="form-actions">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pull-center"><a href="#" class="flip-link btn btn-success" id="to-login">&laquo; Back to login</a></span>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="pull-center"><a class="btn btn-info"/>Reecover</a></span>
-                </div>
-            </form>
-        </div>
-        
-        
-        
-<div class="modal hide fade" id="lofinfail" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-					<h4 class="modal-title">LogIn</h4>
-				</div>
-			
-			<div class="modal-body">
-				<div class="alert alert-danger"  style="margin-top: 18px;">
-  				 <i class="fa fa-times-circle-o" style="font-size:2em;"></i><strong style="font-size:1.2em;"> Incorrect Username & Password...</strong> 
-				</div>
-			</div>
-			<div class="modal-footer">
-			<form>
-			<input type="button" class="btn btn-primary" data-dismiss="modal" value="OK" id="ok" name="ok" />
-			</form>
-			</div>
-		</div>		
-	</div>
-</div> 
-<%if(request.getAttribute("expires")!=null){ %>
-<div class="modal hide fade" id="ServiceProvider" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-					<h4 class="modal-title">Wrong Authorization</h4>
-				</div>
-			
-			<div class="modal-body">
-				<div class="alert alert-danger"  style="margin-top: 18px;">
-  				 <i class="fa fa-times-circle-o" style="font-size:2em;"></i><strong style="font-size:1.2em;"> Not Registerd any user.  Please contact to Vendor ! or Please contact to Support department of Vertical Software  <br> Contact No. - 77 68 92 5050.</strong> 
-				</div>
-			</div>
-			<div class="modal-footer">
-			<form>
-			<input type="button" class="btn btn-primary" data-dismiss="modal" value="OK" id="ok" name="ok" />
-			</form>
-			</div>
-		</div>		
-	</div>
-</div> 
-   <%} %>
-   <%if(request.getAttribute("activateKey")!=null){ %>
-<div class="modal hide fade" id="activation" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-					<h4 class="modal-title">Activation Phase:</h4>
-				</div>
-			
-			<div class="modal-body">
-				<div class="control-group" id="Block">
-              <label class="control-label offset1">Enter Activation Key :</label>
-              <div class="controls">
-                <input type="text" class="span4" id="actKey" name="activationKey" style="position:relative; left:10px;" onblur=document.getElementById('actId').innerHTML="" />
-              <p id="actId" style="color: red;float: right; position: relative;right: 75px;top:5px;font-weight: bold;"></p>
-              </div>
-            </div>
-			</div>
-			<div class="modal-footer" id="mdFoot">
-			
-			<button type="button" onclick="checkKey()"  name="Activate" class="btn btn-success">Activate</button>
-              <button type="button" class="btn btn-danger pull-center" data-dismiss="modal">Cancel</button>
-			</div>
-		</div>		
-	</div>
-</div> 
-   <%} %>
-        
-        
-        <div class="row-fluid">
-		<div id="footer" class="span12">
-			2017 &copy; Vertical Software. <a
-				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
-		</div>
-	</div>
-        
-        
-        
-        <script src="/MSaleERP/config/js/jquery.min.js"></script>  
-        <script src="/MSaleERP/config/js/matrix.login.js"></script> 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
-        
-    </body>
-<script type="text/javascript">
-=======
->>>>>>> refs/remotes/origin/master
 function startFun()
 {
 	showsnack();
+	showModal();
+	showActivation();
+	showWrongAuthentication();
 	}
 
 $('#lofinfail').on('shown.bs.modal', function () {
@@ -525,6 +383,11 @@ else
 	
 	}
 }
+	
+
+	
+	
+
 
 </script>
 </html>
