@@ -2,7 +2,10 @@ package admin.settings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -248,9 +251,26 @@ public class AddVehicles extends HttpServlet {
 		if(request.getParameter("totalDPayment")!=null)
 		{
 			String totalDPayment = request.getParameter("totalDPayment");
+			String vid = request.getParameter("veid");
+			String extraCharge = request.getParameter("extraCharge");
+			String sdate = request.getParameter("sdate");
+			String edate = request.getParameter("edate");
+			String hc = request.getParameter("hc");
+			int tBalance = 4000;
 			
-			//String q="INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `extra_charges`, `particular`, `type`, `balance`) VALUES ()";
-			//List l = gd.getData(q);
+			//SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id=11)
+			
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			String requiredDate = df.format(new Date()).toString();
+			
+			
+			String q = "INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `extra_charges`, `particular`, `type`, `balance`) VALUES "
+					+ "( (SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details "
+					+ "WHERE emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT "
+					+ "vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id=1)))), '"+requiredDate+"', "
+					+totalDPayment+", "+extraCharge+", 'payment "+sdate+" to "+edate+"', 1, "+tBalance+")";
+			System.out.println(q);
+			gd.executeCommand(q);
 		}
 		
 	}
