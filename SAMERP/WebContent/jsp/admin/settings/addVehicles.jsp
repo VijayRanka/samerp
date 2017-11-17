@@ -95,7 +95,7 @@
 <!--breadcrumbs-->
   <div id="content-header">
     <div id="breadcrumb"> <a href="/SAMERP/index.jsp" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a> <a href="#" class="current">Add Vehicles</a> </div>
-  	<h1>Add New Vehicle</h1>
+  
   </div>
 <!--End-breadcrumbs-->
 
@@ -159,8 +159,9 @@
 								</div>
 							</div>
             <div class="form-actions" align="center">
-              <button type="submit" id="submitbtn" name="insertSubmitBtn" class="btn btn-success" style="background:#1196c1;">Submit</button> &nbsp;&nbsp;&nbsp;&nbsp;
-              <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+            <button type="submit" name="insertSubmitBtn" id="submitbtn"	class="btn btn-success">Submit</button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
             </div>
             
           </form>
@@ -250,7 +251,7 @@
 				              		<input type="hidden" name="oldvehicle_alias" id="oldvehicle_alias" />
 				              		
 				<!--                 <input type="text" class="span3" placeholder="Vehicle Type" onkeyup="this.value=this.value.toUpperCase()" name="vehicle_type" id="vehicle_type" required  /> -->
-				                <select class="span3" style="width:269px;" name="Updatevehicle_type" id="Updatevehicle_type" required >
+				                <select class="span3" style="width:269px;" autofocus name="Updatevehicle_type" id="Updatevehicle_type" required >
 				                	<option value=""> Select </option>
 				                	<option value="JCB">JCB</option>
 				                	<option value="POCLAIN">POCLAIN</option>
@@ -292,8 +293,9 @@
 							
 				             
 				            <div class="modal-footer">
-									<input type="submit" id="submitbtn" name="updateSubmitBtn" class="btn btn-primary" style="background:#1196c1;" value="Update" />
-									<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Close"/>
+									
+									 <button type="submit" name="updateSubmitBtn" id="submitbtn" class="btn btn-success">Update</button>
+									<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 							</div>
 						</div>
 					</div>

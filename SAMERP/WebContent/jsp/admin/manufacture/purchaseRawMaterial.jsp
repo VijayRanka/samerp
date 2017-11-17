@@ -320,8 +320,8 @@
 								</table>
 								</div>
 								<div class="form-actions" style="padding-left: 450px">
-									<button type="button" onclick="subPurRaw()" name="purchase" class="btn btn-success">Submit</button>
-									<button type="button" class="btn btn-danger">Exit</button>
+									<button type="button" onclick="subPurRaw()" name="purchase" class="btn btn-success" style="margin-right: 10px;">Submit</button>
+									 <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 								</div>
 							</div>
 						</div>
@@ -436,8 +436,8 @@
 					
 				</div>
 				<div class="modal-footer">
-					<input type="submit" id="" class="btn btn-primary" name="insertsupply" onclick="" value="Add" /> 
-					<input type="button" id="cancelbtn" class="btn btn-primary" data-dismiss="modal" value="Cancel" />
+					<button type="submit" name="insertsupply" class="btn btn-success">Update</button>
+					<button type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 				</form>
 			</div>
@@ -475,9 +475,8 @@
 				</div>
 				
 				<div class="modal-footer">
-					<input type="button" id="submitbtn" class="btn btn-primary" name="modalSubmit" data-dismiss="modal" onclick="addRawMaterial()" value="Add" /> 
-						<input type="button" id="cancelbtn"
-						class="btn btn-primary" data-dismiss="modal" value="Cancel" />
+					<button type="submit" id="submitbtn" name="modalSubmit"  onclick="addRawMaterial()" class="btn btn-success">Add</button>
+					<button type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 				</form>
 			</div>

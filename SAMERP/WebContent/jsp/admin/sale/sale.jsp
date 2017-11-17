@@ -374,7 +374,7 @@ margin-top: 5px;
             
             <div class="form-actions" align="center">
               <button type="submit" name="insertSaleDataSubmitBtn" class="btn btn-success">Done</button> &nbsp;&nbsp;&nbsp;&nbsp;
-              <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Cancel</a>
+              <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
             </div>
             
           </form>
@@ -663,7 +663,7 @@ margin-top: 5px;
 					<div class="control-group">
 						<label class="control-label">Client Orgnization Name:</label>
 						<div class="controls">
-							<input type="text" id="coname" name="coname" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Client Orgnization Name" pattern="[a-z A-Z0-9]*" required />
+							<input type="text" id="coname" name="coname" autofocus class="span3"  onkeyup="this.value=this.value.toUpperCase()" placeholder="Client Orgnization Name" pattern="[a-z A-Z0-9]*" required />
 						</div>
 					</div>
 					<div class="control-group">
@@ -1020,8 +1020,12 @@ function setFocusToTextBox() {
 	document.sales.clientid.focus();
 	document.getElementById("clientid").focus();
 	showModal();
-	myFunction();
+	myFunction();	
 }
+
+$('#add-client').on('shown.bs.modal', function () {
+    $('#coname').focus();
+})
 //******************************** setFocusToTextBox Function END ********************************
 
 //*********************************** SNACKBAR Function START ************************************

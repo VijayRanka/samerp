@@ -582,20 +582,20 @@
 						<div class="control-group">
 							<label class="control-label">Supplier Business Name</label>
 							<div class="controls">
-								<input type="text" id="supBname" name="suppbusinesname" onkeyup="this.value=this.value.toUpperCase()" class="span3" autofocus placeholder="Supplier Business Name" />
+								<input type="text" id="supBname" name="suppbusinesname"  onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" class="span3" placeholder="Supplier Business Name" />
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label">Supplier Name</label>
 							<div class="controls">
-								<input type="text" id="supName" name="suppname" onkeyup="this.value=this.value.toUpperCase()" class="span3" placeholder="Supplier Name" />
+								<input type="text" id="supName" name="suppname" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" class="span3" placeholder="Supplier Name" />
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label">Supplier Address</label>
 							<div class="controls">
 								<!-- <input type="text" id="supAdd" name="address" onkeyup="this.value=this.value.toUpperCase()" class="span3" placeholder="Supplier Address" /> -->
-								<textarea type="text" class="span3" id="supAdd" name="address" onkeyup="this.value=this.value.toUpperCase()" placeholder="Supplier Address" pattern="[a-z A-Z0-9]*" maxlength="200" required></textarea>
+								<textarea type="text" class="span3" id="supAdd" name="address" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z 0-9]*" placeholder="Supplier Address" pattern="[a-z A-Z0-9]*" maxlength="200" required></textarea>
 							</div>
 						</div>
 						<div class="control-group">
@@ -607,7 +607,7 @@
 						<div class="control-group">
 							<label class="control-label">Supplier Balance</label>
 							<div class="controls">
-								<input type="text" id="supBal" name="openingbalance" onkeyup="this.value=this.value.toUpperCase()" class="span3" placeholder="Supplier Balance" />
+								<input type="text" id="supBal" name="openingbalance" onkeyup="this.value=this.value.toUpperCase()" pattern="[0-9]*" class="span3" placeholder="Supplier Balance" />
 							</div>
 						</div>
 						<div class="control-group">
@@ -623,8 +623,8 @@
 						<input type="hidden" name="productPurchasePage" value="productPurchase" />
 						
 						<div class="modal-footer">
-							<input type="submit" id="submitbtn" name="insertsupply" class="btn btn-success" onclass="btn btn-primary" value="Submit" /> 
-							<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
+							<button type="submit" id="submitbtn" name="insertsupply" class="btn btn-success" onclass="btn btn-primary">Submit</button> 
+							<button type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 					</form>
 				</div>
@@ -701,9 +701,8 @@
 						<input type="hidden" name="productPurchasePage1" value="productPurchase" />
 						
 						<div class="modal-footer">
-							<button type="submit" name="insert" class="btn btn-success">Submit</button>
-							&nbsp;&nbsp;&nbsp;
-							<button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 20px">Cancel</button>
+							<button type="submit" name="insert" class="btn btn-success">Submit</button>	&nbsp;&nbsp;&nbsp;
+							<button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 20px">Close</button>
 						</div>
 					</form>
 				</div>
@@ -1122,6 +1121,7 @@ g.onkeyup = function() {
     }
 }
 
+
 </script>
 
 <script src="/SAMERP/config/js/jquery.min.js"></script> 
@@ -1139,6 +1139,15 @@ g.onkeyup = function() {
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
 <script src="/SAMERP/config/js/fullcalendar.min.js"></script>
 
+<script type="text/javascript">
+$('#add-supplier').on('shown.bs.modal', function () {
+    $('#suppbusinesname').focus();
+})
 
+$('#add-client').on('shown.bs.modal', function () {
+    $('#coname').focus();
+})
+
+</script>
 </body>
 </html>

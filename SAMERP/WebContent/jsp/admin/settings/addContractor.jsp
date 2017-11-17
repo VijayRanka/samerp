@@ -119,7 +119,7 @@
 								<div class="control-group">
 									<label class="control-label">Name:</label>
 									<div class="controls">
-										<input type="text" name="name" class="span6"
+										<input type="text" name="name" class="span6" id="name"
 											placeholder="Name"
 											onkeyup="this.value=this.value.toUpperCase()"
 											pattern="[a-z A-Z ]*" required />
@@ -166,8 +166,8 @@
 								</div>
 
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="submit" id="submitbtn" class="btn btn-success" style="background:#1196c1;">Submit</button>&nbsp;&nbsp;&nbsp;
-									 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+									<button type="submit" name="submit" id="submitbtn" class="btn btn-success" >Submit</button>&nbsp;&nbsp;&nbsp;
+									 <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 								</div>
 							</form>
 						</div>
@@ -251,8 +251,8 @@
 						<div class="control-group">
 							<label class="control-label">Name:</label>
 							<div class="controls">
-								<input type="hidden" id="Updateid" name="Updateid" /> <input
-									type="text" name="name" id="updatecname" class="span4"
+								<input type="hidden" id="Updateid" name="Updateid" /> 
+								<input	type="text" name="name" id="updatecname" class="span4"
 									placeholder="Name" pattern="[a-z A-Z]*"
 									onkeyup="this.value=this.value.toUpperCase()" required />
 							</div>
@@ -293,9 +293,8 @@
 							</div>
 						</div>
 						<div class="form-actions" style="padding-left: 450px">
-							<button type="submit" name="save" id="submitbtn"
-								class="btn btn-success" style="background:#1196c1;">Update</button>
-							<button type="button" class="btn btn-danger" style="margin-left: 10px;" data-dismiss="modal">Close</button>
+						<button type="submit" name="save" id="submitbtn" class="btn btn-success">Update</button>
+						<button type="button" class="btn btn-danger" style="margin-left: 10px;" data-dismiss="modal">Close</button>
 						</div>
 					</form>
 				</div>
@@ -450,7 +449,9 @@ function showModal(){
 
 function setFocusToTextBox()
 {
+	document.getElementById("name").focus();
 	document.getElementById("updatecname").focus();
+	
 	showModal();   	
 	 myFunction();
 }
@@ -478,6 +479,10 @@ function setFocusToTextBox()
 	{
 	 document.getelementById("deleteid").value=id1;
 	}
+	
+	$('#myModal').on('shown.bs.modal', function () {
+	    $('#updatecname').focus();
+	})
 	 </script>
 </body>
 </html>
