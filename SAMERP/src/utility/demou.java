@@ -41,6 +41,20 @@ public class demou {
 			System.out.println(itr.next());
 			System.out.println(itr.next());
 		}
+//		RequireData rd=new RequireData();
+//		SysDate sd=new SysDate();
+//		SecureCode ed=new SecureCode();
+//		String h="12345VHJA";
+//		System.out.println(h.charAt(5)=='V');
+		
+		
+		
+		
+		String debtorId=gd.getData("SELECT id FROM debtor_master WHERE type='CL_"+gd.getData("SELECT client_details.client_organization_name FROM client_details WHERE client_details.client_id=4").get(0).toString()+"'").get(0).toString();
+		
+		System.out.println(debtorId);
 			
 	}
 }
+
+//;
