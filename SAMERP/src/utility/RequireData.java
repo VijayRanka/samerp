@@ -761,7 +761,7 @@ public class RequireData
 				String startDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01";
 				String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 				String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
-						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`, `reason` FROM "
+						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`,bankId, `reason` FROM "
 						+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
 						+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+startDate+"' and '"+lastDate+"' order by date";
 				List demoList=gd.getData(demo);
@@ -897,8 +897,11 @@ public class RequireData
 			
 			public List getContTransactions(String contId)
 			{
+				SysDate sd=new SysDate();
+				String startDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01";
+				String lastDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
 		
-				String getDetails="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId;
+				String getDetails="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId+" and date BETWEEN '"+startDate+"' and '"+lastDate+"'";
 				if(!gd.getData(getDetails).isEmpty())
 				{
 					List demoList=gd.getData(getDetails);

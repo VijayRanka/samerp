@@ -159,7 +159,7 @@
                 </div>
          		
               <div class="form-actions" id="addCancel" align="center" style="display: none">
-                <input class="btn btn-success" name="insertAccDetails" type="button" style="background:#1196c1;" value="Add Stock" onclick="getInsertData()" />
+                <input id="buttonSave" class="btn btn-success" name="insertAccDetails" type="button" style="background:#1196c1;" value="Add Stock" onclick="getInsertData()" />
                 <input class="btn btn-danger" type="button" value="Cancel" />
               </div>
               
@@ -224,7 +224,7 @@ function getInsertData()
 	alert("Please Select Right Format Of Date!");
 	else
 	{
-	var contractorId=document.getElementById().value;
+	var contractorId=document.getElementById("contractor").value;
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -232,6 +232,7 @@ function getInsertData()
 			var demoStr = this.responseText.split(",");
 			if(demoStr[0]==1)
 				{
+				document.getElementById("buttonSave").disabled==true;
 				alert("Updated Successfully");
 				getProductList(document.getElementById("contractor").value);
 				}
@@ -307,6 +308,7 @@ function getProductList(value){
 					document.getElementById("addCancel").setAttribute("style","display:block");
 					document.getElementById("countDown").value=j-1;
 					document.getElementById("myDataTable").innerHTML=tableStr;
+					document.getElementById("buttonSave").disabled==false;
 					document.getElementById("dailyQty1").focus();
 				}
 				}

@@ -16,8 +16,31 @@ public class demou {
 		RequireData rd=new RequireData();
 		SysDate sd=new SysDate();
 		SecureCode ed=new SecureCode();
-		String h="12345VHJA";
-		System.out.println(h.charAt(5)=='V');
+		/*tring h="12345VHJA";
+		System.out.println(h.charAt(5)=='V');*/
+		
+		String startDate="2017-11-07";
+		String lastDate="2017-11-17";
+		String contId="1";
+		
+		String demoStr="SELECT * FROM expenses_master";
+		List demoList=gd.getData(demoStr);
+		Iterator itr=demoList.iterator();
+		while(itr.hasNext())
+		{
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+			System.out.println(itr.next());
+		}
 			
 	}
 }
