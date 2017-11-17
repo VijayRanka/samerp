@@ -421,6 +421,7 @@
 										<th>Mode</th>
 										<th>Cheque No.</th>
 										<th>Balance</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<%
@@ -441,6 +442,7 @@
 										<td><%=handLoan.next()%></td>
 										<td><%=handLoan.next()%></td>
 										<td><%=handLoan.next()%></td>
+										<td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="" data-toggle="modal"><i class="icon-pencil"></i></a></td>
 									</tr>
 								<%hCount++; }%>
 								</tbody>

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -29,9 +30,49 @@ public class SalePayment extends HttpServlet {
 		RequireData rd = new RequireData();
 		PrintWriter out=response.getWriter();
 		
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		String requiredDate = df.format(new Date()).toString();
-		
+		if(request.getParameter("dataByChalan")!=null)
+		{
+			String[] chalanNos=request.getParameter("chalanNos").split(",");
+			for(int i=0;i<chalanNos.length;i++)
+			{
+				String getDataByChalan="SELECT sale_master.id,sale_master.product_count,sale_master.date,sale_master.chalan_no FROM `sale_master` WHERE chalan_no='"+chalanNos[i]+"';";
+				List chalanData=gd.getData(getDataByChalan);
+				Iterator itr=chalanData.iterator();
+				while(itr.hasNext())
+				{
+					Object id=itr.next();
+					Object prodCount=itr.next();
+					Object date=itr.next();
+					Object chalanNo=itr.next();
+					out.print(prodCount+","+date+","+chalanNo+",");
+					
+					String getSaleDetails="SELECT sale_details_master.product_name,product_master.hsncode,"
+							+ "sale_details_master.gst,sale_details_master.qty,sale_details_master.rate FROM "
+							+ "sale_details_master,product_master WHERE sale_details_master.sale_master_id="+id
+							+ " AND sale_details_master.product_name=product_master.name";
+					List saleDetails=gd.getData(getSaleDetails);
+					Iterator itr2=saleDetails.iterator();
+					double totalAmount=0.0;
+					while(itr2.hasNext())
+					{
+						Object prodName=itr2.next();
+						Object hsnCode=itr2.next();
+						double gst=Double.parseDouble(itr2.next().toString());
+						double qty=Double.parseDouble(itr2.next().toString());
+						double rate=Double.parseDouble(itr2.next().toString());
+						
+						out.print(prodName+","+hsnCode+","+gst+","+qty+","+rate+","+qty*rate+","+(qty*rate*gst/100)/2+","+(qty*rate*gst/100)/2+",");
+						
+						totalAmount+=(qty*rate)+((qty*rate*gst)/100);
+						
+					}
+					out.print(totalAmount+",");
+					
+				}
+			}
+			
+		}
+				
 
 		if(request.getParameter("billSubmit")!=null){
 			

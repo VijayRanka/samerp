@@ -63,6 +63,12 @@ public class AddDailyStock extends HttpServlet {
 		boolean finalStockStatus=false;
 		boolean existStatus=false;
 		
+		if(pDate.isEmpty())
+		{
+			System.out.println(pDate);
+		}
+		System.out.println(finalStockStatus);
+		
 		String getDateExistDetail="SELECT date FROM `daily_stock_details` GROUP BY date";
 		List getDateExistDetailList=gd.getData(getDateExistDetail);
 		Iterator traverseDS=getDateExistDetailList.iterator();
@@ -74,7 +80,7 @@ public class AddDailyStock extends HttpServlet {
 		
 		if(!existStatus)
 		{
-			for(int i=0;i<allData.length;i+=3)
+			/*for(int i=0;i<allData.length;i+=3)
 			{
 				String productId=allData[i];
 				String productQty=allData[i+1];
@@ -143,7 +149,7 @@ public class AddDailyStock extends HttpServlet {
 					
 					
 				}
-			}
+			}*/
 		}
 		if(finalStockStatus)
 		{
@@ -153,6 +159,7 @@ public class AddDailyStock extends HttpServlet {
 		{
 			out.print("3,");
 		}
+		
 		
 		}
 		

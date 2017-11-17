@@ -604,50 +604,6 @@ margin-top: 5px;
 	                     <input type="checkbox" id="revertCheck" onclick="onUamount()">Reverted
 	         			</div>
 	        	</div>
-	        	<script type="text/javascript">
-	        	function onUamount()
-	        	{
-	        		if(document.getElementById('uAmount').readOnly==false)
-	        			{
-	        			document.getElementById('uAmount').value=firstAmount;
-	        			document.getElementById('oldAmount').value="0";
-	        			document.getElementById('uAmount').readOnly=true;
-	        			}
-	        		else
-	        			{
-	        			window.firstAmount=document.getElementById('uAmount').value;
-	        			document.getElementById('oldAmount').value=firstAmount;
-	        			document.getElementById('uAmount').readOnly=false;
-	        			}
-	        		
-	        	}
-	        	function getUpdateData(id)
-	        	{
-	        		document.getElementById('oldAmount').value="0";
-	        		document.getElementById('uAmount').readOnly=true;
-	        		document.getElementById('revertCheck').checked=false;
-	        		document.getElementById('uniform-revertCheck').children[0].setAttribute("class","");
-	        		var xhttp;
-	        		xhttp = new XMLHttpRequest();
-	        			xhttp.onreadystatechange = function() {
-	        				if (this.readyState == 4 && this.status == 200) {
-	        					var demoStr = this.responseText.split(",");
-	        					if(demoStr[0]==1)
-	        						{
-	        						document.getElementById('uId').value=id;
-	        						document.getElementById('uDate').value=demoStr[1];
-	        						document.getElementById('uOrgName').value=demoStr[2];
-	        						document.getElementById('uSelfChalan').value=demoStr[3];
-	        						document.getElementById('uVehDetails').value=demoStr[4];
-	        						document.getElementById('uAmount').value=demoStr[5];
-	        						}
-	        				}
-	        			};
-
-	        			xhttp.open("POST", "/SAMERP/Sales?getUpdateData=1&id=" + id, true);
-	        			xhttp.send();
-	        	}
-	        	</script>
 	        	
 		      </div>
 	      	</div>
@@ -779,6 +735,57 @@ margin-top: 5px;
 <script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
 <script src="/SAMERP/config/js/fullcalendar.min.js"></script>
+
+<script type="text/javascript">
+
+function onUamount()
+{
+	if(document.getElementById('uAmount').readOnly==false)
+ 	{
+ 		document.getElementById('uAmount').value=firstAmount;
+  		document.getElementById('oldAmount').value="0";
+     	document.getElementById('uAmount').readOnly=true;
+    }
+    else
+    {
+    	window.firstAmount=document.getElementById('uAmount').value;
+    	document.getElementById('oldAmount').value=firstAmount;
+    	document.getElementById('uAmount').readOnly=false;
+    }
+}
+
+function getUpdateData(id)
+{
+	document.getElementById('oldAmount').value="0";
+	document.getElementById('uAmount').readOnly=true;
+	document.getElementById('revertCheck').checked=false;
+	document.getElementById('uniform-revertCheck').children[0].setAttribute("class","");
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+  	
+		if (this.readyState == 4 && this.status == 200) 
+		{
+  			var demoStr = this.responseText.split(",");
+  			if(demoStr[0]==1)
+  			{
+  				document.getElementById('uId').value=id;
+  				document.getElementById('uDate').value=demoStr[1];
+  				document.getElementById('uOrgName').value=demoStr[2];
+  				document.getElementById('uSelfChalan').value=demoStr[3];
+     			document.getElementById('uVehDetails').value=demoStr[4];
+     			document.getElementById('uAmount').value=demoStr[5];
+     		}
+     	}
+     };
+     
+     xhttp.open("POST", "/SAMERP/Sales?getUpdateData=1&id=" + id, true);
+     xhttp.send();
+}
+
+</script>
+
 
 <script type="text/javascript">
 
