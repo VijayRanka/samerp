@@ -461,32 +461,46 @@
             </table> -->
             
             
-            <span style="margin-bottom: 15%; margin-top: 2%; ">
-            	<h4 style=" margin-bottom: 15%; margin-top: 2%; margin-left: 20%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : </h4> 
-            </span>    
+            <span>  
             
-            <span style="float: right; position: relative; margin-top: -14%; margin-right: 2%;">
+            <span style="float: left; margin-left: 4%; margin-top: 1%;">
             	<h4>
             	Trip(s) : <span id="tripCnt">  </span>  <br>
             	Diesel : <span id="dieselCost">  </span> + <span id="dieselExpCost">  </span> <br>
             	Deposit : <span id="depositCost">  </span> <br>
             	Maintenance : <span id="driverCost">  </span> <br>
+            	</h4>
+            </span>	
+            
+            	<span style="float: right; margin-top: 1%; margin-right: 27.5%;">
+            	<h4>
             	Helper Previous Remaining : <span id="helperPrevCost">  </span> <br>
             	Helper Charges : <span id="helperCharge"> </span> <br> <!-- <input type="text" id="helperCharge" style="width: 5%;"> -->
+            	
+            	Total Helper Charges : <span id="tHelperCharge"> </span>
+            	<input type="button" class="btn btn-success btn" onclick="makeHelperPayment()" value="Generate Payment" style="float: right; margin-right: 3%; margin-top: 5%;">
+            	</h4>
+            	</span>
+
+				<span style="float: right; margin-right: 3%; margin-top: 2%;">
+				<h4>
             	Driver Previous Remaining : <span id="driverPrevCost">  </span> <br> 
             	Driver (D.C. + A + Extra) :  
- 
+ 			
 	            	<span id="driverCharge"> </span> <!-- <input type="text" id="driverCharge" style="width: 5%;"> --> +
 	            	<span id="allowance"> </span> * <span id="allowanceCharge"> </span> <!-- <input type="text" id="allowanceCharge" style="width: 5%;">  --> + 
 	            	<input type="text" id="extraCharge" value="0" maxlength="5" onkeyup="getDates()" pattern="[0-9]{1,5}" style="width: 10%; margin:0;"> =  <span id="totalDPayment">  </span>  &nbsp;&nbsp;&nbsp;
-	            	
-	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment" style="float: right; margin-right: 3%;">
 	            	<br>
-	            
-            	Total : <span id="totalCost">  </span>  
-            	</h4>
-            </span>
-             
+	            	Total Driver Charges : <span id="tDriverCharge"> </span>
+	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment" style="float: right; margin-right: 47%; margin-top: 3%;">
+	            	<br>
+	            </h4>
+	            </span>
+	            	
+             	<span style="margin-right:28%; ">
+            		<h4 style=" margin-top: 20%; margin-left: 4%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : <span id="totalCost">  </span>  </h4> 
+            	</span>  
+           	</span>  
             </form>
           </div>
         </div>
@@ -1047,7 +1061,13 @@ function getDriverExp(sdate, edate)
 				document.getElementById("dieselCost").innerHTML = expDCost
 				document.getElementById("dieselExpCost").innerHTML = d[3];
 				document.getElementById("driverCost").innerHTML = d[4];
-				document.getElementById("totalCost").innerHTML = totalCost+  +d[4]+ +d[1]+ +totalDPayment; 
+				document.getElementById("helperPrevCost").innerHTML = d[5];
+				document.getElementById("driverPrevCost").innerHTML = d[6];
+				
+				document.getElementById("totalCost").innerHTML = totalCost+  +d[4]+ +d[1]+ +d[5]+ +d[6]+ +totalDPayment; 
+				
+				document.getElementById("tHelperCharge").innerHTML = +d[1]+ +d[5];
+				document.getElementById("tDriverCharge").innerHTML = +d[0]+ +d[6];
 				
 			}else{
 				
@@ -1058,6 +1078,8 @@ function getDriverExp(sdate, edate)
 				document.getElementById("dieselCost").innerHTML = "0 + 0";
 				document.getElementById("driverCost").innerHTML = "0";
 				document.getElementById("totalCost").innerHTML = "0";
+				document.getElementById("helperPrevCost").innerHTML = "0";
+				document.getElementById("driverPrevCost").innerHTML = "0";
 			}
 		}
 	};
@@ -1077,12 +1099,12 @@ function isNumber(evt) {
 
 function makeDriverPayment() {
 	
-	var totalDPayment = document.getElementById("totalDPayment").innerHTML;
+	var totalDPayment = document.getElementById("totalDPayment").innerHTML;	
 	var value = document.getElementById("selectVehicle").value;
 	var extraCharge = document.getElementById("extraCharge").value;
 	var fromDate = document.getElementById("fromDate").value.trim();
 	var toDate = document.getElementById("toDate").value.trim();
-	var hc = document.getElementById("helperCharge").innerHTML;
+	
 	
 	var xhttp;
 	xhttp = new XMLHttpRequest();
@@ -1093,7 +1115,32 @@ function makeDriverPayment() {
 		}
 	};
 	
-	xhttp.open("POST", "/SAMERP/AddVehicles?totalDPayment="+totalDPayment+"&veid="+value+"&extraCharge="+extraCharge+"&sdate="+fromDate+"&edate="+toDate+"&hc="+hc, true);
+	xhttp.open("POST", "/SAMERP/AddVehicles?role=driver&totalDPayment="+totalDPayment+"&veid="+value+"&extraCharge="+extraCharge+"&sdate="+fromDate+"&edate="+toDate, true);
+	xhttp.send();
+	
+	
+}
+
+
+function makeHelperPayment() {
+	
+	var hc = document.getElementById("helperCharge").innerHTML;	
+	alert(hc);
+	var value = document.getElementById("selectVehicle").value;
+	var fromDate = document.getElementById("fromDate").value.trim();
+	var toDate = document.getElementById("toDate").value.trim();
+	
+	
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			
+		}
+	};
+	
+	xhttp.open("POST", "/SAMERP/AddVehicles?role=helper&totalDPayment="+totalDPayment+"&veid="+value+"&hc="+hc+"&sdate="+fromDate+"&edate="+toDate, true);
 	xhttp.send();
 	
 	
