@@ -187,6 +187,8 @@ public class Expenses extends HttpServlet {
 			
 			System.out.println("Amount is:"+totalbalance);
 			
+		String debtor_query="";
+			
 			String query="insert into bank_account_details(bid,date,debit,particulars,balance) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"','"+totalbalance+"')";
 		  
 			System.out.println("cash deposite:"+query);
