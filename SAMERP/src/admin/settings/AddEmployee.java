@@ -48,10 +48,12 @@ public class AddEmployee extends HttpServlet {
 			RequireData rq=new RequireData();
 			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
 			
+
 			String desig=request.getParameter("designation");
 			char designation=desig.charAt(0);
 			
 			String aliasname="EMP_"+designation+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
+	
 			
 		//Driver Helper Payment
 			String opening_bal=request.getParameter("opening_balance");

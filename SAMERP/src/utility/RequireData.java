@@ -1,6 +1,9 @@
 package utility;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -289,6 +292,28 @@ public class RequireData
 					String q = "SELECT  `driver_charges`, `helper_charges`, `trip_allowance` FROM `vehicle_details` WHERE vehicle_number='"+vehicle+"'";
 					List l = gd.getData(q);
 					return l;
+				}
+				
+				
+				public String getDriverDebterIdFromVid(String vid){
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					String tdate = df.format(new Date()).toString();
+					
+					String q = "SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%Driver%' AND emp_date>='"+tdate+"' AND status=0 AND emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+")))";
+					//SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%Driver%' AND emp_date>='2017-11-17' AND status=0 AND emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+")))
+					List l = gd.getData(q);
+					return l.get(0).toString();
+				}
+				
+				public String getHelperDebterIdFromVid(String vid){
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					String tdate = df.format(new Date()).toString();
+					
+					String q = "SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%Helper%' AND emp_date>='"+tdate+"'  AND status=0 AND emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+")))";
+					//SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%Helper%' AND emp_date>=(SELECT emplyoee_details.emp_date FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%Helper%' AND status=0 AND emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+"))) AND status=0 AND emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+")))";
+					//SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%Driver%' AND emp_date>='2017-11-17' AND status=0 AND emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+")))
+					List l = gd.getData(q);
+					return l.get(0).toString();
 				}
 				
 	
@@ -1027,8 +1052,6 @@ public class RequireData
 			public int checkPCStatus(int amount)
 			{
 				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
-				
-				
 				
 				if(!gd.getData(statusString).isEmpty())
 				{
