@@ -44,7 +44,7 @@ public class AddEmployee extends HttpServlet {
 			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
 			
 			String designation=request.getParameter("designation");
-			String aliasname=designation+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
+			String aliasname="EMP_"+designation+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
 			int status=0;
 			String insertQuery="";
 			
