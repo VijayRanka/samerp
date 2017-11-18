@@ -145,6 +145,7 @@ display: none;}
         </div>
         <div class="widget-content nopadding">
           <form action="/SAMERP/Expenses.do" method="post" class="form-horizontal">
+          
           <div class="control-group">
               <label class="control-label">Date :</label>
               <div class="controls">
@@ -155,6 +156,7 @@ display: none;}
                 <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" autofocus class="span6">
                 </div>
             </div>
+            
            <div class="control-group">
               <label class="control-label">Expense-Type :</label>
               <div class="controls">
