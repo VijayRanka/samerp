@@ -460,6 +460,7 @@
             
             </table> -->
             
+            
             <span style="margin-bottom: 15%; margin-top: 2%; ">
             	<h4 style=" margin-bottom: 15%; margin-top: 2%; margin-left: 20%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : </h4> 
             </span>    
@@ -470,12 +471,15 @@
             	Diesel : <span id="dieselCost">  </span> + <span id="dieselExpCost">  </span> <br>
             	Deposit : <span id="depositCost">  </span> <br>
             	Maintenance : <span id="driverCost">  </span> <br>
-            	Helper Charges : <span id="helperCharge"> </span> <br> <!-- <input type="text" id="helperCharge" style="width: 5%;"> --> 
+            	Helper Previous Remaining : <span id="helperPrevCost">  </span> <br>
+            	Helper Charges : <span id="helperCharge"> </span> <br> <!-- <input type="text" id="helperCharge" style="width: 5%;"> -->
+            	Driver Previous Remaining : <span id="driverPrevCost">  </span> <br> 
             	Driver (D.C. + A + Extra) :  
  
 	            	<span id="driverCharge"> </span> <!-- <input type="text" id="driverCharge" style="width: 5%;"> --> +
 	            	<span id="allowance"> </span> * <span id="allowanceCharge"> </span> <!-- <input type="text" id="allowanceCharge" style="width: 5%;">  --> + 
 	            	<input type="text" id="extraCharge" value="0" maxlength="5" onkeyup="getDates()" pattern="[0-9]{1,5}" style="width: 10%; margin:0;"> =  <span id="totalDPayment">  </span>  &nbsp;&nbsp;&nbsp;
+	            	
 	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment" style="float: right; margin-right: 3%;">
 	            	<br>
 	            
