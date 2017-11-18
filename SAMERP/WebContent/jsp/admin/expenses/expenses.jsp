@@ -152,7 +152,7 @@ display: none;}
               SysDate sd=new SysDate();
               String[] sdDemo=sd.todayDate().split("-");
               %>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" class="span6">
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" autofocus class="span6">
                 </div>
             </div>
            <div class="control-group">
@@ -243,8 +243,8 @@ display: none;}
               </div>
             </div>
             <div class="form-actions">
-              <center><button type="submit" name="save" class="btn btn-success pull-center">Save</button>
-              <a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger">Cancel</button></a>
+              <center><button type="submit" name="save" class="btn btn-success pull-center" style="margin-right: 10px;">Save</button>
+              <a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger">Exit</button></a>
               </center>
             </div>
           </form>

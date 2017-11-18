@@ -69,7 +69,7 @@
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/payment/rawSupplier.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Raw Payment</a> </li>
 		<li class="bg_lo"> <a href="/SAMERP/jsp/admin/sale/salePayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Sale Payment</a> </li>
       	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/payment/contractorPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Contractor Payment</a> </li>
-    	<li class="bg_lb"> <a href="/SAMERP/jsp/admin/payment/driverPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Driver Payment</a> </li>
+
       </ul>
     </div>
 <!--End-Action boxes-->    

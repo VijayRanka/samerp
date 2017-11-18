@@ -125,7 +125,7 @@
 								<div class="control-group">
 									<label class="control-label">Product Name:</label>
 									<div class="controls">
-										<input type="text" id="productname" name="productname"
+										<input type="text" id="product_name" name="productname"
 											class="span6" onkeyup="this.value=this.value.toUpperCase()"
 											placeholder="Product Name" pattern="[a-z A-Z 0-9]*" required />
 									</div>
@@ -176,8 +176,9 @@
 								
 							<div class="form-footer">
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="submit" class="btn btn-success" style="background:#1196c1;">Submit</button>&nbsp;&nbsp;&nbsp;
-									 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+									<button type="submit" name="submit" class="btn btn-success" style="110px;">Submit</button>&nbsp;&nbsp;&nbsp;
+									 <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+									 
 								</div>
 								</div>
 							</form>
@@ -228,7 +229,7 @@
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><a href="#myModal" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle="modal"><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;
@@ -261,10 +262,10 @@
 
 					<form action='/SAMERP/AddProduct' name="form2" method="Post" class="form-horizontal">
 						<div class="control-group">
-							<label class="control-label">Name:</label>
+							<label class="control-label">Product Name:</label>
 							<div class="controls">
 								<input type="hidden" id="Updateid" name="Updateid" />
-								 <input	type="text" name="name" id="updatepname" class="span4" placeholder="Product Name"  onkeyup="this.value=this.value.toUpperCase()" style="width: 385px;" />
+								 <input	type="text" name="name" id="updatepname" autofocus class="span4" placeholder="Product Name"  onkeyup="this.value=this.value.toUpperCase()" style="width: 385px;" />
 							</div>
 						</div>
 					
@@ -310,7 +311,7 @@
 						</div>
 						
 						<div class='modal-footer' >
-							<button type="submit" name="save" class="btn btn-success" style="background:#1196c1;">Update</button>
+							<button type="submit" name="save" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 					</form>
@@ -391,7 +392,7 @@ function searchName(id1) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			"WebContent/jsp/admin/settings/AddProduct.jsp"
+		//	"WebContent/jsp/admin/settings/AddProduct.jsp"
 			document.getElementById("Updateid").value = demoStr[0];
 			document.getElementById("updatepname").value = demoStr[1];
 			document.getElementById("updatehsncode").value=demoStr[2];
@@ -452,7 +453,7 @@ function showModal(){
 
 function setFocusToTextBox()
 {
-	document.getElementById("updatepname").focus();
+	document.getElementById("product_name").focus();
 	showModal();   	
 	 myFunction();
 }

@@ -612,22 +612,22 @@ td{
 					
 					
  					<tr>
- 						<th colspan="8" style="text-align: right; border: 0;"></th>
+ 						<th colspan="8" style="text-align:left; border: 0;">TERMS & CONDITIONS :   </th>
 						<th style="text-align: right;">Taxable Amount</th>
 						<th colspan="3" style="text-align: center;"><i id="totalAmount_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th colspan="8" style="text-align: left; border: 0;">Payment Within 30 days of delivery.</th>
 						<th style="text-align: right;">CGST</th>
 						<th colspan="3" style="text-align: center;"><i id="CGST_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th colspan="8" style="text-align: left; border: 0;">Guarantee doesn't cover mishandling of component after delivery.</th>
 						<th style="text-align: right;">SGST</th>
 						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th colspan="8" style="text-align: left; border: 0;">We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.</th>
 						<th style="text-align: right;" >Total Amount</th>
 						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
 					</tr>

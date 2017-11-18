@@ -123,8 +123,7 @@
 									<label class="control-label"><span style="color: red;">*</span>
 										Employee Name :</label>
 									<div class="controls">
-										<input type="text" name="employee_name" 
-											class="span5" placeholder="Employee Name"
+										<input type="text" name="employee_name" id="emp_name" class="span5" placeholder="Employee Name"
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
@@ -165,21 +164,24 @@
 								</div>
 
 								<div class="control-group">
-									<label class="control-label">Other: </label>
+									<label class="control-label">Designation: </label>
 									<div class="controls">
-										<input type="text" name="other" class="span5"
-											placeholder="Other"
-											onkeyup="this.value=this.value.toUpperCase()" />
+										
+											<select name="designation" class="span3" style="width: 348px;" >
+											<option value="1">Driver</option>
+											<option value="2">Helper</option>
+											<option value="3">Home Worker</option>
+											<option valu="4">Laber</option>
+											
+											</select>
 									</div>
 								</div>
+							
 
 								<div class="form-actions">
 								
-									<button type="submit" name="submit"
-										class="btn btn-success"
-										style="position: relative; right: 685px; float: right;">Submit</button>
-									<a href="/SAMERP/index.jsp"><button type="button"
-											class="btn btn-danger "
+									<button type="submit" name="submit"	class="btn btn-success"	style="position: relative; right: 685px; float: right;">Submit</button>
+									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger "
 											style="position: relative; right: 550px; float: right;">Exit</button></a>
 								</div>
 							</form>
@@ -203,7 +205,7 @@
 								<th>Employee Name</th>
 								<th>Contact No</th>
 								<th>Debtor_Id</th>
-								<th>Other</th>
+								<th>Designation</th>
 								<th>AliasName</th>
 								<th>Actions</th>
 							</tr>
@@ -227,19 +229,21 @@
 							<td ><%=itr.next() %></td>							
 							<td ><%=itr.next() %></td>
 							
-							<% Object other= itr.next(); 
-										if(other==null){
+							<% Object designation= itr.next(); 
+										if(designation.equals("1")){
 										%>
-											<td>-</td>
-										<%}else{ %>
-											<td><%=other %></td>
+											<td>Driver</td>
+										<%}else if(designation.equals("2")){ %>
+											<td>Helper</td>
+										<%}else if(designation.equals("3")){%>
+											<td>Home Worker</td>
+											<%}else{ %>
+											<td>Laber</td>
 										<%} %>
-							
-							
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
 										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil"></i></a>
-										/ <a href="/SAMERP/AddEmployee?deleteId=<%=empid%>"><i class="icon-remove"></i></a></td>
+									</td>
 							
 						</tr>
 						<%
@@ -255,14 +259,7 @@
 			</div>
 		</div>
 	
-					
-
-
-
-
-
-
-	<div class="modal hide fade" id="update_employee" role="dialog">
+		<div class="modal hide fade" id="update_employee" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -276,7 +273,7 @@
 										Employee Name :</label>
 									<div class="controls">
 										<input type="hidden" id="Updateid" name="Updateid" />
-									<input type="text" name="employee_name" id="employeename" class="span3" placeholder="Employee Name"
+									<input type="text" name="employee_name" id="employeename" class="span3" autofocus placeholder="Employee Name"
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
@@ -296,7 +293,7 @@
 										With:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_alias" id="contractor_vehicle"class="span3">
+										<select name="contractorVehicle_alias" id="contractor_vehicle" class="span3">
 
 											<%
 												List detail = rq.getContractorVehicle();
@@ -310,7 +307,7 @@
 											<%
 												}
 											%>
-										</select><input type="text" id="old_contractor_vehicle" name="old_contractor_vehicle">
+										</select><input type="hidden" id="old_contractor_vehicle" name="old_contractor_vehicle">
 									</div>
 									<%
 										}
@@ -318,11 +315,15 @@
 								</div>
 								
 								<div class="control-group">
-									<label class="control-label">Other: </label>
+									<label class="control-label">Designation: </label>
 									<div class="controls">
-										<input type="text" name="other" id="other" pattern="[a-z A-Z ]*" class="span3"
-											placeholder="Other"
-											onkeyup="this.value=this.value.toUpperCase()" />
+										
+											<select name="designation" style="width: 271px;" id="designationid" >
+											<option value="1">Driver</option>
+											<option value="2">Helper</option>
+											<option value="3">Home Worker</option>
+											<option valu="4">Laber</option>											
+											</select>
 									</div>
 								</div>
 							
@@ -359,7 +360,7 @@ function myFunction() {
 
 
 function setFocusToTextBox() {
-	document.getElementById("employeename").focus();
+	document.getElementById("emp_name").focus();
 	myFunction();
 	showModal();
 }
@@ -388,9 +389,18 @@ function searchEmpolyee(id) {
 			document.getElementById("contactno").value = demoStr[2];
 			document.getElementById("contractor_vehicle").value = demoStr[3];
 			document.getElementById("old_contractor_vehicle").value = demoStr[3];
-			document.getElementById("other").value = demoStr[4];
-	
-					
+			document.getElementById("designationid").value = demoStr[4];	
+			
+			var desig=document.getElementById("designationid");
+		
+			for (var i = 0; i < desig.options.length; i++) {
+			    if (desig.options[i].text === demoStr[4]) {
+			    	desig.selectedIndex = i;
+			        //alert(demoStr[4]);
+			        getSetSelect('s2id_updatecontractorname', demoStr[4]);
+			        break;
+			    }
+			}
 			
 			}
 		};

@@ -159,7 +159,9 @@
                 </div>
          		
               <div class="form-actions" id="addCancel" align="center" style="display: none">
-                <input id="buttonSave" class="btn btn-success" name="insertAccDetails" type="button" style="background:#1196c1;" value="Add Stock" onclick="getInsertData()" />
+                <input class="btn btn-success" name="insertAccDetails" type="button" value="Add Stock" onclick="getInsertData()" />
+
+                
                 <input class="btn btn-danger" type="button" value="Cancel" />
               </div>
               
