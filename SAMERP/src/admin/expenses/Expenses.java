@@ -171,10 +171,23 @@ public class Expenses extends HttpServlet {
 			
 			String Bank_Id=request.getParameter("bank_name");
 			String Date=request.getParameter("date");
-			String Amount=request.getParameter("amount");
+			int Amount=Integer.parseInt(request.getParameter("amount"));
 			String particulars="cash";
 			
-			String query="insert into bank_account_details(bid,date,debit,particulars) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"')";
+			String query1="SELECT MAX(id) FROM bank_account_details";
+			String maxid=gd.getData(query1).get(0).toString();
+			
+			System.out.println("max id:"+maxid);
+			
+			String getPreviousbalance="SELECT bank_account_details.balance FROM bank_account_details WHERE bank_account_details.id='"+maxid+"'";
+			int previousbal=Integer.parseInt(gd.getData(getPreviousbalance).get(0).toString());
+			
+			System.out.println("previous bal:"+previousbal);
+			int totalbalance=Amount+previousbal;
+			
+			System.out.println("Amount is:"+totalbalance);
+			
+			String query="insert into bank_account_details(bid,date,debit,particulars,balance) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"','"+totalbalance+"')";
 		  
 			System.out.println("cash deposite:"+query);
 			
