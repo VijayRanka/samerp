@@ -291,6 +291,13 @@ public class RequireData
 					return l;
 				}
 				
+				
+				public String getDebterIdFromVid(String vid){
+					String q = "(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id="+vid+"))ORDER BY emplyoee_details.emp_date DESC LIMIT 1))";
+					List l = gd.getData(q);
+					return l.get(0).toString();
+				}
+				
 	
 	//--mukesh end
 	
@@ -1028,8 +1035,6 @@ public class RequireData
 			public int checkPCStatus(int amount)
 			{
 				String statusString="SELECT balance FROM petty_cash_details WHERE id=(SELECT MAX(id) FROM petty_cash_details)";
-				
-				
 				
 				if(!gd.getData(statusString).isEmpty())
 				{

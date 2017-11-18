@@ -36,6 +36,7 @@ public class AddVehicles extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		GenericDAO gd = new GenericDAO();
 		String deleteId = request.getParameter("delete");
+		RequireData rdd = new RequireData();
 		
 		if(request.getParameter("insertSubmitBtn")!=null)
 		{
@@ -178,6 +179,11 @@ public class AddVehicles extends HttpServlet {
 				String q = "SELECT `expenses_type_id`, `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
 				List l = gd.getData(q);
 				
+				
+				String did = rdd.getDebterIdFromVid(vno);
+				String qq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE type='D' AND driver_helper_payment_master.debter_id="+did+" ORDER BY driver_helper_payment_master.id DESC LIMIT 1";
+				List ll = gd.getData(qq);
+				
 				Iterator itr=l.iterator();
 				int DieselTotal=0, total=0;
 				
@@ -256,20 +262,22 @@ public class AddVehicles extends HttpServlet {
 			String sdate = request.getParameter("sdate");
 			String edate = request.getParameter("edate");
 			String hc = request.getParameter("hc");
-			int tBalance = 4000;
+			int tBalance = 0;
 			
-			//SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id=11)
 			
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String requiredDate = df.format(new Date()).toString();
 			
+			String did = rdd.getDebterIdFromVid(vid);
+			
+			String qq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+did+")";
+			List ll = gd.getData(qq);
+			
+			tBalance += Integer.parseInt(ll.get(0).toString()) + Integer.parseInt(totalDPayment);
 			
 			String q = "INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `extra_charges`, `particular`, `type`, `balance`) VALUES "
-					+ "( (SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT emplyoee_details.aliasname FROM emplyoee_details "
-					+ "WHERE emplyoee_details.emp_workwith=(SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT "
-					+ "vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_id=1)))), '"+requiredDate+"', "
-					+totalDPayment+", "+extraCharge+", 'payment "+sdate+" to "+edate+"', 1, "+tBalance+")";
-			System.out.println(q);
+					+ "( "+did+", '"+requiredDate+"', "+totalDPayment+", "+extraCharge+", 'payment "+sdate+" to "+edate+"','D', "+tBalance+")";
+
 			gd.executeCommand(q);
 		}
 		
