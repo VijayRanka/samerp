@@ -178,7 +178,7 @@ public class Expenses extends HttpServlet {
 			String maxid=gd.getData(query1).get(0).toString();
 			
 			System.out.println("max id:"+maxid);
-			
+		
 			String getPreviousbalance="SELECT bank_account_details.balance FROM bank_account_details WHERE bank_account_details.id='"+maxid+"'";
 			int previousbal=Integer.parseInt(gd.getData(getPreviousbalance).get(0).toString());
 			

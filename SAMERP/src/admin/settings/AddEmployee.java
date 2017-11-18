@@ -36,7 +36,7 @@ public class AddEmployee extends HttpServlet {
 		
 		//for inserting data into table--->employee_details
 		if(request.getParameter("submit")!=null){
-			
+			String reqdate=request.getParameter("date");
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
 			String Debtor_Id=request.getParameter("contractorVehicle_name");
@@ -44,23 +44,27 @@ public class AddEmployee extends HttpServlet {
 			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
 			
 			String designation=request.getParameter("designation");
-			String aliasname="EMP_"+employeename.replace(" ", "_")+'_'+WorkWith;
+			String aliasname=designation+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
 			int status=0;
 			String insertQuery="";
 			
-			//start debtor master
-			
-			insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
-			
-			gd.executeCommand(insertQuery);
-
+		
 			//end debtor master
-			insertQuery="INSERT INTO emplyoee_details(emp_name, emp_contactno,emp_workwith,emp_designation,aliasname)"
-					+ " VALUES ('"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+designation+"','"+aliasname+"');";
+			insertQuery="INSERT INTO emplyoee_details(emp_date,emp_name, emp_contactno,emp_workwith,emp_designation,aliasname)"
+					+ " VALUES ('"+reqdate+"','"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+designation+"','"+aliasname+"');";
 			
 			System.out.println("Q ===> "+insertQuery);
 			
 			status=gd.executeCommand(insertQuery);	
+			
+			if(status==1)
+			{
+			insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
+			gd.executeCommand(insertQuery);
+			}
+
+			
+			
 			if(status!=0)
 			{
 				System.out.println("employee successfully inserted");
@@ -101,24 +105,28 @@ public class AddEmployee extends HttpServlet {
 		if(request.getParameter("update")!=null)
 		{
 			String Emp_id=request.getParameter("Updateid");
+			String up_date = request.getParameter("date");
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
 			String work_with= request.getParameter("contractorVehicle_alias");
+				System.out.println("wo:"+work_with);
+			
 			
 			String query="SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_workwith='"+work_with+"'";
+			System.out.println("query:"+query);
 			String workwith=gd.getData(query).get(0).toString();
-			System.out.println("work:"+workwith);
+			
 			
 			String designation = request.getParameter("designation");
 			
-			String update_aliasname="EMP_"+employee_name.replace(" ", "_")+"_"+workwith;
+			String update_aliasname=designation+"_"+employee_name.replace(" ", "_")+"_"+workwith;
 			
 			System.out.println("up:"+update_aliasname);
 			
 			String up_aliasname="";
 
-			String updateEmployeeQuery = "update emplyoee_details set emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_designation='"+designation+"',aliasname='"+update_aliasname+"'  where emp_id='"+Emp_id+"';";
-			
+			String updateEmployeeQuery = "update emplyoee_details set emp_date='"+up_date+"',emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_designation='"+designation+"',aliasname='"+update_aliasname+"'  where emp_id='"+Emp_id+"';";
+			System.out.println("updated:"+updateEmployeeQuery);
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			
 			System.out.println("update :"+updatestatus);
