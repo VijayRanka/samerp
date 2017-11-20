@@ -29,7 +29,8 @@ public class PTCash extends HttpServlet {
 	    }
 	    return sum;
 	}
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 	}
 

@@ -840,6 +840,7 @@ function getDeleteId(deleteid)
 //****************************************** Vehicle Search START ******************************************
 function VehicleSearch(str) {
 
+	str = str.toUpperCase();
 	var xhttp;
 	if (str == "") {
 		return;

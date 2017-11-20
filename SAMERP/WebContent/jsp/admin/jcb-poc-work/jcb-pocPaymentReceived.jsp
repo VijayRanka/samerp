@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css"
 	rel="stylesheet" />
+	<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
 	rel='stylesheet' type='text/css'>
@@ -53,10 +54,11 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="current">JCB & POKLAND Receive-Payment</a>
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="#" class="current">JCB & POKLAND Payment Received </a>
 			</div>
-			<h1>JCB & POKLAND Receive-Payment</h1>
+			<h1>JCB & POKLAND Payment Received </h1>
 		</div>
 		<div class="container-fluid">
 			<hr>
@@ -67,14 +69,12 @@
 							<strong>Enter Party/Customer Name <span class="badge badge-info">OR</span> Contact No : </strong>
 							<input list="browsers" name="browser" id="editdata"	onkeyup="CustomerSearch(this.value)" onkeydown="CustomerPrint()" autocomplete="off" required>
 							<datalist id="browsers"></datalist>
+							<a href="#addRevert" data-toggle="modal" tabindex="-1" style="float: right;"><span class="badge badge-important">Revert Entry</span></a>
 						</div>
-						<div class="alert alert-info" style="display: none;" id="updateWork" >
-						<h4><strong>Update Work Detail</strong></h4>
-
-						</div>
+						
 						<div class="widget-content nopadding">
-							<form action="/SAMERP/JcbPocPaymentReceived.do" method="post" name="payForm" id="payForm" class="form-horizontal" style="padding-left: 240px;">
-								<div class="control-group">
+							<form action="/SAMERP/JcbPocPaymentReceived.do" method="post" name="payForm" id="payForm" class="form-horizontal">
+								<div class="control-group" style="padding-left: 21%;">
 									<label class="control-label">Date :</label>
 									<div class="controls">
 										<input type="date" name="payDate" id="payDate" value="dd/mm/yyyy" class="span4" required="required"/>
@@ -83,13 +83,14 @@
 										<input type="hidden" name="debtorId" id="debtorId">
 									</div>
 								</div>
-								<div class="control-group">
+								<div class="control-group" style="padding-left: 21%;">
 									<label class="control-label">Received Amount :</label>
 									<div class="controls">
 										<input type="text" name="payAmount" id="payAmount" class="span4" placeholder="Amount" onkeypress="return isNumber(event)" required="required"/>
+										<span class="help-inline error" id="amtError" style="color: red; font-weight: bold;"></span>
 									</div>
 								</div>
-								<div class="control-group" id="payLine">
+								<div class="control-group" id="payLine" style="padding-left: 21%;">
 									<label class="control-label">Payment Mode :</label>
 									<div class="controls">
 										<input type="radio" name="radios" id="radios1" value="1" onclick="showBank(this.value)" style="margin-left: 0px;" checked="checked" /> Cash
@@ -97,7 +98,7 @@
 										<input type="radio" name="radios" id="radios3" value="3" onclick="showBank(this.value)" style="margin-left: 0px;" /> Transfer
 									</div>
 								</div>
-								<div class="control-group hide" id="selectBank">
+								<div class="control-group hide" id="selectBank" style="padding-left: 21%;">
 									<label class="control-label">Select Bank :</label>
 									<div class="controls">
 									<%
@@ -119,21 +120,21 @@
 									</div>
 									<span class="help-inline error" id="payBankError" style="color: red; font-weight: bold;"></span>
 								</div>
-								<div class="control-group hide" id="bankCheque">
+								<div class="control-group hide" id="bankCheque" style="padding-left: 21%;">
 									<label class="control-label">Cheque No :</label>
 									<div class="controls">
 										<input type="text" name="payCheque" id="payCheque" class="span4" placeholder="Cheque No" />
 										<span class="help-inline error" id="payChequeError" style="color: red; font-weight: bold;"></span>
 									</div>
 								</div>
-								<div class="control-group">
+								<div class="control-group" style="padding-left: 21%;">
 									<label class="control-label">Description :</label>
 									<div class="controls">
 										<input type="text" name="payDescription" id="payDescription" class="span4" />
 									</div>
 								</div>
 							
-								<div class="form-actions">
+								<div class="form-actions" style="text-align: center;">
 									<button type="button" id="saveBtn" onclick="paySubmit()" class="btn btn-success" disabled="disabled">Submit</button>
 								</div>
 							</form>
@@ -222,7 +223,81 @@
 			
 			
 		</div>
+		<div id="addRevert" class="modal hide fade" role="dialog"
+		style="width: 55%; margin-left: -28%;">
+		<div class="modal-dialog">
 
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header" style="    height: 30px;">
+					<h4 class="modal-title">Revert Entry</h4>
+				</div>
+				<div class="alert alert-info" style="padding-left: 150px;" id="addWork">
+							<strong>Enter Party/Customer Name <span class="badge badge-info">OR</span> Contact No : </strong>
+							<input list="browsersRevert" name="browserRevert" id="editdataRevert"	onkeyup="CustomerSearch(this.value)" onkeydown="CustomerPrintRevert()" autocomplete="off" required>
+							<datalist id="browsersRevert"></datalist>
+				</div>
+					<form action="/SAMERP/JcbPocPaymentReceived.do" method="post" name="payFormRevert" id="payFormRevert"	class="form-horizontal">
+						<div class="modal-body">
+							<table id="display-textfeild" style="margin: 0 auto;">
+								<tr>
+									<td>
+										<input type="hidden" name="custIdRevert" id="custIdRevert">
+										Description :
+										<input type="text" name="payDescription" id="description1" onkeyup="this.value=this.value.toUpperCase()" required>
+										<span class="help-inline error" id="selectProjectError" style="color: red; font-weight: bold;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Amount :
+										<input type="text" name="amount" id="amount" onkeypress="return isNumber(event)" placeholder="Amount">
+										<span class="help-inline error" id="payAmtError" style="color: red; font-weight: bold;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Pay Mode :
+										<input type="radio" name="radios" id="radios1Revert" value="1" checked="checked" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Cash
+										<input type="radio" name="radios" id="radios2Revert" value="2" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Cheque
+									</td>
+								</tr>
+								<tr>
+									<td>
+										
+										<var class="control-group hide" id="selectBankProject">
+											Select Bank :
+												<%
+													List bank1 = rd.getBank();
+													Iterator itr1 = bank1.iterator();
+												%>
+												<select class="span6" name="payBank" id="payBankRevert">
+													<option></option>
+														<%
+															while (itr1.hasNext()) {
+														%>
+														<option value="<%=itr1.next()%>"><%=itr1.next()%></option>
+														<%
+															}
+														%>
+												</select>
+												<span class="help-inline error" id="payBankErrorRevert" style="color: red; font-weight: bold;"></span>
+										</var>
+									</td>
+								</tr>
+							</table>
+				</div>
+						<div class="modal-footer" style="padding-left: 450px">
+							<button type="button" name="save" id="saveBtnRevert" onclick="paySubmitRevert()" class="btn btn-success" disabled="disabled">Submit</button>
+							<button type="button" class="btn btn-danger" id="closeProject" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+
+		</div>
+		</div>
 
 
 	</div>
@@ -251,6 +326,27 @@ function paySubmit(){
 		document.getElementById("payForm").submit();
 	}
 }
+function paySubmitRevert(){
+	var x=validationCheckRevert();
+	
+	if(x != false){
+		document.getElementById("payFormRevert").submit();
+	}
+}
+//*************************************** DEPOSIT *******************************
+function showBankProject(str) {
+	if(str==1){
+		//document.getElementById("openingBal").style.display = 'inline-block';;
+		document.getElementById("selectBankProject").className="control-group hide";
+	}
+	if(str==2){
+		//document.getElementById("openingBal").style.display = "none";
+		document.getElementById("selectBankProject").className="control-group";
+	}
+	
+	
+}
+//*************************************** END DEPOSIT *******************************
 //**********************Payment Mode******************************************
 function showBank(str) {
 	if(str==1){
@@ -293,6 +389,7 @@ function CustomerSearch(str) {
 					i++;
 				}
 				document.getElementById("browsers").innerHTML = text;
+				document.getElementById("browsersRevert").innerHTML = text;
 			}
 
 		};
@@ -322,11 +419,35 @@ function  CustomerPrint() {
 			}
 	    }
 }
+function  CustomerPrintRevert() {
+	var val = document.getElementById('editdataRevert').value;
+      var str = $('#browsersRevert').find('option[value="' + val + '"]').attr('id');
+		if (str == null || str=="undefined") {
+			return;
+		}
+		if(event.keyCode == 13 || event.keyCode == 9) {
+			document.getElementById('custIdRevert').value=str;
+			var id=document.getElementById('custIdRevert').value;
+			if (id != null) {
+				document.getElementById('saveBtnRevert').disabled = false;
+			}else {
+				document.getElementById('saveBtnRevert').disabled = true;
+			}
+	    }
+}
 //******************************************END Cutomer Print******************************************************************
-//******************************************END validationCheck******************************************************************
+//****************************************** validationCheck******************************************************************
 function validationCheck(){
 	var radios2=document.getElementById("radios2").checked;
 	var radios3=document.getElementById("radios3").checked;
+	
+	var amt=document.getElementById("payAmount").value;
+	if(amt == ""){
+		document.getElementById("amtError").innerHTML ="Add Amount!";
+		return false;
+	}else{
+		document.getElementById("amtError").innerHTML ="";
+	}
 	
 	if(radios2 == true){
 		var payBank = document.forms["payForm"]["payBank"].value;
@@ -354,6 +475,27 @@ function validationCheck(){
 		}
 		
 	}
+}
+function validationCheckRevert(){
+	var radios2=document.getElementById("radios2Revert").checked;
+	
+	var amt=document.getElementById("amount").value;
+	if (amt == "") {
+		document.getElementById("payAmtError").innerHTML ="Add Amount!";
+		return false;
+	}else{
+		document.getElementById("payAmtError").innerHTML ="";
+	}
+	if(radios2 == true){
+		var payBank = document.getElementById("payBankRevert").value;
+		if(payBank == ""){
+			document.getElementById("payBankErrorRevert").innerHTML ="Select Bank!";
+			return false;
+		}else{
+			document.getElementById("payBankErrorRevert").innerHTML ="";
+		}
+	}
+	
 }
 //******************************************END validationCheck******************************************************************
 //******************************************Update******************************************************************
