@@ -52,7 +52,7 @@ public class AddEmployee extends HttpServlet {
 			String desig=request.getParameter("designation");
 			char designation=desig.charAt(0);
 			
-			String aliasname="EMP_"+designation+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
+			String aliasname="EMP_"+desig+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
 	
 			
 		//Driver Helper Payment
@@ -65,13 +65,13 @@ public class AddEmployee extends HttpServlet {
 		//End Driver Helper Payment
 			
 			insertQuery="INSERT INTO emplyoee_details(emp_date,emp_name, emp_contactno,emp_workwith,emp_designation,aliasname)"
-					+ " VALUES ('"+reqdate+"','"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+designation+"','"+aliasname+"');";
+					+ " VALUES ('"+reqdate+"','"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+desig+"','"+aliasname+"');";
 				
 			status=gd.executeCommand(insertQuery);	
 			if(status==1)
 			{
-			insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
-			gd.executeCommand(insertQuery);
+				insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
+				gd.executeCommand(insertQuery);
 			}
 
 			
