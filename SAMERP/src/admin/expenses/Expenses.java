@@ -174,12 +174,14 @@ public class Expenses extends HttpServlet {
 			int Amount=Integer.parseInt(request.getParameter("amount"));
 			String particulars="cash";
 			
+			
+			
 			String query1="SELECT MAX(id) FROM bank_account_details";
 			String maxid=gd.getData(query1).get(0).toString();
 			
 			System.out.println("max id:"+maxid);
 		
-			String getPreviousbalance="SELECT bank_account_details.balance FROM bank_account_details WHERE bank_account_details.id='"+maxid+"'";
+			String getPreviousbalance="SELECT bank_account_details.balance FROM bank_account_details WHERE bank_account_details.id=(SELECT MAX(bank_account_details.id) FROM bank_account_details WHERE bank_account_details.bid='"+Bank_Id+"')";
 			int previousbal=Integer.parseInt(gd.getData(getPreviousbalance).get(0).toString());
 			
 			System.out.println("previous bal:"+previousbal);
@@ -187,9 +189,9 @@ public class Expenses extends HttpServlet {
 			
 			System.out.println("Amount is:"+totalbalance);
 			
-		String debtor_query="";
+			String debtor_query="";
 			
-			String query="insert into bank_account_details(bid,date,debit,particulars,balance) values('"+Bank_Id+"','"+Date+"','"+Amount+"','"+particulars+"','"+totalbalance+"')";
+			String query="insert into bank_account_details(bid,date,debit,credit,particulars,debter_id,balance) values('"+Bank_Id+"','"+Date+"','0','"+Amount+"','"+particulars+"','3','"+totalbalance+"')";
 		  
 			System.out.println("cash deposite:"+query);
 			
