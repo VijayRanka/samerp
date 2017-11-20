@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
 <style type="text/css">
@@ -50,11 +51,11 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="current">JCB/POC
-					Detail</a>
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="#" class="current">JCB & POKLAND Bill</a>
 			</div>
-			<h1>JCB/POC Detail</h1>
+			<h1>JCB & POKLAND Bill</h1>
 		</div>
 		<div class="container-fluid">
 			<hr>

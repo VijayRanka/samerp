@@ -34,7 +34,7 @@
     <li><a href="/SAMERP/jsp/admin/expenses/expenses.jsp"><i class="icon icon-money"></i> <span>Expenses</span></a> </li>
     <li><a href="/SAMERP/jsp/admin/PTCash/ptcash.jsp"><i class="icon icon-money"></i> <span>Petty Cash</span></a> </li>
     <li><a href="#"><i class="icon icon-fullscreen"></i> <span>Work Details</span></a></li>
-    <li><a href="#"><i class="icon icon-pencil"></i> <span>Report</span></a></li>
+    <li><a href="/SAMERP/jsp/admin/reports/reportDetails.jsp" ><i class="icon icon-pencil"></i> <span>Report</span></a></li>
   </ul>
 </div>
 <!--sidebar-menu-->

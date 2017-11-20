@@ -642,7 +642,6 @@ public class RequireData
 		public List getEmployeeRowData(String RowId)
 		{
 			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_designation,emplyoee_details.aliasname FROM emplyoee_details where emp_id="+RowId+"; ";
-			System.out.println("empdetails:"+employeeRowDataQuery);
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
 			return employeeDetailsData;
 		}
@@ -1128,22 +1127,5 @@ public class RequireData
 				List List = gd.getData(query);
 				return List;
 			}
-			
-/*			public List getPettyCashDetailsDash(){
-				List List = gd.getData("");
-				return List;
-			}
-			
-			public List getbadDetailsDash(){
-				List List = gd.getData("");
-				return List;
-			}
-			public List getPettyCashDetails(){
-				List List = gd.getData("");
-				return List;
-			}*/
-			
-			
-			//-- common methods end
-	
+			//-- common methods end	
 }

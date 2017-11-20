@@ -155,7 +155,8 @@
 									<label class="control-label">Designation: </label>
 									<div class="controls">
 										
-											<select name="designation" class="span3" style="width: 356px;" >
+											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" >
+											<option>Select Designation</option>
 											<option value="Driver">Driver</option>
 											<option value="Helper">Helper</option>
 											<option value="Home Worker">Home Worker</option>
@@ -189,6 +190,14 @@
 									<%
 										}
 									%>
+								</div>
+								
+								<div class="control-group hide" id="opening_balid">
+									<label class="control-label"><span style="color: red;"></span>
+										Opening Balance :</label>
+									<div class="controls">
+										<input type="text" name="opening_balance" id="opening_balanceid" class="span5" placeholder="Opening Balance" pattern="[0-9]*" required />
+									</div>
 								</div>
 
 								<div class="form-actions">								
@@ -231,10 +240,8 @@
 						{
 							Iterator itr=getEmployeeList.iterator();
 							while(itr.hasNext())
-							{
-								
-								String empid=itr.next().toString();
-														
+							{								
+								String empid=itr.next().toString();														
 						%>
 						<tr>
 							<td id="<%=empid%>"><%=count %></td>
@@ -307,7 +314,7 @@
 									<label class="control-label">Designation: </label>
 									<div class="controls">
 										
-											<select name="designation" style="width: 271px;" id="designationid" >
+											<select name="designation" style="width: 271px;" id="designationid" onchange="getVehicle()" >
 											<option value="Driver">Driver</option>
 											<option value="Helper">Helper</option>
 											<option value="Home Worker">Home Worker</option>
@@ -343,20 +350,6 @@
 									%>
 								</div>
 								
-								<div class="control-group">
-									<label class="control-label">Designation: </label>
-									<div class="controls">
-										
-											<select name="designation" style="width: 271px;" id="designationid" >
-											<option value="Driver">Driver</option>
-											<option value="Helper">Helper</option>
-											<option value="Home Worker">Home Worker</option>
-											<option valu="Laber">Laber</option>
-																					
-											</select>
-									</div>
-								</div>
-							
 								<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -433,10 +426,49 @@ function searchEmpolyee(id) {
 			    }
 			}
 			
+			document.getElementById("opening_balanceid").value = demoStr[7];
+			
 			}
 		};
 	xhttp.open("POST","/SAMERP/AddEmployee?employeeid="+id, true);
 	xhttp.send();
+}
+
+function getVehicle(id) {
+	
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText.split(",");
+			document.getElementById("Updateid").value = demoStr[0];
+			document.getElementById("dateid").value = demoStr[1];
+			document.getElementById("employeename").value = demoStr[2];
+	
+			
+			}
+		};
+	xhttp.open("POST","/SAMERP/AddEmployee?employeeid="+id, true);
+	xhttp.send();
+}
+
+function showOpening(str) {
+	alert(str);
+	if(str=='Driver' ||str=='Helper'){
+		document.getElementById("opening_balid").className="control-group ";
+	
+	}
+	if(str=='HomeWorker'){
+		document.getElementById("opening_balid").className="control-group hide";
+		
+	}
+	if(str=='Laber'){
+		document.getElementById("opening_balid").className="control-group hide";
+		
+	}
+	
+	
 }
 
 function getSetSelect(id,value)

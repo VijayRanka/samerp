@@ -1148,7 +1148,8 @@ function makeHelperPayment() {
 /*-----------------------------------Mukesh data end-----------------------------*/
 
 </script>
-<script src="/SAMERP/config/js/jquery.min.js"></script> 
+<!-- <script src="/SAMERP/config/js/jquery.min.js"></script>  -->
+<script src="/SAMERP/config/reportExport/libs/jquery-3.2.1.min.js"></script>
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
 <script src="/SAMERP/config/js/bootstrap.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-datepicker.js"></script> 
