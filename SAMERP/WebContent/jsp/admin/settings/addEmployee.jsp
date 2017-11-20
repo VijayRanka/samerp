@@ -1,3 +1,4 @@
+<%@page import="utility.SysDate"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="utility.RequireData"%>
@@ -119,17 +120,29 @@
 						<div class="widget-content nopadding">
 							<form action="/SAMERP/AddEmployee" method="post"
 								class="form-horizontal">
+
 								<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>
+									<label class="control-label">Date :</label>
+									<div class="controls">
+										<%
+											RequireData rd = new RequireData();
+											SysDate sd = new SysDate();
+											String[] sdDemo = sd.todayDate().split("-");
+										%>
+										<input name="date" type="date"	value="<%=sdDemo[2] + "-" + sdDemo[1] + "-" + sdDemo[0]%>" class="span5">
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label"><span style="color: red;"></span>
 										Employee Name :</label>
 									<div class="controls">
-										<input type="text" name="employee_name" 
-											class="span5" placeholder="Employee Name"
+										<input type="text" name="employee_name" id="emp_name" class="span5" placeholder="Employee Name"
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>Contact
+									<label class="control-label"><span style="color: red;"></span>Contact
 										No. :</label>
 									<div class="controls">
 										<input type="text" name="contact_no" class="span5"
@@ -139,7 +152,21 @@
 								</div>
 
 								<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>Work
+									<label class="control-label">Designation: </label>
+									<div class="controls">
+										
+											<select name="designation" class="span3" style="width: 356px;" >
+											<option value="Driver">Driver</option>
+											<option value="Helper">Helper</option>
+											<option value="Home Worker">Home Worker</option>
+											<option valu="Laber">Laber</option>
+											
+											</select>
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label"><span style="color: red;"></span>Work
 										With:</label>
 
 									<div class="controls">
@@ -164,22 +191,9 @@
 									%>
 								</div>
 
-								<div class="control-group">
-									<label class="control-label">Other: </label>
-									<div class="controls">
-										<input type="text" name="other" class="span5"
-											placeholder="Other"
-											onkeyup="this.value=this.value.toUpperCase()" />
-									</div>
-								</div>
-
-								<div class="form-actions">
-								
-									<button type="submit" name="submit"
-										class="btn btn-success"
-										style="position: relative; right: 685px; float: right;">Submit</button>
-									<a href="/SAMERP/index.jsp"><button type="button"
-											class="btn btn-danger "
+								<div class="form-actions">								
+									<button type="submit" name="submit"	class="btn btn-success"	style="position: relative; right: 685px; float: right;">Submit</button>
+									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger "
 											style="position: relative; right: 550px; float: right;">Exit</button></a>
 								</div>
 							</form>
@@ -200,10 +214,11 @@
 						<thead>
 							<tr>
 								<th>Sr.No.</th>
+								<th>Date</th>
 								<th>Employee Name</th>
 								<th>Contact No</th>
 								<th>Debtor_Id</th>
-								<th>Other</th>
+								<th>Designation</th>
 								<th>AliasName</th>
 								<th>Actions</th>
 							</tr>
@@ -224,22 +239,14 @@
 						<tr>
 							<td id="<%=empid%>"><%=count %></td>
 							<td ><%=itr.next()%></td>
+							<td ><%=itr.next()%></td>
 							<td ><%=itr.next() %></td>							
-							<td ><%=itr.next() %></td>
-							
-							<% Object other= itr.next(); 
-										if(other==null){
-										%>
-											<td>-</td>
-										<%}else{ %>
-											<td><%=other %></td>
-										<%} %>
-							
-							
+							<td ><%=itr.next() %></td>							
+							<td><%=itr.next() %></td>
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
 										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil"></i></a>
-										/ <a href="/SAMERP/AddEmployee?deleteId=<%=empid%>"><i class="icon-remove"></i></a></td>
+									</td>
 							
 						</tr>
 						<%
@@ -255,14 +262,7 @@
 			</div>
 		</div>
 	
-					
-
-
-
-
-
-
-	<div class="modal hide fade" id="update_employee" role="dialog">
+		<div class="modal hide fade" id="update_employee" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -271,12 +271,24 @@
 				</div>
 				<div class="modal-body">
 					<form action="/SAMERP/AddEmployee" method="post" class="form-horizontal">
-								<div class="control-group">									
+
+						<div class="control-group">
+							<label class="control-label">Date :</label>
+							<div class="controls">
+								<%
+									RequireData rd1 = new RequireData();
+									SysDate sd1 = new SysDate();
+									String[] sdDem = sd1.todayDate().split("-");
+								%>
+								<input name="date" id="dateid" type="date"	value="<%=sdDem[2] + "-" + sdDem[1] + "-" + sdDem[0]%>" class="span3">
+							</div>
+						</div>
+						<div class="control-group">									
 									<label class="control-label"><span style="color: red;">*</span>
 										Employee Name :</label>
 									<div class="controls">
 										<input type="hidden" id="Updateid" name="Updateid" />
-									<input type="text" name="employee_name" id="employeename" class="span3" placeholder="Employee Name"
+									<input type="text" name="employee_name" id="employeename" class="span3" autofocus placeholder="Employee Name"
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
@@ -290,13 +302,27 @@
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
+								
+									<div class="control-group">
+									<label class="control-label">Designation: </label>
+									<div class="controls">
+										
+											<select name="designation" style="width: 271px;" id="designationid" >
+											<option value="Driver">Driver</option>
+											<option value="Helper">Helper</option>
+											<option value="Home Worker">Home Worker</option>
+											<option valu="Laber">Laber</option>
+																					
+											</select>
+									</div>
+								</div>
 									
 									<div class="control-group">
 									<label class="control-label"><span style="color: red;">*</span>Work
 										With:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_alias" id="contractor_vehicle"class="span3">
+										<select name="contractorVehicle_alias" id="contractor_vehicle" class="span3">
 
 											<%
 												List detail = rq.getContractorVehicle();
@@ -310,7 +336,7 @@
 											<%
 												}
 											%>
-										</select><input type="text" id="old_contractor_vehicle" name="old_contractor_vehicle">
+										</select><input type="hidden" id="old_contractor_vehicle" name="old_contractor_vehicle">
 									</div>
 									<%
 										}
@@ -318,11 +344,16 @@
 								</div>
 								
 								<div class="control-group">
-									<label class="control-label">Other: </label>
+									<label class="control-label">Designation: </label>
 									<div class="controls">
-										<input type="text" name="other" id="other" pattern="[a-z A-Z ]*" class="span3"
-											placeholder="Other"
-											onkeyup="this.value=this.value.toUpperCase()" />
+										
+											<select name="designation" style="width: 271px;" id="designationid" >
+											<option value="Driver">Driver</option>
+											<option value="Helper">Helper</option>
+											<option value="Home Worker">Home Worker</option>
+											<option valu="Laber">Laber</option>
+																					
+											</select>
 									</div>
 								</div>
 							
@@ -359,7 +390,7 @@ function myFunction() {
 
 
 function setFocusToTextBox() {
-	document.getElementById("employeename").focus();
+	document.getElementById("emp_name").focus();
 	myFunction();
 	showModal();
 }
@@ -383,14 +414,24 @@ function searchEmpolyee(id) {
 			
 			var demoStr = this.responseText.split(",");
 			document.getElementById("Updateid").value = demoStr[0];
-			document.getElementById("employeename").value = demoStr[1];
+			document.getElementById("dateid").value = demoStr[1];
+			document.getElementById("employeename").value = demoStr[2];
 			//alert(demoStr[1]);
-			document.getElementById("contactno").value = demoStr[2];
-			document.getElementById("contractor_vehicle").value = demoStr[3];
-			document.getElementById("old_contractor_vehicle").value = demoStr[3];
-			document.getElementById("other").value = demoStr[4];
-	
-					
+			document.getElementById("contactno").value = demoStr[3];
+			document.getElementById("contractor_vehicle").value = demoStr[4];
+			document.getElementById("old_contractor_vehicle").value = demoStr[5];
+			document.getElementById("designationid").value = demoStr[6];	
+			
+			var desig=document.getElementById("designationid");
+		
+			for (var i = 0; i < desig.options.length; i++) {
+			    if (desig.options[i].text === demoStr[5]) {
+			    	desig.selectedIndex = i;
+			        //alert(demoStr[4]);
+			        getSetSelect('s2id_updatecontractorname', demoStr[5]);
+			        break;
+			    }
+			}
 			
 			}
 		};

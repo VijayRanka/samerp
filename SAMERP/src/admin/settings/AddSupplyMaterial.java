@@ -56,7 +56,7 @@ public class AddSupplyMaterial extends HttpServlet {
 			
 		
 			
-			String supBussName=request.getParameter("suppbusinesname");
+			String supBussName=request.getParameter("suppbusines_name");
 			String supplierName=request.getParameter("suppname");
 			String supplierAddress=request.getParameter("address");
 			String suppContact=request.getParameter("contact");
