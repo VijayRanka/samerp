@@ -126,6 +126,7 @@ public class PTCash extends HttpServlet {
 						String alias=add+handLoanName;
 						
 						String handLoanDetails="SELECT handloan_details.handloan_id,handloan_details.balance FROM handloan_details,handloan_master WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"' ORDER BY handloan_details.id DESC LIMIT 1";
+						System.out.println(handLoanDetails);
 						List getDetails=gd.getData(handLoanDetails);
 						 
 						int addAmt=(int)getDetails.get(1);
