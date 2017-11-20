@@ -428,6 +428,7 @@ public class PTCash extends HttpServlet {
 					String alias=add+handLoanName;
 					
 					String handLoanDetails="SELECT handloan_details.handloan_id,handloan_details.balance FROM handloan_details,handloan_master WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"' ORDER BY handloan_details.id DESC LIMIT 1";
+					System.out.println("hiiii"+handLoanDetails);
 					List getDetails=gd.getData(handLoanDetails);
 					 
 					int addAmt=(int)getDetails.get(1);
@@ -502,7 +503,7 @@ public class PTCash extends HttpServlet {
 						cash.add(withdrawlAmt);
 						String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+bankAlias+"'";
 						List debtorId=gd.getData(getDebtorId);
-						String handLoanName=request.getParameter("hlName,"+i);
+						String handLoanName=request.getParameter("hlName,"+j);
 						String add="HL_";
 						String alias=add+handLoanName;
 						
@@ -511,7 +512,7 @@ public class PTCash extends HttpServlet {
 						List getDetails=gd.getData(handLoanDetails);
 						 
 						int addAmt=(int)getDetails.get(1);
-						int amt=Integer.parseInt(request.getParameter("hlAmt,"+i));
+						int amt=Integer.parseInt(request.getParameter("hlAmt,"+j));
 						cash.add(amt);
 						int updateAmt=addAmt+amt;
 						out.println("handloan new amt : "+updateAmt+"<br>");
@@ -737,7 +738,7 @@ public class PTCash extends HttpServlet {
 		if(request.getParameter("findHanLoanName")!=null)
 		{
 			String name=request.getParameter("findHanLoanName");
-			String query="SELECT id,name FROM handloan_master";
+			String query="SELECT id, alias_name FROM handloan_master";
 			List getHandloadName=gd.getData(query);
 			Iterator itr=getHandloadName.iterator();
 			while(itr.hasNext())
