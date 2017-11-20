@@ -2,7 +2,10 @@ package admin.pettycash;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,69 +47,270 @@ public class PTCash extends HttpServlet {
 		
 		if(request.getParameter("updateHandLoan")!=null)
 		{
-			int oldCr=Integer.parseInt(request.getParameter("oldCr"));
-			int newCr=Integer.parseInt(request.getParameter("cr"));
+			String date=request.getParameter("uDate");
+			String alias=request.getParameter("uName");
+			String handLoanId=request.getParameter("handLoanId");
 			int oldDr=Integer.parseInt(request.getParameter("oldDr"));
 			int newDr=Integer.parseInt(request.getParameter("dr"));
-			String handLoanId=request.getParameter("handLoanId");
-			int oldBalance=Integer.parseInt(request.getParameter("uBalance"));
-			String detailsId=request.getParameter("detailsId");
+			int oldCr=Integer.parseInt(request.getParameter("oldCr"));
+			int newCr=Integer.parseInt(request.getParameter("cr"));
+			String mode=request.getParameter("uMode");
 			String chqNo=request.getParameter("chqNo");
+			int oldBalance=Integer.parseInt(request.getParameter("uBalance"));
+			String particulars="";
+			
+			
+			String detailsId=request.getParameter("detailsId");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			String requiredDate = df.format(new Date()).toString();
+			
+			String getHandLoanDebtorId="SELECT id FROM debtor_master WHERE type='"+alias+"'";
+			List handLoanDebtorId=gd.getData(getHandLoanDebtorId);
+			
+			String getRevertDebtorId="SELECT id FROM debtor_master WHERE type='REVERT_ENTRY'";
+			List revertDebtorId=gd.getData(getRevertDebtorId);
+			
 			if(newCr!=0)
 			{
-				if(oldCr<newCr)
-				{
 					//Addition to handloan balance
 					
-					//getting mode,handloanDetailsId and balance from specific id to last record
-					String getAllBalance="SELECT handloan_details.balance,handloan_details.id,handloan_details.mode FROM handloan_details WHERE handloan_details.handloan_id='"+handLoanId+"' AND handloan_details.id BETWEEN '"+detailsId+"' AND (SELECT MAX(handloan_details.id) FROM handloan_details)";
-					List allBalance=gd.getData(getAllBalance);
+					String getHandLoanBalance="SELECT handloan_details.balance FROM handloan_details ORDER BY handloan_details.id DESC LIMIT 1";
+					List handLoanBalance=gd.getData(getHandLoanBalance);
 					
-					//update credit amount in user update entry only
-					String updateCredit="UPDATE `handloan_details` SET `credit`="+newCr+",`particulars`='"+chqNo+"' WHERE handloan_details.id='"+detailsId+"'";
-					System.out.println(updateCredit+"<br>");
+					int cancelEntryBalance=(int)handLoanBalance.get(0)-oldCr;
 					
-					int difference=newCr-oldCr;
-					out.println("Before Addition : "+allBalance+"<br>");
-					System.out.println("Before Addition : "+allBalance+"<br>");
-					Iterator itr=allBalance.iterator();
-					while(itr.hasNext())
+					String cancelHandLoanEntry="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
+							+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+0+","+oldCr+",'"+mode+"','"+date+"','"+cancelEntryBalance+"')";
+					int cancelHandLoanEntryStatus=gd.executeCommand(cancelHandLoanEntry);
+					if(cancelHandLoanEntryStatus>0)
 					{
-						int updatedBalance=difference+(int)itr.next();
-						Object handLoanDetailsId=itr.next();
-						Object mode=itr.next();
-						
-						//update handloan details all balance from user update entry to last record
-						String updateHandLoanBalance="UPDATE `handloan_details` SET `balance`="+updatedBalance+" WHERE handloan_details.id='"+handLoanDetailsId+"'";
-						
-						//int handLoanBalanceStatus=gd.executeCommand(updateHandLoanBalance);		
-						
-						out.println("After Addition : "+updatedBalance);
-						if(mode.equals("CHEQUE") || mode.equals("TRANSFER"))
+						int revertEntryBalance=cancelEntryBalance+newCr;
+						String revertHandLoanEntry="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
+								+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+newCr+","+0+",'"+mode+"','"+chqNo+"',"+revertEntryBalance+")";
+						int revertHandLoanEntryStaus=gd.executeCommand(revertHandLoanEntry);
+						if(revertHandLoanEntryStaus>0)
 						{
-							out.println("bank update");
-						}
-						else if(mode.equals("CASH"))
-						{
-							out.print("petty update");
+							System.out.println("handloan reverted");
+							if(mode.equals("CHEQUE") || mode.equals("TRANSFER"))
+							{
+								System.out.println("bank enter");
+								String getBankBalance="SELECT bank_account_details.balance FROM bank_account_details ORDER by bank_account_details.id DESC LIMIT 1";
+								List bankBalance=gd.getData(getBankBalance);
+								
+								if(mode.equals("CHEQUE"))
+								{
+									particulars="HANDLOAN CHEQUE";
+								}
+								else if(mode.equals("TRANSFER"))
+								{
+									particulars="HANDLOAN TRANSFER";
+								}
+									
+								String getBankRecord="SELECT bank_account_details.bid,bank_account_details.date,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,bank_account_details.debter_id,bank_account_details.balance FROM bank_account_details WHERE bank_account_details.date='"+date+"' AND bank_account_details.credit="+oldCr+" AND bank_account_details.particulars='"+particulars+"' AND bank_account_details.debter_id='"+handLoanDebtorId.get(0)+"'";
+								System.out.println(getBankRecord);
+								List bankRecord=gd.getData(getBankRecord);
+								Object bid=bankRecord.get(0);
+								Object bDate=bankRecord.get(1);
+								Object debit=bankRecord.get(2);
+								Object credit=bankRecord.get(3);
+								Object bParticulars=bankRecord.get(4);
+								Object debtId=bankRecord.get(5);
+								Object bBal=bankRecord.get(6);
+								
+								int cancelBankEntryBalance=(int)bankBalance.get(0)-oldCr;
+								String cancelBankEntry="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+										+ "VALUES ('"+bid+"','"+requiredDate+"',"+oldCr+","+0+",'"+date+"','"+debtId+"',"+cancelBankEntryBalance+")";
+								int cancelBankEntryStatus=gd.executeCommand(cancelBankEntry);
+								if(cancelBankEntryStatus>0)
+								{
+									System.out.println("bank cancel");
+									int revertBankEntryBalance=cancelBankEntryBalance+newCr;
+									String revertBankEntry="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+											+ "VALUES ('"+bid+"','"+requiredDate+"',"+0+","+newCr+",'"+bParticulars+"','"+debtId+"',"+revertBankEntryBalance+")";
+									int revertBankEntryStatus=gd.executeCommand(revertBankEntry);
+									if(revertBankEntryStatus>0)
+									{
+										System.out.println("updated successfully");
+										request.setAttribute("status", "Updated & Reverted Successfully in Bank");
+										request.setAttribute("tab", "tab2");
+										RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+										rq.forward(request, response);
+									}
+									
+								}
+								//out.println("bank update");
+							}
+							else if(mode.equals("CASH"))
+							{
+								System.out.println("cash enter");
+								String getPettyBalance="SELECT balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
+								List pettyBalance=gd.getData(getPettyBalance);
+								
+								String getPettyRecord="SELECT date,debit,credit,debtor_id,balance FROM petty_cash_details WHERE date='"+date+"' AND credit="+oldCr+" AND debtor_id='"+handLoanDebtorId.get(0)+"'";
+								System.out.println(getPettyRecord);
+								List pettyRecord=gd.getData(getPettyRecord);
+								Object pDate=pettyRecord.get(0);
+								Object pDebit=pettyRecord.get(1);
+								Object pCredit=pettyRecord.get(2);
+								Object pDebtId=pettyRecord.get(3);
+								Object pBal=pettyRecord.get(4);
+								
+								
+								
+								int cancelPettyEntryBalance=(int)pettyBalance.get(0)-oldCr;
+								String cancelPettyEntry="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) "
+										+ "VALUES ('"+requiredDate+"',"+oldCr+","+0+",'"+revertDebtorId.get(0)+"',"+cancelPettyEntryBalance+")";
+								int cancelPettyEntryStatus=gd.executeCommand(cancelPettyEntry);
+								if(cancelPettyEntryStatus>0)
+								{
+									System.out.println("petty Cancel");
+									int revertPettyEntryBalance=cancelPettyEntryBalance+newCr;
+									String revertPettyEntry="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) "
+											+ "VALUES ('"+requiredDate+"',"+0+","+newCr+",'"+pDebtId+"',"+revertPettyEntryBalance+")";
+									int revertPettyEntryStatus=gd.executeCommand(revertPettyEntry);
+									if(revertPettyEntryStatus>0)
+									{
+										request.setAttribute("status", "Updated & Reverted Successfully in PettyCash");
+										request.setAttribute("tab", "tab2");
+										RequestDispatcher rq=request.getRequestDispatcher("/jsp/admin/PTCash/ptcash.jsp");
+										rq.forward(request, response);
+										
+										//response.sendRedirect(request.getContextPath()+"/jsp/admin/PTCash/ptcash.jsp");
+										System.out.println("updated Successfully");
+									}
+								}
+								
+								
+								
+								//out.print("petty update");
+							}
 						}
 					}
-					
-				}
-				else if(oldCr>newCr)
-				{
-					//substraction from handloan balance
-					out.println("sub");
-				}
-				else
-				{
-					out.println("nothing");
-				}
+				
 				
 			}
 			else if(newDr!=0)
 			{
-				out.println("Debit");
+				String getHandLoanBalance="SELECT handloan_details.balance FROM handloan_details ORDER BY handloan_details.id DESC LIMIT 1";
+				List handLoanBalance=gd.getData(getHandLoanBalance);
+				
+				int cancelEntryBalance=(int)handLoanBalance.get(0)+oldDr;
+				
+				String cancelHandLoanEntry="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
+						+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+oldDr+","+0+",'"+mode+"','"+date+"','"+cancelEntryBalance+"')";
+				int cancelHandLoanEntryStatus=gd.executeCommand(cancelHandLoanEntry);
+				if(cancelHandLoanEntryStatus>0)
+				{
+					int revertEntryBalance=cancelEntryBalance-newDr;
+					String revertHandLoanEntry="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
+							+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+0+","+newDr+",'"+mode+"','"+chqNo+"',"+revertEntryBalance+")";
+					int revertHandLoanEntryStaus=gd.executeCommand(revertHandLoanEntry);
+					if(revertHandLoanEntryStaus>0)
+					{
+						System.out.println("handloan reverted");
+						if(mode.equals("CHEQUE") || mode.equals("TRANSFER"))
+						{
+							System.out.println("bank enter");
+							String getBankBalance="SELECT bank_account_details.balance FROM bank_account_details ORDER by bank_account_details.id DESC LIMIT 1";
+							List bankBalance=gd.getData(getBankBalance);
+							
+							if(mode.equals("CHEQUE"))
+							{
+								particulars="HANDLOAN CHEQUE";
+							}
+							else if(mode.equals("TRANSFER"))
+							{
+								particulars="HANDLOAN TRANSFER";
+							}
+							
+							String getBankRecord="SELECT bank_account_details.bid,bank_account_details.date,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,bank_account_details.debter_id,bank_account_details.balance FROM bank_account_details WHERE bank_account_details.date='"+date+"' AND bank_account_details.debit="+oldDr+" AND bank_account_details.particulars='"+particulars+"' AND bank_account_details.debter_id='"+handLoanDebtorId.get(0)+"'";
+							System.out.println(getBankRecord);
+							List bankRecord=gd.getData(getBankRecord);
+							Object bid=bankRecord.get(0);
+							Object bDate=bankRecord.get(1);
+							Object debit=bankRecord.get(2);
+							Object credit=bankRecord.get(3);
+							Object bParticulars=bankRecord.get(4);
+							Object debtId=bankRecord.get(5);
+							Object bBal=bankRecord.get(6);
+							
+							int cancelBankEntryBalance=(int)bankBalance.get(0)+oldDr;
+							String cancelBankEntry="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+									+ "VALUES ('"+bid+"','"+requiredDate+"',"+0+","+oldDr+",'"+date+"','"+debtId+"',"+cancelBankEntryBalance+")";
+							int cancelBankEntryStatus=gd.executeCommand(cancelBankEntry);
+							if(cancelBankEntryStatus>0)
+							{
+								System.out.println("bank cancel");
+								int revertBankEntryBalance=cancelBankEntryBalance-newDr;
+								String revertBankEntry="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
+										+ "VALUES ('"+bid+"','"+requiredDate+"',"+newDr+","+0+",'"+bParticulars+"','"+debtId+"',"+revertBankEntryBalance+")";
+								int revertBankEntryStatus=gd.executeCommand(revertBankEntry);
+								if(revertBankEntryStatus>0)
+								{
+									System.out.println("updated successfully");
+									request.setAttribute("status", "Updated & Reverted Successfully in Bank");
+									request.setAttribute("tab", "tab2");
+									RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
+									rq.forward(request, response);
+								}
+							}
+								
+							
+							
+							
+							
+						}
+						else if(mode.equals("CASH"))
+						{
+							System.out.println("cash enter");
+							String getPettyBalance="SELECT balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
+							List pettyBalance=gd.getData(getPettyBalance);
+							
+							String getPettyRecord="SELECT date,debit,credit,debtor_id,balance FROM petty_cash_details WHERE date='"+date+"' AND debit="+oldDr+" AND debtor_id='"+handLoanDebtorId.get(0)+"'";
+							System.out.println(getPettyRecord);
+							List pettyRecord=gd.getData(getPettyRecord);
+							Object pDate=pettyRecord.get(0);
+							Object pDebit=pettyRecord.get(1);
+							Object pCredit=pettyRecord.get(2);
+							Object pDebtId=pettyRecord.get(3);
+							Object pBal=pettyRecord.get(4);
+							
+							int cancelPettyEntryBalance=(int)pettyBalance.get(0)+oldDr;
+							String cancelPettyEntry="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) "
+									+ "VALUES ('"+requiredDate+"',"+0+","+oldDr+",'"+revertDebtorId.get(0)+"',"+cancelPettyEntryBalance+")";
+							int cancelPettyEntryStatus=gd.executeCommand(cancelPettyEntry);
+							if(cancelPettyEntryStatus>0)
+							{
+								System.out.println("petty Cancel");
+								int revertPettyEntryBalance=cancelPettyEntryBalance-newDr;
+								String revertPettyEntry="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) "
+										+ "VALUES ('"+requiredDate+"',"+newDr+","+0+",'"+pDebtId+"',"+revertPettyEntryBalance+")";
+								int revertPettyEntryStatus=gd.executeCommand(revertPettyEntry);
+								if(revertPettyEntryStatus>0)
+								{
+									request.setAttribute("status", "Updated & Reverted Successfully in PettyCash");
+									request.setAttribute("tab", "tab2");
+									RequestDispatcher rq=request.getRequestDispatcher("/jsp/admin/PTCash/ptcash.jsp");
+									rq.forward(request, response);
+									
+									//response.sendRedirect(request.getContextPath()+"/jsp/admin/PTCash/ptcash.jsp");
+									System.out.println("updated Successfully");
+								}
+								
+							}
+							
+						}
+						
+					}
+					
+					
+					
+				}
+				
+				
+				
+				
+				//out.println("Debit");
 			}
 			
 			//out.println("working");
@@ -380,7 +584,7 @@ public class PTCash extends HttpServlet {
 				String debtor_master="insert into `debtor_master`(`type`) values('"+newAlias+"')";
 				gd.executeCommand(debtor_master);
 				
-				if(paymode.equals("Cheque"))
+				if(paymode.equals("CHEQUE"))
 				{
 					System.out.println("inside new cheque");
 					String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ((SELECT MAX(id) FROM handloan_master),'"+date+"',"+amount+","+0+",'CHEQUE','"+chequeNo+"',"+amount+")";
@@ -407,7 +611,7 @@ public class PTCash extends HttpServlet {
 						
 					}
 				}
-				else if(paymode.equals("Transfer"))
+				else if(paymode.equals("TRANSFER"))
 				{
 					System.out.println("inside new transfer");
 					String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ((SELECT MAX(id) FROM handloan_master),'"+date+"',"+amount+","+0+",'TRANSFER','-',"+amount+")";
@@ -444,7 +648,7 @@ public class PTCash extends HttpServlet {
 				List handLoanDetailsBalance=gd.getData(getHandloadDetailsBalance);
 				int newHandLoanBalance=Integer.parseInt(amount)+(int)handLoanDetailsBalance.get(1);
 				
-				if(paymode.equals("Cheque"))
+				if(paymode.equals("CHEQUE"))
 				{
 					String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ("+handLoanDetailsBalance.get(0)+",'"+date+"',"+amount+","+0+",'CHEQUE','"+chequeNo+"',"+newHandLoanBalance+")";
 					int insertStatus=gd.executeCommand(insertHandLoanDetails);
@@ -471,7 +675,7 @@ public class PTCash extends HttpServlet {
 					}
 					
 				}
-				else if(paymode.equals("Transfer"))
+				else if(paymode.equals("TRANSFER"))
 				{
 					String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) VALUES ("+handLoanDetailsBalance.get(0)+",'"+date+"',"+amount+","+0+",'TRANSFER','',"+newHandLoanBalance+")";
 					int insertStatus=gd.executeCommand(insertHandLoanDetails);
@@ -556,7 +760,7 @@ public class PTCash extends HttpServlet {
 			String handloan_id=gd.getData(maxid).get(0).toString();
 			
 					
-			if(paymode.equals("Cash"))
+			if(paymode.equals("CASH"))
 			{
 				String insert_query1="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
 				System.out.println("cash:"+insert_query1);

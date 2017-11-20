@@ -133,7 +133,7 @@
 				
 		<div class="widget-box">
           <div class="widget-title">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="myTab">
               <li class="active"><a data-toggle="tab" href="#tab1">Petty Cash</a></li>
               <li><a data-toggle="tab" href="#tab2">Hand Loan Bank</a></li>
             </ul>
@@ -161,6 +161,7 @@
 										%>
 										<input type="date" name="date" value="<%=requireddate%>"
 											class="span4">
+											<input type="hidden" id="changeTab" value="<%=request.getAttribute("tab")%>">
 									</div>
 								</div>
 								<%
@@ -337,6 +338,8 @@
 												<input type="hidden" id="status" name="status"  value="Old" placeholder="Name" />
 												<datalist id="getHandLoanName"></datalist>
 												<span class="badge badge-inverse" id="addNewH" onclick="newHandLoaner()" title="Add New"><i class="icon-plus"></i></span>
+			
+			
 											</div>
 										</div>
 										
@@ -364,8 +367,8 @@
 										<div class="control-group" style="">
 											<label class="control-label">Payment Mode : </label>
 											<div class="controls">
-												 <input type="radio" value="Cheque" style="margin-left: 1%;" name="payModep"	onclick="displayBank('bankDetails', 'chequeDetails')" checked/>
-												Cheque <input type="radio" value="Transfer"	style="margin-left: 1%;" name="payModep"	onclick="displayBank('bankDetails')" /> Transfer
+												 <input type="radio" value="CHEQUE" style="margin-left: 1%;" name="payModep"	onclick="displayBank('bankDetails', 'chequeDetails')" checked/>
+												Cheque <input type="radio" value="TRANSFER"	style="margin-left: 1%;" name="payModep"	onclick="displayBank('bankDetails')" /> Transfer
 											</div>
 										</div>
 				
@@ -488,14 +491,14 @@
 											<div class="control-group">
 												<label class="control-label">Date</label>
 	    										<div class="controls">
-	                                				<input type="text" id="uDate" name="" readonly>
+	                                				<input type="text" id="uDate" name="uDate" readonly>
 	                                				<input type="text" id="detailsId" name="detailsId">
 	                                			</div>
 											</div>
 											<div class="control-group">
 												<label class="control-label">Name</label>
 	    										<div class="controls">
-	                                				<input type="text" id="uName" name="" readonly>
+	                                				<input type="text" id="uName" name="uName" readonly>
 	                                				<input type="text" id="handLoanId" name="handLoanId">
 	                                			</div>
 											</div>
@@ -516,7 +519,7 @@
 											<div class="control-group">
 												<label class="control-label">Mode</label>
 	    										<div class="controls">
-	                                				<input type="text" id="uMode" name="" readonly>
+	                                				<input type="text" id="uMode" name="uMode" readonly>
 	                                			</div>
 											</div>
 											<div class="control-group">
@@ -535,7 +538,7 @@
 									</div>
 								</div>
 										<div class="modal-footer">			
-											<input type="button" class="btn btn-success" id="" name="updateHandLoan" value="Update" />
+											<input type="submit" class="btn btn-success" id="" name="updateHandLoan" value="Update" />
 											<input type="button" class="btn btn-danger" data-dismiss="modal" id="submitbtn" value="Cancel" />
 										</div>
 									</div>
@@ -595,7 +598,7 @@
 						<div class="control-group" style="">
 							<label class="control-label">Payment Mode : </label>
 							<div class="controls">
-								<input type="radio" value="Cash" style="margin-left: 1%;" name="payMode" onclick="displayBank()" checked="checked" />Cash
+								<input type="radio" value="CASH" style="margin-left: 1%;" name="payMode" onclick="displayBank()" checked="checked" />Cash
 							</div>
 						</div>
 
@@ -846,7 +849,15 @@ function getAmt(name,id)
 	}
 }
 function myFunction() {
-		if(document.getElementById("snackbar")!=null)
+	
+	var checkTab=document.getElementById("changeTab").value;
+	if(checkTab=="tab2")
+	{
+		alert(checkTab);
+		$('#myTab a:last').tab('show');
+	}
+	
+	if(document.getElementById("snackbar")!=null)
 		{
 		    var x = document.getElementById("snackbar")
 		    x.className = "show";
