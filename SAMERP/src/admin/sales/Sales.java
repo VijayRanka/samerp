@@ -30,8 +30,37 @@ public class Sales extends HttpServlet {
 		
 		String searchVehicle = request.getParameter("searchVehicle");
 		
-		//ajax for geting update data
 		
+		// ajax to search vehicle		
+		if (searchVehicle != null)
+		{ 
+			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT';";
+			System.out.println("Query ===>  "+query);
+			List list = gd.getData(query);	
+			System.out.println("List ===>  "+list);
+			Iterator itr = list.iterator();
+			while (itr.hasNext()) 
+			{
+				out.print(itr.next() + ",");
+			}
+		}
+		
+		// ajax to search product
+		if(request.getParameter("q")!=null)
+		{
+			
+			String query="SELECT `id`,`name`,`gstper` FROM `product_master` WHERE `name` LIKE '"+request.getParameter("q")+"%'";
+			List details = gd.getData(query);
+
+			Iterator itr = details.iterator();
+			while (itr.hasNext()) 
+			{
+				out.print(itr.next() + ",");
+			}
+		}
+		
+		
+		//ajax for geting update data
 		if(request.getParameter("getUpdateData")!=null){
 			
 			String id=request.getParameter("id");
@@ -168,33 +197,6 @@ public class Sales extends HttpServlet {
 				}
 				
 		}
-			
-
-		// ajax to search vehicle		
-		if (searchVehicle != null)
-		{ 
-			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT'";
-			List list = gd.getData(query);			
-			Iterator itr = list.iterator();
-			while (itr.hasNext()) 
-			{
-				out.print(itr.next() + ",");
-			}
-		}
-		
-		// ajax to search product
-		if(request.getParameter("q")!=null)
-		{
-			
-			String query="SELECT `id`,`name`,`gstper` FROM `product_master` WHERE `name` LIKE '"+request.getParameter("q")+"%'";
-			List details = gd.getData(query);
-
-			Iterator itr = details.iterator();
-			while (itr.hasNext()) 
-			{
-				out.print(itr.next() + ",");
-			}
-		}
 		
 		if(request.getParameter("insertSaleDataSubmitBtn")!=null){
 			
@@ -288,12 +290,20 @@ public class Sales extends HttpServlet {
 					System.out.println("hi");
 					if(!debtorId.isEmpty())
 					{
-					
-						String insertExp_master="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
-						System.out.println(insertExp_master);
+						
+						String insertExp_masterForDeposit="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+								+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleDeposit+",'CASH','"+date+"','-','-')";
+						System.out.println(insertExp_masterForDeposit);
 				
-						gd.executeCommand(insertExp_master);
+						gd.executeCommand(insertExp_masterForDeposit);
+					
+						String insertExp_masterForDiesel="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
+						System.out.println(insertExp_masterForDiesel);
+				
+						gd.executeCommand(insertExp_masterForDiesel);
+						
+						
 					
 						if(vehicleAmount!=null||vehicleReading!=null||dieselInLiter!=null)
 						{

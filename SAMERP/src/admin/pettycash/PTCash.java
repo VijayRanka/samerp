@@ -29,7 +29,8 @@ public class PTCash extends HttpServlet {
 	    }
 	    return sum;
 	}
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 	}
 
@@ -502,7 +503,7 @@ public class PTCash extends HttpServlet {
 						cash.add(withdrawlAmt);
 						String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+bankAlias+"'";
 						List debtorId=gd.getData(getDebtorId);
-						String handLoanName=request.getParameter("hlName,"+i);
+						String handLoanName=request.getParameter("hlName,"+j);
 						String add="HL_";
 						String alias=add+handLoanName;
 						
@@ -511,7 +512,7 @@ public class PTCash extends HttpServlet {
 						List getDetails=gd.getData(handLoanDetails);
 						 
 						int addAmt=(int)getDetails.get(1);
-						int amt=Integer.parseInt(request.getParameter("hlAmt,"+i));
+						int amt=Integer.parseInt(request.getParameter("hlAmt,"+j));
 						cash.add(amt);
 						int updateAmt=addAmt+amt;
 						out.println("handloan new amt : "+updateAmt+"<br>");
