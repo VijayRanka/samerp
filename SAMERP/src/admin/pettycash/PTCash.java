@@ -420,6 +420,7 @@ public class PTCash extends HttpServlet {
 			int bankCount=Integer.parseInt(request.getParameter("bankCount"));
 			//int cash[]=new int[30];
 			ArrayList<Integer> cash=new ArrayList<>();
+			int updatedPettyBalance=0;
 			for(int i=0;i<=count;i++)
 			{
 				if(!request.getParameter("hlName,"+i).isEmpty())
@@ -440,7 +441,7 @@ public class PTCash extends HttpServlet {
 					
 					
 					String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
-							+ "VALUES ("+getDetails.get(0)+",'"+pettyDate+"',"+amt+","+0+",'Cash','',"+updateAmt+")";
+							+ "VALUES ("+getDetails.get(0)+",'"+pettyDate+"',"+amt+","+0+",'CASH','',"+updateAmt+")";
 					int insertHandLoanStatus=gd.executeCommand(insertHandLoanDetails);
 					if(insertHandLoanStatus>0)
 					{
@@ -455,8 +456,15 @@ public class PTCash extends HttpServlet {
 					String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
 					List lastPettyBalance=gd.getData(getLastPettyBalance);
 					
+					if(!lastPettyBalance.isEmpty())
+					{
+						updatedPettyBalance=amt+(int)lastPettyBalance.get(1);
+					}
+					else
+					{
+						updatedPettyBalance=amt+0;
+					}
 					
-					int updatedPettyBalance=amt+(int)lastPettyBalance.get(1);
 					
 					String insertPetty="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) VALUES ('"+pettyDate+"',"+0+","+amt+","+debtorId.get(0)+","+updatedPettyBalance+")";
 					int insertStatus=gd.executeCommand(insertPetty);
@@ -521,7 +529,8 @@ public class PTCash extends HttpServlet {
 						
 						int newBankBalance=bankBalance-withdrawlAmt;
 						String insertBankdetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-								+ "VALUES ("+getBankDetails.get(0)+",'"+pettyDate+"',"+withdrawlAmt+","+0+",'HandLoan',"+debtorId.get(0)+","+newBankBalance+")";
+								+ "VALUES ("+getBankDetails.get(0)+",'"+pettyDate+"',"+withdrawlAmt+","+0+",'HANDLOAN',"+debtorId.get(0)+","+newBankBalance+")";
+						System.out.println(insertBankdetails);
 						int bankDetailsStatus=gd.executeCommand(insertBankdetails);
 						if(bankDetailsStatus>0)
 						{
@@ -535,7 +544,15 @@ public class PTCash extends HttpServlet {
 						String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
 						List lastPettyBalance=gd.getData(getLastPettyBalance);
 						
-						int updatedPettyBalance=withdrawlAmt+(int)lastPettyBalance.get(1);
+						if(!lastPettyBalance.isEmpty())
+						{
+							updatedPettyBalance=withdrawlAmt+(int)lastPettyBalance.get(1);
+						}
+						else
+						{
+							updatedPettyBalance=withdrawlAmt+0;
+						}
+						
 						
 						String insertPetty="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) VALUES ('"+pettyDate+"',"+0+","+withdrawlAmt+","+debtorId.get(0)+","+updatedPettyBalance+")";
 						int insertStatus=gd.executeCommand(insertPetty);
@@ -621,6 +638,7 @@ public class PTCash extends HttpServlet {
 						{
 							System.out.println(amount+" New Cheque Inserted "+newBankBalance);
 							request.setAttribute("status", "Rs."+amount+" HandLoan Added in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+							request.setAttribute("tab", "tab2");
 							
 							RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 							rq.forward(request, response);
@@ -649,6 +667,7 @@ public class PTCash extends HttpServlet {
 						{
 							System.out.println(amount+" New Transfer Inserted "+newBankBalance);
 							request.setAttribute("status", "Rs."+amount+" HandLoan Transfer in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+							request.setAttribute("tab", "tab2");
 							
 							RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 							rq.forward(request, response);
@@ -684,6 +703,7 @@ public class PTCash extends HttpServlet {
 							System.out.println(newHandLoanBalance+" Old Cheque Inserted "+newBankBalance);
 							
 							request.setAttribute("status", "Rs."+amount+" HandLoan Added in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+							request.setAttribute("tab", "tab2");
 							
 							RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 							rq.forward(request, response);
@@ -710,6 +730,7 @@ public class PTCash extends HttpServlet {
 						{
 							System.out.println(newHandLoanBalance+" Old Transfer Inserted "+newBankBalance);
 							request.setAttribute("status", "Rs."+amount+" HandLoan Transfer in Bank. Total Bank Balance of "+bank_name+" is Rs. "+newBankBalance);
+							request.setAttribute("tab", "tab2");
 							
 							RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 							rq.forward(request, response);
