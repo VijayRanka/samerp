@@ -76,6 +76,8 @@ public class AddVehicles extends HttpServlet {
 				request.setAttribute("status", "Vehicle add Fail");
 			}
 			
+		
+			
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addVehicles.jsp");
 			rd.forward(request, response);
 		}
