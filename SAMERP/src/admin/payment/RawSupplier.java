@@ -290,7 +290,9 @@ public class RawSupplier extends HttpServlet {
 				int total = Integer.parseInt(l.get(0).toString()) - Integer.parseInt(paidAmt);
 				
 				String insertQuery1="INSERT INTO `total_supplier_payment_master`(`supplier_id`, `payment_id`, `paid_amt`, `date`, `total_remaining`) VALUES ("+supid+", (select max(id) from supplier_payment_master), (SELECT `paid_amt` FROM `supplier_payment_master` WHERE id=(SELECT MAX(id) from supplier_payment_master)), '"+requiredDate+"' , "+total+")";
-				int status1=gd.executeCommand(insertQuery1);				
+				int status1=gd.executeCommand(insertQuery1);	
+				
+				rdGet.commonExpEntry("4", debtorId, "", paidAmt, payMode, bankInfo, chequeNo, requiredDate);
 			}
 			
 			System.out.println("bankExit : "+bankExit);

@@ -13,20 +13,6 @@
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
-<link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/colorpicker.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/bs_modal_transition.css" /> -->
-
-
-
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
@@ -137,6 +123,7 @@ display: none;}
     </div>
 </div>
   <div class="row-fluid">
+  <input type="hidden" id="getErrorStatus" <%if(request.getAttribute("payError")!=null){%>value="<%=request.getAttribute("payError")%>"<%}else{ %>value="null"<%} %>/>
   	<div class="span12">
   	 <div class="widget-box">
           <div class="widget-title">
@@ -158,6 +145,7 @@ display: none;}
         </div>
         <div class="widget-content nopadding">
           <form action="/SAMERP/Expenses.do" method="post" class="form-horizontal">
+          
           <div class="control-group">
               <label class="control-label">Date :</label>
               <div class="controls">
@@ -165,9 +153,10 @@ display: none;}
               SysDate sd=new SysDate();
               String[] sdDemo=sd.todayDate().split("-");
               %>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" class="span6">
+                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" autofocus class="span6">
                 </div>
             </div>
+            
            <div class="control-group">
               <label class="control-label">Expense-Type :</label>
               <div class="controls">
@@ -256,8 +245,8 @@ display: none;}
               </div>
             </div>
             <div class="form-actions">
-              <center><button type="submit" name="save" class="btn btn-success pull-center">Save</button>
-              <a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger">Cancel</button></a>
+              <center><button type="submit" name="save" class="btn btn-success pull-center" style="margin-right: 10px;">Save</button>
+              <a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger">Exit</button></a>
               </center>
             </div>
           </form>
@@ -271,44 +260,17 @@ display: none;}
             <table class="table table-bordered data-table">
             
             <div class="controls" style="float: right;position: relative;right: 280px;">
-              <span  style="position: relative;bottom: 5px;"><b id="dateFun">Start Date:</b></span>
+              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
               <% sdDemo=sd.todayDate().split("-");
               %>
-                <input name="date" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getExpData(this.value)">
-                <button type="button" onclick="hello()">hello</button>
-                <script>
-                var x;
-                function getExpData(value)
-                {
-                	
-                	if(x!=null){
-                		var lastDate=value;
-                		alert(lastDate+","+x);
-                	}
-                	else
-                		{
-                		
-                		document.getElementById("dateFun").innerHTML="Final Date";
-                		x=value;
-                		
-                		}
-                }
-                function hello()
-                {
-                	alert(x);
-                }
-                
-                
-                </script>
+                <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
+                  <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
+                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
                 </div> 
-                <div class="controls" style="float: right;position: relative;right: 280px;">
-                <input name="date" type="text" placeholder="Dates"><span style="font-size: 20px;position: relative;right: 15px;bottom: 2px">x</span>
-                </div> 
-                
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Date</th>
+                  <th style="width:80px">Date</th>
                   <th>Name</th>
                   <th>Amount</th>
                   <th>Payment Mode</th>
@@ -317,11 +279,12 @@ display: none;}
                   <th>Expenses Type</th>
                   <th>Debtor Type</th>
                   <th>Cheque Details</th>
-                  <th>Description</th>
+                  <th>Bank Info</th>
+                  <th>Reason</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="wholeDataList">
 	              <%
 	             
 	              List getExpData=rd.getExpensesDetails();
@@ -354,8 +317,11 @@ display: none;}
                   
                   <% Object otherdetailsdata=getexpitr.next(); %>
                   <td style="text-align: center"><%if(otherdetailsdata.equals("")){ %>-<%} else{%><%=otherdetailsdata %><%} %></td>
-                  <td style="text-align: center"><%=getexpitr.next() %></td>
-                  <td style="text-align: center"><a data-toggle="modal" href="#update" onclick="getUpdateData(<%=dataId%>)">Update</a>|<a href="/SAMERP/Expenses.do?deleteId=<%=dataId%>">Delete</a></td>
+                  <%String bankInfo=getexpitr.next().toString(); %>
+                  <td style="text-align: center"><% if(!bankInfo.equals("0")){%><%=rd.getBankById(bankInfo.toString())%><%}else{%>-<%}%></td>
+                  <%String reason=getexpitr.next().toString(); %>
+                  <td style="text-align: center"><% if(reason.equals("")){%>-<%}else{%><%=reason%><%}%></td>
+                  <td style="text-align: center"><a data-toggle="modal" href="#update" onclick="getUpdateData(<%=dataId%>)">Update</a></td>
                 </tr>
                 <%i++;}} %>
               </tbody>
@@ -404,7 +370,7 @@ display: none;}
 	        	</div>
 	        	
 	        	<div class="control-group">
-	                  <label class="control-label">Name</label>
+	                 		 <label class="control-label">Name</label>
 	                  <div class="controls">
 	                    <input type="text" id="uName" name="uName" onkeyup="this.value=this.value.toUpperCase()"/>
 	         			</div>
@@ -580,6 +546,66 @@ display: none;}
 </div>
 
 <script>
+
+function getData(value,id)
+{
+	if(document.getElementById("fromDate").value=="" || document.getElementById("toDate").value=="")
+		{
+		alert("Choose Right Date Format");
+		}
+	else{
+		var firstDate="";
+		var lastDate="";
+		if(id==1)
+		{
+			firstDate=value;
+			lastDate=document.getElementById("toDate").value;
+		}
+	    else if(id==2)
+		{
+			firstDate=document.getElementById("fromDate").value;
+			lastDate=value;
+		}
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var demoStr = this.responseText.split(",");
+					if(demoStr=="")
+						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+					else{
+					var a="";
+					var count=1;
+					for(var i=0;i<demoStr.length-1;i=i+12)
+						{
+						 a+= "<tr>"+
+						"<td style='text-align: center'>"+count+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+						"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+						"<td style='text-align: center'' >"+demoStr[i+7]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+11]+"</td>"+
+						" <td style='text-align: center'>"+
+						"<a data-toggle='modal' href='#update' onclick='getUpdateData("+demoStr[i]+")'>Update</a></td>"+
+						"<tr>";
+						count++;
+						}
+					document.getElementById("wholeDataList").innerHTML=a;
+					}
+				
+				}
+					
+				};
+			xhttp.open("POST", "/SAMERP/Expenses.do?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();
+		}
+}
 function onUamount()
 {
 	if(document.getElementById('uAmount').readOnly==false)
@@ -625,9 +651,10 @@ function displayBank(id, id1){
 	}
 }
 function myFunction() {
-	<%if(request.getAttribute("payError")!=null){%>
-	var payError = "<%=request.getAttribute("payError") %>";
 	
+	if(document.getElementById("getErrorStatus").value!="null")
+	{
+	var payError = document.getElementById("getErrorStatus").value;
 	if(payError.split("_")[1]==='c')
 		{
 		
@@ -644,7 +671,7 @@ function myFunction() {
 				$('#payStatus').text(payError.split("_")[0]);
 				$('#pettyCashError').modal('show');
 					}
-			if(payError.split("_")[2]==='-2')
+			if(payError.split("_")[2]==='2')
 					{
 				document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
 				$('#payStatus').text(payError.split("_")[0]);
@@ -665,14 +692,14 @@ function myFunction() {
 					$('#payStatus').text(payError.split("_")[0]);
 					$('#pettyCashError').modal('show');
 						}
-				if(payError.split("_")[2]==='-2')
+				if(payError.split("_")[2]==='2')
 						{
 					document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/settings/addAccountDetails.jsp'");
 					$('#payStatus').text(payError.split("_")[0]);
 					$('#pettyCashError').modal('show');
 						}
 		}
-	<%}%>
+	}
 	document.getElementById("expenses_type_name").focus();
     var x = document.getElementById("snackbar");
     if(x!=null)
@@ -680,6 +707,7 @@ function myFunction() {
 	    x.className = "show";
 	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
     	}
+    document.getElementById("DataTables_Table_0_wrapper").children[0].children[0].setAttribute("style","width:150px;");
     
 }
 

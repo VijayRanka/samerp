@@ -299,6 +299,14 @@
           </div>
           <div class="widget-content nopadding">
             <table class="table table-bordered" id="pastPurchaseTable">
+            <div class="controls" style="float: right;position: relative;right: 68px; bottom: 33px">
+              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
+              <% SysDate sd=new SysDate(); String[] sdDemo; sdDemo=sd.todayDate().split("-");
+              %>
+                <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
+                  <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
+                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
+                </div> 
               <thead>
                 <tr>
                   <th>Sr.No.</th>
@@ -582,20 +590,20 @@
 						<div class="control-group">
 							<label class="control-label">Supplier Business Name</label>
 							<div class="controls">
-								<input type="text" id="supBname" name="suppbusinesname" onkeyup="this.value=this.value.toUpperCase()" class="span3" autofocus placeholder="Supplier Business Name" />
+								<input type="text" id="supBname" name="suppbusinesname"  onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" class="span3" placeholder="Supplier Business Name" />
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label">Supplier Name</label>
 							<div class="controls">
-								<input type="text" id="supName" name="suppname" onkeyup="this.value=this.value.toUpperCase()" class="span3" placeholder="Supplier Name" />
+								<input type="text" id="supName" name="suppname" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" class="span3" placeholder="Supplier Name" />
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label">Supplier Address</label>
 							<div class="controls">
 								<!-- <input type="text" id="supAdd" name="address" onkeyup="this.value=this.value.toUpperCase()" class="span3" placeholder="Supplier Address" /> -->
-								<textarea type="text" class="span3" id="supAdd" name="address" onkeyup="this.value=this.value.toUpperCase()" placeholder="Supplier Address" pattern="[a-z A-Z0-9]*" maxlength="200" required></textarea>
+								<textarea type="text" class="span3" id="supAdd" name="address" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z 0-9]*" placeholder="Supplier Address" pattern="[a-z A-Z0-9]*" maxlength="200" required></textarea>
 							</div>
 						</div>
 						<div class="control-group">
@@ -607,7 +615,7 @@
 						<div class="control-group">
 							<label class="control-label">Supplier Balance</label>
 							<div class="controls">
-								<input type="text" id="supBal" name="openingbalance" onkeyup="this.value=this.value.toUpperCase()" class="span3" placeholder="Supplier Balance" />
+								<input type="text" id="supBal" name="openingbalance" onkeyup="this.value=this.value.toUpperCase()" pattern="[0-9]*" class="span3" placeholder="Supplier Balance" />
 							</div>
 						</div>
 						<div class="control-group">
@@ -623,8 +631,8 @@
 						<input type="hidden" name="productPurchasePage" value="productPurchase" />
 						
 						<div class="modal-footer">
-							<input type="submit" id="submitbtn" name="insertsupply" class="btn btn-success" onclass="btn btn-primary" value="Submit" /> 
-							<input type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
+							<button type="submit" id="submitbtn" name="insertsupply" class="btn btn-success" onclass="btn btn-primary">Submit</button> 
+							<button type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
 					</form>
 				</div>
@@ -701,9 +709,8 @@
 						<input type="hidden" name="productPurchasePage1" value="productPurchase" />
 						
 						<div class="modal-footer">
-							<button type="submit" name="insert" class="btn btn-success">Submit</button>
-							&nbsp;&nbsp;&nbsp;
-							<button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 20px">Cancel</button>
+							<button type="submit" name="insert" class="btn btn-success">Submit</button>	&nbsp;&nbsp;&nbsp;
+							<button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: 20px">Close</button>
 						</div>
 					</form>
 				</div>
@@ -748,6 +755,66 @@
 
 window.counter = 0;
 
+//vijay data ajax b/w dates
+
+function getData(value,id)
+{
+	if(document.getElementById("fromDate").value=="" || document.getElementById("toDate").value=="")
+		{
+		alert("Choose Right Date Format");
+		}
+	else{
+		/* var firstDate="";
+		var lastDate="";
+		if(id==1)
+		{
+			firstDate=value;
+			lastDate=document.getElementById("toDate").value;
+		}
+	    else if(id==2)
+		{
+			firstDate=document.getElementById("fromDate").value;
+			lastDate=value;
+		}
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var demoStr = this.responseText.split(",");
+					if(demoStr=="")
+						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+					else{
+					var a="";
+					var count=1;
+					for(var i=0;i<demoStr.length-1;i=i+11)
+						{
+						 a+= "<tr>"+
+						"<td style='text-align: center'>"+count+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+						"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+						"<td style='text-align: center'' >"+demoStr[i+7]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+						"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+						" <td style='text-align: center'>"+
+						"<a data-toggle='modal' href='#update' onclick='getUpdateData("+demoStr[i]+")'>Update</a></td>"+
+						"<tr>";
+						count++;
+						}
+					document.getElementById("wholeDataList").innerHTML=a;
+					}
+				
+				}
+					
+				};
+			xhttp.open("POST", "/SAMERP/ProductPurchase?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();*/
+		} 
+}
 
 function myFunction1() {
 	  var input, filter, table, tr, td, i, j, index, num, span1, t;
@@ -1122,6 +1189,7 @@ g.onkeyup = function() {
     }
 }
 
+
 </script>
 
 <script src="/SAMERP/config/js/jquery.min.js"></script> 
@@ -1139,6 +1207,15 @@ g.onkeyup = function() {
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
 <script src="/SAMERP/config/js/fullcalendar.min.js"></script>
 
+<script type="text/javascript">
+$('#add-supplier').on('shown.bs.modal', function () {
+    $('#suppbusinesname').focus();
+})
 
+$('#add-client').on('shown.bs.modal', function () {
+    $('#coname').focus();
+})
+
+</script>
 </body>
 </html>

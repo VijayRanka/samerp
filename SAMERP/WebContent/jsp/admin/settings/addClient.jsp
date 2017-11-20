@@ -192,7 +192,7 @@
 								</div>
 								<div class="form-actions" style="padding-left: 350px">
 									<button type="submit" name="insert" class="btn btn-success">Submit</button>&nbsp;&nbsp;&nbsp;
-									 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+									 <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 								</div>
 							</form>
 						</div>
@@ -501,7 +501,7 @@ function showModal(){
 
 function setFocusToTextBox()
 {
-	document.getElementById("Updateconame").focus();
+	document.getElementById("coname").focus();
 	showModal();   	
 	 myFunction();
 }

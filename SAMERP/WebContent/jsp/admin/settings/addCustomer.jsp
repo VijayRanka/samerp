@@ -174,8 +174,8 @@
 								<div class="form-actions">
 									<button type="submit" name="insertorganizer" id="custSubmit"
 										class="btn btn-success"
-										style="position: relative; right: 700px; float: right;" style="background:#1196c1;">Submit</button>
-									<a href="/SAMERP/index.jsp"><button type="button"
+										style="position: relative; right: 682px; float: right;">Submit</button>
+									<a href="/SAMERP/dashboard.jsp"><button type="button"
 											class="btn btn-danger "
 											style="position: relative; right: 550px; float: right;">Exit</button></a>
 								</div>
@@ -339,13 +339,12 @@
 							</div>
 						</div>
 					</div>
-			</div>
+				</div>
 			<div class="modal-footer">
 				<div class="form-actions">
-							<button type="submit" name="insertorganizer" id="custSubmitUpdate"
-								class="btn btn-success"
-								style="float: right;" style="background:#1196c1;">Submit</button>
-							</div>
+				<button type="submit" name="insertorganizer" id="custSubmitUpdate"	class="btn btn-success"	style="float: right;margin-left: 10px;margin-right:64px; " >Update</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right: -153px;">Close</button>
+				</div>
 
 			</div>
 			</form>

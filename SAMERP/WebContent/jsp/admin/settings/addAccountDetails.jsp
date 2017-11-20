@@ -137,8 +137,8 @@
                 </div>
           
               <div class="form-actions" align="center">
-                <input class="btn btn-success" name="insertAccDetails" type="submit" value="OK" />
-                <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+                <button type="submit" name="insertAccDetails" class="btn btn-success">Submit</button>&nbsp;&nbsp;&nbsp;
+                <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
                 
                 
                 <div id="status"></div>
@@ -201,7 +201,7 @@
 
 <!--end-main-container-part-->
 
-<div class="modal hide fade zoom-out" id="updateAccDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal hide fade zoom-out" id="updateAccDetails" role="dialog" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -216,7 +216,7 @@
                   <label class="control-label">Bank Name</label>
                   <div class="controls">
                   <input type="hidden" id="modalId"  name="modalId"/>
-                    <input type="text" id="modalName" name="modalbName" placeholder="Bank Name" pattern="[a-z A-Z]*" onkeyup="this.value=this.value.toUpperCase()" required />
+                    <input type="text" id="modalName" autofocus name="modalbName" placeholder="Bank Name" pattern="[a-z A-Z]*" onkeyup="this.value=this.value.toUpperCase()" required />
          			</div>
         	</div>
         	
@@ -250,8 +250,12 @@
         	</div>
       
       <div class="modal-footer">
-        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" name="Update" class="btn btn-primary">Save changes</button></div>
+     	
+       	 <button type="submit" name="Update" class="btn btn-success">Update</button>
+		<button type="button" class="btn btn-danger" style="margin-left: 10px;" data-dismiss="modal">Close</button>
+					
+       
+      </div>
       </div>
       </div>
       </form>

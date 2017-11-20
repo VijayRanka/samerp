@@ -112,7 +112,7 @@
 								<div class="control-group">
 									<label class="control-label">Suppliers-Business Name:</label>
 									<div class="controls">
-										<input type="text" name="suppbusinesname" class="span7"
+										<input type="text" name="suppbusines_name" id="supp_busi_name" class="span7"
 											placeholder="Suppliers-Business Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
 									</div>
 								</div>
@@ -161,8 +161,8 @@
 									</div>
 								</div>
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="insertsupply" class="btn btn-success" style="background:#1196c1;">Submit</button>
-								 <a href="/SAMERP/index.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
+									<button type="submit" name="insertsupply" class="btn btn-success" >Submit</button>
+								 <a href="/SAMERP/dashboard.jsp" id="cancelbtn"  class="btn btn-danger">Exit</a>
 
 								</div>
 							</form>
@@ -470,7 +470,7 @@ function showModal(){
 
 function setFocusToTextBox()
 {
-	document.getElementById("update_business_name").focus();	
+	document.getElementById("supp_busi_name").focus();	
 	showModal(); 
 	myFunction();
 	 

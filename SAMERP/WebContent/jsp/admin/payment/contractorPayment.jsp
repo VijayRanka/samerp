@@ -29,74 +29,45 @@
 
 <style>
 #snackbar {
-	visibility: hidden;
-	min-width: 250px;
-	margin-left: -125px;
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	border-radius: 2px;
-	padding: 16px;
-	position: fixed;
-	z-index: 1;
-	left: 50%;
-	bottom: 30px;
-	font-size: 15px;
-	border-radius: 50px 50px;
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 20px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 80px;
+    font-size: 14px;
 }
 
 #snackbar.show {
-	visibility: visible;
-	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-@
--webkit-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 80px; opacity: 1;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 80px; opacity: 1;}
 }
 
-}
-@
-keyframes fadein {
-	from {bottom: 0;
-	opacity: 0;
+@-webkit-keyframes fadeout {
+    from {top: 80px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
 }
 
-to {
-	bottom: 30px;
-	opacity: 1;
-}
-
-}
-@
--webkit-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
-
-}
-@
-keyframes fadeout {
-	from {bottom: 30px;
-	opacity: 1;
-}
-
-to {
-	bottom: 0;
-	opacity: 0;
-}
+@keyframes fadeout {
+    from {top: 80px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }
 </style>
 </head>
@@ -150,6 +121,7 @@ to {
 				RequireData rq = new RequireData();
 			%>
 			<div class="row-fluid">
+			<input type="hidden" id="getErrorStatus" <%if(request.getAttribute("payError")!=null){%>value="<%=request.getAttribute("payError")%>"<%}else{ %>value="null"<%} %>/>
 				<div class="span12">
 					<div class="widget-box">
 						<div class="widget-title">
@@ -169,7 +141,7 @@ to {
 										<div class="controls">
 											<select name="contractor_name" id="selectid"
 												onchange="setPayId()" class="span6" placeholder="Select Team">
-												<option selected>Select Contractor</option>
+												<option selected value="select" >Select Contractor</option>
 												<%
 													List details = rq.getContractorListDetails();
 													if (details != null) {
@@ -338,6 +310,15 @@ to {
 							</div>
 							<div class="widget-content nopadding">
 								<table class="table table-bordered data-table">
+								<div class="controls" style="float: right;position: relative;right: 280px;">
+					              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
+					              <%SysDate sd=new SysDate();
+					              String[] sdDemo=sd.todayDate().split("-");
+					              %>
+					                <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
+					                  <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
+					                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
+					                </div> 
 									<thead>
 										<tr>
 											<th>S.No.</th>
@@ -356,7 +337,7 @@ to {
 											
 										</tr>
 									</thead>
-									 <tbody>
+									 <tbody id="wholeDataList">
 									<%if(request.getParameter("ppid")!=null){
 									List demoList=rq.getContTransactions(request.getParameter("ppid").toString());
 									if(demoList!=null)
@@ -379,8 +360,14 @@ to {
 									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
 									<td><%=itr.next() %></td>
-									<td><%=itr.next() %></td>
-									<td><%=itr.next() %></td>
+									<%String cheque=itr.next().toString();%>
+									<%String desc=itr.next().toString();%>
+									<%if(!desc.equals("")){%>
+									<td><%=cheque %></td>
+									<td><%=rq.getBankById(desc)%></td><%}else{%>
+									<td>-</td>
+									<td>-</td>
+									<%} %>
 									<td><%=itr.next() %></td>
 									</tr>	
 									<%itr.next();
@@ -575,7 +562,7 @@ to {
 		</div>
 		<div class="modal-footer">
 		        <input type="hidden" value="<%=request.getParameter("ppid") %>" name="contId"/>
-		         <input type="text" name="dateFromTo" id="dateFromTo"/>
+		         <input type="hidden" name="dateFromTo" id="dateFromTo"/>
 		          <input type="hidden" name="deposit" id="deposit"/>
 		           <input type="hidden" name="loadingCharges" id="loadingCharges"/>
 				<input type="submit" id="paymentSubmitbtn" name="paymentSubmit" class="btn btn-primary" value="Submit" />
@@ -595,6 +582,67 @@ to {
 
 		<script type="text/javascript"> 
 		
+	function getData(value,id)
+	{
+		if(document.getElementById("fromDate").value=="" || document.getElementById("toDate").value=="")
+			{
+			alert("Choose Right Date Format");
+			}
+		else{
+			var firstDate="";
+			var lastDate="";
+			if(id==1)
+			{
+				firstDate=value;
+				lastDate=document.getElementById("toDate").value;
+			}
+		    else if(id==2)
+			{
+				firstDate=document.getElementById("fromDate").value;
+				lastDate=value;
+			}
+				var contId=document.getElementById("selectid").value;
+				var xhttp;
+				xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						var demoStr = this.responseText.split(",");
+						if(demoStr[0]==0)
+							document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+						else
+						{
+						var a="";
+						var count=1;
+						for(var i=0;i<demoStr.length-2;i=i+13)
+							{
+							 a+= "<tr>"+
+							"<td style='text-align: center'>"+count+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+							"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+7]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+11]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+12]+"</td>"+
+							"<tr>";
+							count++;
+							}
+						document.getElementById("wholeDataList").innerHTML=a;
+						}
+					
+					}
+						
+					};
+				xhttp.open("POST", "/SAMERP/ContractorPayment?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate+"&contraId="+contId, true);
+				xhttp.send();
+			}
+	}
+		
 		function getParameterByName(name, url) {
 		    if (!url) url = window.location.href;
 		    name = name.replace(/[\[\]]/g, "\\$&");
@@ -608,7 +656,7 @@ to {
 		function getPaymentEntryModal()
 		{
 			var x=document.getElementById("prevRemAmount").value;
-			var contId=getParameterByName("ppid").trim();
+			var contId=document.getElementById("selectid").value;
 			var xhttp;
 			xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -694,7 +742,7 @@ to {
 				var startDate=getDate(myArray[0]);
 				var lastDate=getDate(myArray[myArray.length-1]);
 				document.getElementById("payHeading").innerHTML="(from "+startDate.split("-")[2]+"-"+startDate.split("-")[1]+"-"+startDate.split("-")[0]+" to "+lastDate.split("-")[2]+"-"+lastDate.split("-")[1]+"-"+lastDate.split("-")[0]+")";
-				var contId=getParameterByName("ppid").trim();
+				var contId=document.getElementById("selectid").value;
 				var xhttp;
 				xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
@@ -755,6 +803,7 @@ to {
 			var getInitial;
 			var status=false;
 			var count=document.getElementById("megaCount").value;
+
 			for(var i=1;i<=count;i++)
 				{
 				
@@ -932,10 +981,66 @@ to {
 		}
 			function setPayId() {
 				var s = document.getElementById("selectid").value;
+				if(s=="select")
+					{
+					alert("PLEASE SELECT CONTRACTOR FIRST");
+					window.location.href="/SAMERP/jsp/admin/payment/contractorPayment.jsp";
+					}
+				else
 				window.location.href="/SAMERP/jsp/admin/payment/contractorPayment.jsp?ppid="+s;
 			}
 
 			function myFunction() {
+				
+				if(document.getElementById("getErrorStatus").value!="null"){
+					var payError = document.getElementById("getErrorStatus").value;
+					
+					if(payError.split("_")[1]==='c')
+					{
+					
+						if(payError.split("_")[2]==='0')
+								{
+							document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+							$('#payStatus').text(payError.split("_")[0]);
+							$('#pettyCashError').modal('show');
+								}
+						
+						if(payError.split("_")[2]==='-1')
+								{
+							document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+							$('#payStatus').text(payError.split("_")[0]);
+							$('#pettyCashError').modal('show');
+								}
+						if(payError.split("_")[2]==='2')
+								{
+							document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+							$('#payStatus').text(payError.split("_")[0]);
+							$('#pettyCashError').modal('show');
+								}
+					}
+					else if(payError.split("_")[1]==='b')
+					{
+							if(payError.split("_")[2]==='0')
+									{
+								document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+								$('#payStatus').text(payError.split("_")[0]);
+								$('#pettyCashError').modal('show');
+									}
+							if(payError.split("_")[2]==='-1')
+									{
+								document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+								$('#payStatus').text(payError.split("_")[0]);
+								$('#pettyCashError').modal('show');
+									}
+							if(payError.split("_")[2]==='2')
+									{
+								document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/settings/addAccountDetails.jsp'");
+								$('#payStatus').text(payError.split("_")[0]);
+								$('#pettyCashError').modal('show');
+									}
+					}
+					}
+				
 				 if( document.getElementById("snackbar")!=null)
 					 {
 						var x = document.getElementById("snackbar")

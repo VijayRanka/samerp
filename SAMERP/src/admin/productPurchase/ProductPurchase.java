@@ -35,6 +35,17 @@ public class ProductPurchase extends HttpServlet {
 		
 		String counter =request.getParameter("counter");
 		
+		//ajax data b/w dates
+		
+		if(request.getParameter("getDateData")!=null)
+		{
+			String startDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			
+			
+			
+		}
+		
 		// ajax to search product
 		if(request.getParameter("q")!=null){
 			
