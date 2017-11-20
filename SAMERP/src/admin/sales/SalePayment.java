@@ -142,9 +142,11 @@ public class SalePayment extends HttpServlet {
 			String insertPayment;
 			int flag=0;
 			
-			
+			int paymentAmount=Integer.parseInt(paidAmt);
+			                           
 			int tatalRemaining=Integer.parseInt(remaminAmt)-Integer.parseInt(paidAmt);
 			
+			String debtorId=gd.getData("SELECT id FROM debtor_master WHERE type='CL_"+gd.getData("SELECT client_details.client_organization_name FROM client_details WHERE client_details.client_id="+clientid).get(0).toString()+"'").get(0).toString();
 			
 			if(payMode.equals("Cash")){
 				insertPayment="INSERT INTO `client_payment_master`(`client_id`, `date`, `paid_amt`, `mode`, `total_remaining_amt`) "
@@ -157,8 +159,6 @@ public class SalePayment extends HttpServlet {
 				
 				balance+=Integer.parseInt(paidAmt);
 				
-				String debtorId=gd.getData("SELECT id FROM debtor_master WHERE type='CL_"+gd.getData("SELECT client_details.client_organization_name FROM client_details WHERE client_details.client_id="+clientid).get(0).toString()+"'").get(0).toString();
-
 				String updatepetty="INSERT INTO `petty_cash_details`(`date`, `credit`, `debtor_id`, `balance`) VALUES ('"+paidDate+"',"+paidAmt+","+debtorId+","+balance+")";
 				gd.executeCommand(updatepetty);
 				flag=1;
@@ -168,12 +168,18 @@ public class SalePayment extends HttpServlet {
 				insertPayment="INSERT INTO `client_payment_master`(`client_id`, `date`, `paid_amt`, `mode`, `bank_id`, `cheque_no`, `total_remaining_amt`)"
 						+ " VALUES ("+clientid+",'"+paidDate+"',"+paidAmt+",'"+payMode+"',"+bankid+","+chequeNo+","+tatalRemaining+")";
 				gd.executeCommand(insertPayment);
+				
+				rd.badEntry(bankid, paidDate, 0, paymentAmount, payMode+"_"+chequeNo, debtorId);
+				
 				flag=1;
 			}
 			else{
 				insertPayment="INSERT INTO `client_payment_master`(`client_id`, `date`, `paid_amt`, `mode`, `bank_id`, `total_remaining_amt`)"
 						+ " VALUES ("+clientid+",'"+paidDate+"',"+paidAmt+",'"+payMode+"',"+bankid+","+tatalRemaining+")";
 				gd.executeCommand(insertPayment);
+				
+				rd.badEntry(bankid, paidDate, 0, paymentAmount, payMode, debtorId);
+				
 				flag=1;
 			}
 			
