@@ -47,12 +47,21 @@ public class Expenses extends HttpServlet {
 		{
 			GenericDAO gd=new GenericDAO();
 			RequireData rd=new RequireData();
+			String indName=request.getParameter("individualName");
 			String firstDate=request.getParameter("fromDate");
 			String lastDate=request.getParameter("toDate");
-			String demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
+			String demo="";
+			if(indName!=null) {
+			demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
 					+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`,bankId, `reason` FROM "
 					+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
-					+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+firstDate+"' and '"+lastDate+"' order by date";
+					+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+firstDate+"' and '"+lastDate+"' and expenses_master.name='"+indName+"' order by date";
+			}else {
+				demo="SELECT `exp_id`, `date`, `name`, `amount`, `payment_mode`,"
+						+ "`expenses_type`.`expenses_type_name`,`debtor_master`.`type`, `other_details`,bankId, `reason` FROM "
+						+ "`expenses_master`,`debtor_master`,`expenses_type` WHERE expenses_type.expenses_type_id=expenses_master.expenses_type_id "
+						+ "and expenses_master.debtor_id=debtor_master.id and date BETWEEN '"+firstDate+"' and '"+lastDate+"' order by date";
+			}
 			if(!gd.getData(demo).isEmpty())
 			{
 				List demoList=gd.getData(demo);
@@ -544,6 +553,20 @@ public class Expenses extends HttpServlet {
 					}
 			}
 		}
+		if(request.getParameter("findNameByReport")!=null)
+		{
+			GenericDAO da = new GenericDAO();
+			String query = "SELECT expenses_master.name FROM expenses_master group by name";
+			List details = da.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+	
+					}
+			}
+		}
 		// insert query
 		if(request.getParameter("save")!=null)
 		{
@@ -664,21 +687,6 @@ public class Expenses extends HttpServlet {
 			catch(Exception e)
 			{
 				request.setAttribute("status", "Some Problem Occured");
-				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
-				rd.forward(request, response);
-			}
-		}
-		// delete query
-		if(request.getParameter("deleteId")!=null)
-		{
-			GenericDAO gd=new GenericDAO();
-			int delstatus=0;
-			String deleteQuery="Delete from `expenses_master` where exp_id="+request.getParameter("deleteId");
-			delstatus=gd.executeCommand(deleteQuery);
-			if(delstatus!=0)
-			{
-				System.out.println("successfully deleted in expenses");
-				request.setAttribute("status", "Deleted Successfully");
 				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
 				rd.forward(request, response);
 			}
