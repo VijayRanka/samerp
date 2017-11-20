@@ -101,8 +101,8 @@
 		<!--breadcrumbs-->
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" class="tip-bottom"
-					data-original-title="Go to Home"><i class="icon-home"></i> Home</a>
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
 				<a href="#" class="current">Add Customer</a>
 				
 			</div>
@@ -351,95 +351,11 @@
 		</div>
 	</div>
 	<!-- Model End -->
-	
+	<jsp:include page="../jcb-poc-work/config/addProject.jsp"></jsp:include>
 	
 	<!--***************************************************** Add Project *******************************************************-->
 	
-	<div id="addProject" class="modal hide fade" role="dialog"
-		style="width: 55%; margin-left: -28%;">
-		<div class="modal-dialog">
-
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header" style="    height: 30px;">
-					<h4 class="modal-title">Add Customer Project</h4>
-				</div>
-				<div class="alert alert-info" style="padding-left: 25px;">
-							<strong>Enter Party/Customer Name <span class="badge badge-info">OR</span> Contact No : </strong>
-							<input list="browsers" name="browser" id="editdata"	onkeyup="CustomerSearch(this.value)" onkeydown="CustomerPrintProject()" autocomplete="off" required>
-							<datalist id="browsers"></datalist>
-									
-
-					</div>
-
-<!-- 					<form name="form2"	class="form-horizontal"> -->
-						<div class="modal-body">
-							<table id="display-textfeild" style="margin: 0 auto;">
-								<tr>
-									<td>
-										<label>Project Name :</label>
-										<div class="controls">
-										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" style="margin-left: 105px;margin-top: -30px;" required>
-										<input type="hidden" name="custid_project" id="custid_project" >
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label style=" margin-left: -23px;">Opening Balance :</label>
-										<div class="controls" style="margin-left: 100px;margin-top: -28px;">
-										<input type="radio" name="radios" value="1" checked="checked" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cash
-										<input type="radio" name="radios" value="2" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cheque
-										</div>
-									</td>
-								</tr>
-								<tr>
-								<%
-									RequireData rq=new RequireData();
-								List list=rq.getBank();
-								Iterator itr=list.iterator();
-								while(itr.hasNext())
-								{
-									String id=itr.next().toString();
-								
-													
-								%>
-									<td style="float: right;">
-										<input type="text" name="openingBal" id="openingBal" onkeypress="return isNumber(event)" placeholder="Deposit" style="margin-top: 13px;">
-										<var class="control-group hide" id="selectBankProject">
-											<label>Select Bank :</label>
-												<select name="bank_name" id="bank_id">
-												<option value="<%=id%>"><%=itr.next()%></option>
-													
-												</select>
-										</var>
-									</td>
-									<%} %>
-									
-								</tr>
-								
-								<tr>
-									<td>
-										<var class="control-group hide" id="selectBankChequeProject">
-											Cheque No :
-											
-											<input type="text" class="" placeholder="Cheque No" />
-											
-										</var>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="save" id="" onclick="addProject()" style="background:#1196c1;" class="btn btn-success">Add</button>
-							<button type="button" class="btn btn-danger" id="closeProject" data-dismiss="modal">Close</button>
-						</div>
-<!-- 					</form> -->
-				</div>
-
-			</div>
-
-		</div>
+	
 		
 	<!-- 	Add Form End -->
 	
@@ -457,58 +373,7 @@ function isNumber(evt) {
     }
     return true;
 }
-//*************************************** DEPOSIT *******************************
-function showBank(str) {
-	if(str==1){
-		document.getElementById("openingBal").style.display = 'inline-block';;
-		document.getElementById("selectBankProject").className="control-group hide";
-		document.getElementById("selectBankChequeProject").className="control-group hide";
-	}
-	if(str==2){
-		document.getElementById("openingBal").style.display = "none";
-		document.getElementById("selectBankProject").className="control-group";
-		document.getElementById("selectBankChequeProject").className="control-group";
-	}
-	
-}
-//*************************************** END DEPOSIT *******************************
-//***************************************addProject********************************
-function addProject() {
-	var custid_project=document.getElementById("custid_project").value;
-	var projectname=document.getElementById("project_name1").value;
-	var openingBal=document.getElementById("openingBal").value;
-	var xhttp;
-	if (custid_project == "") {
-		alert("Select Customer!")
-		return;
-	}
-	if (projectname == "") {
-		alert("Add Project Name!")
-		return;
-	}
-	
-	xhttp = new XMLHttpRequest();
 
-	try {
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var demoStr = this.responseText;
-				alert(demoStr);
-				document.getElementById("closeProject").click();
-				document.getElementById("custid_project").value="";
-				document.getElementById("project_name1").value="";
-				document.getElementById("openingBal").value="";
-				document.getElementById("editdata").value="";
-			}
-
-		};
-		xhttp.open("POST", "/SAMERP/AddCustomer.do?custid_project=" +custid_project+"&projectname="+projectname+"&openingBal="+openingBal, true);
-		xhttp.send();
-	} catch (e) {
-		alert("Unable to connect to server");
-	}
-}
-//***************************************END addProject****************************
 //***************************************Contact Error *******************************
 function checkContactNo(str) {
 	var xhttp;
@@ -568,44 +433,6 @@ function checkContactNoUpdate(str) {
 	}
 }
 //*************************************** End Contact Error *******************************
-//**********************Customer Search******************************************
-
-
-function CustomerSearch(str) {
-
-	var xhttp;
-	if (str == "") {
-		return;
-	}
-	xhttp = new XMLHttpRequest();
-
-	try {
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				//document.getElementById("imeino").innerHTML = this.responseText;
-				var demoStr = this.responseText.split(",");
-				var text = "";
-				var i = 0
-				for (; demoStr[i];) {
-					text += "<option id="+demoStr[i];
-					i++;
-					text += " value="+demoStr[i]+">";
-					i++
-					text += demoStr[i] + "</option>";
-					i++;
-				}
-				document.getElementById("browsers").innerHTML = text;
-			}
-
-		};
-
-		xhttp.open("POST", "/SAMERP/JcbPocDetails.do?q=" + str, true);
-		xhttp.send();
-	} catch (e) {
-		alert("Unable to connect to server");
-	}
-}
-//********************************END Search***********************************
 
 
 function getSr(id){
@@ -657,23 +484,6 @@ function DeleteCustomer(id){
 	}     
 }
 
-
-//********************************Print Customer Data**************************
-function  CustomerPrintProject() {
-	var val = document.getElementById('editdata').value;
-      var str = $('#browsers').find('option[value="' + val + '"]').attr('id');
-      //alert(str);
-      var xhttp;
-		if (str == "undefined") {
-			return;
-		}else {
-			if(event.keyCode == 13 || event.keyCode == 9) {
-				 document.getElementById('custid_project').value=str;
-				
-	    	}
-		}
-}
-//******************************************END Cutomer Print******************************************************************
 </script>
 	<script src="/SAMERP/config/js/jquery.min.js"></script>
 	<script src="/SAMERP/config/js/jquery.ui.custom.js"></script>

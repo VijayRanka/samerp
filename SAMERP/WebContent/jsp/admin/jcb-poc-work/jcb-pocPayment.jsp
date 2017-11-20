@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css"
 	rel="stylesheet" />
+	<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
 	rel='stylesheet' type='text/css'>
@@ -51,8 +52,9 @@
 
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="/SAMERP/index.jsp" title="Go to Home" class="tip-bottom"><i
-					class="fa fa-home"></i> Home</a> <a href="#" class="current"></a>
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="#" class="current">JCB & POKLAND Payment View </a>
 			</div>
 			<h1></h1>
 		</div>
@@ -64,7 +66,7 @@
 					<div class="widget-box">
 						<div class="widget-title">
 							<span class="icon"><i class="icon-th"></i></span>
-							<h5>Jcb And Poc PaymentDetails</h5>
+							<h5>JCB & POKLAND Payment View</h5>
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">
@@ -200,7 +202,7 @@
 //==================================================Year & Month Set========================================
 	function setYearMonth(){
 		var year = 2016;
-		var till = 2025;
+		var till = 2017;
 		var options = "";
 		for(var y=year; y<=till; y++){
 		  options += "<option>"+ y +"</option>";
