@@ -108,34 +108,75 @@ public class AddCustomer extends HttpServlet {
 		if (custid_project != null) {
 			String projectname = request.getParameter("projectname");
 			String openingBal = request.getParameter("openingBal");
+			
+			String radios = request.getParameter("radios");
+			String payBank = request.getParameter("payBank");
+			String payCheque =request.getParameter("payCheque");
+			
+			
 			int project_result=0;
 			String project_query="INSERT INTO `jcbpoc_project`(`cust_id`, `project_name`, `opening_balance`) VALUES"
 					+ "("+custid_project+",'"+projectname+"','"+openingBal+"')";
 			project_result = dao.executeCommand(project_query);
-
+			
+//			============================Payment Entry=========================================================
 			if (openingBal != "") {
+				RequireData rd =new RequireData();
+				SysDate sd=new SysDate();
+				
 				query="SELECT `contactno` FROM `customer_master` WHERE `intcustid`="+custid_project;
 				details=dao.getData(query);
 				contactno="CUST_"+details.get(0).toString();
+				String debtorId = String.valueOf(rd.getDebtorId(contactno));
 				
-				RequireData rd =new RequireData();
-				SysDate sd=new SysDate();
+				
+				
 				String[] todate= sd.todayDate().split("-");
 				String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
-				int debit = 0;
-				int credit = Integer.parseInt(openingBal);
-				String debtorId = String.valueOf(rd.getDebtorId(contactno));;
 				
-				rd.pCashEntry(transactionDate, debit, credit, debtorId);
+				int debit = Integer.parseInt(openingBal);
+				int credit = 0;
 				
-//				============================Payment Entry=========================================================
-				String amt="";
-				String balance=rd.getTotalRemainingBalance(custid_project, openingBal, amt);
 				
-				query = "INSERT INTO `jcbpoc_payment`(`cust_id`, `description`, `bill_amount`, `total_balance`, `date`) VALUES "
-						+ "("+custid_project+",'OPENING BALANCE','"+openingBal+"','"+balance+"','"+transactionDate+"')";
-				System.out.println(">>>"+query);
-				dao.executeCommand(query);
+
+			
+				String payMode="";
+				String particular="";
+				if (radios.equals("1")) {
+					payMode="cash";
+					payBank="null";
+					payCheque="";
+				}
+				if (radios.equals("2")) {
+					payMode="Cheque";
+					particular="Cheque No-"+payCheque;
+				}
+				if (radios.equals("3")) {
+					payMode="Transfer";
+					payCheque="";
+					particular="Transfer";
+				}
+				
+				if (radios.equals("1")) {
+//					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+					
+					String payAmount="";
+					String balance=rd.getTotalRemainingBalance(custid_project, openingBal, payAmount);
+					
+					query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `bill_amount`, `total_balance`, `date`, `pay_mode`, `debtorId`) VALUES "
+							+ "("+custid_project+",'OPENING BALANCE','"+openingBal+"','"+balance+"','"+transactionDate+"','"+payMode+"',"+debtorId+")";
+					 dao.executeCommand(query);
+				}
+				if (radios.equals("2") || radios.equals("3")) {
+					
+					
+					String payAmount="";
+					String balance=rd.getTotalRemainingBalance(custid_project, openingBal, payAmount);
+					
+					query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `amount`, `total_balance`, `date`, `pay_mode`,`bank_id`, `cheque_no`, `debtorId`) VALUES "
+							+ "("+custid_project+",'OPENING BALANCE','"+openingBal+"','"+balance+"','"+transactionDate+"','"+payMode+"',"+payBank+",'"+payCheque+"',"+debtorId+")";
+					result = dao.executeCommand(query);
+				}
 				
 			}
 			if (project_result == 1) {
@@ -173,7 +214,7 @@ public class AddCustomer extends HttpServlet {
 			}
 		}
 		if (getProjectUpdate != null) {
-			query="SELECT `id`, `project_name`, `opening_balance` FROM `jcbpoc_project` WHERE id="+getProjectUpdate;
+			query="SELECT `id`, `project_name` FROM `jcbpoc_project` WHERE id="+getProjectUpdate;
 			details=dao.getData(query);
 			Iterator itr = details.iterator();
 			while (itr.hasNext()) {
@@ -182,79 +223,10 @@ public class AddCustomer extends HttpServlet {
 		}
 		if (custid_projectUpdate != null) {
 			String projectnameUpdate = request.getParameter("project_name1Update");
-			String openingBalUpdate = request.getParameter("openingBalUpdate");
-			query="SELECT `opening_balance` FROM `jcbpoc_project` WHERE id="+custid_projectUpdate;
-			details=dao.getData(query);
-			Iterator itr = details.iterator();
-			String updateDeposit="";
-			while (itr.hasNext()) {
-				updateDeposit=(String) itr.next();
-
-			}
+			//String openingBalUpdate = request.getParameter("openingBalUpdate");
 			
-			if (!openingBalUpdate.equals(updateDeposit)) {
-				if (updateDeposit.equals("")) {
-					updateDeposit="0";
-				}
-				if (openingBalUpdate.equals("")) {
-					openingBalUpdate="0";
-				}
-				int newDeposit=Integer.parseInt(openingBalUpdate);
-				int oldDeposit=Integer.parseInt(updateDeposit);
-				
-				if (newDeposit > oldDeposit) {
-					
-					SysDate sd=new SysDate();
-					String[] todate= sd.todayDate().split("-");
-					String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
-					
-					int debit = oldDeposit;
-					int credit = 0;
-					String debtorId = "1";
-					
-					RequireData rd =new RequireData();
-					rd.pCashEntry(transactionDate, debit, credit, debtorId);
-					
-					query="SELECT `contactno` FROM `customer_master`,jcbpoc_project WHERE `intcustid`=jcbpoc_project.cust_id AND jcbpoc_project.id="+custid_projectUpdate;
-					details=dao.getData(query);
-					contactno="CUST_"+details.get(0).toString();
-					
-					query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
-					details=dao.getData(query);
-					
-					debit = 0;
-					credit = newDeposit;
-					debtorId = details.get(0).toString();
-					rd.pCashEntry(transactionDate, debit, credit, debtorId);
-				}
-				
-				if (newDeposit < oldDeposit) {
-					
-					SysDate sd=new SysDate();
-					String[] todate= sd.todayDate().split("-");
-					String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
-					
-					int debit = oldDeposit;
-					int credit = 0;
-					String debtorId = "1";
-					
-					RequireData rd =new RequireData();
-					rd.pCashEntry(transactionDate, debit, credit, debtorId);
-					
-					query="SELECT `customer_master`.`contactno` FROM `customer_master`,jcbpoc_project WHERE `customer_master`.`intcustid`=`jcbpoc_project`.`cust_id` AND `jcbpoc_project`.`id`="+custid_projectUpdate;
-					details=dao.getData(query);
-					contactno="CUST_"+details.get(0).toString();
-					
-					query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
-					details=dao.getData(query);
-					
-					debit = 0;
-					credit = newDeposit;
-					debtorId = details.get(0).toString();
-					rd.pCashEntry(transactionDate, debit, credit, debtorId);
-				}
-			}
-			query = "UPDATE `jcbpoc_project` SET `project_name`='"+projectnameUpdate+"',`opening_balance`='"+openingBalUpdate+"' WHERE `id`="+custid_projectUpdate;
+			
+			query = "UPDATE `jcbpoc_project` SET `project_name`='"+projectnameUpdate+"' WHERE `id`="+custid_projectUpdate;
 
 			result = dao.executeCommand(query);
 

@@ -13,8 +13,15 @@
     <servlet-name>JcbPocBill</servlet-name>
     <url-pattern>/JcbPocBill.do</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>JcbPocPayment</servlet-name>
+    <servlet-class>admin.JcbPocWork.JcbPocPayment</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JcbPocPayment</servlet-name>
+    <url-pattern>/JcbPocPayment.do</url-pattern>
+  </servlet-mapping>
  <servlet>
-
     <servlet-name>JcbPocReport</servlet-name>
     <servlet-class>admin.JcbPocWork.JcbPocReport</servlet-class>
   </servlet>

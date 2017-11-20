@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css"
 	rel="stylesheet" />
+	<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
 	rel='stylesheet' type='text/css'>
@@ -121,10 +122,9 @@ to {
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" class="tip-bottom"
-					data-original-title="Go to Home"><i class="icon-home"></i> Home</a>
-				<a href="#" class="current">JCB & POKLAND Report</a>
-				
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="#" class="current">JCB & POKLAND Report </a>
 			</div>
 		</div>
 		
