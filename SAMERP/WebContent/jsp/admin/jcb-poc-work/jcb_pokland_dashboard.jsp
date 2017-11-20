@@ -33,7 +33,7 @@
 }
 </style>
 </head>
-<body onload="setSelectValue()">
+<body>
 <!--Header-part-->
 <div id="header">
   <h1><a href="/SAMERP/index.jsp">Matrix Admin</a></h1>
@@ -51,7 +51,10 @@
 
 <div id="content">
 <div id="content-header">
-  <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">JCB & POKLAND Dashboard</a>  </div>
+  <div id="breadcrumb"> 
+  	<a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+  	<a href="#" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+  </div>
   <!--Action boxes-->
   <div class="container-fluid" align="center">
     <div class="quick-actions_homepage">
@@ -61,7 +64,7 @@
 		<li class="bg_ly"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Payment View</a> </li>
 		<li class="bg_lb"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Payment Received</a> </li>
 		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/settings/addCustomer.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Add Customer</a> </li>
-		<li class="bg_lo"> <a href="#"> <i class="icon-money"></i><span class="label label-success"></span>Add Project</a> </li>
+		<li class="bg_lo"> <a href="#addProject"  data-toggle="modal" > <i class="icon-money"></i><span class="label label-success"></span>Add Project</a> </li>
       	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocBill.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Create Bill</a> </li>
       	<li class="bg_lb"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocReport.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Report</a> </li>
       </ul>
@@ -112,7 +115,7 @@
        
         
 </div>
-
+<jsp:include page="config/addProject.jsp"></jsp:include>
 <!--Footer-part-->
 <div class="row-fluid">
 		<div id="footer" class="span12">
