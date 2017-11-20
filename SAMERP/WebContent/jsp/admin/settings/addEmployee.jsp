@@ -166,7 +166,7 @@
 									</div>
 								</div>
 								
-								<div class="control-group">
+								<div class="control-group" >
 									<label class="control-label"><span style="color: red;"></span>Work
 										With:</label>
 
@@ -181,8 +181,7 @@
 														String id = itr.next().toString();
 														String alias_name = itr.next().toString();
 											%>
-											<option value="<%=id%>"><%=alias_name%></option>
-											<%
+											<option value="<%=id%>"><%=alias_name%></option>											<%
 												}
 											%>
 										</select>
@@ -454,7 +453,7 @@ function getVehicle(id) {
 }
 
 function showOpening(str) {
-	alert(str);
+	//alert(str);
 	if(str=='Driver' ||str=='Helper'){
 		document.getElementById("opening_balid").className="control-group ";
 	
@@ -467,6 +466,12 @@ function showOpening(str) {
 		document.getElementById("opening_balid").className="control-group hide";
 		
 	}
+	
+	if(str=='Driver')
+		{
+			var d=document.getElementById('contractor_vehicleid').value;
+			alert(d);
+		}
 	
 	
 }

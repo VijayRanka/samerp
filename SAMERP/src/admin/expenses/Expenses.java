@@ -184,24 +184,31 @@ public class Expenses extends HttpServlet {
 			String getPreviousbalance="SELECT bank_account_details.balance FROM bank_account_details WHERE bank_account_details.id=(SELECT MAX(bank_account_details.id) FROM bank_account_details WHERE bank_account_details.bid='"+Bank_Id+"')";
 			int previousbal=Integer.parseInt(gd.getData(getPreviousbalance).get(0).toString());
 			
-			System.out.println("previous bal:"+previousbal);
-			int totalbalance=Amount+previousbal;
 			
-			System.out.println("Amount is:"+totalbalance);
+			boolean ptstatus=false,bstatus=false;
 			
-			String debtor_query="";
+			RequireData req=new RequireData();
+			if(req.checkPCStatus(Amount)==1)
+			{
+				ptstatus = req.pCashEntry(Date,Amount, 0, "3");
+			}
+			else{
+				
+			}
 			
-			String query="insert into bank_account_details(bid,date,debit,credit,particulars,debter_id,balance) values('"+Bank_Id+"','"+Date+"','0','"+Amount+"','"+particulars+"','3','"+totalbalance+"')";
-		  
-			System.out.println("cash deposite:"+query);
+			if(ptstatus)
+			{
+				
+				if(req.checkBankBalance(Amount, Bank_Id)==1)
+				{
+					bstatus = req.badEntry(Bank_Id, Date, 0, Amount, "Petty Cash Deposite", "3");
+				}
+				else{
+					
+				}
+			}
 			
-			bankstatus=gd.executeCommand(query);
-		   
-		     if(bankstatus!=0)
-		    {
-		    	System.out.println("Inserted Successfully");
-		    	request.setAttribute("status", "Inserted Successfully");
-		    }
+		
 		    RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
 			rd.forward(request, response);
 			
