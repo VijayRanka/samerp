@@ -1100,22 +1100,5 @@ public class RequireData
 				List List = gd.getData(query);
 				return List;
 			}
-			
-/*			public List getPettyCashDetailsDash(){
-				List List = gd.getData("");
-				return List;
-			}
-			
-			public List getbadDetailsDash(){
-				List List = gd.getData("");
-				return List;
-			}
-			public List getPettyCashDetails(){
-				List List = gd.getData("");
-				return List;
-			}*/
-			
-			
-			//-- common methods end
-	
+			//-- common methods end	
 }
