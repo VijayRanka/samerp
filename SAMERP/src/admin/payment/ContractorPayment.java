@@ -29,9 +29,50 @@ public class ContractorPayment extends HttpServlet {
 		
 		GenericDAO gd=new GenericDAO();
 		
+		//getDate data ajax
+		if(request.getParameter("getDateData")!=null)
+		{
+			String startDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			String contId=request.getParameter("contraId");
+			
+			String demoStr="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId+" and date BETWEEN '"+startDate+"' and '"+lastDate+"'";
+			List demoList=gd.getData(demoStr);
+			if(demoList.isEmpty())
+			{
+				out.print("0,");
+			}
+			else {
+				System.out.println(demoList);
+				out.print("1,");
+				Iterator itr=demoList.iterator();
+				while(itr.hasNext())
+				{
+					itr.next();
+					itr.next();
+					out.print(itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+",");
+					String cheque=itr.next().toString();
+					String description=itr.next().toString();
+					if(!description.isEmpty())
+					{
+						String bankName=gd.getData("SELECT account_details.acc_aliasname FROM account_details WHERE account_details.acc_id="+description).get(0).toString();	
+						out.print(cheque+","+bankName+","+itr.next()+","+itr.next());
+					}
+						
+					else
+						out.print("-,-,"+itr.next()+","+itr.next()+",");
+					
+				}
+			}
+			
+			
+		}
+		
+		
 		//paymentDataEntry
 		if(request.getParameter("paymentSubmit")!=null)
 		{
+			
 			String contId=request.getParameter("contId");
 			String prevRemAmount=request.getParameter("prevRemAmount");
 			String currentAmount=request.getParameter("currentAmount");
@@ -49,23 +90,27 @@ public class ContractorPayment extends HttpServlet {
 			boolean amountStatusClear=false;
 			RequireData rd=new RequireData();
 			
-			
 			if(payMode.equalsIgnoreCase("Cash"))
 			{
 				int pcStatus=rd.checkPCStatus(Integer.parseInt(paidAmt));
 				if(pcStatus==0)
 				{
-					request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+					request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI-CASH_c_0");
 				
 				}
 				else if(pcStatus==-1)
 				{
-					request.setAttribute("status", "You don't have enough balance in your Peti Cash");
+					request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI-CASH_c_-1");
 				}
 				else if(pcStatus==1)
 				{
 					amountStatusClear=true;
 				}
+				else if(pcStatus==2)
+				{
+					request.setAttribute("payError", "YOU HAVEN'T ADDED PETI-CASH YET_c_-2");
+				}
+				
 				
 			}
 			else
@@ -73,11 +118,15 @@ public class ContractorPayment extends HttpServlet {
 				int badStatus=rd.checkBankBalance(Integer.parseInt(paidAmt),bankInfo);
 				if(badStatus==0)
 						{
-							request.setAttribute("status", "You have insufficient balance in your Bank");
+					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANk_b_0");
 						}
 				else if(badStatus==-1)
 				{
-					request.setAttribute("status", "You have insufficient balance in your Bank");
+					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
+				}
+				else if(badStatus==2)
+				{
+					request.setAttribute("payError", "YOU HAVEN'T ADDED ADDED AMOUNT IN BANK YET_b_-2");
 				}
 				else if(badStatus==1)
 				{

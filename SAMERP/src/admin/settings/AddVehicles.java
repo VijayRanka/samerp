@@ -2,7 +2,10 @@ package admin.settings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,6 +36,7 @@ public class AddVehicles extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		GenericDAO gd = new GenericDAO();
 		String deleteId = request.getParameter("delete");
+		RequireData rdd = new RequireData();
 		
 		if(request.getParameter("insertSubmitBtn")!=null)
 		{
@@ -175,6 +179,17 @@ public class AddVehicles extends HttpServlet {
 				String q = "SELECT `expenses_type_id`, `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
 				List l = gd.getData(q);
 				
+				
+				String did = rdd.getDriverDebterIdFromVid(vno);
+				String qq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+did+")";
+				List ll = gd.getData(qq);
+				
+				
+				String hdid = rdd.getHelperDebterIdFromVid(vno);
+				String hq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+hdid+")";
+				List hl = gd.getData(hq);
+				
+				
 				Iterator itr=l.iterator();
 				int DieselTotal=0, total=0;
 				
@@ -189,7 +204,7 @@ public class AddVehicles extends HttpServlet {
 					}
 				}
 				System.out.println(DieselTotal+ "," + total);
-				out.print(l3.get(0) + "," + l3.get(1) + "," + l3.get(2) + "," + DieselTotal+ "," + total);
+				out.print(l3.get(0) + "," + l3.get(1) + "," + l3.get(2) + "," + DieselTotal+ "," + total+ "," + hl.get(0)+ "," + ll.get(0));
 				System.out.println("vdata "+l);
 			}
 		}
@@ -245,12 +260,60 @@ public class AddVehicles extends HttpServlet {
 		}
 		
 		
-		if(request.getParameter("totalDPayment")!=null)
+		if(request.getParameter("role")!=null)
 		{
-			String totalDPayment = request.getParameter("totalDPayment");
+			if(request.getParameter("role").equals("driver"))
+			{
+				String totalDPayment = request.getParameter("totalDPayment");
+				String vid = request.getParameter("veid");
+				String extraCharge = request.getParameter("extraCharge");
+				String sdate = request.getParameter("sdate");
+				String edate = request.getParameter("edate");
+				int tBalance = 0;
+				
+				
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				String requiredDate = df.format(new Date()).toString();
+				
+				String did = rdd.getDriverDebterIdFromVid(vid);
+				
+				String qq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+did+")";
+				List ll = gd.getData(qq);
+				
+				tBalance += Integer.parseInt(ll.get(0).toString()) + Integer.parseInt(totalDPayment);
+				
+				String q = "INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `extra_charges`, `particular`, `type`, `balance`) VALUES "
+						+ "( "+did+", '"+requiredDate+"', "+totalDPayment+", "+extraCharge+", 'payment "+sdate+" to "+edate+"','D', "+tBalance+")";
+	
+				gd.executeCommand(q);
+			}
 			
-			//String q="INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `extra_charges`, `particular`, `type`, `balance`) VALUES ()";
-			//List l = gd.getData(q);
+			else if(request.getParameter("role").equals("helper"))
+			{
+				String hc = request.getParameter("hc");
+				String vid = request.getParameter("veid");
+				String sdate = request.getParameter("sdate");
+				String edate = request.getParameter("edate");
+				int tBalance = 0;
+				
+				
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				String requiredDate = df.format(new Date()).toString();
+				
+				String did = rdd.getHelperDebterIdFromVid(vid);
+				
+				String qq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+did+")";
+				List ll = gd.getData(qq);
+
+				tBalance += Integer.parseInt(ll.get(0).toString()) + Integer.parseInt(hc);
+				
+				String q = "INSERT INTO `driver_helper_payment_master`(`debter_id`, `date`, `credit`, `particular`, `type`, `balance`) VALUES "
+						+ "( "+did+", '"+requiredDate+"', "+hc+", 'payment "+sdate+" to "+edate+"','H', "+tBalance+")";
+
+				gd.executeCommand(q);
+			}
+			
+			
 		}
 		
 	}

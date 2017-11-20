@@ -100,10 +100,15 @@
 }
 
 .table td {
-   text-align: center;   
+   text-align: center; 
 }
+/* 
+td{
+   text-align: -webkit-center;  
+}
+*/
 
-.modal.fade.in {
+ .modal.fade.in {
     top: 5%;
 }
 .createBillSarthak{
@@ -405,10 +410,10 @@
                </tr>               
               </tbody>
             </table>
-            <input type="text" id="checkedChalan" name="checkedChalan">
+
            </form>
          </div>
-         <button  id="chalanSubmitBtn" onclick="selectedChalan()" disabled="disabled"  class="btn btn-success" style=" margin-left: 50%; margin-top: 3%;" data-toggle='modal'>Submit</button>
+         <button  id="chalanSubmitBtn" onclick="selectedChalan()" disabled="disabled"  class="btn btn-success" style=" margin-left: 45%; margin-top: 3%;" data-toggle='modal'>Generate Bill</button>
          <hr style="border-top-color: #c5bbbb;">
       </div>
       
@@ -432,86 +437,6 @@
 <!--end-Footer-part--> 
 
 <!-- #################    MODEL START  ################################ -->
-
-<div class="modal hide fade zoom-out" id="billEntry" role="dialog" style="width: 35%; margin-left:-18%; margin-top: 10px;">
-	<div class="modal-header">
-		<a class="close" data-dismiss="modal"></a>
-		<h5> New Bill Entry Details</h5>
-	</div>
-	
-	<div class="modal-body" style="padding: 0;">
-		<form class="form-horizontal" action="/SAMERP/SalePayment" method="post" name="">
-			<div class="form-group">
-				<div class="widget-content nopadding">
-	             	<div class="control-group" style="">
-	             		<%
-	             			String maxid_temp=rd.getClientBillMaxId();
-	             			int maxid=Integer.parseInt(maxid_temp);
-	             		%>
-	             		<label class="control-label">Bill Number : </label>
-			               <div class="controls">
-			                 <input type="text" name="billNo" value="<%=(maxid+1) %>" readonly="readonly"/>
-			               </div>
-	             	</div>
-	             	
-	             	<div class="control-group" style="">
-	             		<label class="control-label">Bill Amount : </label>
-			               <div class="controls">
-			                 <input type="text" id="billAmt" name="billAmt" value=""/>
-			               </div>
-	             	</div>
-	             	
-<%-- 	             	<%
-
-
-	             	
-	             		float cgst=(sum/100)*9;
-	             		float sgst=(sum/100)*9;
-	             		float totalBillAmount=sum+cgst+sgst; 
-	             	
-	             	%>
-	             	
-	             	<div class="control-group" style="">
-	             		<label class="control-label">CGST(9%) : </label>
-			               <div class="controls">
-			                 <input type="text" id="cgst" name="cgst" value="<%=cgst%>"/>
-			               </div>
-	             	</div>
-	             	
-	             	<div class="control-group" style="">
-	             		<label class="control-label">SGST(9%) : </label>
-			               <div class="controls">
-			                 <input type="text" id="sgst" name="sgst" value="<%=sgst%>" />
-			               </div>
-	             	</div>	
-	             	
-	             	<div class="control-group" style="">
-	             		<label class="control-label">Total Bill Amount : </label>
-			               <div class="controls">
-			                 <input type="text" id="tba" name="tba" value="<%=totalBillAmount%>"/>
-			               </div>
-	             	</div>	 --%>	             	             	
-	             	
-	             	<div class="control-group" style="">
-	             		<label class="control-label">Date : </label>
-			               <div class="controls">
-			                 <input type="date" name="billDate" value="<%= requiredDate%>" required/>
-			               </div>
-	             	</div>
-		            
-				</div>
-			</div>
-			
-			<input type="hidden" name="clientID1" id="clientID1" />
-			
-			<div class="modal-footer">
-				<input type="submit" name="billSubmit" class="btn green btn-primary" value="Submit" />
-				<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-			</div>
-			
-		</form>
-	</div>
-</div>
 
 
 
@@ -603,9 +528,9 @@
 		</form>
 	</div>
 </div>
-<div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;height: 600px">
+<div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;max-height: 600px">
   <div class="modal-dialog" role="document">
-   <form class="form-horizontal" action="/SAMERP/Expenses.do" method="post">
+   <form class="form-horizontal" action="/SAMERP/SalePayment" method="post">
     <div class="modal-content">
       <div class="modal-body createBillSarthak" id="showModal">
 	     
@@ -630,6 +555,11 @@
 	<!-- 				.Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com -->
 				</thead>
 				<tbody>
+				
+					    <%
+	             			String maxid_temp=rd.getClientBillMaxId();
+	             			int maxid=Integer.parseInt(maxid_temp);
+	             		%>
 					<tr>
 						<td colspan="8" style="border: 0;">To,</td>
 						<td colspan="4">Bill No : <%=maxid+1 %></td>
@@ -672,7 +602,7 @@
 						<th>GST(%)</th>
 						<th>Qty</th>
 						<th>Rate</th>
-						<th>Taxable Amount</th>
+						<th style="width: 105px;">Taxable Amount</th>
 						<th>CGST</th>
 						<th>SGST</th>
 						<th>Total Amount</th>
@@ -682,22 +612,22 @@
 					
 					
  					<tr>
- 						<th colspan="8" style="text-align: right; border: 0;"></th>
+ 						<th colspan="8" style="text-align:left; border: 0;">TERMS & CONDITIONS :   </th>
 						<th style="text-align: right;">Taxable Amount</th>
 						<th colspan="3" style="text-align: center;"><i id="totalAmount_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th colspan="8" style="text-align: left; border: 0;">Payment Within 30 days of delivery.</th>
 						<th style="text-align: right;">CGST</th>
 						<th colspan="3" style="text-align: center;"><i id="CGST_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th colspan="8" style="text-align: left; border: 0;">Guarantee doesn't cover mishandling of component after delivery.</th>
 						<th style="text-align: right;">SGST</th>
 						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<th colspan="8" style="text-align: left; border: 0;">We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.</th>
 						<th style="text-align: right;" >Total Amount</th>
 						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
 					</tr>
@@ -710,10 +640,14 @@
 					</tr>
 				</tbody>
 			</table>
+			<input type="hidden" name="clientID1" id="clientID1" />
+			<input type="hidden" name="billNumber" id="billNumber" value="<%= (maxid+1) %>" />
+			<input type="hidden" name="billDate" value="<%= requiredDate%>"/>
+			<input type="hidden" id="totalBillAmount" name="totalBillAmount" value=""/>
+			<input type="hidden" id="checkedChalan" name="checkedChalan">
       </div> 
       <div class="modal-footer">
-        <button type="submit" name="UpdateData" class="btn btn-primary" style="margin-right:5px;">Save changes</button> 
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>    
+        <button type="submit" name="generateBillData" class="btn btn-primary" style="margin-right:5px;">Save & Create PDF</button> 
           </div>
     </div>
    </form>
@@ -903,6 +837,8 @@ function getAllCheckBoxes(){
 			document.getElementById('totalAmount_1').innerHTML=tAmount;
 			document.getElementById('totalAmountGST').innerHTML=grandTotal;
 			document.getElementById('totalAmountGST_1').innerHTML=grandTotal;
+			document.getElementById('totalBillAmount').value=grandTotal;
+			
 			document.getElementById('chalanSubmitBtn').disabled=false;
 			
 		}
@@ -914,7 +850,7 @@ function getAllCheckBoxes(){
 		document.getElementById('totalAmount_1').innerHTML="";
 		document.getElementById('totalAmountGST').innerHTML="";
 		document.getElementById('totalAmountGST_1').innerHTML="";
-		
+		document.getElementById('totalBillAmount').value="";
 		document.getElementById('SGST_1').innerHTML="";
 		document.getElementById('CGST_1').innerHTML="";
 		document.getElementById('chalanSubmitBtn').disabled=true;
@@ -956,9 +892,9 @@ function selectedChalan(){
   				 l++;
   				data1="";data2="";
   				data1="<tr>"+
-					"<td rowspan='"+demoStr[count]+"' valign='top'>"+j+"</td>"+
-					"<td rowspan='"+demoStr[count]+"' valign='top'>"+demoStr[l++]+"</td>"+
-					"<td rowspan='"+demoStr[count]+"' valign='top'>"+demoStr[l++]+"</td>";
+					"<td rowspan='"+demoStr[count]+"' valign='top' style='vertical-align: middle; text-align: -webkit-center;'>"+j+"</td>"+
+					"<td rowspan='"+demoStr[count]+"' valign='top' style='vertical-align: middle; text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+					"<td rowspan='"+demoStr[count]+"' valign='top' style='vertical-align: middle; text-align: -webkit-center;'>"+demoStr[l++]+"</td>";
 					for(var k=1;k<=demoStr[count];k++)
 						{
 						
@@ -977,27 +913,27 @@ function selectedChalan(){
 									
 									}
 							
-							data2+="<td>"+ demoStr[l++] +"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td>"+demoStr[l++]+"</td>"+
-							"<td style='text-align:center' rowspan='"+demoStr[count]+"' valign='bottom'>"+demoStr[totalAmount]+"</td>"+
+							data2+="<td style='text-align: -webkit-center;'>"+ demoStr[l++] +"</td>"+
+							"<td style='text-align: -webkit-center;' >"+demoStr[l++]+"</td>"+
+							"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+							"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+							"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+							"<td style='text-align: -webkit-left;'>"+demoStr[l++]+"</td>"+
+							"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+							"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+							"<td style='text-align:center; vertical-align: middle; ' rowspan='"+demoStr[count]+"' valign='bottom'>"+demoStr[totalAmount]+"</td>"+
 						"</tr>";
 							}
 						else{
 							data2+="<tr>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
-								"<td>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-left;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
 							"</tr>";
 							
 						}
@@ -1059,6 +995,7 @@ function selectChecks(id)
 		document.getElementById('totalGST').innerHTML=tGst;
 		document.getElementById('totalAmount').innerHTML=tAmount;
 		document.getElementById('totalAmountGST').innerHTML=grandTotal;
+		document.getElementById('totalBillAmount').value=grandTotal;
 		inWords();
 	}
 }
@@ -1290,7 +1227,7 @@ function inWords()
 <script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script>
 
 <script type="text/javascript">
-$('#billEntry').on('shown.bs.modal', function () {
+$('#createBill').on('shown.bs.modal', function () {
 	var m = <%=request.getParameter("ppid") %>
 	document.getElementById("clientID1").value = m;
 	

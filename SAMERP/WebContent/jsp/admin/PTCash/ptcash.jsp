@@ -258,7 +258,7 @@
 
 								<div class="form-actions" style="padding-left: 350px">
 									<button type="submit" name="insertPetty" class="btn btn-success">OK</button>&nbsp;&nbsp;&nbsp;
-									<a type="button" href="/SAMERP/index.jsp" class="btn btn-danger" style="margin-right: 20px">Exit</a>
+									<a type="button" href="/SAMERP/dashboard.jsp" class="btn btn-danger" style="margin-right: 20px">Exit</a>
 								</div>
 							</form>
 						</div>
@@ -394,7 +394,7 @@
 								<input type="hidden" name="supid2" id="supid2" />
 				
 								<div class="modal-footer" style="120px;">
-									<input type="submit" id="handloanbtn" name="handloanpagebtn" class="btn btn-primary" value="Submit" style="margin-right: 10px;"/> 
+									<button type="submit" id="handloanbtn" name="handloanpagebtn" class="btn btn-primary" style="margin-right: 10px;">Submit</button> 
 									<a href="/SAMERP/dashboard.jsp" class="btn btn-danger" data-dismiss="modal" style="margin-right: 404px;">Exit</a>
 								</div>
 				
@@ -636,9 +636,10 @@
 				<input type="hidden" name="supid2" id="supid2" />
 
 				<div class="modal-footer">
-					<input type="submit" id="handloanbtn" name="handloanbtn"
-						class="btn btn-primary" value="Submit" /> <a href="/SAMERP/index.jsp"
-						class="btn btn-danger" data-dismiss="modal">Cancel</a>
+					<button type="submit" id="handloanbtn" name="handloanbtn"
+						class="btn btn-primary">Submit</button>
+						
+				 <a class="btn btn-danger" data-dismiss="modal">Close</a>
 				</div>
 
 			</form>

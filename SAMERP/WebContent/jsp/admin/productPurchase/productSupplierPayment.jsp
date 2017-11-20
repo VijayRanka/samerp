@@ -245,8 +245,8 @@
                  <th>Sr.No.</th>
                  <th>Date</th>
                  <th>Bill Number</th>
-                 <th>Credit Amount</th>
-                 <th>Debit Amount</th>
+                 <th>Bill Amount</th>
+                 <th>Paid Amount</th>
                  <th>Mode</th>
                  <th>Cheque Number</th>
                  <th>Bank Account</th>
