@@ -19,10 +19,11 @@
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
 <style type="text/css">
-#s2id_autogen3, #s2id_vehicle_update,#s2id_vehicle,#s2id_cust_project,#s2id_cust_project_update {
+#s2id_autogen3, #s2id_vehicle_update,#s2id_vehicle,#s2id_cust_project,#s2id_cust_project_update,#s2id_payBank {
 	float: right;
 }
 </style>
@@ -48,11 +49,11 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="current">JCB/POC
-					Detail</a>
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="#" class="current">JCB & POKLAND Chalan Entry</a>
 			</div>
-			<h1>JCB/POC Detail</h1>
+			<h1>JCB & POKLAND Chalan Entry</h1>
 		</div>
 		<div class="container-fluid">
 			<hr>
@@ -64,11 +65,11 @@
 							<input list="browsers" name="browser" id="editdata"	onkeyup="CustomerSearch(this.value)" onkeydown="CustomerPrint()" autocomplete="off" required>
 							<datalist id="browsers"></datalist>
 							<a href="#addCustomer" data-toggle="modal" class="btn btn-primary btn-mini" tabindex="-1" style="width: 35px; border: 2px black solid; font-size: 20px;">+</a>
-							
+							<span class="help-inline error" id="custIdError" style="color: red; font-weight: bold;"></span>
 
 						</div>
 						<div class="widget-content nopadding">
-							<form action="/SAMERP/JcbPocDetails.do" method="POST">
+							<form action="/SAMERP/JcbPocDetails.do" method="POST" id="payFormJCB">
 								<table class=""
 									style="border-color: white; margin: 0 auto; width: 700px">
 									<tr>
@@ -99,6 +100,7 @@
 												<option></option>
 										</select>
 										<a href="#addProject" data-toggle="modal" class="btn btn-primary btn-mini" tabindex="-1" style="width: 35px; border: 2px black solid; font-size: 20px;">+</a>
+										<span class="help-inline error" id="projectError" style="color: red; font-weight: bold;margin-top: 7%;margin-right: -48%;	float: right;"></span>
 									</td>
 										<td style="text-align: right;">
 											Breaker Rate :
@@ -143,31 +145,31 @@
 													}
 												%>
 											</select>
+											<span class="help-inline error" id="machineError" style="color: red; font-weight: bold;margin-top: 9%;margin-right: -66%;	float: right;"></span>
 
 										</td>
 										<td style="text-align: right; padding-right: 100px;">
 											Bucket Hrs : <input type="hidden" id="bucket_hrs" name="bucket_hrs" value="00:00" placeholder="HH:MM">
-											<input type="text" id="bHrs" maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
+											<input type="text" id="bHrs" maxlength="2" value="0" onkeypress="return isNumber(event)" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
 											 : 
-											<input type="text" id="bMus" maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
+											<input type="text" id="bMus" maxlength="2" value="0" onkeypress="return isNumber(event)" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
 										</td>
 									</tr>
 									<tr>
 										<td style="text-align: right;">
-											Diesel Amount :<input type="text" name="diesel" placeholder="Diesel">
+											Diesel Amount :<input type="text" name="diesel" onkeypress="return isNumber(event)" placeholder="Diesel">
 										</td>
 										<td style="text-align: right; padding-right: 100px;">
 											Breaker Hrs : <input type="hidden" id="breaker_hrs" name="breaker_hrs" value="00:00" placeholder="HH:MM">
-											<input type="text" id="bkHrs"  maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
+											<input type="text" id="bkHrs"  maxlength="2" value="0" onkeypress="return isNumber(event)" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); } setHours();" style="width: 40px;">
 											 : 
-											<input type="text" id="bkMus"  maxlength="2" value="00" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); }  setHours();" style="width: 40px;">
+											<input type="text" id="bkMus"  maxlength="2" value="0" onkeypress="return isNumber(event)" onkeyup="if(this.value.length>=2){  $(this).next(':input').focus(); }  setHours();" style="width: 40px;">
 										</td>
 									</tr>
 									<tr>
-										<td style="text-align: right; padding-right: 14%;">
-											Deposit :
-											<input type="radio" name="radios" value="1" checked="checked" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cash
-											<input type="radio" name="radios" value="2" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cheque
+										<td style="text-align: right;">
+											Deposit :<input type="text" name="deposit" id="deposit" onkeypress="return isNumber(event)" placeholder="Deposit">
+											
 										</td>
 										<td style="text-align: right;">
 <!-- 											HSN : <input type="text" name="hsnno" placeholder="HSN"> -->
@@ -175,38 +177,53 @@
 									</tr>
 									<tr>
 										<td style="text-align: right;">
-											<input type="text" name="deposit" id="deposit" onkeypress="return isNumber(event)" placeholder="Deposit">
+											Pay Mode : 
+											<input type="radio" name="radios" id="radios1" value="1" onclick="showBank(this.value)" style="margin-left: 0px;" checked="checked" /> Cash
+											<input type="radio" name="radios" id="radios2" value="2" onclick="showBank(this.value)" style="margin-left: 0px;" /> Cheque
+											<input type="radio" name="radios" id="radios3" value="3" onclick="showBank(this.value)" style="margin-left: 0px;" /> Transfer
+										</td>
+										<td style="text-align: right;">
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">
 											<var class="control-group hide" id="selectBank">
 												Select Bank :
-													<select class="span8">
-														<option>First option</option>
-														<option>Second option</option>
-														<option>Third option</option>
-														<option>Fourth option</option>
-														<option>Fifth option</option>
-														<option>Sixth option</option>
-														<option>Seventh option</option>
-														<option>Eighth option</option>
+													<%
+														List bank = rd.getBank();
+														Iterator itr1 = bank.iterator();
+													%>
+													<select class="span7" name="payBank" id="payBank">
+														<option></option>
+															<%
+																while (itr1.hasNext()) {
+															%>
+															<option value="<%=itr1.next()%>"><%=itr1.next()%></option>
+															<%
+																}
+															%>
 													</select>
+													<span class="help-inline error" id="payBankError" style="color: red; font-weight: bold;margin-top: 7%;margin-right: -20%;	float: right;"></span>
 											</var>
 										</td>
 										<td style="text-align: right;">
 											<var class="control-group hide" id="selectBankCheque">
-												Cheque No :<input type="text" class="span8" placeholder="Cheque No" />
+												Cheque No :
+												<input type="text" name="payCheque" id="payCheque" class="span7" placeholder="Cheque No" />
+												<span class="help-inline error" id="payChequeError" style="color: red; font-weight: bold;"></span>
 											</var>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="2" style="text-align: center;"><button
-												type="submit" name="insertorganizer" class="btn btn-success"">Submit</button>
-											<a href="/SAMERP/index.jsp"><button type="button"
-													class="btn btn-danger ">Exit</button></a></td>
+										<td colspan="2" style="text-align: center;">
+											<button type="button" name="insertorganizer" class="btn btn-success" onclick="paySubmitJCB()">Submit</button>
+											<a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger ">Exit</button></a></td>
 									</tr>
 								</table>
 							</form>
 						</div>
 					</div>
-<!-- 	=========================================update======================================== -->
+<!-- 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@update@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
 					<div class="widget-box" id="updateWork" style="display: none;">
 						<div class="alert alert-info" >
 						<h4><strong>Update Work Detail</strong></h4>
@@ -546,7 +563,7 @@
 				if (str == "") {
 					return;
 				}
-				if(event.keyCode == 13) {
+				if(event.keyCode == 13 || event.keyCode == 9) {
 					xhttp = new XMLHttpRequest();
 					try{ 
 					xhttp.onreadystatechange = function() {
@@ -873,21 +890,85 @@ function checkContactNo(str) {
 	}
 }
 //*************************************** End Contact Error *******************************
-//*************************************** DEPOSIT *******************************
+
+//**********************Payment Mode******************************************
 function showBank(str) {
 	if(str==1){
-		document.getElementById("deposit").style.display = 'inline-block';;
 		document.getElementById("selectBank").className="control-group hide";
 		document.getElementById("selectBankCheque").className="control-group hide";
 	}
 	if(str==2){
-		document.getElementById("deposit").style.display = "none";
 		document.getElementById("selectBank").className="control-group";
 		document.getElementById("selectBankCheque").className="control-group";
 	}
-	
+	if(str==3){
+		document.getElementById("selectBank").className="control-group";
+		document.getElementById("selectBankCheque").className="control-group hide";
+	}
 }
-//*************************************** END DEPOSIT *******************************
+//****************************************** validationCheck******************************************************************
+function validationCheck(){
+	var radios2=document.getElementById("radios2").checked;
+	var radios3=document.getElementById("radios3").checked;
+	
+	var custId=document.getElementById("custid").value;
+	var projectName=document.getElementById("cust_project").value;
+	var machineName=document.getElementById("vehicle").value;
+	
+	if(custId == ""){
+		document.getElementById("custIdError").innerHTML ="Select Customer!";
+		return false;
+	}else{
+		document.getElementById("custIdError").innerHTML ="";
+	}
+	if(projectName == ""){
+		document.getElementById("projectError").innerHTML ="Select Project!";
+		return false;
+	}else{
+		document.getElementById("projectError").innerHTML ="";
+	}
+	if(machineName == ""){
+		document.getElementById("machineError").innerHTML ="Select Machine!";
+		return false;
+	}else{
+		document.getElementById("machineError").innerHTML ="";
+	}
+	
+	if(radios2 == true){
+		var payBank = document.forms["payFormJCB"]["payBank"].value;
+		var payCheque = document.forms["payFormJCB"]["payCheque"].value;;
+		if(payBank == ""){
+			document.getElementById("payBankError").innerHTML ="Select Bank!";
+			return false;
+		}else{
+			document.getElementById("payBankError").innerHTML ="";
+		}
+		if(payCheque == ""){
+			document.getElementById("payChequeError").innerHTML ="Enter Cheque No!";
+			return false;
+		}else{
+			document.getElementById("payChequeError").innerHTML ="";
+		}
+		
+	}
+	if(radios3 == true){
+		var payBank = document.getElementById("payBank").value;
+		
+		if(payBank == ""){
+			document.getElementById("payBankError").innerHTML ="Select Bank!";
+			return false;
+		}
+		
+	}
+}
+//******************************************END validationCheck******************************************************************
+function paySubmitJCB(){
+	var x=validationCheck();
+	
+	if(x != false){
+		document.getElementById("payFormJCB").submit();
+	}
+}
 </script>
 
 

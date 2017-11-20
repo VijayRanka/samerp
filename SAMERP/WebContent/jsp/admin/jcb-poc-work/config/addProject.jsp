@@ -1,6 +1,9 @@
 <!--***************************************************** Add Project *******************************************************-->
 	
-	<div id="addProject" class="modal hide fade" role="dialog"
+	<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
+<%@page import="utility.RequireData"%>
+<div id="addProject" class="modal hide fade" role="dialog"
 		style="width: 55%; margin-left: -28%;">
 		<div class="modal-dialog">
 
@@ -13,7 +16,7 @@
 							<strong>Enter Party/Customer Name <span class="badge badge-info">OR</span> Contact No : </strong>
 							<input list="browsersProject" name="browser" id="editdataProject"	onkeyup="CustomerSearchProject(this.value)" onkeydown="CustomerPrintProject()" autocomplete="off" required>
 							<datalist id="browsersProject"></datalist>
-									
+							<span class="help-inline error" id="selectCustError" style="color: red; font-weight: bold;"></span>
 
 					</div>
 
@@ -25,38 +28,55 @@
 										Project Name :
 										<input type="text" name="projectname1" id="project_name1" onkeyup="this.value=this.value.toUpperCase()" required>
 										<input type="hidden" name="custid_project" id="custid_project" >
+										<span class="help-inline error" id="selectProjectError" style="color: red; font-weight: bold;"></span>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										Opening Balance :
-										<input type="radio" name="radios" value="1" checked="checked" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Cash
-										<input type="radio" name="radios" value="2" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Cheque
+										Opening Balance :<input type="text" name="openingBal" id="openingBal" onkeypress="return isNumber(event)" placeholder="Opening Balance">
+										<var class="control-group hide" >
+										<input type="radio" name="radios" id="radios1" value="1" checked="checked" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Cash
+										<input type="radio" name="radios" id="radios2" value="2" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Cheque
+										<input type="radio" name="radios" id="radios3" value="3" onclick="showBankProject(this.value)" style="margin-left: 0px;" /> Transfer
+										</var>
 									</td>
 								</tr>
 								<tr>
 									<td style="float: right;">
-										<input type="text" name="openingBal" id="openingBal" onkeypress="return isNumber(event)" placeholder="Deposit">
+										
 										<var class="control-group hide" id="selectBankProject">
 											Select Bank :
-												<select class="">
-													<option>First option</option>
-													<option>Second option</option>
-													<option>Third option</option>
-													<option>Fourth option</option>
-													<option>Fifth option</option>
-													<option>Sixth option</option>
-													<option>Seventh option</option>
-													<option>Eighth option</option>
+												<%
+													RequireData rd = new RequireData();
+													List bank = rd.getBank();
+													Iterator itr = bank.iterator();
+												%>
+												<select class="span2" name="payBank" id="payBank">
+													<option></option>
+														<%
+															while (itr.hasNext()) {
+														%>
+														<option value="<%=itr.next()%>"><%=itr.next()%></option>
+														<%
+															}
+														%>
 												</select>
+												<span class="help-inline error" id="payBankError" style="color: red; font-weight: bold;"></span>
 										</var>
 									</td>
 								</tr>
 								<tr>
 									<td>
 										<var class="control-group hide" id="selectBankChequeProject">
-											Cheque No :<input type="text" class="" placeholder="Cheque No" />
+											Cheque No :<input type="text" name="payCheque" id="payCheque" placeholder="Cheque No" />
+										<span class="help-inline error" id="payChequeError" style="color: red; font-weight: bold;"></span>
 										</var>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<button type="submit" name="save" id="" onclick="paySubmit()" class="btn btn-success">Add</button>
+							<button type="button" class="btn btn-danger" id="closeProject" data-dismiss="modal">Close</button>
 									</td>
 								</tr>
 							</table>
@@ -82,10 +102,7 @@
 						</table>
 					</div>
 					</div>
-						<div class="modal-footer" style="padding-left: 450px">
-							<button type="submit" name="save" id="" onclick="addProject()" class="btn btn-success">Add</button>
-							<button type="button" class="btn btn-danger" id="closeProject" data-dismiss="modal">Close</button>
-						</div>
+						
 <!-- 					</form> -->
 				</div>
 
@@ -113,38 +130,7 @@
 										<input type="hidden" name="custid_projectUpdate" id="custid_projectUpdate" >
 									</td>
 								</tr>
-								<tr>
-									<td>
-										Opening Balance :
-										<input type="radio" name="radiosUpdate" value="1" checked="checked" onclick="showBankProjectUpdate(this.value)" style="margin-left: 0px;" /> Cash
-										<input type="radio" name="radiosUpdate" value="2" onclick="showBankProjectUpdate(this.value)" style="margin-left: 0px;" /> Cheque
-									</td>
-								</tr>
-								<tr>
-									<td style="float: right;">
-										<input type="text" name="openingBalUpdate" id="openingBalUpdate" onkeypress="return isNumber(event)" placeholder="Opeing Balance">
-										<var class="control-group hide" id="selectBankProjectUpdate">
-											Select Bank :
-												<select class="">
-													<option>First option</option>
-													<option>Second option</option>
-													<option>Third option</option>
-													<option>Fourth option</option>
-													<option>Fifth option</option>
-													<option>Sixth option</option>
-													<option>Seventh option</option>
-													<option>Eighth option</option>
-												</select>
-										</var>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<var class="control-group hide" id="selectBankChequeProject">
-											Cheque No :<input type="text" class="" placeholder="Cheque No" />
-										</var>
-									</td>
-								</tr>
+								
 							</table>
 				
 						<div class="modal-footer" style="padding-left: 450px">
@@ -175,33 +161,87 @@ function isNumber(evt) {
     }
     return true;
 }
+function paySubmit(){
+	var x=validationCheck();
+	
+	if(x != false){
+		addProject();
+	}
+}
 //*************************************** DEPOSIT *******************************
 function showBankProject(str) {
 	if(str==1){
-		document.getElementById("openingBal").style.display = 'inline-block';;
+		//document.getElementById("openingBal").style.display = 'inline-block';;
 		document.getElementById("selectBankProject").className="control-group hide";
 		document.getElementById("selectBankChequeProject").className="control-group hide";
 	}
 	if(str==2){
-		document.getElementById("openingBal").style.display = "none";
+		//document.getElementById("openingBal").style.display = "none";
 		document.getElementById("selectBankProject").className="control-group";
 		document.getElementById("selectBankChequeProject").className="control-group";
+	}
+	if(str==3){
+		//document.getElementById("openingBal").style.display = "none";
+		document.getElementById("selectBankProject").className="control-group";
+		document.getElementById("selectBankChequeProject").className="control-group hide";
 	}
 	
 }
 //*************************************** END DEPOSIT *******************************
+//******************************************END validationCheck******************************************************************
+function validationCheck(){
+	var radios2=document.getElementById("radios2").checked;
+	var radios3=document.getElementById("radios3").checked;
+	
+	if(radios2 == true){
+		var payBank = document.getElementById("payBank").value;
+		var payCheque = document.getElementById("payCheque").value;;
+		if(payBank == ""){
+			document.getElementById("payBankError").innerHTML ="Select Bank!";
+			return false;
+		}else{
+			document.getElementById("payBankError").innerHTML ="";
+		}
+		if(payCheque == ""){
+			document.getElementById("payChequeError").innerHTML ="Enter Cheque No!";
+			return false;
+		}else{
+			document.getElementById("payChequeError").innerHTML ="";
+		}
+		
+	}
+	if(radios3 == true){
+		var payBank = document.getElementById("payBank").value;
+		
+		if(payBank == ""){
+			document.getElementById("payBankError").innerHTML ="Select Bank!";
+			return false;
+		}
+		
+	}
+}
+//******************************************END validationCheck******************************************************************
 //***************************************addProject********************************
 function addProject() {
 	var custid_project=document.getElementById("custid_project").value;
 	var projectname=document.getElementById("project_name1").value;
 	var openingBal=document.getElementById("openingBal").value;
+	var radios=document.querySelector('input[name="radios"]:checked').value;;
+	var payBank=document.getElementById("payBank").value;
+	var payCheque=document.getElementById("payCheque").value;
+	
+	
+	
 	var xhttp;
 	if (custid_project == "") {
-		alert("Select Customer!")
+		
+		document.getElementById("selectCustError").innerHTML ="Select Customer!";
 		return;
 	}
 	if (projectname == "") {
-		alert("Add Project Name!")
+		
+		document.getElementById("selectProjectError").innerHTML ="Add Project Name!";
+		document.getElementById("selectCustError").innerHTML ="";
 		return;
 	}
 	
@@ -221,7 +261,7 @@ function addProject() {
 			}
 
 		};
-		xhttp.open("POST", "/SAMERP/AddCustomer.do?custid_project=" +custid_project+"&projectname="+projectname+"&openingBal="+openingBal, true);
+		xhttp.open("POST", "/SAMERP/AddCustomer.do?custid_project=" +custid_project+"&projectname="+projectname+"&openingBal="+openingBal+"&radios="+radios+"&payBank="+payBank+"&payCheque="+payCheque, true);
 		xhttp.send();
 	} catch (e) {
 		alert("Unable to connect to server");
@@ -334,7 +374,8 @@ function getProjectUpdate(str) {
 				var demoStr = this.responseText.split("~");
 				document.getElementById("custid_projectUpdate").value=demoStr[0];
 				document.getElementById("project_name1Update").value=demoStr[1];
-				document.getElementById("openingBalUpdate").value=demoStr[2];
+				//document.getElementById("openingBalUpdate").value=demoStr[2];
+				
 			}
 
 		};
@@ -348,7 +389,7 @@ function getProjectUpdate(str) {
 function UpdateProject() {
 	var custid_project=document.getElementById("custid_projectUpdate").value;
 	var projectname=document.getElementById("project_name1Update").value;
-	var openingBal=document.getElementById("openingBalUpdate").value;
+	//var openingBal=document.getElementById("openingBalUpdate").value;
 	var xhttp;
 	if (custid_project == "") {
 		alert("Select Customer!")
@@ -369,11 +410,12 @@ function UpdateProject() {
 				document.getElementById("closeProjectUpdate").click();
 				document.getElementById("custid_projectUpdate").value="";
 				document.getElementById("project_name1Update").value="";
-				document.getElementById("openingBalUpdate").value="";
+				//document.getElementById("openingBalUpdate").value="";
+				projectList();
 			}
 
 		};
-		xhttp.open("POST", "/SAMERP/AddCustomer.do?custid_projectUpdate=" +custid_project+"&project_name1Update="+projectname+"&openingBalUpdate="+openingBal, true);
+		xhttp.open("POST", "/SAMERP/AddCustomer.do?custid_projectUpdate=" +custid_project+"&project_name1Update="+projectname, true);
 		xhttp.send();
 	} catch (e) {
 		alert("Unable to connect to server");

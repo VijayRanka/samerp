@@ -1,3 +1,4 @@
+<%@page import="utility.SysDate"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="utility.RequireData"%>
@@ -119,8 +120,21 @@
 						<div class="widget-content nopadding">
 							<form action="/SAMERP/AddEmployee" method="post"
 								class="form-horizontal">
+
 								<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>
+									<label class="control-label">Date :</label>
+									<div class="controls">
+										<%
+											RequireData rd = new RequireData();
+											SysDate sd = new SysDate();
+											String[] sdDemo = sd.todayDate().split("-");
+										%>
+										<input name="date" type="date"	value="<%=sdDemo[2] + "-" + sdDemo[1] + "-" + sdDemo[0]%>" class="span5">
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label"><span style="color: red;"></span>
 										Employee Name :</label>
 									<div class="controls">
 										<input type="text" name="employee_name" id="emp_name" class="span5" placeholder="Employee Name"
@@ -128,7 +142,7 @@
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>Contact
+									<label class="control-label"><span style="color: red;"></span>Contact
 										No. :</label>
 									<div class="controls">
 										<input type="text" name="contact_no" class="span5"
@@ -138,7 +152,22 @@
 								</div>
 
 								<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>Work
+									<label class="control-label">Designation: </label>
+									<div class="controls">
+										
+											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" >
+											<option>Select Designation</option>
+											<option value="Driver">Driver</option>
+											<option value="Helper">Helper</option>
+											<option value="Home Worker">Home Worker</option>
+											<option valu="Laber">Laber</option>
+											
+											</select>
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label"><span style="color: red;"></span>Work
 										With:</label>
 
 									<div class="controls">
@@ -162,24 +191,16 @@
 										}
 									%>
 								</div>
-
-								<div class="control-group">
-									<label class="control-label">Designation: </label>
+								
+								<div class="control-group hide" id="opening_balid">
+									<label class="control-label"><span style="color: red;"></span>
+										Opening Balance :</label>
 									<div class="controls">
-										
-											<select name="designation" class="span3" style="width: 348px;" >
-											<option value="1">Driver</option>
-											<option value="2">Helper</option>
-											<option value="3">Home Worker</option>
-											<option valu="4">Laber</option>
-											
-											</select>
+										<input type="text" name="opening_balance" id="opening_balanceid" class="span5" placeholder="Opening Balance" pattern="[0-9]*" required />
 									</div>
 								</div>
-							
 
-								<div class="form-actions">
-								
+								<div class="form-actions">								
 									<button type="submit" name="submit"	class="btn btn-success"	style="position: relative; right: 685px; float: right;">Submit</button>
 									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger "
 											style="position: relative; right: 550px; float: right;">Exit</button></a>
@@ -202,6 +223,7 @@
 						<thead>
 							<tr>
 								<th>Sr.No.</th>
+								<th>Date</th>
 								<th>Employee Name</th>
 								<th>Contact No</th>
 								<th>Debtor_Id</th>
@@ -218,28 +240,16 @@
 						{
 							Iterator itr=getEmployeeList.iterator();
 							while(itr.hasNext())
-							{
-								
-								String empid=itr.next().toString();
-														
+							{								
+								String empid=itr.next().toString();														
 						%>
 						<tr>
 							<td id="<%=empid%>"><%=count %></td>
 							<td ><%=itr.next()%></td>
+							<td ><%=itr.next()%></td>
 							<td ><%=itr.next() %></td>							
-							<td ><%=itr.next() %></td>
-							
-							<% Object designation= itr.next(); 
-										if(designation.equals("1")){
-										%>
-											<td>Driver</td>
-										<%}else if(designation.equals("2")){ %>
-											<td>Helper</td>
-										<%}else if(designation.equals("3")){%>
-											<td>Home Worker</td>
-											<%}else{ %>
-											<td>Laber</td>
-										<%} %>
+							<td ><%=itr.next() %></td>							
+							<td><%=itr.next() %></td>
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
 										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil"></i></a>
@@ -268,7 +278,19 @@
 				</div>
 				<div class="modal-body">
 					<form action="/SAMERP/AddEmployee" method="post" class="form-horizontal">
-								<div class="control-group">									
+
+						<div class="control-group">
+							<label class="control-label">Date :</label>
+							<div class="controls">
+								<%
+									RequireData rd1 = new RequireData();
+									SysDate sd1 = new SysDate();
+									String[] sdDem = sd1.todayDate().split("-");
+								%>
+								<input name="date" id="dateid" type="date"	value="<%=sdDem[2] + "-" + sdDem[1] + "-" + sdDem[0]%>" class="span3">
+							</div>
+						</div>
+						<div class="control-group">									
 									<label class="control-label"><span style="color: red;">*</span>
 										Employee Name :</label>
 									<div class="controls">
@@ -285,6 +307,20 @@
 										<input type="text" name="contact_no" id="contactno" class="span3" 
 											placeholder="Contact Number"
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
+									</div>
+								</div>
+								
+									<div class="control-group">
+									<label class="control-label">Designation: </label>
+									<div class="controls">
+										
+											<select name="designation" style="width: 271px;" id="designationid" onchange="getVehicle()" >
+											<option value="Driver">Driver</option>
+											<option value="Helper">Helper</option>
+											<option value="Home Worker">Home Worker</option>
+											<option valu="Laber">Laber</option>
+																					
+											</select>
 									</div>
 								</div>
 									
@@ -314,19 +350,6 @@
 									%>
 								</div>
 								
-								<div class="control-group">
-									<label class="control-label">Designation: </label>
-									<div class="controls">
-										
-											<select name="designation" style="width: 271px;" id="designationid" >
-											<option value="1">Driver</option>
-											<option value="2">Helper</option>
-											<option value="3">Home Worker</option>
-											<option valu="4">Laber</option>											
-											</select>
-									</div>
-								</div>
-							
 								<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -384,28 +407,68 @@ function searchEmpolyee(id) {
 			
 			var demoStr = this.responseText.split(",");
 			document.getElementById("Updateid").value = demoStr[0];
-			document.getElementById("employeename").value = demoStr[1];
+			document.getElementById("dateid").value = demoStr[1];
+			document.getElementById("employeename").value = demoStr[2];
 			//alert(demoStr[1]);
-			document.getElementById("contactno").value = demoStr[2];
-			document.getElementById("contractor_vehicle").value = demoStr[3];
-			document.getElementById("old_contractor_vehicle").value = demoStr[3];
-			document.getElementById("designationid").value = demoStr[4];	
+			document.getElementById("contactno").value = demoStr[3];
+			document.getElementById("contractor_vehicle").value = demoStr[4];
+			document.getElementById("old_contractor_vehicle").value = demoStr[5];
+			document.getElementById("designationid").value = demoStr[6];	
 			
 			var desig=document.getElementById("designationid");
 		
 			for (var i = 0; i < desig.options.length; i++) {
-			    if (desig.options[i].text === demoStr[4]) {
+			    if (desig.options[i].text === demoStr[5]) {
 			    	desig.selectedIndex = i;
 			        //alert(demoStr[4]);
-			        getSetSelect('s2id_updatecontractorname', demoStr[4]);
+			        getSetSelect('s2id_updatecontractorname', demoStr[5]);
 			        break;
 			    }
 			}
+			
+			document.getElementById("opening_balanceid").value = demoStr[7];
 			
 			}
 		};
 	xhttp.open("POST","/SAMERP/AddEmployee?employeeid="+id, true);
 	xhttp.send();
+}
+
+function getVehicle(id) {
+	
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText.split(",");
+			document.getElementById("Updateid").value = demoStr[0];
+			document.getElementById("dateid").value = demoStr[1];
+			document.getElementById("employeename").value = demoStr[2];
+	
+			
+			}
+		};
+	xhttp.open("POST","/SAMERP/AddEmployee?employeeid="+id, true);
+	xhttp.send();
+}
+
+function showOpening(str) {
+	alert(str);
+	if(str=='Driver' ||str=='Helper'){
+		document.getElementById("opening_balid").className="control-group ";
+	
+	}
+	if(str=='HomeWorker'){
+		document.getElementById("opening_balid").className="control-group hide";
+		
+	}
+	if(str=='Laber'){
+		document.getElementById("opening_balid").className="control-group hide";
+		
+	}
+	
+	
 }
 
 function getSetSelect(id,value)
