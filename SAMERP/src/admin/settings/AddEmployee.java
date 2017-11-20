@@ -87,8 +87,8 @@ public class AddEmployee extends HttpServlet {
 			status=gd.executeCommand(insertQuery);	
 			if(status==1)
 			{
-			insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
-			gd.executeCommand(insertQuery);
+				insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
+				gd.executeCommand(insertQuery);
 			}
 
 			

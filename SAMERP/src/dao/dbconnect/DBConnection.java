@@ -1,4 +1,3 @@
-
 package dao.dbconnect;
 
 import java.sql.Connection;
@@ -10,6 +9,7 @@ public class DBConnection {
 
 
 	String driverName = "com.mysql.jdbc.Driver";
+
 
 	String url = "jdbc:mysql://localhost:3306/";
 	//String url = "jdbc:mysql://192.168.0.52:3306/";
@@ -40,11 +40,4 @@ public class DBConnection {
 		}
 		return con;
 	}	
-	
-	
-	
 }
-
-
-
-

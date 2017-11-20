@@ -33,8 +33,11 @@ public class JcbPocPaymentReceived extends HttpServlet {
 		String custId = request.getParameter("custId");
 		String custUpdateId = request.getParameter("custUpdateId");
 		String updateselect = request.getParameter("updateselect");
+		String custIdRevert = request.getParameter("custIdRevert");
 		
 		String payDate = request.getParameter("payDate");
+		
+		String amount = request.getParameter("amount");
 		String payAmount = request.getParameter("payAmount");
 		String radios = request.getParameter("radios");
 		String payBank = request.getParameter("payBank");
@@ -206,6 +209,52 @@ public class JcbPocPaymentReceived extends HttpServlet {
 			while (itr.hasNext()) {
 				out.print(itr.next() + "~");
 
+			}
+		}
+//	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@	Revert @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		if (amount != "" && amount != null && radios.equals("1")) {
+			
+			SysDate sd = new SysDate();
+			
+			String[] transactionDate=sd.todayDate().split("-");
+			String toDate=transactionDate[2].toString()+"-"+transactionDate[1].toString()+"-"+transactionDate[0].toString();
+			int debit =  Integer.parseInt(amount);
+			int credit =0;
+			rd.pCashEntry(toDate, debit, credit, "1");
+			
+			payAmount = "0";
+			String balance=rd.getTotalRemainingBalance(custIdRevert, amount, payAmount);
+			
+			query = "INSERT INTO `jcbpoc_payment`(`cust_id`,`description`, `bill_amount`, `total_balance`, `date`, `pay_mode`, `debtorId`) VALUES "
+					+ "("+custIdRevert+",'"+payDescription+"','"+amount+"','"+balance+"','"+toDate+"','CASH',1)";
+			result = dao.executeCommand(query);
+
+			if (result == 1) {
+				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
+			} else {
+				out.print("something wrong");
+			}
+		}
+		if (amount != "" && amount != null && radios.equals("2")) {
+			
+			SysDate sd = new SysDate();
+			
+			String[] transactionDate=sd.todayDate().split("-");
+			String toDate=transactionDate[2].toString()+"-"+transactionDate[1].toString()+"-"+transactionDate[0].toString();
+			int debit = Integer.parseInt(amount);
+			int credit = 0;
+			rd.badEntry(payBank, toDate, debit, credit, "REVERT", "1");
+			
+			payAmount = "0";
+			String balance=rd.getTotalRemainingBalance(custIdRevert, amount, payAmount);
+			
+			query = "INSERT INTO `jcbpoc_payment`(`cust_id`,`description`, `bill_amount`, `total_balance`, `date`, `pay_mode`,`bank_id`, `debtorId`) VALUES "
+					+ "("+custIdRevert+",'"+payDescription+"','"+amount+"','"+balance+"','"+toDate+"','BANK',"+payBank+",1)";
+			result = dao.executeCommand(query);
+			if (result == 1) {
+				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
+			} else {
+				out.print("something wrong");
 			}
 		}
 	}

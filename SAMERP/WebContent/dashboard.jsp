@@ -998,7 +998,7 @@ function getDates() {
 		    	  tr[i].style.display = "";
 		    	  ++counter;
 		    	  dieselCost = +dieselCost + +document.getElementById("diesel"+i).innerHTML;
-		    	  depositCost = +depositCost + +document.getElementById("deposit"+i).innerHTML;
+		    	  //depositCost = +depositCost + +document.getElementById("deposit"+i).innerHTML;
 		      }
 		      else 
 		      {
@@ -1019,7 +1019,7 @@ function getDates() {
 	  document.getElementById("tripCnt").innerHTML=counter;
 	  document.getElementById("allowance").innerHTML=counter;
 	  document.getElementById("dieselCost").innerHTML=dieselCost;
-	  document.getElementById("depositCost").innerHTML=depositCost;
+	  //document.getElementById("depositCost").innerHTML=depositCost;
 	  
 	  
 	  getDriverExp(fromDate, toDate);
@@ -1057,17 +1057,19 @@ function getDriverExp(sdate, edate)
 				document.getElementById("totalDPayment").innerHTML = totalDPayment;
 				
 				totalCost = +totalCost + +d[3];
+				var cost = d[4].split("-");
 				
 				document.getElementById("dieselCost").innerHTML = expDCost
 				document.getElementById("dieselExpCost").innerHTML = d[3];
-				document.getElementById("driverCost").innerHTML = d[4];
+				document.getElementById("driverCost").innerHTML = cost[0];
 				document.getElementById("helperPrevCost").innerHTML = d[5];
 				document.getElementById("driverPrevCost").innerHTML = d[6];
 				
-				document.getElementById("totalCost").innerHTML = totalCost+  +d[4]+ +d[1]+ +d[5]+ +d[6]+ +totalDPayment; 
-				
 				document.getElementById("tHelperCharge").innerHTML = +d[1]+ +d[5];
-				document.getElementById("tDriverCharge").innerHTML = +d[0]+ +d[6];
+				document.getElementById("tDriverCharge").innerHTML = +totalDPayment+ +d[6];
+				document.getElementById("depositCost").innerHTML=cost[1];
+				
+				document.getElementById("totalCost").innerHTML = totalCost+ +cost[0]+ +cost[1]+ +d[1]+ +d[5]+ +d[6]+ +totalDPayment; 
 				
 			}else{
 				
@@ -1148,7 +1150,8 @@ function makeHelperPayment() {
 /*-----------------------------------Mukesh data end-----------------------------*/
 
 </script>
-<script src="/SAMERP/config/js/jquery.min.js"></script> 
+<!-- <script src="/SAMERP/config/js/jquery.min.js"></script>  -->
+<script src="/SAMERP/config/reportExport/libs/jquery-3.2.1.min.js"></script>
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
 <script src="/SAMERP/config/js/bootstrap.min.js"></script> 
 <script src="/SAMERP/config/js/bootstrap-datepicker.js"></script> 
