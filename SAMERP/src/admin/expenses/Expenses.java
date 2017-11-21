@@ -739,14 +739,28 @@ public class Expenses extends HttpServlet {
 							gd.executeCommand(insertQuery);
 						}
 					}
-					else if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1].equalsIgnoreCase("driver")) {
-						
+					else if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1].equalsIgnoreCase("driver") ||
+							gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1].equalsIgnoreCase("helper")) {
+						String type=gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1];
+						String empType="";
+						if(type.equalsIgnoreCase("helper"))
+							empType="H";
+						else if(type.equalsIgnoreCase("driver"))
+							empType="D";
+							
+						System.out.println(empType);
 						rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
 						
 						String maxExpId=gd.getData("SELECT MAX(exp_id) FROM expenses_master").get(0).toString();
-						String insertQuery="INSERT INTO `driver_helper_payment_master`(`debter_id`, `exp_id`, `date`, `credit`, `debit`, `extra_charges`, "
+						int oldBalance=0;
+						oldBalance=Integer.parseInt(gd.getData("SELECT MAX(balance) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+debtType).get(0).toString());
+						int newBalance=oldBalance-amount;
+						
+						
+						String insertQuery="INSERT INTO `driver_helper_payment_master`(`debter_id`, `exp_id`, `date`, `credit`, `debit`, "
 									+ "`particular`, `type`, `balance`) VALUES ("+debtType+","+maxExpId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+""
-											+ ",extracharges,type,balance)";
+											+ ",'PAYMENT','"+empType+"',"+newBalance+")";
+						gd.executeCommand(insertQuery);
 						
 					}
 					else {
