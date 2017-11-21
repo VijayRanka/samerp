@@ -46,7 +46,7 @@ public class RequireData
 					return VehicleList;
 				}
 				public List getJcbPocWorkDetail() {
-					String JcbPocWorkDetail_query="SELECT customer_master.`custname`,jcbpoc_master.`chalanno`,vehicle_details.vehicle_aliasname,jcbpoc_master.`data`,jcbpoc_master.bucket_hr,jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel,jcbpoc_master.intjcbpocid FROM `jcbpoc_master`,customer_master,vehicle_details WHERE jcbpoc_master.intcustid=customer_master.intcustid AND jcbpoc_master.intvehicleid=vehicle_details.vehicle_id ORDER BY jcbpoc_master.intjcbpocid DESC";
+					String JcbPocWorkDetail_query="SELECT customer_master.`custname`,jcbpoc_master.`chalanno`,vehicle_details.vehicle_aliasname,jcbpoc_master.`data`,jcbpoc_master.bucket_hr,jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel,jcbpoc_master.intjcbpocid FROM `jcbpoc_master`,customer_master,vehicle_details WHERE jcbpoc_master.status=0 AND jcbpoc_master.intcustid=customer_master.intcustid AND jcbpoc_master.intvehicleid=vehicle_details.vehicle_id ORDER BY jcbpoc_master.intjcbpocid DESC";
 					List JcbPocWorkList=gd.getData(JcbPocWorkDetail_query);
 					return JcbPocWorkList;
 				}
@@ -477,6 +477,13 @@ public class RequireData
 	//--omkar end
 	
 	// sandeep start
+	
+	public List getVehicle()
+	{
+		String query="SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_aliasname LIKE '%TRANSPORT%'";
+		List list=gd.getData(query);
+		return list;
+	}
 	
 	public List getDriverPayment()
 	{

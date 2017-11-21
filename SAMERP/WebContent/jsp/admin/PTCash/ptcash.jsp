@@ -150,7 +150,7 @@
 						
 						<div class="widget-content nopadding">
 							<form action="/SAMERP/PTCash" method="Post"
-								class="form-horizontal" onsubmit="return validateForm()">
+								class="form-horizontal" onsubmit="return validatePetty()">
 								<div class="control-group">
 									<label class="control-label">Date :</label>
 									<div class="controls">
@@ -245,6 +245,7 @@
 									<div class="controls">
 										<input type="hidden" class="span4" name="count" id="count" placeholder="Total" value="0" readonly />
 										<input type="hidden" class="span4" name="bankCount" id="bankCount" placeholder="Total" value="0" readonly />
+										<span class="help-inline error" id="validationError" style="color: red; font-weight: bold;	float: center;"></span>
 									</div>
 								</div>
 
@@ -257,7 +258,7 @@
 								</div> -->
 
 								<div class="form-actions" style="padding-left: 350px">
-									<button type="submit" name="insertPetty" class="btn btn-success">OK</button>&nbsp;&nbsp;&nbsp;
+									<button type="submit" name="insertPetty" onclick="" class="btn btn-success">Add Petty Cash</button>&nbsp;&nbsp;&nbsp;
 									<a type="button" href="/SAMERP/index.jsp" class="btn btn-danger" style="margin-right: 20px">Exit</a>
 								</div>
 							</form>
@@ -375,7 +376,7 @@
 										<div class="control-group" id="chequeDetails" style="">
 											<label class="control-label">Cheque Number : </label>
 											<div class="controls">
-												<input type="text" placeholder="Cheque Number" name="chequeNop" id="chequeNo" />
+												<input type="text" placeholder="Cheque Number" maxlength="6" name="chequeNop" id="chequeNo" />
 											</div>
 										</div>
 				
@@ -665,6 +666,20 @@ var bankNameCount=1;
 var counter=0;
 var bankCounter=0;
 
+function validatePetty()
+{
+	var hName=document.getElementById("hlName,0").value;
+	var hAmt=document.getElementById("hlAmt,0").value;
+	var bName=document.getElementById("bName,0").value;
+	var bAmt=document.getElementById("bAmt,0").value;
+	if ((hName == "" || hAmt=="") && (bName=="" || bAmt=="")) 
+	{
+		document.getElementById("validationError").innerHTML="* Fill atleast Handloan or Cash Details"
+		return false;
+	}
+	
+}
+
 function getInfo(val)
 {
 	var xhttp;
@@ -895,8 +910,8 @@ function InsertBankRow()
     var cell3 = row.insertCell(2);
     
   
-    cell2.innerHTML = "<input type='text'  list='getBankName' autocomplete='off' placeholder='Bank Name' id='bName,"+bankNameCount+"' name='bName,"+bankNameCount+"' onfocus='searchBankName(this.value)' class='span2' style='width: 170px;margin-top: 10px;margin-left:15px;margin-right: 10px;'>";
-    cell3.innerHTML = "<input type='text' style='width:83px;margin-top: 10px;' name='bAmt,"+bankNameCount+"' id='bAmt"+bankNameCount+"' placeholder='Amount' />";
+    cell2.innerHTML = "<input type='text'  list='getBankName' autocomplete='off' placeholder='Bank Name' id='bName,"+bankNameCount+"' name='bName,"+bankNameCount+"' onfocus='searchBankName(this.value)' class='span2' style='width: 170px;margin-top: 10px;margin-left:15px;margin-right: 10px;' required>";
+    cell3.innerHTML = "<input type='text' style='width:83px;margin-top: 10px;' name='bAmt,"+bankNameCount+"' id='bAmt"+bankNameCount+"' placeholder='Amount' required/>";
     bankNameCount++; 
     bankCounter++;
     document.getElementById("bankCount").value=bankCounter;
@@ -933,8 +948,8 @@ function InsertRow() {
     var cell3 = row.insertCell(2);
     
   
-    cell2.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='HandLoan Name' id='hlName,"+nameCount+"' name='hlName,"+nameCount+"' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-top:10px;margin-left:15px;margin-right: 10px;'>";
-    cell3.innerHTML = "<input type='text' style='width:83px;margin-top:10px;' name='hlAmt,"+nameCount+"' id='hlAmt,"+nameCount+"' placeholder='Amount' />";
+    cell2.innerHTML = "<input type='text'  list='getName' autocomplete='off' placeholder='HandLoan Name' id='hlName,"+nameCount+"' name='hlName,"+nameCount+"' onfocus='searchName(this.value)' class='span2' style='width: 170px;margin-top:10px;margin-left:15px;margin-right: 10px;' required>";
+    cell3.innerHTML = "<input type='text' style='width:83px;margin-top:10px;' name='hlAmt,"+nameCount+"' id='hlAmt,"+nameCount+"' placeholder='Amount' required/>";
     nameCount++; 
     counter++;
     document.getElementById("count").value=counter;

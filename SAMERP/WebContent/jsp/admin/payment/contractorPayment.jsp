@@ -613,12 +613,11 @@
 						{
 						var a="";
 						var count=1;
-						for(var i=0;i<demoStr.length-2;i=i+13)
+						for(var i=0;i<demoStr.length-2;i=i+14)
 							{
 							 a+= "<tr>"+
 							"<td style='text-align: center'>"+count+"</td>"+
 							"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
-							"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
 							"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
 							"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
 							"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
@@ -629,6 +628,7 @@
 							"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
 							"<td style='text-align: center'>"+demoStr[i+11]+"</td>"+
 							"<td style='text-align: center'>"+demoStr[i+12]+"</td>"+
+							"<td style='text-align: center'>"+demoStr[i+13]+"</td>"+
 							"<tr>";
 							count++;
 							}
@@ -749,6 +749,7 @@
 					if (this.readyState == 4 && this.status == 200) {
 						var myData = this.responseText.split(",");
 						var totalAmount=0;
+						alert(myData);
 						if(myData[0]==1)
 							{
 							document.getElementById("depositCount").innerHTML=myData[1];

@@ -28,9 +28,12 @@
     margin-left: 615px;
     margin-top: -27px;
 }
+#DataTables_Table_0_length{
+	width: 15%;
+}
 </style>
 </head>
-<body>
+<body onload="setMonth()">
 
 	<!--Header-part-->
 	<div id="header">
@@ -52,7 +55,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
-				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" title="Go to JCB & POKLAND Dashboard" class="tip-bottom">JCB & POKLAND Dashboard</a>  
 				<a href="#" class="current">JCB & POKLAND Bill</a>
 			</div>
 			<h1>JCB & POKLAND Bill</h1>
@@ -150,6 +153,14 @@
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">
+								<div class="controls"style="float: right;position: relative;right: 280px;">
+					              <span  style="position: relative;bottom: 5px;">
+					              	<b>From Date:</b>
+					              </span>
+					               	<input type="date" name="" id="dataTableFrom" data-date-format="dd-mm-yyyy" value="" onchange="getDataForTable()" onclick="getDataForTable()">
+					               	<b>To Date:</b>
+					               	<input type="date" name="" id="dataTableTo" data-date-format="dd-mm-yyyy" value="" onchange="getDataForTable()" onclick="getDataForTable()">
+					            </div> 
 								<thead>
 									<tr>
 										<th>Sr No</th>
@@ -160,43 +171,7 @@
 										<th>Action</th>
 									</tr>
 								</thead>
-								<%
-									RequireData rd=new RequireData();
-									List details = rd.getJcbPocBillDetail();
-									int srno = 0;
-									String billNo = "";
-									String custId = "";
-									String custname = "";
-									String date = "";
-									String billAmount = "";
-
-									if (details != null) {
-										Iterator itr2 = details.iterator();
-								%>
-								<tbody>
-									<%
-										while (itr2.hasNext()) {
-												srno++;
-												billNo = itr2.next().toString();
-												custId = itr2.next().toString();
-												custname = itr2.next().toString();
-												date = itr2.next().toString();
-												billAmount = itr2.next().toString();
-									%>
-									<tr class="gradeX">
-										<td style="width: 32px;"><%=srno%></td>
-										<td><%=billNo%></td>
-										<td><var id="custId<%=billNo%>" style="visibility: hidden;"><%=custId%></var><var id="custNameUpdate<%=billNo%>" style="font-style: normal;"><%=custname%></var></td>
-										<td><%=date%></td>
-										<td><%=billAmount%></td>
-										<td><a href="#update" data-toggle='modal'
-											onclick='getCustomerBillDataUpdate(<%=billNo%>)'>Update</a> / <a
-											href="/SAMERP/JcbPocDetails.do?deleteid=<%=billNo%>">Delete</a></td>
-									</tr>
-									<%
-										}
-										}
-									%>
+								<tbody id="jcbpocDataTable">
 								</tbody>
 								
 							</table>
@@ -239,6 +214,57 @@
 
 	<!--end-Footer-part-->
 	<script type="text/javascript">
+// 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@DATA TABLE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+	function setMonth() {
+		var thisYear = new Date().getFullYear();
+		var thisMonth = new Date().getMonth();
+		thisMonth=thisMonth+1;
+		document.getElementById("dataTableFrom").value =thisYear+"-"+thisMonth+"-"+"01";
+		document.getElementById("dataTableTo").value =thisYear+"-"+thisMonth+"-"+"30";
+		getDataForTable();
+	}
+	function getDataForTable() {
+		var fromDate=document.getElementById("dataTableFrom").value;
+		var toDate=document.getElementById("dataTableTo").value;
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split("~");
+				if(demoStr=="")
+				document.getElementById("jcbpocDataTable").innerHTML="<tr><	td colspan='10'>No Records Found!</td></tr>"
+				else{
+					var count=1;
+					var wholeData="";
+					
+					for(var i=0;i<demoStr.length-2;i=i+5){
+							
+						wholeData+="<tr>"+
+						"<td style=\"width: 32px;\">"+count+"</td>"+
+						"<td>"+demoStr[i]+"</td>";
+						
+						var billNo=demoStr[i];
+						var custId=demoStr[i+1];
+						
+						wholeData+="<td><var id=\"custId"+billNo+"\" style=\"visibility: hidden;\"></var><var id=\"custNameUpdate"+custId+""+billNo+"\" style=\"font-style: normal;\">"+demoStr[i+2]+"</var></td>"+
+						"<td>"+demoStr[i+3]+"</td>"+
+						"<td>"+demoStr[i+4]+"</td>"+
+						"<td>"+"<a href=\"#update\" data-toggle='modal' onclick='getCustomerBillDataUpdate("+billNo+")'>Update</a> / <a href=\"/SAMERP/JcbPocDetails.do?deleteid="+billNo+"\">Delete</a></td>"+
+						"<tr>";
+						
+						count++;
+					}
+				
+				document.getElementById("jcbpocDataTable").innerHTML=wholeData;
+				}
+			}
+		};
+		xhttp.open("GET", "/SAMERP/JcbPocBill.do?fromDate=" + fromDate+"&toDate="+toDate, true);
+		xhttp.send();
+	}
+
+//	 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END DATA TABLE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		//**********************Customer Search******************************************
 		
 		
