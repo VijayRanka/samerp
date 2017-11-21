@@ -1,9 +1,11 @@
 package admin.productPurchase;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -28,6 +30,7 @@ public class productSupplierPayment extends HttpServlet {
 		
 		GenericDAO gd = new GenericDAO();
 		RequireData rd = new RequireData();
+		PrintWriter out = response.getWriter();
 		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		String requiredDate = df.format(new Date()).toString();
@@ -73,6 +76,9 @@ public class productSupplierPayment extends HttpServlet {
 			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supId);
 			rdd.forward(request, response);
 		}
+		
+		
+		
 		
 		
 		if(request.getParameter("paymentSubmitbtn")!=null){
@@ -190,6 +196,177 @@ public class productSupplierPayment extends HttpServlet {
 			rdd.forward(request, response);
 		}
 		
+		
+		if(request.getParameter("updateid")!=null){
+			String id[] = request.getParameter("updateid").split("-");
+			
+			List l = rd.getSupplierPaymentUpdateDetails(id[0], id[1]);
+			
+			String ll = "";
+			
+			Iterator itr = l.iterator();
+			
+			while(itr.hasNext()){
+				ll+=itr.next()+", ";
+			}
+			
+			out.print(ll);
+			
+		}
+		
+		
+		if(request.getParameter("updateSubmitbtn")!=null){
+			
+			String newAmt = request.getParameter("updateDebitAmount").trim();
+			String oldAmt = request.getParameter("oldupdateDebitAmount").trim();
+			String tid = request.getParameter("tid").trim();
+			String supid = request.getParameter("sid").trim();
+			String updateMode = request.getParameter("updateMode").trim();
+			String updateBank = request.getParameter("updateBank").trim();
+			String updateChequeNumber = request.getParameter("updateChequeNumber").trim();
+			
+			boolean amountStatusClear = false;
+
+			if(updateMode.equalsIgnoreCase("Cash")){	
+				
+				int pcStatus=rd.checkPCStatus(Integer.parseInt(newAmt));
+				if(pcStatus==0)
+				{
+					request.setAttribute("status", "You don't have enough balance in your Petty Cash");
+				
+				}
+				else if(pcStatus==-1)
+				{
+					request.setAttribute("status", "You don't have enough balance in your Petty Cash");
+				}
+				else if(pcStatus==1)
+				{
+					amountStatusClear=true;
+				}
+				
+				if(amountStatusClear)
+				{
+					boolean successFirst=rd.pCashEntry(requiredDate, 0, Integer.parseInt(oldAmt), "1");
+					if(successFirst)
+					{
+						
+						String getDebtorId="SELECT `id` FROM `debtor_master` WHERE debtor_master.type=(SELECT material_supply_master.supplier_alias FROM material_supply_master WHERE material_supply_master.supplier_business_id="+supid+")";
+						String debtorId=gd.getData(getDebtorId).get(0).toString();
+						
+						boolean successSecond=rd.pCashEntry(requiredDate, Integer.parseInt(newAmt), 0, debtorId);
+						if(successSecond)
+						{
+							request.setAttribute("status", "Updated Petty Cash And Expense");
+						}
+					}
+					
+				}
+			}
+			else if(updateMode.equalsIgnoreCase("Cheque"))
+			{
+				String bankId=gd.getData("SELECT account_details.acc_id FROM account_details WHERE account_details.acc_aliasname='"+updateBank+"'").get(0).toString();
+				
+				int badStatus=rd.checkBankBalance(Integer.parseInt(newAmt), bankId);
+				if(badStatus==0)
+				{
+					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_0");
+				}
+				else if(badStatus==-1)
+				{
+					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
+				}
+				else if(badStatus==1)
+				{
+					amountStatusClear=true;
+				}
+				else if(badStatus==2)
+				{
+					request.setAttribute("payError", "YOU HAVE NOT ADD MONEY IN YOUR BANK_b_2");
+				}
+				
+				if(amountStatusClear)
+				{
+				
+					boolean successFirst=rd.badEntry(bankId, requiredDate, 0, Integer.parseInt(oldAmt), "REVERT", "1");
+					if(successFirst)
+					{
+						String debtorId=gd.getData("SELECT `id` FROM `debtor_master` WHERE debtor_master.type=(SELECT material_supply_master.supplier_alias FROM material_supply_master WHERE material_supply_master.supplier_business_id="+supid+")").get(0).toString();
+						boolean successSecond=rd.badEntry(bankId, requiredDate, Integer.parseInt(newAmt), 0, "CHEQUE_"+updateChequeNumber, debtorId);
+						if(successSecond)
+						{
+							request.setAttribute("status", "Updated Bank Amount And Expense");
+						}
+					}
+				}
+			}
+			else if(updateMode.equalsIgnoreCase("Transfer"))
+			{
+				String bankId=gd.getData("SELECT account_details.acc_id FROM account_details WHERE account_details.acc_aliasname='"+updateBank+"'").get(0).toString();
+				boolean successFirst=rd.badEntry(bankId, requiredDate, 0, Integer.parseInt(oldAmt), "REVERT", "1");
+				if(successFirst)
+				{
+					String debtorId=gd.getData("SELECT `id` FROM `debtor_master` WHERE debtor_master.type=(SELECT material_supply_master.supplier_alias FROM material_supply_master WHERE material_supply_master.supplier_business_id="+supid+")").get(0).toString();
+					boolean successSecond=rd.badEntry(bankId, requiredDate, Integer.parseInt(newAmt), 0, updateMode, debtorId);
+					if(successSecond)
+					{
+						request.setAttribute("status", "Updated Bank Amount And Expense");
+					}
+				}
+			}
+			
+			
+			
+			
+			int diff = Integer.parseInt(newAmt)-Integer.parseInt(oldAmt);
+			
+			String maxIdQ = "SELECT max(id) FROM `total_supplier_payment_master`";
+			List maxList = gd.getData(maxIdQ);
+			String maxId = maxList.get(0).toString();
+			
+			
+			String updateTPaymet = "UPDATE `total_supplier_payment_master` SET `paid_amt`="+newAmt+" WHERE id="+tid;
+			int updateTPaymetStatus = gd.executeCommand(updateTPaymet);
+			
+			if(updateTPaymetStatus==1){
+				
+				for(int i=Integer.parseInt(tid); i<=Integer.parseInt(maxId); i++){
+					rd.updateTPaymet(String.valueOf(i), String.valueOf(diff));
+				}
+			}
+			
+			
+			String spid = rd.getSupPaymentIdByTid(tid);
+			
+			if(!spid.equals("")){
+				
+				String updateSPaymet = "UPDATE `supplier_payment_master` SET `paid_amt`="+newAmt+" WHERE id="+spid;
+				int updateSPaymetStatus = gd.executeCommand(updateSPaymet);
+				
+				if(updateSPaymetStatus==1){
+					
+				}
+			}
+			
+			
+			
+			
+			
+			
+			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supid);
+			rdd.forward(request, response);
+		}
+		
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
