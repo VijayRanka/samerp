@@ -331,6 +331,8 @@ function generateName(value){
 				xhttp.open("POST", "/SAMERP/Expenses.do?findNameByReport=1", true);
 			else if(value=='BANKSTATEMENT')
 				xhttp.open("POST", "/SAMERP/AddAccountDetails?findNameByReport=1", true);
+			else if(value=='SALE')
+				xhttp.open("POST", "/SAMERP/Sales?findSaleClient=1", true);
 			else if(value=='PAYMENTSTATEMENT'){
 				document.getElementById("payTypes").style.display="block";
 				if(document.getElementById("type1").checked==true){
