@@ -421,6 +421,9 @@ public class PTCash extends HttpServlet {
 			//int cash[]=new int[30];
 			ArrayList<Integer> cash=new ArrayList<>();
 			int updatedPettyBalance=0;
+			int amt=0;
+			int updateAmt=0;
+			List debtorId=null;
 			for(int i=0;i<=count;i++)
 			{
 				if(!request.getParameter("hlName,"+i).isEmpty())
@@ -430,28 +433,50 @@ public class PTCash extends HttpServlet {
 					String alias=add+handLoanName;
 					
 					String handLoanDetails="SELECT handloan_details.handloan_id,handloan_details.balance FROM handloan_details,handloan_master WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"' ORDER BY handloan_details.id DESC LIMIT 1";
-					System.out.println("hiiii"+handLoanDetails);
+					//System.out.println("hiiii"+handLoanDetails);
 					List getDetails=gd.getData(handLoanDetails);
-					 
-					int addAmt=(int)getDetails.get(1);
-					int amt=Integer.parseInt(request.getParameter("hlAmt,"+i));
-					cash.add(amt);
-					int updateAmt=addAmt+amt;
-					out.println("handloan new amt : "+updateAmt+"<br>");
 					
-					
-					String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
-							+ "VALUES ("+getDetails.get(0)+",'"+pettyDate+"',"+amt+","+0+",'CASH','',"+updateAmt+")";
-					int insertHandLoanStatus=gd.executeCommand(insertHandLoanDetails);
-					if(insertHandLoanStatus>0)
+					if(!getDetails.isEmpty())
 					{
-						System.out.println("inserted credit amt and balance in handloanDetails");
+						int addAmt=(int)getDetails.get(1);
+						amt=Integer.parseInt(request.getParameter("hlAmt,"+i));
+						cash.add(amt);
+						updateAmt=addAmt+amt;
+						
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
+								+ "VALUES ("+getDetails.get(0)+",'"+pettyDate+"',"+amt+","+0+",'CASH','',"+updateAmt+")";
+						int insertHandLoanStatus=gd.executeCommand(insertHandLoanDetails);
+						if(insertHandLoanStatus>0)
+						{
+							System.out.println("inserted credit amt and balance in handloanDetails");
+						}
+						
+						String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+alias+"'";
+						debtorId=gd.getData(getDebtorId);
+						
 					}
-					
-					
-					String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+alias+"'";
-					List debtorId=gd.getData(getDebtorId);
-					
+					else
+					{
+						amt=Integer.parseInt(request.getParameter("hlAmt,"+i));
+						cash.add(amt);
+						updateAmt=amt;
+						
+						String getHannLoanId="SELECT id,alias_name FROM handloan_master ORDER BY id DESC LIMIT 1";
+						List handLoanId=gd.getData(getHannLoanId);
+						
+						String insertHandLoanDetails="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
+								+ "VALUES ("+handLoanId.get(0)+",'"+pettyDate+"',"+amt+","+0+",'CASH','',"+updateAmt+")";
+						int insertHandLoanStatus=gd.executeCommand(insertHandLoanDetails);
+						if(insertHandLoanStatus>0)
+						{
+							System.out.println("inserted credit amt and balance in handloanDetails");
+						}
+						
+						String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+handLoanId.get(1)+"'";
+						debtorId=gd.getData(getDebtorId);
+						
+					}
+					//out.println("handloan new amt : "+updateAmt+"<br>");
 					
 					String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
 					List lastPettyBalance=gd.getData(getLastPettyBalance);
@@ -511,7 +536,7 @@ public class PTCash extends HttpServlet {
 					{
 						cash.add(withdrawlAmt);
 						String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+bankAlias+"'";
-						List debtorId=gd.getData(getDebtorId);
+						debtorId=gd.getData(getDebtorId);
 						String handLoanName=request.getParameter("hlName,"+j);
 						String add="HL_";
 						String alias=add+handLoanName;
@@ -521,9 +546,9 @@ public class PTCash extends HttpServlet {
 						List getDetails=gd.getData(handLoanDetails);
 						 
 						int addAmt=(int)getDetails.get(1);
-						int amt=Integer.parseInt(request.getParameter("hlAmt,"+j));
+						 amt=Integer.parseInt(request.getParameter("hlAmt,"+j));
 						cash.add(amt);
-						int updateAmt=addAmt+amt;
+						updateAmt=addAmt+amt;
 						out.println("handloan new amt : "+updateAmt+"<br>");
 						
 						
@@ -829,7 +854,7 @@ public class PTCash extends HttpServlet {
 			if(status1>0)
 			{
 				System.out.println("inserted Successfully");
-				request.setAttribute("hName", name);
+				request.setAttribute("hName", aliasname);
 				request.setAttribute("amt", amount);
 				request.setAttribute("status", "Handloan Details Added");
 			}
