@@ -33,6 +33,39 @@ public class AddEmployee extends HttpServlet {
 		PrintWriter out=response.getWriter();
 		GenericDAO gd=new GenericDAO();
 		
+		
+
+		
+		if(request.getParameter("empid")!=null)
+		{
+			RequireData req=new RequireData();
+			String str=request.getParameter("empid");
+			
+			System.out.println("emp:"+str);
+			String s="";
+			if(str.equals("Driver") ||str.equals("Helper"))
+			{
+				List list=req.getVehicle();
+				Iterator itr2=list.iterator();
+				while(itr2.hasNext())
+				{
+					s+=itr2.next()+",";
+				}
+			}
+			else if(str.equals("Home Worker")||str.equals("Labour")){
+				List list=req.getContractorVehicle();
+				System.out.println("List is !:"+list);
+				Iterator itr2=list.iterator();
+				while(itr2.hasNext())
+				{
+					s+=itr2.next()+",";
+				}
+				
+			}
+			
+			out.print(s);
+		}
+		
 		//for inserting data into table--->employee_details
 		if(request.getParameter("submit")!=null){
 			
@@ -43,13 +76,15 @@ public class AddEmployee extends HttpServlet {
 			String reqdate=request.getParameter("date");
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
-			String Debtor_Id=request.getParameter("contractorVehicle_name");
+			String Debtor_Id=request.getParameter("contractorVehicle_name").trim();
+			System.out.print("debtor:"+Debtor_Id);
 			String empid=request.getParameter("employeeid");
 			
 			RequireData rq=new RequireData();
 			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
 			
-
+				System.out.println("work:"+WorkWith);
+				
 			String desig=request.getParameter("designation");
 			char designation=desig.charAt(0);
 			
@@ -61,15 +96,6 @@ public class AddEmployee extends HttpServlet {
 			
 			//Get Transport List start 
 			
-			RequireData rd=new RequireData();
-			List demoList=rd.getVehicle();
-			System.out.println("demoList:"+demoList);
-			Iterator itr1=demoList.iterator();
-			while(itr1.hasNext())
-			{
-				
-				out.print(itr1.next()+",");
-			}
 			
 			//End Transport List start 
 			
@@ -133,6 +159,7 @@ public class AddEmployee extends HttpServlet {
 			
 		}
 		
+		
 		if(request.getParameter("employeeid")!=null)
 		{
 			String RowId=request.getParameter("employeeid");
@@ -154,24 +181,24 @@ public class AddEmployee extends HttpServlet {
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
 			String work_with= request.getParameter("contractorVehicle_alias");
-				System.out.println("wo:"+work_with);
-			
-			
-			String query="SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_workwith='"+work_with+"'";
-			System.out.println("query:"+query);
-			String workwith=gd.getData(query).get(0).toString();
-		
-			
 			String designation = request.getParameter("designation");
+			
+			
+			/*String query="SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_workwith='"+work_with+"'";
+			System.out.println("query:"+query);
+			String workwith=gd.getData(query).get(0).toString();	
 			
 			String update_aliasname=designation+"_"+employee_name.replace(" ", "_")+"_"+workwith;
 			
 			System.out.println("up:"+update_aliasname);
+			*/
 			
 			String up_aliasname="";
 
-			String updateEmployeeQuery = "update emplyoee_details set emp_date='"+up_date+"',emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_designation='"+designation+"',aliasname='"+update_aliasname+"'  where emp_id='"+Emp_id+"';";
+			String updateEmployeeQuery = "update emplyoee_details set emp_date='"+up_date+"',emp_name='"+employee_name+"', emp_contactno='"+contact_no+"', emp_workwith='"+work_with+"', emp_designation='"+designation+"' where emp_id='"+Emp_id+"';";
+			
 			System.out.println("updated:"+updateEmployeeQuery);
+			
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			
 			System.out.println("update :"+updatestatus);

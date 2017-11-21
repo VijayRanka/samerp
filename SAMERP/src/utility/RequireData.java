@@ -480,8 +480,10 @@ public class RequireData
 	
 	public List getVehicle()
 	{
-		String query="SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_aliasname LIKE '%TRANSPORT%'";
+		String query="SELECT debtor_master.id, debtor_master.type FROM debtor_master WHERE debtor_master.type LIKE '%TRANSPORT%' AND debtor_master.type NOT LIKE '%EMP%'";
 		List list=gd.getData(query);
+		
+		System.out.println("List Of Vehicle Aliasname:"+list);
 		return list;
 	}
 	
@@ -702,7 +704,7 @@ public class RequireData
 		
 		public List getEmployeeRowData(String RowId)
 		{
-			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_workwith,emplyoee_details.emp_designation,emplyoee_details.aliasname FROM emplyoee_details where emp_id="+RowId+"; ";
+			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_designation,debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id="+RowId+"";
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
 			return employeeDetailsData;
 		}
