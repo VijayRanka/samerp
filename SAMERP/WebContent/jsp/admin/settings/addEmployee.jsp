@@ -11,9 +11,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />
-<link rel="stylesheet"
-	href="/SAMERP/config/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="/SAMERP/config/css/fullcalendar.css" />
+<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />
+<link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />
+<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css" rel="stylesheet" />
@@ -166,12 +167,14 @@
 									</div>
 								</div>
 								
+							
+								
 								<div class="control-group" >
 									<label class="control-label"><span style="color: red;"></span>Work
 										With:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_name" class="span5">
+										<select name="contractorVehicle_name" list="myList" class="span5" id="contractorvehicleid">
 
 											<%
 												List details = rq.getContractorVehicle();
@@ -181,7 +184,8 @@
 														String id = itr.next().toString();
 														String alias_name = itr.next().toString();
 											%>
-											<option value="<%=id%>"><%=alias_name%></option>											<%
+											<option value="<%=id%>"><%=alias_name%></option>	<datalist id="myList"></datalist>
+											<%
 												}
 											%>
 										</select>
@@ -191,11 +195,14 @@
 									%>
 								</div>
 								
+								
+																
 								<div class="control-group hide" id="opening_balid">
 									<label class="control-label"><span style="color: red;"></span>
 										Opening Balance :</label>
 									<div class="controls">
-										<input type="text" name="opening_balance" id="opening_balanceid" class="span5" placeholder="Opening Balance" pattern="[0-9]*" required />
+										<input type="text" name="opening_balance"  id="opening_balanceid" class="span5" placeholder="OPening Balance" pattern="[0-9]*" required />
+										
 									</div>
 								</div>
 
@@ -225,7 +232,7 @@
 								<th>Date</th>
 								<th>Employee Name</th>
 								<th>Contact No</th>
-								<th>Debtor_Id</th>
+								<th>WorkWith</th>
 								<th>Designation</th>
 								<th>AliasName</th>
 								<th>Actions</th>
@@ -339,6 +346,7 @@
 														String alias_name = itr.next().toString();
 											%>
 											<option value="<%=id1%>"><%=alias_name%></option>
+											
 											<%
 												}
 											%>
@@ -453,7 +461,7 @@ function getVehicle(id) {
 }
 
 function showOpening(str) {
-	//alert(str);
+	
 	if(str=='Driver' ||str=='Helper'){
 		document.getElementById("opening_balid").className="control-group ";
 	
@@ -467,14 +475,9 @@ function showOpening(str) {
 		
 	}
 	
-	if(str=='Driver')
-		{
-			var d=document.getElementById('contractor_vehicleid').value;
-			alert(d);
-		}
-	
 	
 }
+
 
 function getSetSelect(id,value)
 {
@@ -483,26 +486,19 @@ function getSetSelect(id,value)
 	xx[0].innerHTML=value;
 }
 </script>
-	<script src="/SAMERP/config/js/excanvas.min.js"></script>
-	<script src="/SAMERP/config/js/jquery.min.js"></script>
-	<script src="/SAMERP/config/js/jquery.ui.custom.js"></script>
-	<script src="/SAMERP/config/js/bootstrap.min.js"></script>
-	<script src="/SAMERP/config/js/jquery.flot.min.js"></script>
-	<script src="/SAMERP/config/js/jquery.flot.resize.min.js"></script>
-	<script src="/SAMERP/config/js/jquery.peity.min.js"></script>
-	<script src="/SAMERP/config/js/fullcalendar.min.js"></script>
-	<script src="/SAMERP/config/js/matrix.js"></script>
-	<script src="/SAMERP/config/js/matrix.dashboard.js"></script>
-	<script src="/SAMERP/config/js/jquery.gritter.min.js"></script>
-	<script src="/SAMERP/config//SAMERP/config/js/matrix.interface.js"></script>
-	<script src="/SAMERP/config/js/matrix.chat.js"></script>
-	<script src="/SAMERP/config/js/jquery.validate.js"></script>
-	<script src="/SAMERP/config/js/matrix.form_validation.js"></script>
-	<script src="/SAMERP/config/js/jquery.wizard.js"></script>
-	<script src="/SAMERP/config/js/jquery.uniform.js"></script>
-	<script src="/SAMERP/config/js/select2.min.js"></script>
-	<script src="/SAMERP/config/js/matrix.popover.js"></script>
-	<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script>
-	<script src="/SAMERP/config/js/matrix.tables.js"></script>
+<script src="/SAMERP/config/js/jquery.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
+<script src="/SAMERP/config/js/bootstrap.min.js"></script> 
+<script src="/SAMERP/config/js/bootstrap-datepicker.js"></script> 
+<script src="/SAMERP/config/js/jquery.toggle.buttons.js"></script> 
+<script src="/SAMERP/config/js/jquery.uniform.js"></script> 
+<script src="/SAMERP/config/js/select2.min.js"></script> 
+<script src="/SAMERP/config/js/jquery.dataTables.min.js"></script> 
+<script src="/SAMERP/config/js/matrix.js"></script> 
+<script src="/SAMERP/config/js/matrix.tables.js"></script>
+<script src="/SAMERP/config/js/wysihtml5-0.3.0.js"></script> 
+<script src="/SAMERP/config/js/jquery.peity.min.js"></script> 
+<script src="/SAMERP/config/js/bootstrap-wysihtml5.js"></script> 
+<script src="/SAMERP/config/js/fullcalendar.min.js"></script>
 </body>
 </html>
