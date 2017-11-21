@@ -142,9 +142,12 @@ to {
 			          <div class="control-group" >
 				             	   <label class="control-label">From : </label>
 					               <div class="control" style="top: 5px; position: relative; left: 20px;">
-										<input type="date" name="fromDate" id="fromDate" value="2017-11-09"> &nbsp;&nbsp;&nbsp;
+					               <%SysDate sd=new SysDate(); 
+					               String lDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
+					               String fDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01"; %>
+										<input type="date" name="fromDate" id="fromDate" value="<%=fDate%>"> &nbsp;&nbsp;&nbsp;
 										<strong>To : </strong>
-										<input type="date" name="toDate" id="toDate" value="2017-11-19">
+										<input type="date" name="toDate" id="toDate" value="<%=lDate%>">
 									</div>
 				             	</div>
 			          
@@ -157,6 +160,7 @@ to {
 			                <option value="EXPENSES">Expenses</option>
 			                <option value="HANDLOAD">Hand-Loan</option>
 			                <option value="JCBPOKLAND">JCB-Pokland</option>
+			                <option value="PAYMENTSTATEMENT">Payment Statement</option>
 			                <option value="PIPEPURCHASE">Pipe Purchase</option>
 			                <option value="PRODUCTDETAILS">Production Details</option>
 			                <option value="SALE">Sale</option>
@@ -164,6 +168,16 @@ to {
 			                </select>
 			              </div>
 			            </div>
+			             <div class="control-group" style="" id="payTypes">
+				             	   <label class="control-label">Select Type : </label>
+					               <div class="controls">
+					                 <input type="radio" id="" value="" name="types" onclick="" checked="checked"/> <span>Clients</span> 
+					                 &nbsp;&nbsp;&nbsp;&nbsp;
+					                 <input type="radio" id="" value="" name="types" onclick="" /><span>Supplier</span> 
+					                  &nbsp;&nbsp;&nbsp;&nbsp;
+					                 <input type="radio" id="" value="" name="types" onclick="" /><span>Contractor</span> 
+					               </div>
+				             	</div>
 			            <div class="control-group" style="">
 				             	   <label class="control-label">Select Mode : </label>
 					               <div class="controls">
@@ -223,7 +237,7 @@ to {
 							<h5>Data List</h5>
 						</div>
 						<div class="widget-content nopadding" id="myTable">
-							<table class="table table-bordered" id="wholeDataList" style="font-size: 14px">
+							<table class="table table-bordered" id="wholeDataList" style="font-size: 12px">
 							</table>
 						</div>
 					</div>
