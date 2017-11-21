@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,11 +38,13 @@ public class AddEmployee extends HttpServlet {
 			
 			int status=0;
 			String insertQuery="";
+			String[] checkStatus=new String[100];
 			
 			String reqdate=request.getParameter("date");
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
 			String Debtor_Id=request.getParameter("contractorVehicle_name");
+			String empid=request.getParameter("employeeid");
 			
 			RequireData rq=new RequireData();
 			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
@@ -53,7 +54,23 @@ public class AddEmployee extends HttpServlet {
 			char designation=desig.charAt(0);
 			
 			String aliasname="EMP_"+desig+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
-	
+			
+			checkStatus=aliasname.split("_");
+			
+			/*for( String s:checkStatus)
+			{
+				System.out.println("checkstatus:"+s);
+			}*/
+			
+			String checkStatus1="SELECT emplyoee_details.emp_id, emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%TRANSPORT_"+checkStatus[4]+"%' AND emplyoee_details.aliasname LIKE '%"+desig+"%' AND emplyoee_details.status=0 ";
+			List ckst=gd.getData(checkStatus1);
+			if(!ckst.isEmpty())
+			{
+				String updatestatus="UPDATE emplyoee_details SET status=1 WHERE emp_id='"+ckst.get(0)+"'";
+				int st=gd.executeCommand(updatestatus);
+				
+			}
+			
 			
 		//Driver Helper Payment
 			String opening_bal=request.getParameter("opening_balance");
@@ -82,6 +99,8 @@ public class AddEmployee extends HttpServlet {
 				request.setAttribute("status", "Employee Inserted Successfully");
 				
 			}
+			
+			
 			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
 			rd.forward(request, response);
 		}

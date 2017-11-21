@@ -193,24 +193,31 @@ public class Expenses extends HttpServlet {
 			String getPreviousbalance="SELECT bank_account_details.balance FROM bank_account_details WHERE bank_account_details.id=(SELECT MAX(bank_account_details.id) FROM bank_account_details WHERE bank_account_details.bid='"+Bank_Id+"')";
 			int previousbal=Integer.parseInt(gd.getData(getPreviousbalance).get(0).toString());
 			
-			System.out.println("previous bal:"+previousbal);
-			int totalbalance=Amount+previousbal;
 			
-			System.out.println("Amount is:"+totalbalance);
+			boolean ptstatus=false,bstatus=false;
 			
-			String debtor_query="";
+			RequireData req=new RequireData();
+			if(req.checkPCStatus(Amount)==1)
+			{
+				ptstatus = req.pCashEntry(Date,Amount, 0, "3");
+			}
+			else{
+				
+			}
 			
-			String query="insert into bank_account_details(bid,date,debit,credit,particulars,debter_id,balance) values('"+Bank_Id+"','"+Date+"','0','"+Amount+"','"+particulars+"','3','"+totalbalance+"')";
-		  
-			System.out.println("cash deposite:"+query);
+			if(ptstatus)
+			{
+				
+				if(req.checkBankBalance(Amount, Bank_Id)==1)
+				{
+					bstatus = req.badEntry(Bank_Id, Date, 0, Amount, "Petty Cash Deposite", "3");
+				}
+				else{
+					
+				}
+			}
 			
-			bankstatus=gd.executeCommand(query);
-		   
-		     if(bankstatus!=0)
-		    {
-		    	System.out.println("Inserted Successfully");
-		    	request.setAttribute("status", "Inserted Successfully");
-		    }
+		
 		    RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
 			rd.forward(request, response);
 			
@@ -243,107 +250,17 @@ public class Expenses extends HttpServlet {
 			//update the data
 			String expUpdId="SELECT expenses_type.expenses_type_id FROM expenses_type,expenses_master WHERE expenses_type.expenses_type_id="
 					+ "expenses_master.expenses_type_id and expenses_master.exp_id="+uId;
-			if(!gd.getData(expUpdId).isEmpty())
+			 
+			if(!gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.type='"+uDebtorType+"'").get(0).toString().split("_")[0].equalsIgnoreCase("HL"))
 			{
-				int demoId=Integer.parseInt(gd.getData(expUpdId).get(0).toString());
-				String query2="";
-				if(!oldAmount.equals("0"))
+				
+				if(!gd.getData(expUpdId).isEmpty())
 				{
-					if(Integer.parseInt(uAmount)-Integer.parseInt(oldAmount)<0)
-						{
-							if(payMode.equalsIgnoreCase("Cash")){
-							boolean successFirst=rd.pCashEntry(todDate, 0, Integer.parseInt(oldAmount), "1");
-							if(successFirst)
-							{
-								String debtorId=gd.getData("SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+uDebtorType+"'").get(0).toString();
-								boolean successSecond=rd.pCashEntry(todDate, Integer.parseInt(uAmount), 0, debtorId);
-								if(successSecond)
-								{
-									request.setAttribute("status", "Updated Petty Cash And Expense");
-								}
-							}
-							query2="UPDATE `expenses_master` SET `name`='"+uName+"',amount="+uAmount+",`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
-							}
-							else if(payMode.equalsIgnoreCase("cheque"))
-							{
-								String bankId=gd.getData("SELECT account_details.acc_id FROM account_details WHERE account_details.acc_aliasname='"+uDebtorType+"'").get(0).toString();
-								boolean successFirst=rd.badEntry(bankId, todDate, 0, Integer.parseInt(oldAmount), "", "1");
-								if(successFirst)
-								{
-									String debtorId=gd.getData("SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+uDebtorType).get(0).toString();
-									boolean successSecond=rd.badEntry(bankId, todDate, Integer.parseInt(uAmount), 0, "CHEQUE_"+uOtherDetails, debtorId);
-									if(successSecond)
-									{
-										request.setAttribute("status", "Updated Bank Amount And Expense");
-									}
-								}
-								query2="UPDATE `expenses_master` SET `name`='"+uName+"',amount="+uAmount+",`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
-								
-							}
-							else
-							{
-								String bankId=gd.getData("SELECT account_details.acc_id FROM account_details WHERE account_details.acc_aliasname='"+uDebtorType+"'").get(0).toString();
-								boolean successFirst=rd.badEntry(bankId, todDate, 0, Integer.parseInt(oldAmount), "", "1");
-								if(successFirst)
-								{
-									String debtorId=gd.getData("SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+uDebtorType).get(0).toString();
-									boolean successSecond=rd.badEntry(bankId, todDate, Integer.parseInt(uAmount), 0, payMode, debtorId);
-									if(successSecond)
-									{
-										request.setAttribute("status", "Updated Bank Amount And Expense");
-									}
-								}
-								query2="UPDATE `expenses_master` SET `name`='"+uName+"',amount="+uAmount+",`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
-								
-							}
-							
-						}
-					else if(Integer.parseInt(uAmount)-Integer.parseInt(oldAmount)>0)
-						{
-							if(payMode.equalsIgnoreCase("Cash"))
-							{
-								int pcStatus=rd.checkPCStatus(Integer.parseInt(uAmount));
-								if(pcStatus==0)
-								{
-									request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_0");
-								
-								}
-								else if(pcStatus==-1)
-								{
-									request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_-1");
-								}
-								else if(pcStatus==1)
-								{
-									amountStatusClear=true;
-								}
-								else if(pcStatus==2)
-								{
-									request.setAttribute("payError", "YOU HAVE NOT ADDED YOUR PETI CASH_c_-1");
-								}
-								
-							}
-							else
-							{
-								int badStatus=rd.checkBankBalance(Integer.parseInt(uAmount),uDebtorType);
-								if(badStatus==0)
-										{
-											request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_0");
-										}
-								else if(badStatus==-1)
-								{
-									request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
-								}
-								else if(badStatus==1)
-								{
-									amountStatusClear=true;
-								}
-								else if(badStatus==2)
-								{
-									request.setAttribute("payError", "YOU HAVE NOT ADD MONEY IN YOUR BANK_b_2");
-								}
-								
-							}
-							if(amountStatusClear)
+					int demoId=Integer.parseInt(gd.getData(expUpdId).get(0).toString());
+					String query2="";
+					if(!oldAmount.equals("0"))
+					{
+						if(Integer.parseInt(uAmount)-Integer.parseInt(oldAmount)<0)
 							{
 								if(payMode.equalsIgnoreCase("Cash")){
 								boolean successFirst=rd.pCashEntry(todDate, 0, Integer.parseInt(oldAmount), "1");
@@ -392,60 +309,161 @@ public class Expenses extends HttpServlet {
 								}
 								
 							}
-							
-						}
-				}
-				else
-				query2="UPDATE `expenses_master` SET `name`='"+uName+"',`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
-				
-				getstatus=gd.executeCommand(query2);
-				System.out.println("after upd");
-				if(getstatus!=0)
-				{
-					status=true;
-					System.out.println("Successfully Updated In Expenses");
-					request.setAttribute("status", "Data Updated Successfully");
-				}
-
-				if(!request.getParameter("uVehReading").isEmpty())
-				{
+						else if(Integer.parseInt(uAmount)-Integer.parseInt(oldAmount)>0)
+							{
+								if(payMode.equalsIgnoreCase("Cash"))
+								{
+									int pcStatus=rd.checkPCStatus(Integer.parseInt(uAmount));
+									if(pcStatus==0)
+									{
+										request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_0");
+									
+									}
+									else if(pcStatus==-1)
+									{
+										request.setAttribute("payError", "YOU DON'T HAVE ENOUGH BALANCE IN YOUR PETI CASH_c_-1");
+									}
+									else if(pcStatus==1)
+									{
+										amountStatusClear=true;
+									}
+									else if(pcStatus==2)
+									{
+										request.setAttribute("payError", "YOU HAVE NOT ADDED YOUR PETI CASH_c_-1");
+									}
+									
+								}
+								else
+								{
+									int badStatus=rd.checkBankBalance(Integer.parseInt(uAmount),uDebtorType);
+									if(badStatus==0)
+											{
+												request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_0");
+											}
+									else if(badStatus==-1)
+									{
+										request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
+									}
+									else if(badStatus==1)
+									{
+										amountStatusClear=true;
+									}
+									else if(badStatus==2)
+									{
+										request.setAttribute("payError", "YOU HAVE NOT ADD MONEY IN YOUR BANK_b_2");
+									}
+									
+								}
+								if(amountStatusClear)
+								{
+									if(payMode.equalsIgnoreCase("Cash")){
+									boolean successFirst=rd.pCashEntry(todDate, 0, Integer.parseInt(oldAmount), "1");
+									if(successFirst)
+									{
+										String debtorId=gd.getData("SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+uDebtorType+"'").get(0).toString();
+										boolean successSecond=rd.pCashEntry(todDate, Integer.parseInt(uAmount), 0, debtorId);
+										if(successSecond)
+										{
+											request.setAttribute("status", "Updated Petty Cash And Expense");
+										}
+									}
+									query2="UPDATE `expenses_master` SET `name`='"+uName+"',amount="+uAmount+",`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
+									}
+									else if(payMode.equalsIgnoreCase("cheque"))
+									{
+										String bankId=gd.getData("SELECT account_details.acc_id FROM account_details WHERE account_details.acc_aliasname='"+uDebtorType+"'").get(0).toString();
+										boolean successFirst=rd.badEntry(bankId, todDate, 0, Integer.parseInt(oldAmount), "", "1");
+										if(successFirst)
+										{
+											String debtorId=gd.getData("SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+uDebtorType).get(0).toString();
+											boolean successSecond=rd.badEntry(bankId, todDate, Integer.parseInt(uAmount), 0, "CHEQUE_"+uOtherDetails, debtorId);
+											if(successSecond)
+											{
+												request.setAttribute("status", "Updated Bank Amount And Expense");
+											}
+										}
+										query2="UPDATE `expenses_master` SET `name`='"+uName+"',amount="+uAmount+",`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
+										
+									}
+									else
+									{
+										String bankId=gd.getData("SELECT account_details.acc_id FROM account_details WHERE account_details.acc_aliasname='"+uDebtorType+"'").get(0).toString();
+										boolean successFirst=rd.badEntry(bankId, todDate, 0, Integer.parseInt(oldAmount), "", "1");
+										if(successFirst)
+										{
+											String debtorId=gd.getData("SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+uDebtorType).get(0).toString();
+											boolean successSecond=rd.badEntry(bankId, todDate, Integer.parseInt(uAmount), 0, payMode, debtorId);
+											if(successSecond)
+											{
+												request.setAttribute("status", "Updated Bank Amount And Expense");
+											}
+										}
+										query2="UPDATE `expenses_master` SET `name`='"+uName+"',amount="+uAmount+",`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
+										
+									}
+									
+								}
+								
+							}
+					}
+					else
+					query2="UPDATE `expenses_master` SET `name`='"+uName+"',`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
 					
-					String getExpIdVRM="SELECT vehicle_reading_master.id FROM vehicle_reading_master WHERE vehicle_reading_master.expenses_master_id="+uId;
-					
-					if(!gd.getData(getExpIdVRM).isEmpty())
+					getstatus=gd.executeCommand(query2);
+					System.out.println("after upd");
+					if(getstatus!=0)
+					{
+						status=true;
+						System.out.println("Successfully Updated In Expenses");
+						request.setAttribute("status", "Data Updated Successfully");
+					}
+	
+					if(!request.getParameter("uVehReading").isEmpty())
 					{
 						
-						String vId="SELECT vehicle_details.vehicle_id FROM vehicle_details,debtor_master "
-								+ "WHERE debtor_master.type=vehicle_details.vehicle_aliasname and vehicle_details."
-								+ "vehicle_aliasname='"+uDebtorType+"'";
-						if(!gd.getData(vId).isEmpty())
+						String getExpIdVRM="SELECT vehicle_reading_master.id FROM vehicle_reading_master WHERE vehicle_reading_master.expenses_master_id="+uId;
+						
+						if(!gd.getData(getExpIdVRM).isEmpty())
 						{
-							String updateVRM="UPDATE `vehicle_reading_master` SET `vehicle_reading`="+uVehReading+",`vehicle_diesel_qty`="+vehicleLtrQt+" WHERE vehicle_reading_master.id="+gd.getData(getExpIdVRM).get(0);
-							if(gd.executeCommand(updateVRM)>0)
+							
+							String vId="SELECT vehicle_details.vehicle_id FROM vehicle_details,debtor_master "
+									+ "WHERE debtor_master.type=vehicle_details.vehicle_aliasname and vehicle_details."
+									+ "vehicle_aliasname='"+uDebtorType+"'";
+							if(!gd.getData(vId).isEmpty())
 							{
-								status=true;
-								System.out.println("successfully updated Vehicle reading master");
+								String updateVRM="UPDATE `vehicle_reading_master` SET `vehicle_reading`="+uVehReading+",`vehicle_diesel_qty`="+vehicleLtrQt+" WHERE vehicle_reading_master.id="+gd.getData(getExpIdVRM).get(0);
+								if(gd.executeCommand(updateVRM)>0)
+								{
+									status=true;
+									System.out.println("successfully updated Vehicle reading master");
+								}
+							}
+							else
+							{
+								status=false;
+								request.setAttribute("status", "Vehicle Not Present");
+								RequestDispatcher reqDis=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
+								reqDis.forward(request, response);
 							}
 						}
-						else
-						{
-							status=false;
-							request.setAttribute("status", "Vehicle Not Present");
-							RequestDispatcher reqDis=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
-							reqDis.forward(request, response);
-						}
 					}
+					if(status)
+					{
+						request.setAttribute("status", "Updated Successfully");
+						RequestDispatcher reqDis=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
+						reqDis.forward(request, response);
+					}
+					
 				}
-				if(status)
-				{
-					request.setAttribute("status", "Updated Successfully");
+				else{
+					request.setAttribute("status","Expense Type Not Selected Properly");
 					RequestDispatcher reqDis=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
 					reqDis.forward(request, response);
+					
 				}
-				
-			}
-			else{
-				request.setAttribute("status","Expense Type Not Selected Properly");
+		}
+			else {
+				request.setAttribute("payError", "GO TO HANDLOAN DETAILS TO EDIT THIS ENTRY_hlr_0");
 				RequestDispatcher reqDis=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
 				reqDis.forward(request, response);
 				
@@ -641,8 +659,83 @@ public class Expenses extends HttpServlet {
 				}
 				if(amountStatusClear)
 				{
+					if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[0].equalsIgnoreCase("HL")) 
+					{
+						String expId=gd.getData("SELECT expenses_type.expenses_type_id FROM expenses_type WHERE expenses_type.expenses_type_name='"+expType+"'").get(0).toString();
+						if(expType.equals(expId))
+						{
+							String handLoanId=gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).get(0).toString();
+						int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
+								+ " WHERE handloan_master.id=handloan_details.handloan_id and handloan_details.id="
+								+ "(SELECT MAX(handloan_details.id) FROM handloan_details WHERE handloan_master.id="+handLoanId+")").get(0).toString());
+						if(prevBalance-amount<0) 
+							{
+								amountStatusClear=false;
+								String hlName[]=gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_");
+								request.setAttribute("payError", "YOU CANNOT GIVE EXTRA MONEY TO "+hlName[1]+" "+hlName[2]+"_hl_0");
+							}
+						}
+						else {
+							amountStatusClear=false;
+							request.setAttribute("payError", "PLEASE INSERT EXPENSE TYPE = PAYMENT_hl_0");
+						}
+					}
+				}
+				
+				if(amountStatusClear)
+				{
 					getExpId=gd.getData("select expenses_type_id from expenses_type where expenses_type_name='"+expType+"'").get(0).toString();
 					rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
+					if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[0].equalsIgnoreCase("HL")) 
+					{
+						if(!gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).isEmpty())
+						{
+							String handLoanInsert="";
+							String handLoanId=gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).get(0).toString();
+							int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
+									+ " WHERE handloan_master.id=handloan_details.handloan_id and handloan_details.id="
+									+ "(SELECT MAX(handloan_details.id) FROM handloan_details WHERE handloan_master.id="+handLoanId+")").get(0).toString());
+							//for cash paymode
+							if(payMode.equalsIgnoreCase("CASH"))
+							{
+								int newBalance=0;
+								newBalance=prevBalance - amount;
+								handLoanInsert="INSERT INTO `handloan_details`"
+										+ "(`handloan_id`, `date`, `credit`, `debit`, `mode`, `balance`) "
+										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'CASH',"+newBalance+")";
+								gd.executeCommand(handLoanInsert);
+							}
+							//for cheque paymode
+							else if(payMode.equalsIgnoreCase("cheque")) {
+								
+								int newBalance=0;
+								newBalance=prevBalance - amount;
+								
+								rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], newBalance, 0, chequeNo, debtType);
+								
+								handLoanInsert="INSERT INTO `handloan_details`"
+										+ "(`handloan_id`, `date`, `credit`, `debit`, particulars,`mode`, `balance`) "
+										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'"+chequeNo+"','CHEQUE',"+newBalance+")";
+								gd.executeCommand(handLoanInsert);
+								
+							}
+							//for transfer paymode
+							else{
+								
+								int newBalance=0;
+								newBalance=prevBalance - amount;
+								rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], newBalance, 0, chequeNo, debtType);
+								
+								handLoanInsert="INSERT INTO `handloan_details`"
+										+ "(`handloan_id`, `date`, `credit`, `debit`, `mode`, `balance`) "
+										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'TRANSFER',"+newBalance+")";
+								gd.executeCommand(handLoanInsert);
+							}
+							
+							
+						}
+					}
+					
 					request.setAttribute("status", "Data Inserted Successfully");
 					
 					if(payMode.equalsIgnoreCase("cash"))

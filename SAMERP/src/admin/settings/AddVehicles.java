@@ -76,6 +76,8 @@ public class AddVehicles extends HttpServlet {
 				request.setAttribute("status", "Vehicle add Fail");
 			}
 			
+		
+			
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addVehicles.jsp");
 			rd.forward(request, response);
 		}
@@ -176,7 +178,7 @@ public class AddVehicles extends HttpServlet {
 			
 			
 			if(!l2.isEmpty()){
-				String q = "SELECT `expenses_type_id`, `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details)";
+				String q = "SELECT `expenses_type_id`, `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details )";
 				List l = gd.getData(q);
 				
 				
@@ -191,20 +193,25 @@ public class AddVehicles extends HttpServlet {
 				
 				
 				Iterator itr=l.iterator();
-				int DieselTotal=0, total=0;
+				int DieselTotal=0, maintananceTotal=0, depositTotal=0;
 				
 				while(itr.hasNext())
 				{
 					String et = itr.next().toString();
-					if(et.equals("2")){
+					if(et.equals("1"))
+					{
+						depositTotal += Integer.parseInt(itr.next().toString());
+					}
+					else if(et.equals("2"))
+					{
 						DieselTotal += Integer.parseInt(itr.next().toString());
 					}
-					else{
-						total += Integer.parseInt(itr.next().toString());
+					else if(et.equals("3")){
+						maintananceTotal += Integer.parseInt(itr.next().toString());
 					}
-				}
-				System.out.println(DieselTotal+ "," + total);
-				out.print(l3.get(0) + "," + l3.get(1) + "," + l3.get(2) + "," + DieselTotal+ "," + total+ "," + hl.get(0)+ "," + ll.get(0));
+				} 
+				System.out.println(DieselTotal+ "," + maintananceTotal);
+				out.print(l3.get(0) + "," + l3.get(1) + "," + l3.get(2) + "," + DieselTotal+ "," + maintananceTotal+"-"+depositTotal + "," + hl.get(0)+ "," + ll.get(0));
 				System.out.println("vdata "+l);
 			}
 		}
