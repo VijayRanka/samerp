@@ -179,7 +179,7 @@ td{
      		<li class="bg_ls"> <a href="#" onclick="showdata('paymentDetails')" > <i class="icon-desktop"></i><span class="label label-success"></span>View Balance</a> </li>
      		<li class="bg_ls"> <a href="#" onclick="showdata('billDetails')" > <i class="icon-list-alt"></i><span class="label label-success"></span>Bill Entry</a> </li>
      		<li class="bg_ls"> <a href="#paymentEntry" data-toggle='modal' onclick="showdata()" > <i class="icon-money"></i><span class="label label-success"></span>Payment Received</a> </li>
-     		<li class="bg_ls"> <a href="#createBill" data-toggle="modal" > <i class="icon-desktop"></i> <span class="label label-important"></span>Create Bill</a></li>
+     		<!-- <li class="bg_ls"> <a href="#createBill" data-toggle="modal" > <i class="icon-desktop"></i> <span class="label label-important"></span>Create Bill</a></li> -->
       </ul>
     </div>
   </div>
@@ -627,7 +627,7 @@ td{
 						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
 					</tr>
 					<tr>
-						<td colspan="8" style="text-align: left; border: 0;">3. We declare that this invoice shows the actual price of the goods described and that <br> &nbsp;&nbsp;&nbsp; all particulars are true and correct</th>
+						<td colspan="8" style="text-align: left; border: 0;">3. We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</th>
 						<th style="text-align: right;" >Total Amount</th>
 						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
 					</tr>
@@ -647,7 +647,7 @@ td{
 			<input type="hidden" id="checkedChalan" name="checkedChalan">
       </div> 
       <div class="modal-footer">
-        <button type="submit" name="generateBillData" class="btn btn-primary" style="margin-right:5px;">Save & Create PDF</button> 
+        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData()" style="margin-right:5px;">Save & Create PDF</button> 
           </div>
     </div>
    </form>
@@ -1208,6 +1208,46 @@ function inWords()
     var print =finalOutput +" Only";
     document.getElementById("print_inwords").innerHTML = print;
 }
+
+//===============================================PRINT========================================
+function printData()
+{
+   var divToPrint=document.getElementById("createBillTable");
+   var htmlToPrint = '' +       
+   	   '<link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/colorpicker.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />'+
+	   '<style type="text/css">' +
+		'#createBillTable tbody {'+
+		'border: 1px;'+
+		'border-style: groove;'+
+	'}'+
+   '#createBillTable tbody tr td{'+
+		'border: 1px;'+
+		'border-style: groove;'+
+	'}'+
+	'#createBillTable tbody tr th{'+
+		'border: 1px;'+
+		'border-style: groove;'+
+		'font-size: x-small;'+
+	'}'+
+	'h2,h3,h6{'+
+		'margin:-3px 0;'+
+	'}'+
+   '</style>';
+   htmlToPrint += divToPrint.outerHTML+"</table>";
+   newWin= window.open("");
+   newWin.document.write(htmlToPrint);
+ //  newWin.print();
+//	   newWin.close();
+}
+//===================================End PRINT=================================================
+
+
 /* sarang */
 </script>
 
