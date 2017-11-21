@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
@@ -78,8 +79,12 @@ public class AddCustomer extends HttpServlet {
 
 			if (Customer_result == 1 && Alias_result == 1) {
 				if (path!=null) {
+					HttpSession session=request.getSession();  
+			        session.setAttribute("status","Customer Add Successfully!");
 					response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocDetails.jsp");
 				}else {
+					HttpSession session=request.getSession();  
+			        session.setAttribute("status","Customer Add Successfully!");  
 					response.sendRedirect("jsp/admin/settings/addCustomer.jsp");
 				}
 			} else {
@@ -99,6 +104,8 @@ public class AddCustomer extends HttpServlet {
 			int Customer_result = dao.executeCommand(Customer_query);
 
 			if (Customer_result == 1 && aliasContact_result == 1) {
+				HttpSession session=request.getSession();  
+		        session.setAttribute("status","Customer Update Successfully!");
 				response.sendRedirect("jsp/admin/settings/addCustomer.jsp");
 			} else {
 				out.print("something wrong");

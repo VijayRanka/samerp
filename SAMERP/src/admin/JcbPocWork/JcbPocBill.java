@@ -21,8 +21,29 @@ public class JcbPocBill extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out = response.getWriter();
+		GenericDAO dao = new GenericDAO();
+		
+		String query = "";
+		int result=0;
+
+		List details = null;
+		
+		String fromDate[] = request.getParameter("fromDate").split("-");
+		String toDate[] = request.getParameter("toDate").split("-");
+		
+		if (fromDate != null && toDate !=null) {
+			query="SELECT jcbpoc_invoice.id,customer_master.intcustid,customer_master.custname,jcbpoc_invoice.date,"
+					+ "jcbpoc_invoice.bill_amount FROM `jcbpoc_invoice`,`customer_master` WHERE"
+					+ " `jcbpoc_invoice`.status=0 AND `customer_master`.intcustid=`jcbpoc_invoice`.cust_id AND "
+					+ "jcbpoc_invoice.date BETWEEN '"+fromDate[0]+"-"+fromDate[1]+"-"+fromDate[2]+"' AND '"+toDate[0]+"-"+toDate[1]+"-"+toDate[2]+"' ORDER BY jcbpoc_invoice.id DESC";
+			details=dao.getData(query);
+			Iterator itr = details.iterator();
+			while (itr.hasNext()) {
+				out.print(itr.next() + "~");
+
+			}
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
