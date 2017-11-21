@@ -389,5 +389,19 @@ public class Sales extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
 			rd.forward(request, response);
 		}
+		
+		if(request.getParameter("findSaleClient")!=null){
+			String query = "SELECT `client_organization_name` FROM `client_details`";
+			List details = gd.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+	
+					}
+			}
+			System.out.println("Sarang");
+		}
 	}
 }
