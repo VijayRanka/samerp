@@ -142,9 +142,12 @@ to {
 			          <div class="control-group" >
 				             	   <label class="control-label">From : </label>
 					               <div class="control" style="top: 5px; position: relative; left: 20px;">
-										<input type="date" name="fromDate" id="fromDate" value="2017-11-09"> &nbsp;&nbsp;&nbsp;
+					               <%SysDate sd=new SysDate(); 
+					               String lDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0];
+					               String fDate=sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-01"; %>
+										<input type="date" name="fromDate" id="fromDate" value="<%=fDate%>"> &nbsp;&nbsp;&nbsp;
 										<strong>To : </strong>
-										<input type="date" name="toDate" id="toDate" value="2017-11-19">
+										<input type="date" name="toDate" id="toDate" value="<%=lDate%>">
 									</div>
 				             	</div>
 			          
@@ -158,6 +161,7 @@ to {
 			                <option value="EXPENSES">Expenses</option>
 			                <option value="HANDLOAD">Hand-Loan</option>
 			                <option value="JCBPOKLAND">JCB-Pokland</option>
+			                <option value="PAYMENTSTATEMENT">Payment Statement</option>
 			                <option value="PIPEPURCHASE">Pipe Purchase</option>
 			                <option value="PRODUCTDETAILS">Production Details</option>
 			                <option value="SALE">Sale</option>
@@ -165,6 +169,16 @@ to {
 			                </select>
 			              </div>
 			            </div>
+			             <div class="control-group" style="" id="payTypes">
+				             	   <label class="control-label">Select Type : </label>
+					               <div class="controls">
+					                 <input type="radio" id="" value="" name="types" onclick="" checked="checked"/> <span>Clients</span> 
+					                 &nbsp;&nbsp;&nbsp;&nbsp;
+					                 <input type="radio" id="" value="" name="types" onclick="" /><span>Supplier</span> 
+					                  &nbsp;&nbsp;&nbsp;&nbsp;
+					                 <input type="radio" id="" value="" name="types" onclick="" /><span>Contractor</span> 
+					               </div>
+				             	</div>
 			            <div class="control-group" style="">
 				             	   <label class="control-label">Select Mode : </label>
 					               <div class="controls">
@@ -224,7 +238,7 @@ to {
 							<h5>Data List</h5>
 						</div>
 						<div class="widget-content nopadding" id="myTable">
-							<table class="table table-bordered" id="wholeDataList" style="font-size: 14px">
+							<table class="table table-bordered" id="wholeDataList" style="font-size: 12px">
 							</table>
 						</div>
 					</div>
@@ -277,7 +291,7 @@ to {
 // to display list of individuals
 function generateName(value){
 	if(value=='EXPENSES')
-		{
+	{
 		var xhttp;
 		xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -288,6 +302,7 @@ function generateName(value){
 			};
 		xhttp.open("POST", "/SAMERP/Expenses.do?findNameByReport=1", true);
 		xhttp.send();
+
 		}
 	else if(value=='BANKSTATEMENT')
 	{
@@ -302,13 +317,28 @@ function generateName(value){
 		xhttp.open("POST", "/SAMERP/AddAccountDetails?findNameByReport=1", true);
 		xhttp.send();
 	}
+
+	else if(value=='SALE'){
+
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText;
+				document.getElementById("getList").innerHTML = demoStr;
+				}
+			};
+		xhttp.open("POST", "/SAMERP/Sales?findSaleClient=1", true);
+		xhttp.send();
+	}
+	
 	
 	else{
 		document.getElementById("getList").innerHTML = "";
 		document.getElementById("individualName").value = "";
 	}
 		
-		
+	alert("Hi");	
 }
 // ##########################################	Grt Data For Report ###########################################
 function getBillReportData() {
