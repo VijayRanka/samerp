@@ -275,8 +275,8 @@ to {
  	
 // to display list of individuals
 function generateName(value){
-	if(value=='EXPENSES')
-		{
+	if(value=='expenses')
+	{
 		var xhttp;
 		xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -287,7 +287,11 @@ function generateName(value){
 			};
 		xhttp.open("POST", "/SAMERP/Expenses.do?findNameByReport=1", true);
 		xhttp.send();
-		}
+	}
+	else if(value=='sale'){
+		alert("Hi Sarang");
+	}
+	
 	
 	else{
 		document.getElementById("getList").innerHTML = "";
