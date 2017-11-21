@@ -289,7 +289,7 @@ to {
  	
 // to display list of individuals
 function generateName(value){
-	if(value=='expenses')
+	if(value=='EXPENSES')
 	{
 		var xhttp;
 		xhttp = new XMLHttpRequest();
@@ -302,8 +302,18 @@ function generateName(value){
 		xhttp.open("POST", "/SAMERP/Expenses.do?findNameByReport=1", true);
 		xhttp.send();
 	}
-	else if(value=='sale'){
-		alert("Hi Sarang");
+	else if(value=='SALE'){
+
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText;
+				document.getElementById("getList").innerHTML = demoStr;
+				}
+			};
+		xhttp.open("POST", "/SAMERP/Sales?findSaleClient=1", true);
+		xhttp.send();
 	}
 	
 	
@@ -312,7 +322,7 @@ function generateName(value){
 		document.getElementById("individualName").value = "";
 	}
 		
-		
+	alert("Hi");	
 }
 // ##########################################	Grt Data For Report ###########################################
 function getBillReportData() {
