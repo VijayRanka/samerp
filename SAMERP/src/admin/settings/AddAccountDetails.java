@@ -42,6 +42,68 @@ public class AddAccountDetails extends HttpServlet {
 		GenericDAO gd= new GenericDAO();
 		String acc_id=request.getParameter("delete");
 		
+		
+		//for reporting
+		if(request.getParameter("getDateData")!=null)
+		{
+			String fromDate=request.getParameter("fromDate");
+			String toDate=request.getParameter("toDate");
+			String indName=request.getParameter("individualName");
+			
+			if(indName!=null)
+			{
+				String getBankData="SELECT bank_account_details.date,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,debtor_master,account_details WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date BETWEEN '2017-11-01' and '2017-11-31' AND account_details.acc_aliasname='"+indName+"' order by bank_account_details.id";
+				List bankData=gd.getData(getBankData);
+				Iterator itr=bankData.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object particulars=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(date+","+debit+","+credit+","+particulars+","+type+","+balance+",");
+					
+				}
+			}
+			else
+			{
+				String getBankData="SELECT bank_account_details.date,account_details.acc_aliasname,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,debtor_master,account_details WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date BETWEEN '"+fromDate+"' and '"+toDate+"' order by bank_account_details.id";
+				List bankData=gd.getData(getBankData);
+				Iterator itr=bankData.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object bName=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object particulars=itr.next();
+					Object type=itr.next();
+					Object balance=itr.next();
+					
+					out.print(date+","+bName+","+debit+","+credit+","+particulars+","+type+","+balance+",");
+					
+				}
+			}
+			
+			
+		}
+		
+		if(request.getParameter("findNameByReport")!=null)
+		{
+			String getBankAlias="SELECT acc_aliasname FROM account_details";
+			List bankAlias=gd.getData(getBankAlias);
+			Iterator itr=bankAlias.iterator();
+			while(itr.hasNext())
+			{
+				out.print("<option>"+itr.next()+"</option>");
+			}
+		}
+		
+		
+		
 		if(request.getParameter("updateid")!=null)
 		{
 			String accId=request.getParameter("updateid");
