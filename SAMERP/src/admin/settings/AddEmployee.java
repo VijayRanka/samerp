@@ -40,30 +40,29 @@ public class AddEmployee extends HttpServlet {
 		{
 			RequireData req=new RequireData();
 			String str=request.getParameter("empid");
-			
-			System.out.println("emp:"+str);
-			String s="";
+			System.out.println("Home :"+str);
 			if(str.equals("Driver") ||str.equals("Helper"))
 			{
 				List list=req.getVehicle();
-				Iterator itr2=list.iterator();
-				while(itr2.hasNext())
+				Iterator itr3=list.iterator();
+				while(itr3.hasNext())
 				{
-					s+=itr2.next()+",";
+					out.print(itr3.next()+",");
 				}
 			}
-			else if(str.equals("Home Worker")||str.equals("Labour")){
+		
+			else 
+				if(str.equals("Home Worker") ||str.equals("Labour")){
 				List list=req.getContractorVehicle();
 				System.out.println("List is !:"+list);
-				Iterator itr2=list.iterator();
-				while(itr2.hasNext())
+				Iterator itr4=list.iterator();
+				while(itr4.hasNext())
 				{
-					s+=itr2.next()+",";
+					out.print(itr4.next()+",");
 				}
 				
 			}
 			
-			out.print(s);
 		}
 		
 		//for inserting data into table--->employee_details
@@ -90,14 +89,8 @@ public class AddEmployee extends HttpServlet {
 			
 			String aliasname="EMP_"+desig+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
 			
-			checkStatus=aliasname.split("_");
+			checkStatus=aliasname.split("_");		
 			
-			
-			
-			//Get Transport List start 
-			
-			
-			//End Transport List start 
 			
 			String checkStatus1="SELECT emplyoee_details.emp_id, emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%TRANSPORT_"+checkStatus[4]+"%' AND emplyoee_details.aliasname LIKE '%"+desig+"%' AND emplyoee_details.status=0 ";
 			List ckst=gd.getData(checkStatus1);
