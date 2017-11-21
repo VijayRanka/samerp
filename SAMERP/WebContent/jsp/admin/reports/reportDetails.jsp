@@ -156,7 +156,7 @@ to {
 			            <div class="control-group">
 			              <label class="control-label">Report Type :</label>
 			              <div class="controls">
-			                <select id="reportType" style="width: 220px;"  onchange="generateName(this.value)">
+			                <select id="reportType" style="width: 220px;" onchange="generateName(this.value)">
 			                <option >Select Report Type</option>
 			                <option value="BANKSTATEMENT">Bank Statement</option>
 			                <option value="EXPENSES">Expenses</option>
@@ -316,6 +316,7 @@ function generateName(value){
 	//for removing the data list and value of individual input
 	document.getElementById("getList").innerHTML = "";
 	document.getElementById("individualName").value = "";
+	document.getElementById("wholeDataList").value = "";
 	
 	if(value!=='PAYMENTSTATEMENT'){
 		document.getElementById("payTypes").style.display="none";
@@ -476,6 +477,7 @@ function getBillReportData() {
 			}
 		} 
 	}
+}
 // ########################################## End	Grt Data For Report ###########################################
 
 // ########################################## Excel ###########################################
@@ -960,7 +962,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	//----------------------End(Omkar)----------------------
 	
   
-  	//************************* SARANG *****************
+  		//************************* SARANG *****************
 	
 	function getSaleData()
      {
@@ -1026,11 +1028,10 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  					}
 	  					
 	  					a+="</tbody>";
-                var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+	  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
 	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
 	  					document.getElementById("wholeDataList").innerHTML=a;
 	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
-
 	  					}
 	  					
 	  				}
@@ -1040,9 +1041,9 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  			xhttp.send();
      }
 	
+	
     function getSaleDataByClient()
     {
-    	
     	var firstDate=document.getElementById("fromDate").value;
  		var lastDate=document.getElementById("toDate").value;
 	   	var name=document.getElementById("individualName").value;
@@ -1096,20 +1097,18 @@ function DoOnCellHtmlData(cell, row, col, data) {
 		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
 		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>";
   						}
-		  						
-  						
-  						
-  					 a+="</tr>";
-  						count++;
+	  					 a+="</tr>";
+  						 count++;
   					}
   					
   					a+="</tbody>";
-				}
+  					
+  					document.getElementById("wholeDataList").innerHTML=a;
+  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
+  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
 
-				document.getElementById("wholeDataList").innerHTML=a;
-				var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
-				var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
-				document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+				}
 			}
 				
 			};
