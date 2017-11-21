@@ -537,20 +537,6 @@ public class PTCash extends HttpServlet {
 						cash.add(withdrawlAmt);
 						String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+bankAlias+"'";
 						debtorId=gd.getData(getDebtorId);
-						String handLoanName=request.getParameter("hlName,"+j);
-						String add="HL_";
-						String alias=add+handLoanName;
-						
-						String handLoanDetails="SELECT handloan_details.handloan_id,handloan_details.balance FROM handloan_details,handloan_master WHERE handloan_details.handloan_id=handloan_master.id AND handloan_master.alias_name='"+alias+"' ORDER BY handloan_details.id DESC LIMIT 1";
-						System.out.println(handLoanDetails);
-						List getDetails=gd.getData(handLoanDetails);
-						 
-						int addAmt=(int)getDetails.get(1);
-						 amt=Integer.parseInt(request.getParameter("hlAmt,"+j));
-						cash.add(amt);
-						updateAmt=addAmt+amt;
-						out.println("handloan new amt : "+updateAmt+"<br>");
-						
 						
 						int newBankBalance=bankBalance-withdrawlAmt;
 						String insertBankdetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "

@@ -153,15 +153,14 @@ to {
 			              <label class="control-label">Report Type :</label>
 			              <div class="controls">
 			                <select id="reportType" style="width: 220px;"  onchange="generateName(this.value)">
-			                <option value="bankStatement">Bank Statement</option>
-			                <option value="expenses">Expenses</option>
-			                <option value="handLoad">Hand-Loan</option>
-			                <option value="jcbPokland">JCB-Pokland</option>
-			                
-			                <option value="pipePurchase">Pipe Purchase</option>
-			                <option value="productDetails">Production Details</option>
-			                <option value="sale">Sale</option>
-			                <option value="vehicleRepair">Vehicle Repair</option>
+			                <option value="BANKSTATEMENT">Bank Statement</option>
+			                <option value="EXPENSES">Expenses</option>
+			                <option value="HANDLOAD">Hand-Loan</option>
+			                <option value="JCBPOKLAND">JCB-Pokland</option>
+			                <option value="PIPEPURCHASE">Pipe Purchase</option>
+			                <option value="PRODUCTDETAILS">Production Details</option>
+			                <option value="SALE">Sale</option>
+			                <option value="VEHICLEREPAIR">Vehicle Repair</option>
 			                </select>
 			              </div>
 			            </div>
@@ -176,7 +175,7 @@ to {
 				             	<div class="control-group" id="selectIndividual" style="display: none">
 				             	   <label class="control-label">Select Individual : </label>
 					               <div class="controls">
-					                 <input type="text" list="getList" id="individualName" onkeyup="searchName(this.value,this.id,this.list.id)"
+					                 <input type="text" list="getList" id="individualName"
 					                 autocomplete="off"  placeholder="Individual Name"/>
               							<datalist id="getList"></datalist>
 					               </div>
@@ -224,7 +223,7 @@ to {
 							<h5>Data List</h5>
 						</div>
 						<div class="widget-content nopadding" id="myTable">
-							<table class="table table-bordered data-table" id="wholeDataList">
+							<table class="table table-bordered" id="wholeDataList" style="font-size: 14px">
 							</table>
 						</div>
 					</div>
@@ -309,7 +308,7 @@ function getBillReportData() {
 	}
 	else{
 		
-	if(document.getElementById("reportType").value=='expenses')
+	if(document.getElementById("reportType").value=='EXPENSES')
 		{
 			 if(document.getElementById("mode1").checked==true)
 				{
@@ -417,7 +416,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
     	'h2,h3,h6{'+
     		'margin:-3px 0;'+
     	'}'+
-       '</style>';
+       'body{padding:0px 20px 0px 0px}</style>';
        htmlToPrint += divToPrint.outerHTML+"</table>";
 	   newWin= window.open("");
 	   newWin.document.write(htmlToPrint);
@@ -440,18 +439,19 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
 	  					else{
 	  					var a="<thead>"+
+	  					"<tr><th colspan='12' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
 	  					"<tr><th>S.No.</th>"+
-	  					"<th style='width:80px'>Date</th>"+
-	  					"<th>Name</th>"+
-	  					"<th>Amount</th>"+
-	  					"<th>Payment Mode</th>"+
-	  					"<th>Vehicle Reading</th>"+
-	  					"<th>Qty In Litres(s)</th>"+
-	  					"<th>Expenses Type</th>"+
-	  					"<th>Debtor Type</th>"+
-	  					"<th>Cheque Details</th>"+
-	  					"<th>Bank Info</th>"+
-	  					"<th>Reason</th>"+
+	  					"<th style='width:80px;text-align: center'>Date</th>"+
+	  					"<th style='text-align: center'>Name</th>"+
+	  					"<th style='text-align: center'>Amount</th>"+
+	  					"<th style='text-align: center'>Payment Mode</th>"+
+	  					"<th style='text-align: center'>Vehicle Reading</th>"+
+	  					"<th style='text-align: center'>Qty In Litres(s)</th>"+
+	  					"<th style='text-align: center'>Expenses Type</th>"+
+	  					"<th style='text-align: center'>Debtor Type</th>"+
+	  					"<th style='text-align: center'>Cheque Details</th>"+
+	  					"<th style='text-align: center'>Bank Info</th>"+
+	  					"<th style='text-align: center'>Reason</th>"+
 	  					"</tr></thead><tbody>";
 	  					var count=1;
 	  					for(var i=0;i<demoStr.length-1;i=i+12)
@@ -473,8 +473,12 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  						count++;
 	  						}
 	  					a+="</tbody>";
+	  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
 	  					document.getElementById("wholeDataList").innerHTML=a;
+	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
 	  					}
+	  					
 	  				}
 	  					
 	  				};
@@ -496,17 +500,18 @@ function DoOnCellHtmlData(cell, row, col, data) {
 					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
 				else{
 				var a="<thead>"+
-				"<tr><th>S.No.</th>"+
-				"<th style='width:80px'>Date</th>"+
-				"<th>Amount</th>"+
-				"<th>Payment Mode</th>"+
-				"<th>Vehicle Reading</th>"+
-				"<th>Qty In Litres(s)</th>"+
-				"<th>Expenses Type</th>"+
-				"<th>Debtor Type</th>"+
-				"<th>Cheque Details</th>"+
-				"<th>Bank Info</th>"+
-				"<th>Reason</th>"+
+				"<tr><th colspan='11' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+				"<tr><th style='text-align: center'>S.No.</th>"+
+				"<th style='width:80px;text-align:center'>Date</th>"+
+				"<th style='text-align: center'>Amount</th>"+
+				"<th style='text-align: center'>Payment Mode</th>"+
+				"<th style='text-align: center'>Vehicle Reading</th>"+
+				"<th style='text-align: center'>Qty In Litres(s)</th>"+
+				"<th style='text-align: center'>Expenses Type</th>"+
+				"<th style='text-align: center'>Debtor Type</th>"+
+				"<th style='text-align: center'>Cheque Details</th>"+
+				"<th style='text-align: center'>Bank Info</th>"+
+				"<th style='text-align: center'>Reason</th>"+
 				"</tr></thead><tbody>";
 				var count=1;
 				for(var i=0;i<demoStr.length-1;i=i+12)
@@ -528,6 +533,11 @@ function DoOnCellHtmlData(cell, row, col, data) {
 					}
 				a+="</tbody>";
 				document.getElementById("wholeDataList").innerHTML=a;
+				var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+				var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+				
+				document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+				
 				}
 			}
 				
