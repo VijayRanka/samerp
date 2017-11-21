@@ -699,6 +699,18 @@ function myFunction() {
 					$('#pettyCashError').modal('show');
 						}
 		}
+		else if(payError.split("_")[1]==='hl')
+			{
+			$('#payStatus').text(payError.split("_")[0]);
+			$('#pettyCashError').modal('show');
+			}
+		else if(payError.split("_")[1]==='hlr')
+		{
+			document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/PTCash/ptcash.jsp'");
+			document.getElementById("pettyCashOk").innerHTML="Go Hand-Loan";
+			$('#payStatus').text(payError.split("_")[0]);
+			$('#pettyCashError').modal('show');
+		}
 	}
 	document.getElementById("expenses_type_name").focus();
     var x = document.getElementById("snackbar");
@@ -1102,5 +1114,6 @@ $('#update').on('shown.bs.modal', function () {
 $('#pettyCashError').on('shown.bs.modal', function () {
     $('#pettyCashOk').focus();
 })
+
 </script> 
 </html>
