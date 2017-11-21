@@ -158,7 +158,7 @@ public class AddVehicles extends HttpServlet {
 			
 		}
 		
-		
+		System.out.println("vno1 " +request.getParameter("vno"));
 		if(request.getParameter("vno")!="")
 		{
 			String vno = request.getParameter("vno");
@@ -166,10 +166,11 @@ public class AddVehicles extends HttpServlet {
 			String edate = request.getParameter("edate");
 			List l2 = new ArrayList(), l3 = new ArrayList();
 			
-			System.out.println("vno "+ vno);
+			System.out.println("vno2 "+ vno);
 			
 			if(vno!=null){
 				String q2="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vno+")";
+				System.out.println(q2);
 				l2 = gd.getData(q2);
 				
 				String q3="SELECT `driver_charges`, `helper_charges`, `trip_allowance` FROM `vehicle_details` WHERE vehicle_id="+vno;
@@ -190,6 +191,7 @@ public class AddVehicles extends HttpServlet {
 				String hdid = rdd.getHelperDebterIdFromVid(vno);
 				String hq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+hdid+")";
 				List hl = gd.getData(hq);
+
 				
 				
 				Iterator itr=l.iterator();
@@ -209,10 +211,14 @@ public class AddVehicles extends HttpServlet {
 					else if(et.equals("3")){
 						maintananceTotal += Integer.parseInt(itr.next().toString());
 					}
-				} 
-				System.out.println(DieselTotal+ "," + maintananceTotal);
+				}
+				
+				
+				
+				//System.out.println(DieselTotal+ "," + maintananceTotal);
 				out.print(l3.get(0) + "," + l3.get(1) + "," + l3.get(2) + "," + DieselTotal+ "," + maintananceTotal+"-"+depositTotal + "," + hl.get(0)+ "," + ll.get(0));
-				System.out.println("vdata "+l);
+				
+			//	System.out.println("vdata "+l);
 			}
 		}
 		
@@ -293,8 +299,8 @@ public class AddVehicles extends HttpServlet {
 						+ "( "+did+", '"+requiredDate+"', "+totalDPayment+", "+extraCharge+", 'payment "+sdate+" to "+edate+"','D', "+tBalance+")";
 	
 				gd.executeCommand(q);
+				request.setAttribute("status", "Payment of Driver generated Successfully");
 			}
-			
 			else if(request.getParameter("role").equals("helper"))
 			{
 				String hc = request.getParameter("hc");
@@ -318,6 +324,7 @@ public class AddVehicles extends HttpServlet {
 						+ "( "+did+", '"+requiredDate+"', "+hc+", 'payment "+sdate+" to "+edate+"','H', "+tBalance+")";
 
 				gd.executeCommand(q);
+				request.setAttribute("status", "Payment of Helper generated Successfully");
 			}
 			
 			
