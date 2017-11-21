@@ -29,40 +29,86 @@ public class ContractorPayment extends HttpServlet {
 		
 		GenericDAO gd=new GenericDAO();
 		
+		//generate Contractor List
+		if(request.getParameter("findList")!=null)
+		{
+			GenericDAO da = new GenericDAO();
+			List details = null;
+			String query = "SELECT contractor_master.aliasname from contractor_master";
+			details = da.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+					}
+			}
+		}
+		
 		//getDate data ajax
 		if(request.getParameter("getDateData")!=null)
 		{
 			String startDate=request.getParameter("fromDate");
 			String lastDate=request.getParameter("toDate");
 			String contId=request.getParameter("contraId");
-			
-			String demoStr="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId+" and date BETWEEN '"+startDate+"' and '"+lastDate+"'";
-			List demoList=gd.getData(demoStr);
-			if(demoList.isEmpty())
+			String name=request.getParameter("contName");
+			String wholeData=request.getParameter("wholeData");
+			String demoStr="";
+			boolean status=false;
+			if(wholeData!=null)
 			{
-				out.print("0,");
+					demoStr="SELECT * FROM `contractor_payment_details` WHERE date BETWEEN '"+startDate+"' and '"+lastDate+"' order by contractor_payment_details.id";
+					status=true;
+			}else {
+				if(name!=null) {
+					if(!gd.getData("SELECT contractor_master.id FROM contractor_master WHERE contractor_master.aliasname='"+name+"'").isEmpty()) {
+						String contNameId=gd.getData("SELECT contractor_master.id FROM contractor_master WHERE contractor_master.aliasname='"+name+"'").get(0).toString();
+						demoStr="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contNameId+" and date BETWEEN '"+startDate+"' and '"+lastDate+"' order by contractor_payment_details.id";
+						status=true;
+					}
+					else
+					{
+						out.print("0,");
+						status=false;
+					}
+				}else {
+					demoStr="SELECT * FROM `contractor_payment_details` WHERE contractor_id="+contId+" and date BETWEEN '"+startDate+"' and '"+lastDate+"'";
+					status=true;
+				}
+			}
+			
+			
+			
+			if(status) {
+				List demoList=gd.getData(demoStr);
+				if(demoList.isEmpty())
+				{
+					out.print("0,");
+				}
+				else {
+					out.print("1,");
+					Iterator itr=demoList.iterator();
+					while(itr.hasNext())
+					{
+						itr.next();
+						out.print(gd.getData("SELECT contractor_master.aliasname from contractor_master WHERE contractor_master.id="+itr.next()).get(0)+",");
+						out.print(itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+",");
+						String cheque=itr.next().toString();
+						String description=itr.next().toString();
+						if(!description.isEmpty())
+						{
+							String bankName=gd.getData("SELECT account_details.acc_aliasname FROM account_details WHERE account_details.acc_id="+description).get(0).toString();	
+							out.print(cheque+","+bankName+","+itr.next()+","+itr.next()+",");
+						}
+							
+						else
+							out.print("-,-,"+itr.next()+","+itr.next()+",");
+						
+					}
+				}
 			}
 			else {
-				System.out.println(demoList);
-				out.print("1,");
-				Iterator itr=demoList.iterator();
-				while(itr.hasNext())
-				{
-					itr.next();
-					itr.next();
-					out.print(itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+","+itr.next()+",");
-					String cheque=itr.next().toString();
-					String description=itr.next().toString();
-					if(!description.isEmpty())
-					{
-						String bankName=gd.getData("SELECT account_details.acc_aliasname FROM account_details WHERE account_details.acc_id="+description).get(0).toString();	
-						out.print(cheque+","+bankName+","+itr.next()+","+itr.next());
-					}
-						
-					else
-						out.print("-,-,"+itr.next()+","+itr.next()+",");
-					
-				}
+				out.print("0,");
 			}
 			
 			
@@ -319,7 +365,7 @@ public class ContractorPayment extends HttpServlet {
 					out.print(","+totalContCharges);
 				}
 				else
-					out.print("0,0");
+					out.print(",0,0");
 			}
 		else{
 			if(!contCharges.isEmpty())
