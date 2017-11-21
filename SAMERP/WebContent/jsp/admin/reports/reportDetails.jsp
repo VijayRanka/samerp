@@ -673,7 +673,6 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	
     function getSaleDataByClient()
     {
-    	
     	var firstDate=document.getElementById("fromDate").value;
  		var lastDate=document.getElementById("toDate").value;
 	   	var name=document.getElementById("individualName").value;
@@ -727,20 +726,18 @@ function DoOnCellHtmlData(cell, row, col, data) {
 		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
 		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>";
   						}
-		  						
-  						
-  						
-  					 a+="</tr>";
-  						count++;
+	  					 a+="</tr>";
+  						 count++;
   					}
   					
   					a+="</tbody>";
-				}
+  					
+  					document.getElementById("wholeDataList").innerHTML=a;
+  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
+  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
 
-				document.getElementById("wholeDataList").innerHTML=a;
-				var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
-				var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
-				document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+				}
 			}
 				
 			};
