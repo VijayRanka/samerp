@@ -251,6 +251,7 @@
                  <th>Cheque Number</th>
                  <th>Bank Account</th>
                  <th>Total Balance</th>
+                 <th>Action</th>
                </tr>
              </thead>
              <tbody>
@@ -265,8 +266,8 @@
              	int i=1;
              	Iterator itr = payList.iterator();
              	while(itr.hasNext()){
-             		itr.next();
-             		itr.next();
+             		String tid = itr.next().toString();
+             		String sid = itr.next().toString();
              %>
              
                <tr class="gradeX">
@@ -285,9 +286,11 @@
 	             <%
 	                	}
 	                }
+                 
                  %>
                  
                  <td><%=itr.next()%></td>
+                 <td><a class="tip" title="Update" href="#product_supplier_payment" onclick="setUpdateData(<%=sid %>, <%=tid %>)" data-toggle="modal"><i class="icon-pencil"></i></a></td>
                </tr>
                
               <%
@@ -315,78 +318,75 @@
 
 <!--end-Footer-part--> 
 
-<%-- <div class="modal hide fade zoom-out" id="viewBalanceDetails" style=" margin-left: -36%; width: 70%;" role="dialog" >
+<div class="modal hide fade zoom-out" id="product_supplier_payment" role="dialog" >
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal"></a>
-		<h5> New Payment Entry Details</h5>
+		<h5> Product Supplier Payment Details</h5>
 	</div>
 	
-	<div class="modal-body" style="padding-bottom: 0;">
-		<form class="form-horizontal" action="" method="post" name="">
+	<div class="modal-body" style="padding: 0;">
+		<form class="form-horizontal" action="/SAMERP/productSupplierPayment" method="post" name="">
 			<div class="form-group">
 				<div class="widget-content nopadding">
-					
-	             	<div class="widget-box">
-			          <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-			            <h5>Data table</h5>
-			          </div>
-			          <div class="widget-content nopadding">
-			            <table class="table table-bordered data-table">
-			              <thead>
-			                <tr>
-			                  <th>Sr.No.</th>
-			                  <th>Date</th>
-			                  <th>Bill Number</th>
-			                  <th>Credit</th>
-			                  <th>Debit</th>
-			                  <th>Particular</th>
-			                  <th>Total Balance</th>
-			                </tr>
-			              </thead>
-			              <tbody>
-			              <%
-			              	
-			              	List payList = new ArrayList();
-			              	if(request.getParameter("ppid")!=null){
-			              		
-			              		payList = rd.getSupplierPaymentDetails(request.getParameter("ppid"));
-			              	}
-			              	
-			              	int i=0;
-			              	Iterator itr = payList.iterator();
-			              	while(itr.hasNext()){
-			              		itr.next();
-			              	
-			              %>
-			              
-			                <tr class="gradeX">
-			                  <td><%=i %></td>
-			                  <td><%=itr.next()%></td>
-			                  <td><%=itr.next()%></td>
-			                  <td><%=itr.next()%></td>
-			                  <td><%=itr.next()%></td>
-			                  <td><%=itr.next()%></td>
-			                  <td><%=itr.next()%></td>
-			                </tr>
-			                
-		                <%
-		              		}
-		                %>
-			                
-			              </tbody>
-			            </table>
-			          </div>
-			        </div>
+
+	             	<div class="control-group" style="">
+	             		<label class="control-label">Bill Number : </label>
+			               <div class="controls">
+			                 <input type="text" name="updateBillNo" id="updateBillNo"  onkeyup="this.value=this.value.toUpperCase()" placeholder="Bill Number" required readonly="readonly"/>
+			               </div>
+	             	</div>
+	             	
+	             	<div class="control-group" style="">
+	             		<label class="control-label">Credit Amount : </label>
+			               <div class="controls">
+			                 <input type="text" name="updateCreditAmt" id="updateCreditAmt" placeholder="Credit Amount" required />
+			               </div>
+	             	</div>
+	             	
+	             	<div class="control-group" style="">
+	             		<label class="control-label">Dedit Amount : </label>
+			               <div class="controls">
+			                 <input type="text" name="updateDebitAmount" id="updateDebitAmount"  placeholder="Debit Amount"/>
+			                 <input type="hidden" name="oldupdateDebitAmount" id="oldupdateDebitAmount"/>
+			               </div>
+	             	</div>
+	             	
+	             	<div class="control-group" style="">
+	             		<label class="control-label">Mode: </label>
+			               <div class="controls">
+			                 <input type="text" name="updateMode" id="updateMode" placeholder="Mode" required readonly="readonly"/>
+			               </div>
+	             	</div>
+	             	
+	             	<div class="control-group" style="">
+	             		<label class="control-label">Cheque Number: </label>
+			               <div class="controls">
+			                 <input type="text" name="updateChequeNumber" id="updateChequeNumber" placeholder="Cheque Number" required readonly="readonly"/>
+			               </div>
+	             	</div>
+	             	
+	             	<div class="control-group" style="">
+	             		<label class="control-label">Bank : </label>
+			               <div class="controls">
+			                 <input type="text" name="updateBank" id="updateBank" placeholder="Bank" required readonly="readonly"/>
+			               </div>
+	             	</div>
 		            
 				</div>
 			</div>
+			
+			<input type="hidden" name="tid" id="tid"/>
+			<input type="hidden" name="sid" id="sid"/>
+			
+			<div class="modal-footer">
+				<button type="submit" name="updateSubmitbtn" class="btn green btn-primary">Submit</button>
+				<a class="btn btn-danger" data-dismiss="modal">Close</a>
+			</div>
+			
 		</form>
 	</div>
-	
-	<div class="modal-footer">
-		<a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
-	</div>
-</div> --%>
+</div>
+
 
 <div class="modal hide fade zoom-out" id="billEntry" role="dialog" >
 	<div class="modal-header">
@@ -765,6 +765,39 @@ function selectedChalan(){
 		$('#checkboxError').modal('show');
 	}
 }
+
+function setUpdateData(sid, tid) 
+{
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText.split(",");
+				alert(demoStr);
+			for(var i=0; i<demoStr.length; i++){
+				if(demoStr[i]==' null'){
+					demoStr[i]="-";
+				}			
+			}
+			
+			document.getElementById("tid").value=demoStr[0];
+			document.getElementById("sid").value=demoStr[1];
+			document.getElementById("updateBillNo").value=demoStr[3];
+			document.getElementById("updateCreditAmt").value=demoStr[4];
+			document.getElementById("updateDebitAmount").value=demoStr[5];
+			document.getElementById("oldupdateDebitAmount").value=demoStr[5];
+			document.getElementById("updateMode").value=demoStr[6];
+			document.getElementById("updateChequeNumber").value=demoStr[7];
+			document.getElementById("updateBank").value=demoStr[8];
+			
+		}
+	};
+	xhttp.open("POST","/SAMERP/productSupplierPayment?updateid="+sid+"-"+tid, true);
+	xhttp.send();
+	
+	
+} 
 </script>
 
 <script src="/SAMERP/config/js/jquery.min.js"></script> 

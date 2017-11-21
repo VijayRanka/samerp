@@ -42,7 +42,7 @@ public class AddVehicles extends HttpServlet {
 		{
 			
 			String vehicleType = request.getParameter("vehicle_type");	
-			System.out.println(vehicleType);
+			//System.out.println(vehicleType);
 			
 			String vehicleNo1 = request.getParameter("vehicleno1");
 			String vehicleNo2 = request.getParameter("vehicleno2");
@@ -158,7 +158,7 @@ public class AddVehicles extends HttpServlet {
 			
 		}
 		
-		System.out.println("vno1 " +request.getParameter("vno"));
+		
 		if(request.getParameter("vno")!="")
 		{
 			String vno = request.getParameter("vno");
@@ -166,11 +166,11 @@ public class AddVehicles extends HttpServlet {
 			String edate = request.getParameter("edate");
 			List l2 = new ArrayList(), l3 = new ArrayList();
 			
-			System.out.println("vno2 "+ vno);
+			//System.out.println("vno2 "+ vno);
 			
 			if(vno!=null){
 				String q2="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type=(SELECT `vehicle_aliasname` FROM `vehicle_details` WHERE vehicle_id="+vno+")";
-				System.out.println(q2);
+				//System.out.println(q2);
 				l2 = gd.getData(q2);
 				
 				String q3="SELECT `driver_charges`, `helper_charges`, `trip_allowance` FROM `vehicle_details` WHERE vehicle_id="+vno;
@@ -181,7 +181,6 @@ public class AddVehicles extends HttpServlet {
 			if(!l2.isEmpty()){
 				String q = "SELECT `expenses_type_id`, `amount` FROM `expenses_master` WHERE debtor_id='"+l2.get(0)+"' AND date BETWEEN '"+sdate+"' AND '"+edate+"' AND expenses_master.exp_id NOT IN (SELECT vehicles_ride_details.exp_master_id FROM vehicles_ride_details )";
 				List l = gd.getData(q);
-				
 				
 				String did = rdd.getDriverDebterIdFromVid(vno);
 				String qq = "SELECT driver_helper_payment_master.balance FROM driver_helper_payment_master WHERE driver_helper_payment_master.id=(SELECT MAX(driver_helper_payment_master.id) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+did+")";
