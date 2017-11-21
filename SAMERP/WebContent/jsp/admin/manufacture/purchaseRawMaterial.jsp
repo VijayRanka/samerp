@@ -475,7 +475,7 @@
 				</div>
 				
 				<div class="modal-footer">
-					<button type="submit" id="submitbtn" name="modalSubmit"  onclick="addRawMaterial()" class="btn btn-success">Add</button>
+					<button type="button" id="submitbtn" name="modalSubmit" data-dismiss="modal"  onclick="addRawMaterial()" class="btn btn-success">Add</button>
 					<button type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 				</form>

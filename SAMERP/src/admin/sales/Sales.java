@@ -30,8 +30,37 @@ public class Sales extends HttpServlet {
 		
 		String searchVehicle = request.getParameter("searchVehicle");
 		
-		//ajax for geting update data
 		
+		// ajax to search vehicle		
+		if (searchVehicle != null)
+		{ 
+			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT';";
+			System.out.println("Query ===>  "+query);
+			List list = gd.getData(query);	
+			System.out.println("List ===>  "+list);
+			Iterator itr = list.iterator();
+			while (itr.hasNext()) 
+			{
+				out.print(itr.next() + ",");
+			}
+		}
+		
+		// ajax to search product
+		if(request.getParameter("q")!=null)
+		{
+			
+			String query="SELECT `id`,`name`,`gstper` FROM `product_master` WHERE `name` LIKE '"+request.getParameter("q")+"%'";
+			List details = gd.getData(query);
+
+			Iterator itr = details.iterator();
+			while (itr.hasNext()) 
+			{
+				out.print(itr.next() + ",");
+			}
+		}
+		
+		
+		//ajax for geting update data
 		if(request.getParameter("getUpdateData")!=null){
 			
 			String id=request.getParameter("id");
@@ -168,33 +197,6 @@ public class Sales extends HttpServlet {
 				}
 				
 		}
-			
-
-		// ajax to search vehicle		
-		if (searchVehicle != null)
-		{ 
-			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT'";
-			List list = gd.getData(query);			
-			Iterator itr = list.iterator();
-			while (itr.hasNext()) 
-			{
-				out.print(itr.next() + ",");
-			}
-		}
-		
-		// ajax to search product
-		if(request.getParameter("q")!=null)
-		{
-			
-			String query="SELECT `id`,`name`,`gstper` FROM `product_master` WHERE `name` LIKE '"+request.getParameter("q")+"%'";
-			List details = gd.getData(query);
-
-			Iterator itr = details.iterator();
-			while (itr.hasNext()) 
-			{
-				out.print(itr.next() + ",");
-			}
-		}
 		
 		if(request.getParameter("insertSaleDataSubmitBtn")!=null){
 			
@@ -288,12 +290,20 @@ public class Sales extends HttpServlet {
 					System.out.println("hi");
 					if(!debtorId.isEmpty())
 					{
-					
-						String insertExp_master="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
-						System.out.println(insertExp_master);
+						
+						String insertExp_masterForDeposit="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+								+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleDeposit+",'CASH','"+date+"','-','-')";
+						System.out.println(insertExp_masterForDeposit);
 				
-						gd.executeCommand(insertExp_master);
+						gd.executeCommand(insertExp_masterForDeposit);
+					
+						String insertExp_masterForDiesel="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
+						System.out.println(insertExp_masterForDiesel);
+				
+						gd.executeCommand(insertExp_masterForDiesel);
+						
+						
 					
 						if(vehicleAmount!=null||vehicleReading!=null||dieselInLiter!=null)
 						{
@@ -379,5 +389,97 @@ public class Sales extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/sale/sale.jsp");
 			rd.forward(request, response);
 		}
+		
+		
+		//Ajax for finding client name
+		if(request.getParameter("findSaleClient")!=null){
+			String query = "SELECT `client_organization_name` FROM `client_details`";
+			List details = gd.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+	
+					}
+			}
+			System.out.println("Sarang");
+		}
+		
+		if(request.getParameter("getDateData")!=null){
+			
+			RequireData requireData=new RequireData();
+			
+			String indName=request.getParameter("individualName");
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			
+			String saleData=null;
+			
+			if(indName==null){
+				saleData="SELECT sale_master.id, sale_master.product_count, client_details.client_organization_name, sale_master.chalan_no, "
+						+ "sale_master.date, sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master, "
+						+ "client_details WHERE sale_master.client_id = client_details.client_id AND (sale_master.date between '"+firstDate+"' AND '"+lastDate+"')";
+			}else {
+				
+				String getClientID="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='"+indName+"'";
+				
+				String clientId=gd.getData(getClientID).get(0).toString();
+				
+				System.out.println(clientId);
+				
+				saleData="SELECT sale_master.id, sale_master.product_count, client_details.client_organization_name, sale_master.chalan_no, "
+						+ "sale_master.date, sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master, "
+						+ "client_details WHERE sale_master.client_id = client_details.client_id AND (sale_master.date between '"+firstDate+"' AND '"+lastDate+"') AND sale_master.client_id="+clientId;
+			}
+			
+			
+			System.out.println(indName+firstDate+lastDate);
+			
+			List saleDataList= gd.getData(saleData);
+			Iterator itr=saleDataList.iterator();
+
+			while (itr.hasNext()) {
+				
+				String sid = itr.next().toString();
+				String productCount = itr.next().toString();
+				String clientOrgName = itr.next().toString();
+				String chalanNo = itr.next().toString();
+				String date = itr.next().toString();
+				String vehicleDetail = itr.next().toString();
+				String debtorid = itr.next().toString();
+				String deposit = itr.next().toString();
+				
+				String vehicleNumber="";
+				
+				if(vehicleDetail.equals("")){
+
+					vehicleNumber=requireData.getVehicleNumber(Integer.parseInt(debtorid));
+
+				}else {
+					vehicleNumber=vehicleDetail;
+				}
+				
+				out.println(productCount+","+clientOrgName+","+chalanNo+","+date+","+vehicleNumber+","+deposit+",");
+				
+				String saleMasterData="SELECT sale_details_master.product_name, sale_details_master.qty, sale_details_master.rate, "
+						+ "sale_details_master.supplier_name, sale_details_master.third_party_chalan FROM sale_details_master, sale_master "
+						+ "WHERE sale_details_master.sale_master_id=sale_master.id AND sale_master.id="+sid;
+				
+				List saleMasterDataList=gd.getData(saleMasterData);
+				Iterator itr1=saleMasterDataList.iterator();
+				
+				while (itr1.hasNext()) {
+					
+					String productName=itr1.next().toString();
+					String qty=itr1.next().toString();
+					String rate=itr1.next().toString();
+					String supplierName=itr1.next().toString();
+					String chalanNoTP=itr1.next().toString();
+					
+					out.println(productName+","+qty+","+rate+","+supplierName+","+chalanNoTP+",");
+				}
+			}	
+		}		
 	}
 }

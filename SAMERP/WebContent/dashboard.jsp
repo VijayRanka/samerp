@@ -35,6 +35,51 @@
     position: absolute;
     text-align: left;
 }
+
+
+#snackbar {
+	    visibility: hidden;
+	    min-width: 250px;
+	    margin-left: -125px;
+	    background-color: #333;
+	    color: #fff;
+	    text-align: center;
+	    border-radius: 2px;
+	    padding: 16px;
+	    position: fixed;
+	    z-index: 1;
+	    left: 50%;
+	    top: 50px;
+	    font-size: 15px;
+	    border-radius:50px 50px;
+	}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+
 </style>
 </head>
 <body onload="setSelectValue()">
@@ -46,6 +91,12 @@
 <!--top-Header-menu-->
 <!--start-top-serch-->
 <div id="search">
+
+
+<% if(request.getAttribute("status")!=null){ %>
+<div id="snackbar"><%=request.getAttribute("status")%></div>
+<%} %>
+
 	<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
 </div>
 <!--close-top-serch--> 
@@ -945,9 +996,10 @@ function getSetSelect(id,value)
 		var e = document.getElementById("collapseFour").className="collapse in";
 	}
 	
-    getWeek();
+  	getWeek();
     getDates();
-    getVehicleData();
+    //getVehicleData();
+   
 }
 
 function getWeek(){
@@ -998,7 +1050,7 @@ function getDates() {
 		    	  tr[i].style.display = "";
 		    	  ++counter;
 		    	  dieselCost = +dieselCost + +document.getElementById("diesel"+i).innerHTML;
-		    	  depositCost = +depositCost + +document.getElementById("deposit"+i).innerHTML;
+		    	  //depositCost = +depositCost + +document.getElementById("deposit"+i).innerHTML;
 		      }
 		      else 
 		      {
@@ -1019,7 +1071,7 @@ function getDates() {
 	  document.getElementById("tripCnt").innerHTML=counter;
 	  document.getElementById("allowance").innerHTML=counter;
 	  document.getElementById("dieselCost").innerHTML=dieselCost;
-	  document.getElementById("depositCost").innerHTML=depositCost;
+	  //document.getElementById("depositCost").innerHTML=depositCost;
 	  
 	  
 	  getDriverExp(fromDate, toDate);
@@ -1037,7 +1089,6 @@ function getDriverExp(sdate, edate)
 		if (this.readyState == 4 && this.status == 200) {
 			demoStr = this.responseText;
 			var d = demoStr.split(",");
-			
 			if(d[0]!=""){
 				var expDCost = document.getElementById("dieselCost").innerHTML;
 				
@@ -1057,17 +1108,19 @@ function getDriverExp(sdate, edate)
 				document.getElementById("totalDPayment").innerHTML = totalDPayment;
 				
 				totalCost = +totalCost + +d[3];
+				var cost = d[4].split("-");
 				
 				document.getElementById("dieselCost").innerHTML = expDCost
 				document.getElementById("dieselExpCost").innerHTML = d[3];
-				document.getElementById("driverCost").innerHTML = d[4];
+				document.getElementById("driverCost").innerHTML = cost[0];
 				document.getElementById("helperPrevCost").innerHTML = d[5];
 				document.getElementById("driverPrevCost").innerHTML = d[6];
 				
-				document.getElementById("totalCost").innerHTML = totalCost+  +d[4]+ +d[1]+ +d[5]+ +d[6]+ +totalDPayment; 
-				
 				document.getElementById("tHelperCharge").innerHTML = +d[1]+ +d[5];
-				document.getElementById("tDriverCharge").innerHTML = +d[0]+ +d[6];
+				document.getElementById("tDriverCharge").innerHTML = +totalDPayment+ +d[6];
+				document.getElementById("depositCost").innerHTML=cost[1];
+				
+				document.getElementById("totalCost").innerHTML = totalCost+ +cost[0]+ +cost[1]+ +d[1]+ +d[5]+ +d[6]+ +totalDPayment; 
 				
 			}else{
 				
@@ -1080,6 +1133,8 @@ function getDriverExp(sdate, edate)
 				document.getElementById("totalCost").innerHTML = "0";
 				document.getElementById("helperPrevCost").innerHTML = "0";
 				document.getElementById("driverPrevCost").innerHTML = "0";
+				document.getElementById("tHelperCharge").innerHTML = "0";
+				document.getElementById("tDriverCharge").innerHTML = "0";
 			}
 		}
 	};
@@ -1087,6 +1142,7 @@ function getDriverExp(sdate, edate)
 	xhttp.open("POST", "/SAMERP/AddVehicles?vno="+value+"&sdate="+sdate+"&edate="+edate, true);
 	xhttp.send();
 }
+
 
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
@@ -1136,7 +1192,7 @@ function makeHelperPayment() {
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			var demoStr = this.responseText.split(",");
-			
+			 myFunction();
 		}
 	};
 	
@@ -1144,6 +1200,12 @@ function makeHelperPayment() {
 	xhttp.send();
 	
 	
+}
+
+function myFunction() {
+    var x = document.getElementById("snackbar")
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 /*-----------------------------------Mukesh data end-----------------------------*/
 

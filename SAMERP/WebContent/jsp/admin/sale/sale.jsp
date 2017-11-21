@@ -398,7 +398,7 @@ margin-top: 5px;
 						<thead>
 							<tr>
 								<th>Sr.No</th>
-								<th>Orgnization Name</th>
+								<th>Client Name</th>
 								<th>Chalan No</th>
 								<th>Date</th>
 								<th>Vehicle No</th>
@@ -840,6 +840,7 @@ function getDeleteId(deleteid)
 //****************************************** Vehicle Search START ******************************************
 function VehicleSearch(str) {
 
+	str = str.toUpperCase();
 	var xhttp;
 	if (str == "") {
 		return;

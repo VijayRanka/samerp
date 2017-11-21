@@ -159,7 +159,7 @@
                 </div>
          		
               <div class="form-actions" id="addCancel" align="center" style="display: none">
-                <input class="btn btn-success" name="insertAccDetails" type="button" value="Add Stock" onclick="getInsertData()" />
+                <input class="btn btn-success" id="buttonSave" name="insertAccDetails" type="button" value="Add Stock" onclick="getInsertData()" />
 
                 
                 <input class="btn btn-danger" type="button" value="Cancel" />
@@ -310,7 +310,7 @@ function getProductList(value){
 					document.getElementById("addCancel").setAttribute("style","display:block");
 					document.getElementById("countDown").value=j-1;
 					document.getElementById("myDataTable").innerHTML=tableStr;
-					document.getElementById("buttonSave").disabled==false;
+					document.getElementById("buttonSave").disabled=false;
 					document.getElementById("dailyQty1").focus();
 				}
 				}
