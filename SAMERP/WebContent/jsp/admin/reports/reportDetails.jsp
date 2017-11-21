@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="/SAMERP/config/css/select2.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-style.css" />
 <link rel="stylesheet" href="/SAMERP/config/css/matrix-media.css" />
+<link rel="icon" href="/SAMERP/config/img/icons/favicon.ico" type="image/x-icon">
 <link href="/SAMERP/config/font-awesome/css/font-awesome.css"
 	rel="stylesheet" />
 <link
@@ -289,57 +290,6 @@ to {
  	}
  	
 // to display list of individuals
-function generateName(value){
-	if(value=='EXPENSES')
-	{
-		var xhttp;
-		xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var demoStr = this.responseText;
-				document.getElementById("getList").innerHTML = demoStr;
-				}
-			};
-		xhttp.open("POST", "/SAMERP/Expenses.do?findNameByReport=1", true);
-		xhttp.send();
-
-		}
-	else if(value=='BANKSTATEMENT')
-	{
-		var xhttp;
-		xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var demoStr = this.responseText;
-				document.getElementById("getList").innerHTML = demoStr;
-				}
-			};
-		xhttp.open("POST", "/SAMERP/AddAccountDetails?findNameByReport=1", true);
-		xhttp.send();
-	}
-
-	else if(value=='SALE'){
-
-		var xhttp;
-		xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var demoStr = this.responseText;
-				document.getElementById("getList").innerHTML = demoStr;
-				}
-			};
-		xhttp.open("POST", "/SAMERP/Sales?findSaleClient=1", true);
-		xhttp.send();
-	}
-	
-	
-	else{
-		document.getElementById("getList").innerHTML = "";
-		document.getElementById("individualName").value = "";
-	}
-		
-	alert("Hi");	
-}
 // ##########################################	Grt Data For Report ###########################################
 function getBillReportData() {
 	
@@ -348,7 +298,7 @@ function getBillReportData() {
 	}
 	else{
 		
-	if(document.getElementById("reportType").value=='EXPENSES')
+		if(document.getElementById("reportType").value=='EXPENSES')
 		{
 			 if(document.getElementById("mode1").checked==true)
 				{
@@ -364,6 +314,25 @@ function getBillReportData() {
 					getExpDataByName();
 				}
 			} 
+		}
+		//Sarang
+		else if(document.getElementById("reportType").value=='SALE'){
+			 
+			if(document.getElementById("mode1").checked==true)
+			{
+				getSaleData();
+			}
+			else{
+			
+					if(document.getElementById("individualName").value=="")
+					{
+						alert("Please select any individual first");
+						document.getElementById("individualName").focus();
+					}
+					else{
+						getSaleDataByClient();
+					}
+			}			
 		}
 	
 	else if(document.getElementById("reportType").value=='BANKSTATEMENT')
@@ -495,6 +464,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  			xhttp.onreadystatechange = function() {
 	  				if (this.readyState == 4 && this.status == 200) {
 	  					var demoStr = this.responseText.split(",");
+	  					alert(demoStr.length);
 	  					if(demoStr=="")
 	  						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
 	  					else{
@@ -607,6 +577,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
      }
 	//--------------------ends (vijay)-----------------------
 	
+
 	
 	//----------------------Start(Omkar)----------------------
 	
@@ -657,11 +628,9 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
 	  					document.getElementById("wholeDataList").innerHTML=a;
 	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
-						
-						//alert(demoStr);
-					}
 
-	
+	  					//alert(demoStr);
+					}
 				}
 	  		};
 			
@@ -671,8 +640,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  		
 		//alert('all working');
 	}
-	
-	function getBankDataByName()
+  function getBankDataByName()
 	{
 		var firstDate=document.getElementById("fromDate").value;
   		var lastDate=document.getElementById("toDate").value;
@@ -733,12 +701,173 @@ function DoOnCellHtmlData(cell, row, col, data) {
     	
 		//alert('individual working');
 	}
-	
-	
-	
-	
-	
 	//----------------------End(Omkar)----------------------
+	
+  
+  	//************************* SARANG *****************
+	
+	function getSaleData()
+     {
+		
+   		  var firstDate=document.getElementById("fromDate").value;
+   		  var lastDate=document.getElementById("toDate").value;
+   		  var xhttp;
+	  			xhttp = new XMLHttpRequest();
+	  			xhttp.onreadystatechange = function() {
+	  				if (this.readyState == 4 && this.status == 200) {
+	  					var demoStr = this.responseText.split(",");
+	  					
+	  					if(demoStr=="")
+	  						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+	  					else{
+	  					var a="<thead>"+
+	  					"<tr><th colspan='11' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
+	  					"<tr><th>S.No.</th>"+
+	  					"<th style='text-align: center'>Client Name</th>"+
+	  					"<th style='text-align: center'>Chalan No.</th>"+
+	  					"<th style='width:80px;text-align: center'>Date</th>"+
+	  					"<th style='text-align: center'>Vehicle No.</th>"+
+	  					"<th style='text-align: center'>Deposit</th>"+
+	  					"<th style='text-align: center'>Product Name</th>"+
+	  					"<th style='text-align: center'>Qty</th>"+
+	  					"<th style='text-align: center'>Rate</th>"+
+	  					"<th style='text-align: center'>Supplier Name</th>"+
+	  					"<th style='text-align: center'>Chalon No(TP)</th>"+
+	  					"</tr></thead><tbody>";
+	  					var count=1;
+	  					for(var i=0;i<demoStr.length-1;)
+	  					{
+	  						var pCount=demoStr[i++];
+	  						
+	  						 a+= "<tr>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+count+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center' >"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>";
+  						 
+	  					a+="<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i++]+"</td></tr>";
+	  					
+	  						for(var k=0; k<(pCount-1)*5;k+=5){
+	  							
+			  					 a+="<tr>"+
+			  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+			  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+			  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+			  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+			  						"<td style='text-align: center'>"+demoStr[i++]+"</td>";
+	  						}
+			  						
+	  						
+	  						
+	  					 a+="</tr>";
+	  						count++;
+	  					}
+	  					
+	  					a+="</tbody>";
+                var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+	  					document.getElementById("wholeDataList").innerHTML=a;
+	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+
+	  					}
+	  					
+	  				}
+	  					
+	  				};
+	  			xhttp.open("POST", "/SAMERP/Sales?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+	  			xhttp.send();
+     }
+	
+    function getSaleDataByClient()
+    {
+    	
+    	var firstDate=document.getElementById("fromDate").value;
+ 		var lastDate=document.getElementById("toDate").value;
+	   	var name=document.getElementById("individualName").value;
+  	    var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				if(demoStr=="")
+					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+				else{
+					var a="<thead>"+
+  					"<tr><th colspan='11' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
+  					"<tr><th>S.No.</th>"+
+  					"<th style='text-align: center'>Client Name</th>"+
+  					"<th style='text-align: center'>Chalan No.</th>"+
+  					"<th style='width:80px;text-align: center'>Date</th>"+
+  					"<th style='text-align: center'>Vehicle No.</th>"+
+  					"<th style='text-align: center'>Deposit</th>"+
+  					"<th style='text-align: center'>Product Name</th>"+
+  					"<th style='text-align: center'>Qty</th>"+
+  					"<th style='text-align: center'>Rate</th>"+
+  					"<th style='text-align: center'>Supplier Name</th>"+
+  					"<th style='text-align: center'>Chalon No(TP)</th>"+
+  					"</tr></thead><tbody>";
+  					var count=1;
+  					for(var i=0;i<demoStr.length-1;)
+  					{
+  						var pCount=demoStr[i++];
+  						
+  						 a+= "<tr>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+count+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center' >"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>";
+						 
+  					a+="<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i++]+"</td></tr>";
+  					
+  						for(var k=0; k<(pCount-1)*5;k+=5){
+  							
+		  					 a+="<tr>"+
+		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+		  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>";
+  						}
+		  						
+  						
+  						
+  					 a+="</tr>";
+  						count++;
+  					}
+  					
+  					a+="</tbody>";
+				}
+
+				document.getElementById("wholeDataList").innerHTML=a;
+				var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+				var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
+				document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+			}
+				
+			};
+		xhttp.open("POST", "/SAMERP/Sales?getDateData=1&individualName="+name+"&fromDate="+firstDate+"&toDate="+lastDate, true);
+		xhttp.send();
+     }
+     
+
+			//************************* SARANG END *****************
+						
+						
+	
+	
+
 </script>
 <!-- 	<script src="/SAMERP/config/js/jquery.min.js"></script> -->
 <script src="/SAMERP/config/reportExport/libs/jquery-3.2.1.min.js"></script>

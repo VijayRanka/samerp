@@ -12,7 +12,15 @@ public class demou {
 		GenericDAO gd=new GenericDAO();	
 		RequireData rd=new RequireData();
 		
-		String saleData="SELECT sale_master.id, sale_master.product_count, client_details.client_organization_name, sale_master.chalan_no, "
+		
+		
+		String q="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='JAY GANESH ENTERPRISE'";
+		
+		String clientid=gd.getData(q).get(0).toString();
+		
+		System.out.println(clientid);
+		
+		/*String saleData="SELECT sale_master.id, sale_master.product_count, client_details.client_organization_name, sale_master.chalan_no, "
 				+ "sale_master.date, sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master, "
 				+ "client_details WHERE sale_master.client_id = client_details.client_id AND (sale_master.date between '2017-11-01' AND '2017-11-30')"; 
 		
@@ -62,7 +70,7 @@ public class demou {
 				System.out.println(productName+" "+qty+" "+rate+" "+supplierName+" "+chalanNoTP);
 			}
 			System.out.println();
-		}
+		}*/
 		
 	}
 }
