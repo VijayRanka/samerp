@@ -376,7 +376,7 @@
 										<div class="control-group" id="chequeDetails" style="">
 											<label class="control-label">Cheque Number : </label>
 											<div class="controls">
-												<input type="text" placeholder="Cheque Number" name="chequeNop" id="chequeNo" />
+												<input type="text" placeholder="Cheque Number" maxlength="6" name="chequeNop" id="chequeNo" />
 											</div>
 										</div>
 				
