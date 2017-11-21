@@ -590,6 +590,7 @@ public class PTCash extends HttpServlet {
 			int sum=PTCash.sum(cash);
 			String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
 			List lastPettyBalance=gd.getData(getLastPettyBalance);
+			request.setAttribute("tab", "tab2");
 			request.setAttribute("status", "Rs."+sum+" Petty Cash Added. Total Petty Cash Balance is Rs."+lastPettyBalance.get(1));
 			RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 			rq.forward(request, response);
@@ -754,10 +755,6 @@ public class PTCash extends HttpServlet {
 			
 			
 			
-			
-			
-			
-			
 		}
 		
 		if(request.getParameter("details")!=null)
@@ -771,7 +768,7 @@ public class PTCash extends HttpServlet {
 		if(request.getParameter("findHanLoanName")!=null)
 		{
 			String name=request.getParameter("findHanLoanName");
-			String query="SELECT id, alias_name FROM handloan_master";
+			String query="SELECT id, name FROM handloan_master";
 			List getHandloadName=gd.getData(query);
 			Iterator itr=getHandloadName.iterator();
 			while(itr.hasNext())
