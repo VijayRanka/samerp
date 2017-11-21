@@ -53,7 +53,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
-				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" title="Go to JCB & POKLAND Dashboard" class="tip-bottom">JCB & POKLAND Dashboard</a>  
 				<a href="#" class="current">JCB & POKLAND Payment View </a>
 			</div>
 			<h1></h1>
@@ -209,11 +209,13 @@
 		}
 		document.getElementById("yearSelect").innerHTML = options;
 		
+		//Year
 		var thisYear = new Date().getFullYear();
 		
 		document.getElementById("yearSelect").value =thisYear;
 		$("#s2id_yearSelect").find("span").html(thisYear);
 		
+		//Month
 		var thisMonth = new Date().getMonth();
 		
 		document.getElementById("monthSelect").value =thisMonth;

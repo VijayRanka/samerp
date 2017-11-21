@@ -26,9 +26,54 @@
 #s2id_autogen3, #s2id_vehicle_update,#s2id_vehicle,#s2id_cust_project,#s2id_cust_project_update,#s2id_payBank {
 	float: right;
 }
+#s2id_autogen3{
+	float: left;
+}
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50px;
+    font-size: 15px;
+    border-radius:50px 50px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
 </style>
 </head>
-<body>
+<body onload="snackBar()">
 
 	<!--Header-part-->
 	<div id="header">
@@ -38,8 +83,16 @@
 	</div>
 
 	<!--start-top-serch-->
+	<%
+			if (session.getAttribute("status") != null) {
+		%>
+		<div id="snackbar"><%=session.getAttribute("status")%></div>
+		<%
+			}
+			session.removeAttribute("status");
+		%>
+	
 	<div id="search">
-
 		<button type="submit" class="tip-bottom">LOGOUT</button>
 	</div>
 	<!--close-top-serch-->
@@ -50,7 +103,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
-				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" title="Go to JCB & POKLAND Dashboard" class="tip-bottom">JCB & POKLAND Dashboard</a>  
 				<a href="#" class="current">JCB & POKLAND Chalan Entry</a>
 			</div>
 			<h1>JCB & POKLAND Chalan Entry</h1>
@@ -230,7 +283,7 @@
 
 						</div>
 						<div class="widget-content nopadding">
-							<form action="/SAMERP/JcbPocDetails.do?update=update" method="POST">
+							<form action="/SAMERP/JcbPocDetails.do?update=update" method="POST" id="payFormJCBUpdate">
 								<table class=""
 									style="border-color: white; margin: 0 auto; width: 700px">
 									<tr>
@@ -256,6 +309,7 @@
 											<select	name="cust_project" id="cust_project_update" class="span8" style="float: right;">
 												<option></option>
 											</select>
+											<span class="help-inline error" id="projectErrorUpdate" style="color: red; font-weight: bold;margin-top: 7%;margin-right: -66%;	float: right;"></span>
 										</td>
 										<td style="text-align: right;">Breaker Rate :<input
 											type="text" name="breaker_rate" id="breaker_rate_update">
@@ -295,7 +349,7 @@
 													}
 												%>
 										</select>
-
+										<span class="help-inline error" id="machineErrorUpdate" style="color: red; font-weight: bold;margin-top: 9%;margin-right: -66%;	float: right;"></span>
 										</td>
 										<td style="text-align: right; padding-right: 100px;">
 											Bucket Hrs : <input type="hidden" name="bucket_hrs" id="bucket_hrs_update" placeholder="HH:MM">
@@ -306,7 +360,9 @@
 									</tr>
 									<tr>
 										<td style="text-align: right; ">
+										<var class="control-group hide">
 											Deposit :<input type="text" name="deposit" id="deposit_update" placeholder="Deposit">
+										</var>
 										</td>
 										<td style="text-align: right; padding-right: 100px;">
 											Breaker Hrs : <input type="hidden" name="breaker_hrs" id="breaker_hrs_update" placeholder="HH:MM">
@@ -317,17 +373,17 @@
 									</tr>
 									<tr>
 										<td style="text-align: right;">
-											Diesel Amount :<input type="text" name="diesel" id="diesel_update" placeholder="Diesel">
+											<var class="control-group hide">
+												Diesel Amount :<input type="text" name="diesel" id="diesel_update" placeholder="Diesel">
+											</var>
 										</td>
 										<td style="text-align: right;">
-											HSN : <input type="text" name="hsnno" placeholder="HSN">
+<!-- 											HSN : <input type="text" name="hsnno" placeholder="HSN"> -->
 										</td>
 									</tr>
 									<tr>
-										<td colspan="2" style="text-align: center;"><button
-												type="submit" name="insertorganizer" class="btn btn-success"">Submit</button>
-											<a href="/SAMERP/index.jsp"><button type="button"
-													class="btn btn-danger ">Exit</button></a></td>
+										<td colspan="2" style="text-align: center;"><button type="button" name="insertorganizer" class="btn btn-success" onclick="paySubmitJCBUpdate()">Submit</button>
+											<a href="/SAMERP/index.jsp"><button type="button" class="btn btn-danger ">Exit</button></a></td>
 									</tr>
 								</table>
 							</form>
@@ -345,11 +401,17 @@
 						<div class="widget-title">
 							<span class="icon"><i class="icon-th"></i></span>
 							<h5>Data table</h5>
-							<a href="#createBill" data-toggle="modal" tabindex="-1" ><span class="label label-important">Create Bill</span></a>
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">
-								<thead>
+								<div class="controls"style="float: right;position: relative;right: 280px;">
+					              <span  style="position: relative;bottom: 5px;">
+					              	<b>From Date:</b></span>
+					               	<input type="text" name="" id="dataTableFrom" data-date-format="dd-mm-yyyy" value="" class="datepicker">
+					               	<b>To Date:</b></span>
+					               	<input type="text" name="" id="dataTableTo" data-date-format="dd-mm-yyyy" value="" class="datepicker">
+					              </div> 
+									<thead>
 									<tr>
 										<th></th>
 										<th>Customer Name</th>
@@ -379,7 +441,7 @@
 									if (details != null) {
 										Iterator itr2 = details.iterator();
 								%>
-								<tbody>
+								<tbody id="jcbpocDataTable">
 									<%
 										while (itr2.hasNext()) {
 												srno++;
@@ -516,6 +578,59 @@
 	    }
 	    return true;
 	}
+	function snackBar() {
+		setMonth();
+	    var x = document.getElementById("snackbar")
+	    x.className = "show";
+	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
+	
+// 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@DATA TABLE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+function setMonth() {
+	var thisYear = new Date().getFullYear();
+	var thisMonth = new Date().getMonth();
+	thisMonth=thisMonth+1;
+	document.getElementById("dataTableFrom").value ="1-"+thisMonth+"-"+thisYear;
+	document.getElementById("dataTableTo").value ="30-"+thisMonth+"-"+thisYear;
+}
+function getDataForTable() {
+	var fromDate=document.getElementById("dataTableFrom").value;
+	var toDate=document.getElementById("dataTableTo").value;
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split("~");
+			if(demoStr=="")
+			document.getElementById("jcbpocDataTable").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+			else{
+				var count=1;
+				var wholeData="";
+				
+				for(var i=0;i<demoStr.length-2;i=i+6){
+						
+					wholeData+="<tr>"+
+					"<td style='text-align: center'>"+count+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+					"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
+					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+					"<tr>";
+					count++;
+				}
+			
+			document.getElementById("jcbpocDataTable").innerHTML=wholeData;
+			}
+		}
+	};
+	xhttp.open("GET", "/SAMERP/JcbPocDetails.do?fromDate=" + fromDate+"&toDate="+toDate, true);
+	xhttp.send();
+}
+
+// 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END DATA TABLE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		//**********************Customer Search******************************************
 		
 		
@@ -961,12 +1076,36 @@ function validationCheck(){
 		
 	}
 }
+function validationCheckUpdate(){
+	var projectName=document.getElementById("cust_project_update").value;
+	var machineName=document.getElementById("vehicle_update").value;
+	
+	if(projectName == ""){
+		document.getElementById("projectErrorUpdate").innerHTML ="Select Project!";
+		return false;
+	}else{
+		document.getElementById("projectErrorUpdate").innerHTML ="";
+	}
+	if(machineName == ""){
+		document.getElementById("machineErrorUpdate").innerHTML ="Select Machine!";
+		return false;
+	}else{
+		document.getElementById("machineErrorUpdate").innerHTML ="";
+	}
+}
 //******************************************END validationCheck******************************************************************
 function paySubmitJCB(){
 	var x=validationCheck();
 	
 	if(x != false){
 		document.getElementById("payFormJCB").submit();
+	}
+}
+function paySubmitJCBUpdate(){
+	var x=validationCheckUpdate();
+	
+	if(x != false){
+		document.getElementById("payFormJCBUpdate").submit();
 	}
 }
 </script>

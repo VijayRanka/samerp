@@ -82,11 +82,12 @@
 	<!--start-top-serch-->
 	<div id="search">
 		<%
-			if (request.getAttribute("status") != null) {
+			if (session.getAttribute("status") != null) {
 		%>
-		<div id="snackbar"><%=request.getAttribute("status")%></div>
+		<div id="snackbar"><%=session.getAttribute("status")%></div>
 		<%
 			}
+			session.removeAttribute("status");
 		%>
 
 		<button type="submit" class="tip-bottom">LOGOUT</button>
@@ -102,7 +103,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
-				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" title="Go to JCB & POKLAND Dashboard" class="tip-bottom">JCB & POKLAND Dashboard</a>  
 				<a href="#" class="current">Add Customer</a>
 				
 			</div>
@@ -363,8 +364,14 @@
 
 	function loadFunction(){
 		document.getElementById("custname").focus();
+		snackBar();
 	}
-	
+	function snackBar() {
+	    var x = document.getElementById("snackbar")
+	    x.className = "show";
+	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
+
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
