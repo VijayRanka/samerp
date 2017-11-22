@@ -120,8 +120,7 @@
 							RequireData rq = new RequireData();
 						%>
 						<div class="widget-content nopadding">
-							<form action="/SAMERP/AddEmployee" method="post"
-								class="form-horizontal">
+							<form action="/SAMERP/AddEmployee" method="post" class="form-horizontal">
 
 								<div class="control-group">
 									<label class="control-label">Date :</label>
@@ -143,6 +142,7 @@
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
+								
 								<div class="control-group">
 									<label class="control-label"><span style="color: red;"></span>Contact
 										No. :</label>
@@ -159,10 +159,10 @@
 										
 											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" >
 											<option>Select Designation</option>
-											<option value="Driver">Driver</option>
-											<option value="Helper">Helper</option>
-											<option value="Home Worker">Home Worker</option>
-											<option valu="Labour">Labour</option>
+											<option value="DRIVER">DRIVER</option>
+											<option value="HELPER">HELPER</option>
+											<option value="HOME WORKER">HOME WORKER</option>
+											<option value="LABOUR">LABOUR</option>
 											
 											</select>
 									</div>
@@ -171,8 +171,7 @@
 							
 								
 								<div class="control-group" >
-									<label class="control-label"><span style="color: red;"></span>Work
-										With:</label>
+									<label class="control-label"><span style="color: red;"></span>WorkWith:</label>
 
 									<div class="controls">
 										<select name="contractorVehicle_name"  class="span5" id="Vehicleid" >
@@ -192,11 +191,10 @@
 										
 									</div>
 								</div>
-
+									
 								<div class="form-actions">								
-									<button type="submit" name="submit"	class="btn btn-success"	style="position: relative; right: 685px; float: right;">Submit</button>
-									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger "
-											style="position: relative; right: 550px; float: right;">Exit</button></a>
+									<input type="submit" name="InsertBtn"	class="btn btn-success"	style="position: relative; right: 685px; float: right;" value="Submit">
+									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger " style="position: relative; right: 550px; float: right;">Exit</button></a>
 								</div>
 							</form>
 						</div>
@@ -309,10 +307,10 @@
 										
 											<select name="designation" style="width: 271px;" id="designationid" onchange="showVehicle(this.value)" >
 											<option value="">Select Designation</option>
-											<option value="Driver">Driver</option>
-											<option value="Helper">Helper</option>
-											<option value="Home Worker">Home Worker</option>
-											<option valu="Labour">Labour</option>
+											<option value="DRIVER">DRIVER</option>
+											<option value="HELPER">HELPER</option>
+											<option value="HOME WORKER">HOME WORKER</option>
+											<option valu="LABOUR">LABOUR</option>
 																					
 											</select>
 									</div>
@@ -395,11 +393,8 @@ function searchEmpolyee(id) {
 			
 			document.getElementById("contactno").value = demoStr[3];
 			
-			document.getElementById("designationid").value = demoStr[4];
-			
-			
-			var dd = document.getElementById('designationid');
-			
+			document.getElementById("designationid").value = demoStr[4];			
+			var dd = document.getElementById('designationid');			
 			for (var i = 0; i < dd.options.length; i++) {
 			    if (dd.options[i].text === demoStr[4]) {
 			        dd.selectedIndex = i;
@@ -408,10 +403,9 @@ function searchEmpolyee(id) {
 			        break;
 			    }
 			}
-			document.getElementById("up_Vehicleid").value = demoStr[5];	
 			
-			var select = document.getElementById('up_Vehicleid');
-			
+			document.getElementById("up_Vehicleid").value = demoStr[5];				
+			var select = document.getElementById('up_Vehicleid');			
 			var opt = document.createElement('option');
 		     opt.value = demoStr[5];
 		     opt.innerHTML =  demoStr[5];
@@ -457,10 +451,10 @@ function getVehicle(id) {
 
 function showOpening(str) {
 	
-	if(str=='Driver' ||str=='Helper'){
+	if(str=='DRIVER' ||str=='HELPER'){
 		document.getElementById("opening_balid").className="control-group ";
 	}
-	else if(str=='Home Worker' ||str=='Labour'){
+	else if(str=='HOME WORKER' ||str=='LABOUR'){
 
 		document.getElementById("opening_balid").className="control-group hide";
 		
@@ -487,7 +481,7 @@ function showOpening(str) {
 		
 			}
 		};
-			
+		alert(str);
 		
 	xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
 	xhttp.send();
@@ -496,7 +490,7 @@ function showOpening(str) {
 }
 
 
-
+/* 
 function showVehicle(str) {
 	
 	if(str=='Driver' ||str=='Helper'){
@@ -535,7 +529,7 @@ function showVehicle(str) {
 	
 }
 
-
+ */
 function getSetSelect(id,value)
 {
 	var x=document.getElementById(id).children;
