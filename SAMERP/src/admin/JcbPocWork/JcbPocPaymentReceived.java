@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
@@ -83,6 +84,8 @@ public class JcbPocPaymentReceived extends HttpServlet {
 				result = dao.executeCommand(query);
 
 				if (result == 1) {
+					HttpSession session=request.getSession();
+			        session.setAttribute("status","Payment Received Successfully!");
 					response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
 				} else {
 					out.print("something wrong");
@@ -108,6 +111,8 @@ public class JcbPocPaymentReceived extends HttpServlet {
 				result = dao.executeCommand(query);
 
 				if (result == 1) {
+					HttpSession session=request.getSession();
+			        session.setAttribute("status","Payment Received Successfully!");
 					response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
 				} else {
 					out.print("something wrong");
@@ -230,6 +235,8 @@ public class JcbPocPaymentReceived extends HttpServlet {
 			result = dao.executeCommand(query);
 
 			if (result == 1) {
+				HttpSession session=request.getSession();
+		        session.setAttribute("status","Revert Entry Successfully!");
 				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
 			} else {
 				out.print("something wrong");
@@ -252,6 +259,8 @@ public class JcbPocPaymentReceived extends HttpServlet {
 					+ "("+custIdRevert+",'"+payDescription+"','"+amount+"','"+balance+"','"+toDate+"','BANK',"+payBank+",1)";
 			result = dao.executeCommand(query);
 			if (result == 1) {
+				HttpSession session=request.getSession();
+		        session.setAttribute("status","Revert Entry Successfully!");
 				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp");
 			} else {
 				out.print("something wrong");

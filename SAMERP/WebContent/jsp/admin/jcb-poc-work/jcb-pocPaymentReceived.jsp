@@ -31,9 +31,52 @@
 	#s2id_cust_project_update {
 	float: right;
 }
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50px;
+    font-size: 15px;
+    border-radius:50px 50px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
 </style>
 </head>
-<body>
+<body onload="snackBar()">
 
 	<!--Header-part-->
 	<div id="header">
@@ -43,6 +86,14 @@
 	</div>
 
 	<!--start-top-serch-->
+		<%
+			if (session.getAttribute("status") != null) {
+		%>
+		<div id="snackbar"><%=session.getAttribute("status")%></div>
+		<%
+			}
+			session.removeAttribute("status");
+		%>
 	<div id="search">
 
 		<button type="submit" class="tip-bottom">LOGOUT</button>
@@ -55,7 +106,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> 
-				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" class="tip-bottom">JCB & POKLAND Dashboard</a>  
+				<a href="/SAMERP/jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp" title="Go to JCB & POKLAND Dashboard" class="tip-bottom">JCB & POKLAND Dashboard</a>  
 				<a href="#" class="current">JCB & POKLAND Payment Received </a>
 			</div>
 			<h1>JCB & POKLAND Payment Received </h1>
@@ -311,6 +362,12 @@
 
 	<!--end-Footer-part-->
 <script type="text/javascript">
+function snackBar() {
+    var x = document.getElementById("snackbar")
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;

@@ -68,6 +68,7 @@
 .table td {
    text-align: center;   
 }
+
 </style>
 </head>
 
@@ -119,8 +120,7 @@
 							RequireData rq = new RequireData();
 						%>
 						<div class="widget-content nopadding">
-							<form action="/SAMERP/AddEmployee" method="post"
-								class="form-horizontal">
+							<form action="/SAMERP/AddEmployee" method="post" class="form-horizontal">
 
 								<div class="control-group">
 									<label class="control-label">Date :</label>
@@ -142,6 +142,7 @@
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
 								</div>
+								
 								<div class="control-group">
 									<label class="control-label"><span style="color: red;"></span>Contact
 										No. :</label>
@@ -158,10 +159,10 @@
 										
 											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" >
 											<option>Select Designation</option>
-											<option value="Driver">Driver</option>
-											<option value="Helper">Helper</option>
-											<option value="Home Worker">Home Worker</option>
-											<option valu="Laber">Laber</option>
+											<option value="DRIVER">DRIVER</option>
+											<option value="HELPER">HELPER</option>
+											<option value="HOME WORKER">HOME WORKER</option>
+											<option value="LABOUR">LABOUR</option>
 											
 											</select>
 									</div>
@@ -170,29 +171,14 @@
 							
 								
 								<div class="control-group" >
-									<label class="control-label"><span style="color: red;"></span>Work
-										With:</label>
+									<label class="control-label"><span style="color: red;"></span>WorkWith:</label>
 
 									<div class="controls">
-										<select name="contractorVehicle_name" list="myList" class="span5" id="contractorvehicleid">
-
-											<%
-												List details = rq.getContractorVehicle();
-												if (details != null) {
-													Iterator itr = details.iterator();
-													while (itr.hasNext()) {
-														String id = itr.next().toString();
-														String alias_name = itr.next().toString();
-											%>
-											<option value="<%=id%>"><%=alias_name%></option>	<datalist id="myList"></datalist>
-											<%
-												}
-											%>
+										<select name="contractorVehicle_name"  class="span5" id="Vehicleid" >
+										
 										</select>
 									</div>
-									<%
-										}
-									%>
+									
 								</div>
 								
 								
@@ -205,11 +191,10 @@
 										
 									</div>
 								</div>
-
+									
 								<div class="form-actions">								
-									<button type="submit" name="submit"	class="btn btn-success"	style="position: relative; right: 685px; float: right;">Submit</button>
-									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger "
-											style="position: relative; right: 550px; float: right;">Exit</button></a>
+									<input type="submit" name="InsertBtn"	class="btn btn-success"	style="position: relative; right: 685px; float: right;" value="Submit">
+									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger " style="position: relative; right: 550px; float: right;">Exit</button></a>
 								</div>
 							</form>
 						</div>
@@ -258,7 +243,7 @@
 							<td><%=itr.next() %></td>
 							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
-										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil"></i></a>
+										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil" title="Update"></i></a>
 									</td>
 							
 						</tr>
@@ -284,7 +269,7 @@
 				</div>
 				<div class="modal-body">
 					<form action="/SAMERP/AddEmployee" method="post" class="form-horizontal">
-
+						<input type="hidden" id="Updateid" name="Updateid" />
 						<div class="control-group">
 							<label class="control-label">Date :</label>
 							<div class="controls">
@@ -300,7 +285,7 @@
 									<label class="control-label"><span style="color: red;">*</span>
 										Employee Name :</label>
 									<div class="controls">
-										<input type="hidden" id="Updateid" name="Updateid" />
+										
 									<input type="text" name="employee_name" id="employeename" class="span3" autofocus placeholder="Employee Name"
 											onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required />
 									</div>
@@ -320,44 +305,30 @@
 									<label class="control-label">Designation: </label>
 									<div class="controls">
 										
-											<select name="designation" style="width: 271px;" id="designationid" onchange="getVehicle()" >
-											<option value="Driver">Driver</option>
-											<option value="Helper">Helper</option>
-											<option value="Home Worker">Home Worker</option>
-											<option valu="Laber">Laber</option>
+											<select name="designation" style="width: 271px;" id="designationid" onchange="showVehicle(this.value)" >
+											<option value="">Select Designation</option>
+											<option value="DRIVER">DRIVER</option>
+											<option value="HELPER">HELPER</option>
+											<option value="HOME WORKER">HOME WORKER</option>
+											<option valu="LABOUR">LABOUR</option>
 																					
 											</select>
 									</div>
 								</div>
 									
 									<div class="control-group">
-									<label class="control-label"><span style="color: red;">*</span>Work
-										With:</label>
+									<label class="control-label" style="margin-top: 6px; margin-bottom: -25px;"><span style="color: red;">*</span>WorkWith:</label>
 
-									<div class="controls">
-										<select name="contractorVehicle_alias" id="contractor_vehicle" class="span3">
+									<div class="controls" style="margin-left: 171px; margin-right: 58px;" >
+										<select name="contractorVehicle_alias" id="up_Vehicleid" class="span3" style="margin-top: -24px;">
 
-											<%
-												List detail = rq.getContractorVehicle();
-												if (details != null) {
-													Iterator itr = detail.iterator();
-													while (itr.hasNext()) {
-														String id1 = itr.next().toString();
-														String alias_name = itr.next().toString();
-											%>
-											<option value="<%=id1%>"><%=alias_name%></option>
+										</select>
 											
-											<%
-												}
-											%>
-										</select><input type="hidden" id="old_contractor_vehicle" name="old_contractor_vehicle">
 									</div>
-									<%
-										}
-									%>
+									
 								</div>
 								
-								<div class='modal-footer' >
+						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
@@ -413,28 +384,46 @@ function searchEmpolyee(id) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			document.getElementById("Updateid").value = demoStr[0];
-			document.getElementById("dateid").value = demoStr[1];
-			document.getElementById("employeename").value = demoStr[2];
-			//alert(demoStr[1]);
-			document.getElementById("contactno").value = demoStr[3];
-			document.getElementById("contractor_vehicle").value = demoStr[4];
-			document.getElementById("old_contractor_vehicle").value = demoStr[5];
-			document.getElementById("designationid").value = demoStr[6];	
 			
-			var desig=document.getElementById("designationid");
-		
-			for (var i = 0; i < desig.options.length; i++) {
-			    if (desig.options[i].text === demoStr[5]) {
-			    	desig.selectedIndex = i;
-			        //alert(demoStr[4]);
-			        getSetSelect('s2id_updatecontractorname', demoStr[5]);
+			document.getElementById("Updateid").value = demoStr[0];
+			
+			document.getElementById("dateid").value = demoStr[1];
+			
+			document.getElementById("employeename").value = demoStr[2];
+			
+			document.getElementById("contactno").value = demoStr[3];
+			
+			document.getElementById("designationid").value = demoStr[4];			
+			var dd = document.getElementById('designationid');			
+			for (var i = 0; i < dd.options.length; i++) {
+			    if (dd.options[i].text === demoStr[4]) {
+			        dd.selectedIndex = i;
+			
+			        getSetSelect('s2id_designationid', demoStr[4]);
 			        break;
 			    }
 			}
 			
-			document.getElementById("opening_balanceid").value = demoStr[7];
-			
+			document.getElementById("up_Vehicleid").value = demoStr[5];				
+			var select = document.getElementById('up_Vehicleid');			
+			var opt = document.createElement('option');
+		     opt.value = demoStr[5];
+		     opt.innerHTML =  demoStr[5];
+		     select.appendChild(opt);
+		     
+		     var dd = document.getElementById('up_Vehicleid');
+				
+				for (var i = 0; i < dd.options.length; i++) {
+				    if (dd.options[i].text === demoStr[5]) {
+				        dd.selectedIndex = i;
+				
+				        getSetSelect('s2id_up_Vehicleid', demoStr[5]);
+				        break;
+				    }
+				}
+		     
+		     
+		     
 			}
 		};
 	xhttp.open("POST","/SAMERP/AddEmployee?employeeid="+id, true);
@@ -462,29 +451,93 @@ function getVehicle(id) {
 
 function showOpening(str) {
 	
-	if(str=='Driver' ||str=='Helper'){
+	if(str=='DRIVER' ||str=='HELPER'){
 		document.getElementById("opening_balid").className="control-group ";
+	}
+	else if(str=='HOME WORKER' ||str=='LABOUR'){
+
+		document.getElementById("opening_balid").className="control-group hide";
+		
+	}
 	
-	}
-	if(str=='HomeWorker'){
-		document.getElementById("opening_balid").className="control-group hide";
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText.split(",");
+			
+			var select = document.getElementById('Vehicleid');
+				
+			 $("#Vehicleid").empty();
+			 for (var i = 0; i<demoStr.length-1; i++){
+				 
+			     var opt = document.createElement('option');
+			     opt.value = demoStr[i];
+			     opt.innerHTML =  demoStr[++i];
+			     select.appendChild(opt);
+			 }
+			 
 		
-	}
-	if(str=='Laber'){
-		document.getElementById("opening_balid").className="control-group hide";
+			}
+		};
+		alert(str);
 		
-	}
+	xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
+	xhttp.send();
 	
 	
 }
 
 
+/* 
+function showVehicle(str) {
+	
+	if(str=='Driver' ||str=='Helper'){
+		document.getElementById("opening_balid").className="control-group ";
+	}
+	else if(str=='Home Worker' ||str=='Labour'){
+	
+		document.getElementById("opening_balid").className="control-group hide";
+		
+	}
+	
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			
+			var demoStr = this.responseText.split(",");
+			
+			var select = document.getElementById('up_Vehicleid');
+			
+			$("#up_Vehicleid").empty();
+			 for (var i = 0; i<demoStr.length-1; i++){
+				 
+			     var opt = document.createElement('option');
+			     opt.value = demoStr[i];
+			     opt.innerHTML =  demoStr[++i];
+			     select.appendChild(opt);
+			 }	
+			}
+		};
+			
+		
+	xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
+	xhttp.send();
+	
+	
+}
+
+ */
 function getSetSelect(id,value)
 {
 	var x=document.getElementById(id).children;
 	var xx=x[0].children;
 	xx[0].innerHTML=value;
 }
+
+
 </script>
 <script src="/SAMERP/config/js/jquery.min.js"></script> 
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 

@@ -662,7 +662,7 @@ public class Expenses extends HttpServlet {
 					if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[0].equalsIgnoreCase("HL")) 
 					{
 						String expId=gd.getData("SELECT expenses_type.expenses_type_id FROM expenses_type WHERE expenses_type.expenses_type_name='"+expType+"'").get(0).toString();
-						if(expType.equals(expId))
+						if(expId.equals("4"))
 						{
 							String handLoanId=gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).get(0).toString();
 						int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
@@ -685,7 +685,6 @@ public class Expenses extends HttpServlet {
 				if(amountStatusClear)
 				{
 					getExpId=gd.getData("select expenses_type_id from expenses_type where expenses_type_name='"+expType+"'").get(0).toString();
-					rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
 					if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[0].equalsIgnoreCase("HL")) 
 					{
 						if(!gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).isEmpty())
@@ -704,6 +703,7 @@ public class Expenses extends HttpServlet {
 										+ "(`handloan_id`, `date`, `credit`, `debit`, `mode`, `balance`) "
 										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'CASH',"+newBalance+")";
 								gd.executeCommand(handLoanInsert);
+								
 							}
 							//for cheque paymode
 							else if(payMode.equalsIgnoreCase("cheque")) {
@@ -731,9 +731,40 @@ public class Expenses extends HttpServlet {
 										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'TRANSFER',"+newBalance+")";
 								gd.executeCommand(handLoanInsert);
 							}
+							String maxHandDetailsId=gd.getData("SELECT MAX(id) FROM handloan_details").get(0).toString();
 							
-							
+							String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
+									+ " `bankId`, `other_details`, `date`,hand_loan_id) VALUES "
+									+ "("+getExpId+","+debtType+",'"+name+"',"+amount+",'"+payMode+"',"+bankInfo+",'"+chequeNo+"','"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"'+"+maxHandDetailsId+")";
+							gd.executeCommand(insertQuery);
 						}
+					}
+					else if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1].equalsIgnoreCase("driver") ||
+							gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1].equalsIgnoreCase("helper")) {
+						String type=gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[1];
+						String empType="";
+						if(type.equalsIgnoreCase("helper"))
+							empType="H";
+						else if(type.equalsIgnoreCase("driver"))
+							empType="D";
+							
+						System.out.println(empType);
+						rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
+						
+						String maxExpId=gd.getData("SELECT MAX(exp_id) FROM expenses_master").get(0).toString();
+						int oldBalance=0;
+						oldBalance=Integer.parseInt(gd.getData("SELECT MAX(balance) FROM driver_helper_payment_master WHERE driver_helper_payment_master.debter_id="+debtType).get(0).toString());
+						int newBalance=oldBalance-amount;
+						
+						
+						String insertQuery="INSERT INTO `driver_helper_payment_master`(`debter_id`, `exp_id`, `date`, `credit`, `debit`, "
+									+ "`particular`, `type`, `balance`) VALUES ("+debtType+","+maxExpId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+""
+											+ ",'PAYMENT','"+empType+"',"+newBalance+")";
+						gd.executeCommand(insertQuery);
+						
+					}
+					else {
+						rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
 					}
 					
 					request.setAttribute("status", "Data Inserted Successfully");
