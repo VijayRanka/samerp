@@ -460,7 +460,7 @@ function showOpening(str) {
 	if(str=='Driver' ||str=='Helper'){
 		document.getElementById("opening_balid").className="control-group ";
 	}
-	else	if(str=='HomeWorker' ||str=='Labour'){
+	else if(str=='Home Worker' ||str=='Labour'){
 
 		document.getElementById("opening_balid").className="control-group hide";
 		
@@ -475,7 +475,7 @@ function showOpening(str) {
 			
 			var select = document.getElementById('Vehicleid');
 				
-			
+			 $("#Vehicleid").empty();
 			 for (var i = 0; i<demoStr.length-1; i++){
 				 
 			     var opt = document.createElement('option');
@@ -502,8 +502,8 @@ function showVehicle(str) {
 	if(str=='Driver' ||str=='Helper'){
 		document.getElementById("opening_balid").className="control-group ";
 	}
-	else	if(str=='HomeWorker' ||str=='Labour'){
-		alert(str);
+	else if(str=='Home Worker' ||str=='Labour'){
+	
 		document.getElementById("opening_balid").className="control-group hide";
 		
 	}
@@ -514,18 +514,17 @@ function showVehicle(str) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			alert(demoStr);
+			
 			var select = document.getElementById('up_Vehicleid');
-	
+			
+			$("#up_Vehicleid").empty();
 			 for (var i = 0; i<demoStr.length-1; i++){
 				 
 			     var opt = document.createElement('option');
 			     opt.value = demoStr[i];
 			     opt.innerHTML =  demoStr[++i];
 			     select.appendChild(opt);
-			 }
-			 
-		
+			 }	
 			}
 		};
 			
