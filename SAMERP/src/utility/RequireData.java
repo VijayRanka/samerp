@@ -1111,7 +1111,6 @@ public class RequireData
 				String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
 						+ " `bankId`, `other_details`, `date`) VALUES "
 						+ "("+expTypeId+","+debtorId+",'"+name+"',"+amount+",'"+mode+"',"+bankId+",'"+chequeDetails+"','"+date+"')";
-				System.out.println(insertQuery);
 				int x=gd.executeCommand(insertQuery);
 			}
 			
