@@ -242,7 +242,7 @@ public class RequireData
 							+ "supplier_payment_master.cheque_no FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id)"
 							+ " AS cheque_no, (SELECT account_details.acc_aliasname FROM account_details, supplier_payment_master WHERE"
 							+ " account_details.acc_id=supplier_payment_master.description AND total_supplier_payment_master.payment_id=supplier_payment_master.id) "
-							+ "AS bank_details, `total_remaining`FROM `total_supplier_payment_master` WHERE  total_supplier_payment_master.id="+tid+" AND total_supplier_payment_master.supplier_id="+pid+" "
+							+ "AS bank_details, `total_remaining`, total_supplier_payment_master.exp_master_id FROM `total_supplier_payment_master` WHERE  total_supplier_payment_master.id="+tid+" AND total_supplier_payment_master.supplier_id="+pid+" "
 									+ "ORDER BY total_supplier_payment_master.id DESC";
 					List List = gd.getData(query);
 					return List;
@@ -879,12 +879,12 @@ public class RequireData
 			public String getVRM(String expId)
 			{
 				String returnString="";
-				String demo="SELECT vehicle_details.vehicle_aliasname,vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
+				String demo="SELECT vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
 						+ "vehicle_reading_master,vehicle_details WHERE vehicle_reading_master.vehicle_id=vehicle_details.vehicle_id "
 						+ "and vehicle_reading_master.expenses_master_id="+expId;
 				if(!gd.getData(demo).isEmpty())
 					{
-					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1)+","+gd.getData(demo).get(2);
+					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1);
 						return returnString;
 					}
 				else 

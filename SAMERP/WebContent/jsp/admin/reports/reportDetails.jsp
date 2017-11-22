@@ -380,13 +380,14 @@ function getBillReportData() {
 			} 
 		}
 		//Sarang
-		else if(document.getElementById("reportType").value=='SALE'){
-			 
+		else if(document.getElementById("reportType").value=='SALE')
+		{
 			if(document.getElementById("mode1").checked==true)
 			{
 				getSaleData();
 			}
-			else{
+			else
+			{
 			
 					if(document.getElementById("individualName").value=="")
 					{
