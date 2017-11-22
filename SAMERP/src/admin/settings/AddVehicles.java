@@ -92,7 +92,6 @@ public class AddVehicles extends HttpServlet {
 			if(deletestatus==1)
 			{
 				System.out.println("delete vehicle successful");
-				
 			}		
 		}
 		else
