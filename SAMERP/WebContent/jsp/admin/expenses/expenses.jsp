@@ -711,6 +711,33 @@ function myFunction() {
 			$('#payStatus').text(payError.split("_")[0]);
 			$('#pettyCashError').modal('show');
 		}
+		else if(payError.split("_")[1]==='jPoc')
+		{
+			document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp'");
+			document.getElementById("pettyCashOk").innerHTML="Go to Chalan Entry";
+			$('#payStatus').text(payError.split("_")[0]);
+			$('#pettyCashError').modal('show');
+		}else if(payError.split("_")[1]==='jPoc')
+		{
+			document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp'");
+			document.getElementById("pettyCashOk").innerHTML="Go to Chalan Entry";
+			$('#payStatus').text(payError.split("_")[0]);
+			$('#pettyCashError').modal('show');
+		}
+		else if(payError.split("_")[1]==='sp')
+		{
+			document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp'");
+			document.getElementById("pettyCashOk").innerHTML="Go to Product Supplier";
+			$('#payStatus').text(payError.split("_")[0]);
+			$('#pettyCashError').modal('show');
+		}
+		else if(payError.split("_")[1]==='sr')
+		{
+			document.getElementById("pettyCashOk").setAttribute("onclick","window.location='/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp'");
+			document.getElementById("pettyCashOk").innerHTML="Go to Raw Supplier";
+			$('#payStatus').text(payError.split("_")[0]);
+			$('#pettyCashError').modal('show');
+		}
 	}
 	document.getElementById("expenses_type_name").focus();
     var x = document.getElementById("snackbar");

@@ -377,6 +377,7 @@
 			
 			<input type="hidden" name="tid" id="tid"/>
 			<input type="hidden" name="sid" id="sid"/>
+			<input type="hidden" name="updateExpId" id="updateExpId"/>
 			
 			<div class="modal-footer">
 				<button type="submit" name="updateSubmitbtn" class="btn green btn-primary">Submit</button>
@@ -717,11 +718,11 @@ function setSelectValue(){
 	var bankExit = <%=request.getAttribute("bankExit") %>
 	var pettyExit = <%=request.getAttribute("pettyExit") %>
 	
-	if(bankExit==0 || bankExit==-1){
+	if(bankExit==0 || bankExit==-1 || bankExit==2){
 		$('#bankBalanceError').modal('show');
 	}
 	
-	if(pettyExit==0 || pettyExit==-1){
+	if(pettyExit==0 || pettyExit==-1 || pettyExit==2){
 		$('#pettyCashError').modal('show');
 	}
 	
@@ -790,6 +791,7 @@ function setUpdateData(sid, tid)
 			document.getElementById("updateMode").value=demoStr[6];
 			document.getElementById("updateChequeNumber").value=demoStr[7];
 			document.getElementById("updateBank").value=demoStr[8];
+			document.getElementById("updateExpId").value=demoStr[10];
 			
 		}
 	};
