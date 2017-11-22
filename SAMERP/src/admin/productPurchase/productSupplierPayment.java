@@ -269,11 +269,11 @@ public class productSupplierPayment extends HttpServlet {
 				int badStatus=rd.checkBankBalance(Integer.parseInt(newAmt), bankId);
 				if(badStatus==0)
 				{
-					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_0");
+					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK ACCOUNT");
 				}
 				else if(badStatus==-1)
 				{
-					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK_b_-1");
+					request.setAttribute("payError", "YOU HAVE INSUFFICIENT BALANCE IN YOUR BANK ACCOUNT");
 				}
 				else if(badStatus==1)
 				{
@@ -281,7 +281,7 @@ public class productSupplierPayment extends HttpServlet {
 				}
 				else if(badStatus==2)
 				{
-					request.setAttribute("payError", "YOU HAVE NOT ADD MONEY IN YOUR BANK_b_2");
+					request.setAttribute("payError", "YOU HAVE NOT ADD MONEY IN YOUR BANK ACCOUNT");
 				}
 				
 				if(amountStatusClear)
