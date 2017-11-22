@@ -403,7 +403,6 @@ public class Sales extends HttpServlet {
 	
 					}
 			}
-			System.out.println("Sarang");
 		}
 		
 		if(request.getParameter("getDateData")!=null){
@@ -434,7 +433,6 @@ public class Sales extends HttpServlet {
 			}
 			
 			
-			System.out.println(indName+firstDate+lastDate);
 			
 			List saleDataList= gd.getData(saleData);
 			Iterator itr=saleDataList.iterator();
