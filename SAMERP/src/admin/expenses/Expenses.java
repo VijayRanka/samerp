@@ -662,7 +662,7 @@ public class Expenses extends HttpServlet {
 					if(gd.getData("SELECT debtor_master.type FROM debtor_master WHERE debtor_master.id="+debtType).get(0).toString().split("_")[0].equalsIgnoreCase("HL")) 
 					{
 						String expId=gd.getData("SELECT expenses_type.expenses_type_id FROM expenses_type WHERE expenses_type.expenses_type_name='"+expType+"'").get(0).toString();
-						if(expType.equals(expId))
+						if(expId.equals("4"))
 						{
 							String handLoanId=gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).get(0).toString();
 						int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
