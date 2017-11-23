@@ -433,7 +433,6 @@ public class Sales extends HttpServlet {
 			}
 			
 			
-			
 			List saleDataList= gd.getData(saleData);
 			Iterator itr=saleDataList.iterator();
 
