@@ -160,13 +160,14 @@ to {
 			                <option >Select Report Type</option>
 			                <option value="BANKSTATEMENT">Bank Statement</option>
 			                <option value="EXPENSES">Expenses</option>
-			                <option value="HANDLOAD">Hand-Loan</option>
+			                <option value="HANDLOAN">Hand-Loan</option>
 			                <option value="JCBPOKLAND">JCB-Pokland</option>
 			                <option value="PAYMENTSTATEMENT">Payment Statement</option>
-			                <option value="PIPEPURCHASE">Pipe Purchase</option>
+			                <option value="PIPE PURCHASE">Pipe Purchase</option>
+			                <option value="RAWPURCHASE">Raw Material Purchase</option>
 			                <option value="PRODUCTDETAILS">Production Details</option>
 			                <option value="SALE">Sale</option>
-			                <option value="VEHICLEREPAIR">Vehicle Repair</option>
+			                <option value="VEHICLE REPAIR">Vehicle Repair</option>
 			                </select>
 			              </div>
 			            </div>
@@ -192,8 +193,7 @@ to {
 				             	<div class="control-group" id="selectIndividual" style="display: none">
 				             	   <label class="control-label">Select Individual : </label>
 					               <div class="controls">
-					                 <input type="text" list="getList" id="individualName"
-					                 autocomplete="off"  placeholder="Individual Name" />
+					                 <input type="text" list="getList" id="individualName" autocomplete="off"  placeholder="Individual Name" />
               							<datalist id="getList"></datalist>
 					               </div>
 				             	</div>
@@ -336,6 +336,10 @@ function generateName(value){
 				xhttp.open("POST", "/SAMERP/AddAccountDetails?findNameByReport=1", true);
 			else if(value=='SALE')
 				xhttp.open("POST", "/SAMERP/Sales?findSaleClient=1", true);
+			else if(value=='HANDLOAN')
+				xhttp.open("POST", "/SAMERP/PTCash?findNameByReport=1", true);
+			else if(value=='RAWPURCHASE')
+				xhttp.open("POST", "/SAMERP/PurchaseRawMaterial?findNameByReport=1", true);
 			else if(value=='PAYMENTSTATEMENT'){
 				document.getElementById("payTypes").style.display="block";
 				if(document.getElementById("type1").checked==true){
@@ -345,14 +349,19 @@ function generateName(value){
 				else if(document.getElementById("type2").checked==true){
 					// generating Name List for Contractors for VIJAY
 					xhttp.open("POST", "/SAMERP/ContractorPayment?findList=1", true);
+					
 				}
 				else if(document.getElementById("type3").checked==true){
 					// generating Name List for Suppliers for OMKAR and Mukesh
-					
+					xhttp.open("POST", "/SAMERP/RawSupplier?allSupplier=1", true);
 				}
 			}
 			else if(value=='PRODUCTDETAILS')
 				xhttp.open("POST", "/SAMERP/ContractorPayment?findList=1", true);
+			else if(value=='VEHICLE REPAIR')
+				xhttp.open("POST", "/SAMERP/AddVehicles?ReportByVehicleName=1", true);
+			else if(value=='PIPE PURCHASE')
+				xhttp.open("POST", "/SAMERP/ProductPurchase?ReportBysupplierName=1", true);
 		xhttp.send();
 		
 	}
@@ -368,14 +377,14 @@ function getBillReportData() {
 		{
 			 if(document.getElementById("mode1").checked==true)
 				{
-				getExpData();
+					getExpData();
 				}
 			else{
 				if(document.getElementById("individualName").value=="")
-					{
-						alert("Please select any individual first");
-						document.getElementById("individualName").focus();
-					}
+				{
+					alert("Please select any individual first");
+					document.getElementById("individualName").focus();
+				}
 				else{
 					getExpDataByName();
 				}
@@ -401,7 +410,7 @@ function getBillReportData() {
 					}
 			}			
 		}
-	
+	//Omkar 1
 	else if(document.getElementById("reportType").value=='BANKSTATEMENT')
 	{
 		 if(document.getElementById("mode1").checked==true)
@@ -420,6 +429,45 @@ function getBillReportData() {
 			}
 		} 
 	}
+	//Omkar 2
+	else if(document.getElementById("reportType").value=='HANDLOAN')
+	{
+		 if(document.getElementById("mode1").checked==true)
+			{
+				getHandLoanData();
+			}
+		else{
+			if(document.getElementById("individualName").value=="")
+				{
+					alert("Please select any individual first");
+					document.getElementById("individualName").focus();
+				}
+			else
+			{
+					getHandLoanByName();
+			}
+		} 
+	}
+	//Omkar 3
+	else if(document.getElementById("reportType").value=='RAWPURCHASE')
+	{
+		 if(document.getElementById("mode1").checked==true)
+			{
+				getRawPurchaseData();
+			}
+		else{
+			if(document.getElementById("individualName").value=="")
+				{
+					alert("Please select any individual first");
+					document.getElementById("individualName").focus();
+				}
+			else
+			{
+					getRawPurchaseByName();
+			}
+		} 
+	}
+	
 	// for Production details vijay
 	else if(document.getElementById("reportType").value=='PRODUCTDETAILS')
 	{
@@ -488,7 +536,7 @@ function getBillReportData() {
 				// for OMKAR and MUKESH suppliers list
 				if(document.getElementById("mode1").checked==true){
 					//whole data of suppliers ()
-					
+					getSupplierData();
 					}
 				else{
 					if(document.getElementById("individualName").value=="")
@@ -497,11 +545,54 @@ function getBillReportData() {
 						document.getElementById("individualName").focus();
 					}
 					else{
+						getSingleSupplierData();
 						//individual supplier data ()
 					}
 				}
 			}
-		} 
+		}
+	
+	// Mukesh for Vehicle Repair report
+	else if(document.getElementById("reportType").value=='VEHICLE REPAIR')
+	{
+		if(document.getElementById("mode1").checked==true)
+		{
+			getVehicleData();
+		}
+		else
+		{
+			if(document.getElementById("individualName").value=="")
+			{
+				alert("Please select any individual first");
+				document.getElementById("individualName").focus();
+			}
+			else{
+				getDataByVehicle();
+			}
+		}			
+	}
+	
+	// Mukesh for pipe purchase report
+	else if(document.getElementById("reportType").value=='PIPE PURCHASE')
+	{
+		if(document.getElementById("mode1").checked==true)
+		{
+			getPipePurchaseData();
+		}
+		else
+		{
+			if(document.getElementById("individualName").value=="")
+			{
+				alert("Please select any individual first");
+				document.getElementById("individualName").focus();
+			}
+			else{
+				getPipePurchaseDataBySupplier();
+			}
+		}			
+	}
+	
+	
 	}
 }
 // ########################################## End	Grt Data For Report ###########################################
@@ -1104,6 +1195,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
 	  		
 		//alert('all working');
 	}
+	
   function getBankDataByName()
 	{
 		var firstDate=document.getElementById("fromDate").value;
@@ -1165,6 +1257,435 @@ function DoOnCellHtmlData(cell, row, col, data) {
     	
 		//alert('individual working');
 	}
+  
+  function getHandLoanData()
+  {
+	  //alert('all working');
+	var firstDate=document.getElementById("fromDate").value;
+	var lastDate=document.getElementById("toDate").value;
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			
+			if(demoStr=="")
+				document.getElementById("wholeDataList").innerHTML="<tr><td colspan='8'>No Records Found!</td></tr>"
+			else{
+				
+				var a="<thead>"+
+				"<tr><th colspan='8' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+				"<tr><th style='text-align: center'>S.No.</th>"+
+				"<th style='width:80px;text-align:center'>Date</th>"+
+				"<th style='text-align: center'>HandLoan Name</th>"+
+				"<th style='text-align: center'>Debit</th>"+
+				"<th style='text-align: center'>Credit</th>"+
+				"<th style='text-align: center'>Mode</th>"+
+				"<th style='text-align: center'>Particulars</th>"+
+				"<th style='text-align: center'>Balance</th>"+
+				"</tr></thead><tbody>";
+				
+				var count=1;
+					for(var i=0;i<demoStr.length-2;i=i+7)
+						{
+  						 a+= "<tr>"+
+  						"<td style='text-align: center'>"+count+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+  						"<tr>";
+  						count++;
+						}
+					a+="</tbody>";
+					
+					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+					document.getElementById("wholeDataList").innerHTML=a;
+					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+
+					//alert(demoStr);
+			}
+		}
+		};
+	
+		xhttp.open("POST", "/SAMERP/PTCash?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+		xhttp.send();
+
+}
+  function getHandLoanByName()
+  {
+	  //alert('indi working');
+	var firstDate=document.getElementById("fromDate").value;
+	var lastDate=document.getElementById("toDate").value;
+  	var name=document.getElementById("individualName").value;
+  	
+  	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			
+			if(demoStr=="")
+				document.getElementById("wholeDataList").innerHTML="<tr><td colspan='7'>No Records Found!</td></tr>"
+			else{
+				
+				var a="<thead>"+
+				"<tr><th colspan='7' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+				"<tr><th style='text-align: center'>S.No.</th>"+
+				"<th style='width:80px;text-align:center'>Date</th>"+
+				"<th style='text-align: center'>Debit</th>"+
+				"<th style='text-align: center'>Credit</th>"+
+				"<th style='text-align: center'>Mode</th>"+
+				"<th style='text-align: center'>Particulars</th>"+
+				"<th style='text-align: center'>Balance</th>"+
+				"</tr></thead><tbody>";
+				
+				var count=1;
+					for(var i=0;i<demoStr.length-2;i=i+6)
+						{
+  						 a+= "<tr>"+
+  						"<td style='text-align: center'>"+count+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+  						"<tr>";
+  						count++;
+						}
+					a+="</tbody>";
+					
+					document.getElementById("wholeDataList").innerHTML=a;
+  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+  					
+					//alert(demoStr);
+			}
+		}
+		};
+	
+		xhttp.open("POST", "/SAMERP/PTCash?getDateData=1&individualName="+name+"&fromDate="+firstDate+"&toDate="+lastDate, true);
+		xhttp.send();
+  	
+  }
+  
+  function getSupplierData()
+  {
+	  var firstDate=document.getElementById("fromDate").value;
+		var lastDate=document.getElementById("toDate").value;
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				if(demoStr=="")
+					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+				else{
+					
+					var a="<thead>"+
+					"<tr><th colspan='10' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+					"<tr><th style='text-align: center'>S.No.</th>"+
+					"<th style='width:80px;text-align:center'>Date</th>"+
+					"<th style='text-align: center'>Supplier Name</th>"+
+					"<th style='text-align: center'>Bill No</th>"+
+					"<th style='text-align: center'>Bill Amount</th>"+
+					"<th style='text-align: center'>Paid Amount</th>"+
+					"<th style='text-align: center'>Mode</th>"+
+					"<th style='text-align: center'>Cheque No</th>"+
+					"<th style='text-align: center'>Bank Details</th>"+
+					"<th style='text-align: center'>Total Remaining</th>"+
+					"</tr></thead><tbody>";
+					
+					var count=1;
+					var billNo="";
+					var mode="";
+					var chqNo="";
+					var bDetails="";
+						for(var i=0;i<demoStr.length-2;i=i+9)
+							{
+								if(demoStr[i+2]=="null")
+								{
+									billNo="-";		
+								}
+								else
+								{
+									billNo=demoStr[i+2];
+								}
+								//
+								if(demoStr[i+5]=="null")
+								{
+									mode="-";	
+								}
+								else
+								{
+									mode=demoStr[i+5];	
+								}
+								//
+								if(demoStr[i+6]=="null")
+								{
+									chqNo="-";
+								}
+								else
+								{
+									chqNo=demoStr[i+6];
+								}
+								//
+								if(demoStr[i+7]=="null")
+								{
+									bDetails="-";
+								}
+								else
+								{
+									bDetails=demoStr[i+7];
+								}
+	  						 a+= "<tr>"+
+	  						"<td style='text-align: center'>"+count+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+	  						"<td style='text-align: center'>"+billNo+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+	  						"<td style='text-align: center'>"+mode+"</td>"+
+	  						"<td style='text-align: center'>"+chqNo+"</td>"+
+	  						"<td style='text-align: center'>"+bDetails+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+	  						"<tr>";
+	  						count++;
+							}
+						a+="</tbody>";
+						
+						var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+						var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+						document.getElementById("wholeDataList").innerHTML=a;
+						document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+" OF SUPPLIER</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+
+						//alert(demoStr);
+				}
+			}
+			};
+		
+			xhttp.open("POST", "/SAMERP/RawSupplier?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();
+
+	
+  }
+  function getSingleSupplierData()
+  {
+	  //alert('indo working');  
+	var firstDate=document.getElementById("fromDate").value;
+	var lastDate=document.getElementById("toDate").value;
+	var name=document.getElementById("individualName").value;
+	var xhttp;
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var demoStr = this.responseText.split(",");
+			if(demoStr=="")
+				document.getElementById("wholeDataList").innerHTML="<tr><td colspan='9'>No Records Found!</td></tr>"
+			else{
+				
+				var a="<thead>"+
+				"<tr><th colspan='9' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+				"<tr><th style='text-align: center'>S.No.</th>"+
+				"<th style='width:80px;text-align:center'>Date</th>"+
+				"<th style='text-align: center'>Bill No</th>"+
+				"<th style='text-align: center'>Bill Amount</th>"+
+				"<th style='text-align: center'>Paid Amount</th>"+
+				"<th style='text-align: center'>Mode</th>"+
+				"<th style='text-align: center'>Cheque No</th>"+
+				"<th style='text-align: center'>Bank Details</th>"+
+				"<th style='text-align: center'>Total Remaining</th>"+
+				"</tr></thead><tbody>";
+				
+				var count=1;
+				var billNo="";
+				var mode="";
+				var chqNo="";
+				var bDetails="";
+					for(var i=0;i<demoStr.length-2;i=i+8)
+						{
+							if(demoStr[i+1]=="null")
+							{
+								billNo="-";		
+							}
+							else
+							{
+								billNo=demoStr[i+1];
+							}
+							//
+							if(demoStr[i+4]=="null")
+							{
+								mode="-";	
+							}
+							else
+							{
+								mode=demoStr[i+4];	
+							}
+							//
+							if(demoStr[i+5]=="null")
+							{
+								chqNo="-";
+							}
+							else
+							{
+								chqNo=demoStr[i+5];
+							}
+							//
+							if(demoStr[i+6]=="null")
+							{
+								bDetails="-";
+							}
+							else
+							{
+								bDetails=demoStr[i+6];
+							}
+  						 a+= "<tr>"+
+  						"<td style='text-align: center'>"+count+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+  						"<td style='text-align: center'>"+billNo+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+  						"<td style='text-align: center'>"+mode+"</td>"+
+  						"<td style='text-align: center'>"+chqNo+"</td>"+
+  						"<td style='text-align: center'>"+bDetails+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+7]+"</td>"+
+  						"<tr>";
+  						count++;
+						}
+					a+="</tbody>";
+					
+					document.getElementById("wholeDataList").innerHTML=a;
+  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+" SUPPLIER</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+  			//alert(demoStr);
+			}
+		}
+		};
+	
+		xhttp.open("POST", "/SAMERP/RawSupplier?getDateData=1&individualName="+name+"&fromDate="+firstDate+"&toDate="+lastDate, true);
+		xhttp.send();
+
+	  	
+  }
+  function getRawPurchaseData()
+  {
+	  var firstDate=document.getElementById("fromDate").value;
+		var lastDate=document.getElementById("toDate").value;
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				
+				if(demoStr=="")
+					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='7'>No Records Found!</td></tr>"
+				else{
+					
+					var a="<thead>"+
+					"<tr><th colspan='7' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+					"<tr><th style='text-align: center'>S.No.</th>"+
+					"<th style='width:80px;text-align:center'>Date</th>"+
+					"<th style='text-align: center'>Supplier Name</th>"+
+					"<th style='text-align: center'>Chalan No</th>"+
+					"<th style='text-align: center'>Vehicle No</th>"+
+					"<th style='text-align: center'>Material</th>"+
+					"<th style='text-align: center'>Quantity</th>"+
+					"</tr></thead><tbody>";
+					
+					var count=1;
+						for(var i=0;i<demoStr.length-2;i=i+6)
+							{
+	  						 a+= "<tr>"+
+	  						"<td style='text-align: center'>"+count+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+	  						"<tr>";
+	  						count++;
+							}
+						a+="</tbody>";
+						
+						var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+						var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+						document.getElementById("wholeDataList").innerHTML=a;
+						document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+
+						//alert(demoStr);
+				}
+			}
+			};
+		
+			xhttp.open("POST", "/SAMERP/PurchaseRawMaterial?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();
+
+	  //alert('all working');
+  }
+  function getRawPurchaseByName()
+  {
+	  	var firstDate=document.getElementById("fromDate").value;
+		var lastDate=document.getElementById("toDate").value;
+		var name=document.getElementById("individualName").value;
+
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				
+				if(demoStr=="")
+					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='6'>No Records Found!</td></tr>"
+				else{
+					
+					var a="<thead>"+
+					"<tr><th colspan='6' id='reportDetails' style='font-size:15px;text-align:center'></th></tr>"+
+					"<tr><th style='text-align: center'>S.No.</th>"+
+					"<th style='width:80px;text-align:center'>Date</th>"+
+					"<th style='text-align: center'>Chalan No</th>"+
+					"<th style='text-align: center'>Vehicle No</th>"+
+					"<th style='text-align: center'>Material</th>"+
+					"<th style='text-align: center'>Quantity</th>"+
+					"</tr></thead><tbody>";
+					
+					var count=1;
+						for(var i=0;i<demoStr.length-2;i=i+5)
+							{
+	  						 a+= "<tr>"+
+	  						"<td style='text-align: center'>"+count+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+	  						"<tr>";
+	  						count++;
+							}
+						a+="</tbody>";
+						
+						document.getElementById("wholeDataList").innerHTML=a;
+	  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+	  					
+						//alert(demoStr);
+				}
+			}
+			};
+		
+			xhttp.open("POST", "/SAMERP/PurchaseRawMaterial?getDateData=1&individualName="+name+"&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();
+		
+	  //alert('indi working');
+  }
+  
 	//----------------------End(Omkar)----------------------
 	
   
@@ -1488,9 +2009,288 @@ function DoOnCellHtmlData(cell, row, col, data) {
     }
 
 			//************************* SARANG END *****************
-						
-						
 	
+			
+	//*************  MUKESH VEHICLE REPORT START *******************
+	
+	function getVehicleData()
+	{
+		var firstDate=document.getElementById("fromDate").value;
+ 		var lastDate=document.getElementById("toDate").value;
+ 		var xhttp;
+	  	xhttp = new XMLHttpRequest();
+	  	xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var demoStr = this.responseText.split(",");
+					
+					if(demoStr=="")
+						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='8'>No Records Found!</td></tr>"
+					else{
+						
+						var a="<thead>"+
+	  					"<tr><th colspan='12' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
+	  					"<tr><th>S.No.</th>"+
+	  					"<th style='width:80px;text-align: center'>Date</th>"+
+	  					"<th style='text-align: center'>Name</th>"+
+	  					"<th style='text-align: center'>Amount</th>"+
+	  					"<th style='text-align: center'>Debtor Type</th>"+
+	  					"<th style='text-align: center'>Expenses Type</th>"+
+	  					"<th style='text-align: center'>Vehicle Reading</th>"+
+	  					"<th style='text-align: center'>Qty In Litres(s)</th>"+
+	  					"<th style='text-align: center'>Payment Mode</th>"+
+	  					"<th style='text-align: center'>Bank Info</th>"+
+	  					"<th style='text-align: center'>Cheque Details</th>"+
+	  					"<th style='text-align: center'>Reason</th>"+
+	  					"</tr></thead><tbody>";
+						
+						var count=1;
+	  					for(var i=0;i<demoStr.length-2;i=i+11)
+  						{
+	  						 a+= "<tr>"+
+	  						"<td style='text-align: center'>"+count+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+7]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+	  						"<tr>";
+	  						count++;
+  						}
+	  					a+="</tbody>";
+	  					
+	  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+	  					document.getElementById("wholeDataList").innerHTML=a;
+	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+
+	  					//alert(demoStr);
+					}
+				}
+	  		};
+			
+	  		xhttp.open("POST", "/SAMERP/AddVehicles?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+			xhttp.send();
+	}
+			
+	
+	function getDataByVehicle()
+    {
+    	var firstDate=document.getElementById("fromDate").value;
+ 		var lastDate=document.getElementById("toDate").value;
+	   	var name=document.getElementById("individualName").value;
+	   	
+  	    var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				if(demoStr=="")
+					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+				else{
+					var a="<thead>"+
+  					"<tr><th colspan='12' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
+  					"<tr><th>S.No.</th>"+
+  					"<th style='width:80px;text-align: center'>Date</th>"+
+  					"<th style='text-align: center'>Name</th>"+
+  					"<th style='text-align: center'>Amount</th>"+
+  					"<th style='text-align: center'>Debtor Type</th>"+
+  					"<th style='text-align: center'>Expenses Type</th>"+
+  					"<th style='text-align: center'>Vehicle Reading</th>"+
+  					"<th style='text-align: center'>Qty In Litres(s)</th>"+
+  					"<th style='text-align: center'>Payment Mode</th>"+
+  					"<th style='text-align: center'>Bank Info</th>"+
+  					"<th style='text-align: center'>Cheque Details</th>"+
+  					"<th style='text-align: center'>Reason</th>"+
+  					"</tr></thead><tbody>";
+  					
+  					var count=1;
+  					for(var i=0;i<demoStr.length-2;i=i+11)
+						{
+  						 a+= "<tr>"+
+  						"<td style='text-align: center'>"+count+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+4]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+6]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+7]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+8]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+9]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i+10]+"</td>"+
+  						"<tr>";
+  						count++;
+						}
+  					a+="</tbody>";
+  					
+  					document.getElementById("wholeDataList").innerHTML=a;
+  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
+  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+
+				}
+			}
+				
+			};
+		xhttp.open("POST", "/SAMERP/AddVehicles?getDateData=1&individualName="+name+"&fromDate="+firstDate+"&toDate="+lastDate, true);
+		xhttp.send();
+     }
+     
+	
+	function getPipePurchaseData()
+    {
+		
+  		  var firstDate=document.getElementById("fromDate").value;
+  		  var lastDate=document.getElementById("toDate").value;
+  		  var xhttp;
+	  			xhttp = new XMLHttpRequest();
+	  			xhttp.onreadystatechange = function() {
+	  				if (this.readyState == 4 && this.status == 200) {
+	  					var demoStr = this.responseText.split(",");
+	  					
+	  					if(demoStr=="")
+	  						document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+	  					else{
+	  					var a="<thead>"+
+	  					"<tr><th colspan='11' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
+	  					"<tr><th>S.No.</th>"+
+	  					"<th style='width:80px;text-align: center'>Date</th>"+
+	  					"<th style='text-align: center'>Supplier Name</th>"+
+	  					"<th style='text-align: center'>Client Name</th>"+
+	  					"<th style='text-align: center'>Chalan No.</th>"+
+	  					"<th style='text-align: center'>Vehicle No.</th>"+
+	  					"<th style='text-align: center'>Product Name</th>"+
+	  					"<th style='text-align: center'>Qty</th>"+
+	  					"<th style='text-align: center'>Rate</th>"+
+	  					"</tr></thead><tbody>";
+	  					
+	  					var count=1;
+	  					for(var i=0;i<demoStr.length-1;)
+	  					{
+	  						var pCount=demoStr[i++];
+	  						
+	  						 a+= "<tr>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+count+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center' >"+demoStr[i++]+"</td>"+
+	  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>";
+ 						 
+	  					a+="<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+	  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+	  						"<td style='text-align: center'>"+demoStr[i++]+"</td></tr>";
+	  					
+	  						for(var k=0; k<(pCount-1)*3;k+=3){
+	  							
+			  					 a+="<tr>"+
+			  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+			  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+			  						"<td style='text-align: center'>"+demoStr[i++]+"</td>";
+	  						}
+			  						
+	  						
+	  						
+	  					 a+="</tr>";
+	  						count++;
+	  					}
+	  					
+	  					a+="</tbody>";
+	  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+	  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];
+	  					document.getElementById("wholeDataList").innerHTML=a;
+	  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+	  					}
+	  					
+	  				}
+	  					
+	  				};
+	  			xhttp.open("POST", "/SAMERP/ProductPurchase?getDateData=1&fromDate="+firstDate+"&toDate="+lastDate, true);
+	  			xhttp.send();
+    }
+	
+	
+
+	function getPipePurchaseDataBySupplier()
+    {
+		
+		var firstDate=document.getElementById("fromDate").value;
+ 		var lastDate=document.getElementById("toDate").value;
+	   	var name=document.getElementById("individualName").value;
+	   	
+  	    var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				if(demoStr=="")
+					document.getElementById("wholeDataList").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
+				else{
+					var a="<thead>"+
+  					"<tr><th colspan='11' id='reportDetails' style='font-size:15px;text-align: center'></th></tr>"+
+  					"<tr><th>S.No.</th>"+
+  					"<th style='width:80px;text-align: center'>Date</th>"+
+  					"<th style='text-align: center'>Client Name</th>"+
+  					"<th style='text-align: center'>Chalan No.</th>"+
+  					"<th style='text-align: center'>Vehicle No.</th>"+
+  					"<th style='text-align: center'>Product Name</th>"+
+  					"<th style='text-align: center'>Qty</th>"+
+  					"<th style='text-align: center'>Rate</th>"+
+  					"</tr></thead><tbody>";
+  					
+  					var count=1;
+  					for(var i=0;i<demoStr.length-1;)
+  					{
+  						var pCount=demoStr[i++];
+  						
+  						 a+= "<tr>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+count+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center' >"+demoStr[i++]+"</td>"+
+  						"<td rowspan='"+pCount+"' style='text-align: center'>"+demoStr[i++]+"</td>";
+						 
+  					a+="<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+  						"<td style='text-align: center'>"+demoStr[i++]+"</td></tr>";
+  					
+  						for(var k=0; k<(pCount-1)*3;k+=3){
+  							
+		  					 a+="<tr>"+
+		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>"+
+		  						"<td style='text-align: center'' >"+demoStr[i++]+"</td>"+
+		  						"<td style='text-align: center'>"+demoStr[i++]+"</td>";
+  						}
+		  						
+  						
+  						
+  					 a+="</tr>";
+  						count++;
+  					}
+  					
+  					a+="</tbody>";
+  					
+  					document.getElementById("wholeDataList").innerHTML=a;
+  					var reportFirstDate=document.getElementById("fromDate").value.split("-")[2]+"-"+document.getElementById("fromDate").value.split("-")[1]+"-"+document.getElementById("fromDate").value.split("-")[0];
+  					var reportLastDate=document.getElementById("toDate").value.split("-")[2]+"-"+document.getElementById("toDate").value.split("-")[1]+"-"+document.getElementById("toDate").value.split("-")[0];			
+  					document.getElementById("reportDetails").innerHTML="<span style='color:#f73838'>"+document.getElementById("reportType").value+"</span> REPORT OF: <span style='color:#f73838'>"+document.getElementById("individualName").value+"</span> FROM: <span style='color:#f73838'>"+reportFirstDate +"</span> TO: <span style='color:#f73838'>"+ reportLastDate+"</span>";
+				}
+			}
+				
+		};
+		xhttp.open("POST", "/SAMERP/ProductPurchase?getDateData=1&individualName="+name+"&fromDate="+firstDate+"&toDate="+lastDate, true);
+		xhttp.send();
+    }
+	
+						
+	//*************  MUKESH VEHICLE REPORT END *******************
 	
 
 </script>

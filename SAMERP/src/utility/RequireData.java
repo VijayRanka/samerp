@@ -142,6 +142,17 @@ public class RequireData
 					return pList;
 				}
 				
+				public List getPurchaseProductBySupplier(String sid)
+				{
+					String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, "
+							+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
+							+ "material_supply_master, client_details "
+							+ "WHERE product_purchase_master.material_supply_master_id="+sid+" AND material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
+							+ "AND client_details.client_id=product_purchase_master.client_details_id";
+					List purchaseList = gd.getData(purchaseQuery);
+					return purchaseList;
+				}
+				
 				public List getCompletePurchaseData()
 				{
 					List finalData = new ArrayList();

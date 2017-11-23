@@ -30,6 +30,71 @@ public class RawSupplier extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
 		
+		
+		if(request.getParameter("getDateData")!=null)
+		{
+			GenericDAO da = new GenericDAO();
+			String fromDate=request.getParameter("fromDate");
+			String toDate=request.getParameter("toDate");
+			String individualName=request.getParameter("individualName");
+			
+			if(individualName!=null)
+			{
+				String getPaymentDetails="SELECT `date`, (SELECT supplier_bill_details.billno FROM supplier_bill_details WHERE total_supplier_payment_master.bill_id=supplier_bill_details.id) AS bill_no , `bill_amt`, `paid_amt`,(SELECT supplier_payment_master.mode FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id) AS mode, (SELECT supplier_payment_master.cheque_no FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id)AS cheque_no, (SELECT account_details.acc_aliasname FROM account_details, supplier_payment_master WHERE account_details.acc_id=supplier_payment_master.description AND total_supplier_payment_master.payment_id=supplier_payment_master.id) AS bank_details, `total_remaining`FROM `total_supplier_payment_master`,material_supply_master WHERE material_supply_master.supplier_business_id=total_supplier_payment_master.supplier_id AND total_supplier_payment_master.date BETWEEN '"+fromDate+"' AND '"+toDate+"' AND material_supply_master.supplier_alias='"+individualName+"' ORDER BY total_supplier_payment_master.id";
+				List paymentDetails=da.getData(getPaymentDetails);
+				//System.out.println(getPaymentDetails);
+				Iterator itr=paymentDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object billNo=itr.next();
+					Object billAmt=itr.next();
+					Object paidAmt=itr.next();
+					Object mode=itr.next();
+					Object chqNo=itr.next();
+					Object bDetails=itr.next();
+					Object tReamin=itr.next();
+					
+					out.print(date+","+billNo+","+billAmt+","+paidAmt+","+mode+","+chqNo+","+bDetails+","+tReamin+",");
+				}
+			}
+			else
+			{
+				String getPaymentDetails="SELECT `date`,material_supply_master.supplier_alias, (SELECT supplier_bill_details.billno FROM supplier_bill_details WHERE total_supplier_payment_master.bill_id=supplier_bill_details.id) AS bill_no , `bill_amt`, `paid_amt`,(SELECT supplier_payment_master.mode FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id) AS mode, (SELECT supplier_payment_master.cheque_no FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id)AS cheque_no, (SELECT account_details.acc_aliasname FROM account_details, supplier_payment_master WHERE account_details.acc_id=supplier_payment_master.description AND total_supplier_payment_master.payment_id=supplier_payment_master.id) AS bank_details, `total_remaining`FROM `total_supplier_payment_master`,material_supply_master WHERE material_supply_master.supplier_business_id=total_supplier_payment_master.supplier_id AND total_supplier_payment_master.date BETWEEN '"+fromDate+"' AND '"+toDate+"' ORDER BY total_supplier_payment_master.id";
+				List paymentDetails=da.getData(getPaymentDetails);
+				Iterator itr=paymentDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object supName=itr.next();
+					Object billNo=itr.next();
+					Object billAmt=itr.next();
+					Object paidAmt=itr.next();
+					Object mode=itr.next();
+					Object chqNo=itr.next();
+					Object bDetails=itr.next();
+					Object tReamin=itr.next();
+					
+					out.print(date+","+supName+","+billNo+","+billAmt+","+paidAmt+","+mode+","+chqNo+","+bDetails+","+tReamin+",");
+				}
+			}
+			
+			
+		}
+		if(request.getParameter("allSupplier")!=null)
+		{
+			GenericDAO da = new GenericDAO();
+			List details = null;
+			String query="SELECT material_supply_master.supplier_alias FROM material_supply_master";
+			details = da.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+				}
+			}
+		}
 		if(request.getParameter("findList")!=null)
 		{
 			GenericDAO da = new GenericDAO();
