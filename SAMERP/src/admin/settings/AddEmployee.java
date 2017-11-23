@@ -165,27 +165,30 @@ public class AddEmployee extends HttpServlet {
 			String up_date = request.getParameter("date");
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
-			String work_with= request.getParameter("contractorVehicle_alias");
+			String alias = request.getParameter("alias");
+		/*	String work_with= request.getParameter("contractorVehicle_alias");
 			System.out.println("workwith up:"+work_with);
-			String designation = request.getParameter("designation");
+			String designation = request.getParameter("designation")*/;
 			
+			String aliasA[] = alias.split("_");
 			
+			String newAlias = aliasA[0]+"_"+aliasA[1]+ "_"+employee_name+ "_"+aliasA[3] +"_"+aliasA[4];
 			/*String query="SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND debtor_master.id='"+work_with+"'";
 			System.out.println("query:"+query);
 			String workwith=gd.getData(query).get(0).toString();	
 			
 			System.out.println("work_with:"+workwith);*/
 			
-			String update_aliasname="EMP_"+designation+"_"+employee_name.replace(" ", "_")+"_"+work_with;
+			/*String update_aliasname="EMP_"+designation+"_"+employee_name.replace(" ", "_")+"_"+work_with;
 			
 			System.out.println("up:"+update_aliasname);
 			
 			
-			String up_aliasname="";
+			String up_aliasname="";*/
 			
-			String emp_WorkWith="(SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_workwith='"+work_with+"')";
+			//String emp_WorkWith="(SELECT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_workwith='"+work_with+"')";
 
-			String updateEmployeeQuery = "UPDATE emplyoee_details,debtor_master SET emplyoee_details.emp_date="+up_date+",emplyoee_details.emp_name='"+employee_name+"',emplyoee_details.emp_contactno='"+contact_no+"',emplyoee_details.emp_designation='"+designation+"',emplyoee_details.emp_workwith="+work_with+",emplyoee_details.aliasname='"+update_aliasname+"' WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id='"+Emp_id+"'";
+			String updateEmployeeQuery = "UPDATE emplyoee_details,debtor_master SET emplyoee_details.emp_date='"+up_date+"',emplyoee_details.emp_name='"+employee_name+"',emplyoee_details.emp_contactno='"+contact_no+"', aliasname='"+newAlias+"' WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id='"+Emp_id+"'";
 			
 			System.out.println("updated:"+updateEmployeeQuery);
 			
