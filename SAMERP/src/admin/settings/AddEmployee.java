@@ -41,7 +41,7 @@ public class AddEmployee extends HttpServlet {
 			RequireData req=new RequireData();
 			String str=request.getParameter("empid");
 			System.out.println("Home :"+str);
-			if(str.equals("Driver") ||str.equals("Helper"))
+			if(str.equals("DRIVER") ||str.equals("HELPER"))
 			{
 				List list=req.getVehicle();
 				Iterator itr3=list.iterator();
@@ -51,8 +51,7 @@ public class AddEmployee extends HttpServlet {
 				}
 			}
 		
-			else 
-				if(str.equals("Home Worker") ||str.equals("Labour")){
+			else if(str.equals("HOME WORKER") ||str.equals("LABOUR")){
 				List list=req.getContractorVehicle();
 				System.out.println("List is !:"+list);
 				Iterator itr4=list.iterator();
@@ -66,11 +65,13 @@ public class AddEmployee extends HttpServlet {
 		}
 		
 		//for inserting data into table--->employee_details
-		if(request.getParameter("submit")!=null){
+		if(request.getParameter("InsertBtn")!=null){
 			
 			int status=0;
 			String insertQuery="";
 			String[] checkStatus=new String[100];
+			
+			System.out.println("get name:"+request.getParameter("getname"));
 			
 			String reqdate=request.getParameter("date");
 			String employeename=request.getParameter("employee_name");
@@ -90,7 +91,7 @@ public class AddEmployee extends HttpServlet {
 			String aliasname="EMP_"+desig+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
 			
 			checkStatus=aliasname.split("_");		
-			
+			System.out.println(reqdate+","+employeename+","+contactno+","+WorkWith+","+desig);
 			
 			String checkStatus1="SELECT emplyoee_details.emp_id, emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%TRANSPORT_"+checkStatus[4]+"%' AND emplyoee_details.aliasname LIKE '%"+desig+"%' AND emplyoee_details.status=0 ";
 			List ckst=gd.getData(checkStatus1);
@@ -100,13 +101,10 @@ public class AddEmployee extends HttpServlet {
 				int st=gd.executeCommand(updatestatus);
 				
 			}
-			
-			
-		
-			
+						
 			insertQuery="INSERT INTO emplyoee_details(emp_date,emp_name, emp_contactno,emp_workwith,emp_designation,aliasname)"
 					+ " VALUES ('"+reqdate+"','"+employeename+"','"+contactno+"','"+Debtor_Id+"','"+desig+"','"+aliasname+"');";
-				
+			
 			status=gd.executeCommand(insertQuery);	
 			if(status==1)
 			{
@@ -121,9 +119,7 @@ public class AddEmployee extends HttpServlet {
 				int i=gd.executeCommand(drier_helper_op_bal);
 				System.out.println("driver pay:"+drier_helper_op_bal);
 			
-			}
-
-			
+			}		
 			
 			if(status!=0)
 			{
