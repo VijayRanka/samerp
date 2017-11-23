@@ -668,6 +668,7 @@ public class Expenses extends HttpServlet {
 						int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
 								+ " WHERE handloan_master.id=handloan_details.handloan_id and handloan_details.id="
 								+ "(SELECT MAX(handloan_details.id) FROM handloan_details WHERE handloan_master.id="+handLoanId+")").get(0).toString());
+						
 						if(prevBalance-amount<0) 
 							{
 								amountStatusClear=false;
@@ -732,10 +733,11 @@ public class Expenses extends HttpServlet {
 								gd.executeCommand(handLoanInsert);
 							}
 							String maxHandDetailsId=gd.getData("SELECT MAX(id) FROM handloan_details").get(0).toString();
-							
+							if(payMode.equalsIgnoreCase("cash"))
+								bankInfo="NULL";
 							String insertQuery="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`,"
 									+ " `bankId`, `other_details`, `date`,hand_loan_id) VALUES "
-									+ "("+getExpId+","+debtType+",'"+name+"',"+amount+",'"+payMode+"',"+bankInfo+",'"+chequeNo+"','"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"'+"+maxHandDetailsId+")";
+									+ "("+getExpId+","+debtType+",'"+name+"',"+amount+",'"+payMode+"',"+bankInfo+",'"+chequeNo+"','"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',"+maxHandDetailsId+")";
 							gd.executeCommand(insertQuery);
 						}
 					}
@@ -748,7 +750,6 @@ public class Expenses extends HttpServlet {
 						else if(type.equalsIgnoreCase("driver"))
 							empType="D";
 							
-						System.out.println(empType);
 						rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
 						
 						String maxExpId=gd.getData("SELECT MAX(exp_id) FROM expenses_master").get(0).toString();
@@ -814,6 +815,7 @@ public class Expenses extends HttpServlet {
 			}
 			catch(Exception e)
 			{
+				e.printStackTrace();
 				request.setAttribute("status", "Some Problem Occured");
 				RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/expenses/expenses.jsp");
 				rd.forward(request, response);

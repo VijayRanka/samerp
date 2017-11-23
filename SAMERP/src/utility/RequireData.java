@@ -824,8 +824,6 @@ public class RequireData
 	//--sarang end
 	
 	// vijay start
-	
-			
 			public List getMaterialSupplyData()
 			{
 				String demo="select * from material_supply_master";
@@ -1017,8 +1015,6 @@ public class RequireData
 				SysDate sd=new SysDate();
 				List getDataList=gd.getData("SELECT amount FROM `expenses_master` "
 						+ "WHERE date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'");
-				System.out.println("SELECT amount FROM `expenses_master` "
-						+ "WHERE date="+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]);
 				if(!getDataList.isEmpty())
 				{
 					Iterator itr=getDataList.iterator();
@@ -1073,7 +1069,6 @@ public class RequireData
 					String insertQuery="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`)"
 							+ " VALUES ('"+bankId+"', '"+transactionDate+"', '"+debit+"', '"+credit+"', '"+particular+"', '"+debtorId+"', '"+balance+"')";
 					
-					System.out.println(insertQuery);
 					
 					int x=gd.executeCommand(insertQuery);
 					if(x>0)
