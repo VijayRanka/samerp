@@ -274,7 +274,7 @@ public class productSupplierPayment extends HttpServlet {
 							request.setAttribute("status", "Record Updated Successfully");
 						}
 					}
-					query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+") `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
+					query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+"), `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
 				}
 			}
 			else if(updateMode.equalsIgnoreCase("Cheque"))
@@ -312,7 +312,7 @@ public class productSupplierPayment extends HttpServlet {
 							request.setAttribute("status", "Record Updated Successfully");
 						}
 					}
-					query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+") `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
+					query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+"), `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
 				}
 			}
 			else if(updateMode.equalsIgnoreCase("Transfer"))

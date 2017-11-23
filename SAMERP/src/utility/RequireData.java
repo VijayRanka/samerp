@@ -319,6 +319,7 @@ public class RequireData
 					List l = gd.getData(q);
 					return l.get(0).toString();
 				}
+				
 				public String getHelperDebterIdFromVid(String vid){
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 					String tdate = df.format(new Date()).toString();
@@ -363,11 +364,6 @@ public class RequireData
 					
 					return flag;
 				}
-				
-				
-				
-				
-				
 				
 	
 	//--mukesh end
@@ -854,6 +850,7 @@ public class RequireData
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
+			
 			public List getExpensesDetailsDash()
 			{
 				SysDate sd=new SysDate();
@@ -864,12 +861,14 @@ public class RequireData
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
+			
 			public List getExpensesType()
 			{
 				String demo="select expenses_type_id, expenses_type_name from expenses_type where status=0";
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
+			
 			public List getDebtorList()
 			{
 				String demo="select * from debtor_master where status=0";
