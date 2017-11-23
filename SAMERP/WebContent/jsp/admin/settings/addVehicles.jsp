@@ -317,7 +317,7 @@
 									<div class="form-group">
 										<div class="widget-content nopadding">
 											<div class="control-group">
-														<input type="hidden" id="deleteid" name="delete"/>
+												<input type="hidden" id="deleteid" name="delete"/>
 														
 												<h4> Are you sure want to delete the selected row...!!</h4>
 											</div>

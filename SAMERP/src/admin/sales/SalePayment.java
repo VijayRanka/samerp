@@ -190,5 +190,55 @@ public class SalePayment extends HttpServlet {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/admin/sale/salePayment.jsp?ppid="+clientid);
 			requestDispatcher.forward(request, response);
 		}
+		
+		
+		//ajax client list for report
+		if(request.getParameter("findList")!=null){
+			String query = "SELECT `client_organization_name` FROM `client_details`";
+			List details = gd.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+	
+					}
+			}
+		}
+		
+		if(request.getParameter("getDateData")!=null){
+			
+			String indName=request.getParameter("individualName");
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			
+			String clientPaymentQuery=null;
+			
+			if(indName==null){
+			
+				clientPaymentQuery="SELECT `bill_id`, client_details.client_organization_name, `date`, `bill_amt`, `paid_amt`, `mode`, `cheque_no`, `bank_id`,"
+						+ "`total_remaining_amt` FROM `client_payment_master`,client_details WHERE client_details.client_id=client_payment_master.client_id "
+						+ "AND (client_payment_master.date BETWEEN '"+firstDate+"' AND '"+lastDate+"')";
+			}else {
+				
+				String getClientID="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='"+indName+"'";
+				
+				String clientId=gd.getData(getClientID).get(0).toString();
+				System.out.println(clientId);
+				
+				clientPaymentQuery="SELECT `bill_id`, client_details.client_organization_name, `date`, `bill_amt`, `paid_amt`, `mode`, `cheque_no`, `bank_id`,"
+						+ "`total_remaining_amt` FROM `client_payment_master`,client_details WHERE client_details.client_id=client_payment_master.client_id "
+						+ "AND (client_payment_master.date BETWEEN '"+firstDate+"' AND '"+lastDate+"') AND client_payment_master.client_id="+clientId;	
+			}
+
+			List clientPaymentList=gd.getData(clientPaymentQuery);
+			
+			Iterator iterator=clientPaymentList.iterator();
+			
+			while (iterator.hasNext()) {
+				
+				out.println(iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+",");
+			}
+		}		
 	}
 }

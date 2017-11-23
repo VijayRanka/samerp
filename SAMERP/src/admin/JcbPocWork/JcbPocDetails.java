@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.General.GenericDAO;
 import utility.RequireData;
@@ -45,8 +46,23 @@ public class JcbPocDetails extends HttpServlet {
 		List details = null;
 		
 		String jcbPocSelectList = request.getParameter("jcbPocSelectList");
+		String fromDate = request.getParameter("fromDate");
+		String toDate = request.getParameter("toDate");
 		
 		if (jcbPocSelectList != null) {
+			query="SELECT vehicle_details.vehicle_aliasname,customer_master.`custname`,jcbpoc_master.bucket_hr,"
+					+ "jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel FROM `jcbpoc_master`,"
+					+ "customer_master,vehicle_details WHERE "
+					+ "jcbpoc_master.status=0 AND jcbpoc_master.intcustid=customer_master.intcustid AND "
+					+ "jcbpoc_master.intvehicleid=vehicle_details.vehicle_id AND jcbpoc_master.data='"+jcbPocSelectList+"' ORDER BY jcbpoc_master.intjcbpocid DESC";
+			details=dao.getData(query);
+			Iterator itr = details.iterator();
+			while (itr.hasNext()) {
+				out.print(itr.next() + "~");
+
+			}
+		}
+		if (fromDate != null && toDate !=null) {
 			query="SELECT vehicle_details.vehicle_aliasname,customer_master.`custname`,jcbpoc_master.bucket_hr,"
 					+ "jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel FROM `jcbpoc_master`,"
 					+ "customer_master,vehicle_details WHERE "
@@ -180,6 +196,8 @@ public class JcbPocDetails extends HttpServlet {
 			result = dao.executeCommand(query);
 
 			if (result == 1) {
+				HttpSession session=request.getSession();
+		        session.setAttribute("status","Chalan Add Successfully!");
 				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocDetails.jsp");
 			} else {
 				out.print("something wrong");
@@ -215,7 +233,7 @@ public class JcbPocDetails extends HttpServlet {
 					int credit = 0;
 					String debtorId = "1";
 					
-					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+//					rd.pCashEntry(transactionDate, debit, credit, debtorId);
 					
 					String contactno="CUST_"+request.getParameter("contactno");
 					query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
@@ -224,7 +242,7 @@ public class JcbPocDetails extends HttpServlet {
 					debit = 0;
 					credit = newDeposit;
 					debtorId = details.get(0).toString();
-					rd.pCashEntry(transactionDate, debit, credit, debtorId);
+//					rd.pCashEntry(transactionDate, debit, credit, debtorId);
 				}
 			}
 			String[] arrayOfString = chalandate.split("-");
@@ -233,6 +251,8 @@ public class JcbPocDetails extends HttpServlet {
 			result = dao.executeCommand(query);
 
 			if (result == 1) {
+				HttpSession session=request.getSession();
+		        session.setAttribute("status","Chalan Update Successfully!");
 				response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocDetails.jsp");
 			} else {
 				out.print("something wrong");
