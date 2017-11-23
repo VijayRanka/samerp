@@ -112,7 +112,7 @@
 								<div class="control-group">
 									<label class="control-label">Suppliers-Business Name:</label>
 									<div class="controls">
-										<input type="text" name="suppbusines_name" id="supp_busi_name" class="span7"
+										<input type="text" name="suppbusinesname" id="supp_busi_name" class="span7"
 											placeholder="Suppliers-Business Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
 									</div>
 								</div>
