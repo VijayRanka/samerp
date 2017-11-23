@@ -1046,6 +1046,12 @@ public class RequireData
 				else
 					return "0";
 			}
+			public String getDebtorAlias(String id)
+			{
+				String aliasName=gd.getData("SELECT debtor_master.type FROM debtor_master WHERE id="+id).get(0).toString();
+				
+				return aliasName;
+			}
 	
 	
 		//--vijay end
