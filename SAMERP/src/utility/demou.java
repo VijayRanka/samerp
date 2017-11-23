@@ -16,20 +16,13 @@ public class demou {
 		
 		String q="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='JAY GANESH ENTERPRISE'";
 		
-		String clientid=gd.getData(q).get(0).toString();
 		
-		System.out.println(clientid);
 		
-		String getDates="SELECT date from daily_stock_details GROUP BY date";
-		List datesData=gd.getData(getDates);
-		Iterator datesItr=datesData.iterator();
-		while(datesItr.hasNext())
-		{
-			String getData="SELECT date from daily_stock_details GROUP BY date";
-			List data=gd.getData(getDates);
-			Iterator dataItr=data.iterator();
-			
-		}
+		/*String dm="SELECT handloan_details.balance FROM handloan_details,handloan_master"
+				+ " WHERE handloan_master.id=handloan_details.handloan_id and handloan_details.id="
+				+ "(SELECT MAX(handloan_details.id) FROM handloan_details WHERE handloan_master.id=1)";
+		System.out.println(dm);*/
+		//System.out.println(gd.getData(dm).get(0).toString());
 		
 		/*String saleData="SELECT sale_master.id, sale_master.product_count, client_details.client_organization_name, sale_master.chalan_no, "
 				+ "sale_master.date, sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master, "

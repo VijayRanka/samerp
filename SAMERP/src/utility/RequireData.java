@@ -829,8 +829,6 @@ public class RequireData
 	//--sarang end
 	
 	// vijay start
-	
-			
 			public List getMaterialSupplyData()
 			{
 				String demo="select * from material_supply_master";
@@ -880,12 +878,12 @@ public class RequireData
 			public String getVRM(String expId)
 			{
 				String returnString="";
-				String demo="SELECT vehicle_details.vehicle_aliasname,vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
+				String demo="SELECT vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
 						+ "vehicle_reading_master,vehicle_details WHERE vehicle_reading_master.vehicle_id=vehicle_details.vehicle_id "
 						+ "and vehicle_reading_master.expenses_master_id="+expId;
 				if(!gd.getData(demo).isEmpty())
 					{
-					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1)+","+gd.getData(demo).get(2);
+					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1);
 						return returnString;
 					}
 				else 
@@ -1019,8 +1017,6 @@ public class RequireData
 				SysDate sd=new SysDate();
 				List getDataList=gd.getData("SELECT amount FROM `expenses_master` "
 						+ "WHERE date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'");
-				System.out.println("SELECT amount FROM `expenses_master` "
-						+ "WHERE date="+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]);
 				if(!getDataList.isEmpty())
 				{
 					Iterator itr=getDataList.iterator();
@@ -1075,7 +1071,6 @@ public class RequireData
 					String insertQuery="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`)"
 							+ " VALUES ('"+bankId+"', '"+transactionDate+"', '"+debit+"', '"+credit+"', '"+particular+"', '"+debtorId+"', '"+balance+"')";
 					
-					System.out.println(insertQuery);
 					
 					int x=gd.executeCommand(insertQuery);
 					if(x>0)
