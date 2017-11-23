@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 
 public class AddDailyStock extends HttpServlet {
@@ -26,6 +27,67 @@ public class AddDailyStock extends HttpServlet {
 
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
+		//report data for ajax
+		if(request.getParameter("getReportData")!=null)
+		{
+			String indName=request.getParameter("individualName");
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			String singleData=request.getParameter("wholeData");
+			GenericDAO gd=new GenericDAO();
+			String demo="";
+			RequireData rd=new RequireData();
+			
+			String getDates="SELECT date from daily_stock_details where date BETWEEN '"+firstDate+"' and '"+lastDate+"' GROUP BY date";
+			System.out.println(singleData);
+			List datesData=gd.getData(getDates);
+			Iterator datesItr=datesData.iterator();
+			while(datesItr.hasNext())
+			{
+				Object particularDate=datesItr.next();
+				String getContDetails="";
+				if(singleData!=null) {
+					int dbId=rd.getDebtorId(singleData);
+				getContDetails="SELECT contractor_master.id,contractor_master.aliasname FROM contractor_master,daily_stock_details,"
+						+ "product_master WHERE product_master.id=daily_stock_details.product_id AND "
+						+ "contractor_master.id=product_master.contractor_id and daily_stock_details.date='"+particularDate+"'"
+						+ "  and contractor_master.id="+dbId+" GROUP by contractor_master.id";
+				}
+				else {
+					getContDetails="SELECT contractor_master.id,contractor_master.aliasname FROM contractor_master,daily_stock_details,"
+							+ "product_master WHERE product_master.id=daily_stock_details.product_id AND "
+							+ "contractor_master.id=product_master.contractor_id and daily_stock_details.date='"+particularDate+"'"
+							+ " GROUP by contractor_master.id";
+				}
+				
+				List getContDetailsList=gd.getData(getContDetails);
+				
+				Iterator gCDLItr=getContDetailsList.iterator();
+				
+				while(gCDLItr.hasNext())
+				{
+					Object contId=gCDLItr.next();
+					Object contName=gCDLItr.next();
+					out.print("#"+particularDate+"/"+contName+".");
+					String getData="SELECT product_master.name,daily_stock_details.product_qty,daily_stock_details.qty_rate,"
+							+ "daily_stock_details.quering_qty,daily_stock_details.query_qty_rate FROM daily_stock_details,"
+							+ " product_master,contractor_master WHERE contractor_master.id=product_master.contractor_id"
+							+ " and daily_stock_details.product_id=product_master.id AND daily_stock_details.date='"+particularDate+"'"
+							+ " and contractor_master.id="+contId;
+					List data=gd.getData(getData);
+					Iterator dataItr=data.iterator();
+					
+					while(dataItr.hasNext())
+					{
+						out.print(dataItr.next()+","+dataItr.next()+","+dataItr.next()+","+dataItr.next()+","+dataItr.next()+"/");
+					}
+					
+				}
+				
+				
+				
+			}
+		}
 		if(request.getParameter("getPrdctData")!=null)
 		{
 			String contId=request.getParameter("getPrdctData").trim();

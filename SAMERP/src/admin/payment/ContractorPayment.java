@@ -322,7 +322,7 @@ public class ContractorPayment extends HttpServlet {
 		}
 		
 		
-		//dataList for ajax
+		//dataList of expense deposit and sale contribution charges for ajax
 		if(request.getParameter("getAmountList")!=null)
 		{
 			String contId=request.getParameter("contrId");

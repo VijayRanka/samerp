@@ -403,7 +403,6 @@ public class Sales extends HttpServlet {
 	
 					}
 			}
-			System.out.println("Sarang");
 		}
 		
 		if(request.getParameter("getDateData")!=null){
@@ -433,8 +432,6 @@ public class Sales extends HttpServlet {
 						+ "client_details WHERE sale_master.client_id = client_details.client_id AND (sale_master.date between '"+firstDate+"' AND '"+lastDate+"') AND sale_master.client_id="+clientId;
 			}
 			
-			
-			System.out.println(indName+firstDate+lastDate);
 			
 			List saleDataList= gd.getData(saleData);
 			Iterator itr=saleDataList.iterator();

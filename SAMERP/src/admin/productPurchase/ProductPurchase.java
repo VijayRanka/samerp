@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.General.GenericDAO;
+import utility.RequireData;
 
 public class ProductPurchase extends HttpServlet {
 	
@@ -27,6 +28,8 @@ public class ProductPurchase extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		GenericDAO gd = new GenericDAO();
+		RequireData rdd = new RequireData();
+		
 		String supplierId = request.getParameter("supplierid");
 		String clientId = request.getParameter("clientid");
 		String ChalanNo = request.getParameter("chalanno");
@@ -265,6 +268,94 @@ public class ProductPurchase extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
+		
+		if(request.getParameter("getDateData")!=null){
+			
+			String indName=request.getParameter("individualName");
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			
+			if(indName==null){
+				List purchaseProductList = rdd.getPurchaseProduct();
+	          	Iterator itr = purchaseProductList.iterator();
+	          	String s="";
+	          	
+	          	while(itr.hasNext()){
+	          		String pid = itr.next().toString();
+	          		String span = itr.next().toString();
+	          		
+	    			String supplierOrgName = itr.next().toString();
+	    			String clientOrgName = itr.next().toString();
+	    			String chalanNo = itr.next().toString();
+	    			String vehicleDetail = itr.next().toString();
+	    			String date1 = itr.next().toString();
+	          		
+	    			s+= span+","+date1+","+supplierOrgName+","+clientOrgName+","+chalanNo+","+vehicleDetail+",";
+	    			
+	          		List l = rdd.getProductDetails(pid);
+				 	Iterator itr2 = l.iterator();
+				 	
+				 	while(itr2.hasNext()){
+				 		String productName=itr2.next().toString();
+						String qty=itr2.next().toString();
+						String rate=itr2.next().toString();
+						
+						s += productName+","+ qty+","+rate+",";
+				 	}
+	          	}
+	          	//System.out.println(s);
+	          	out.print(s);
+			}
+			else{
+				
+				String sid = gd.getData("SELECT material_supply_master.supplier_business_id FROM material_supply_master WHERE material_supply_master.supplier_business_name='"+indName+"'").get(0).toString();
+				
+				List purchaseProductList = rdd.getPurchaseProductBySupplier(sid);
+	          	Iterator itr = purchaseProductList.iterator();
+	          	String s="";
+	          	
+	          	while(itr.hasNext()){
+	          		String pid = itr.next().toString();
+	          		String span = itr.next().toString();
+	          		
+	    			String clientOrgName = itr.next().toString();
+	    			String chalanNo = itr.next().toString();
+	    			String vehicleDetail = itr.next().toString();
+	    			String date1 = itr.next().toString();
+	          		
+	    			s+= span+","+date1+","+clientOrgName+","+chalanNo+","+vehicleDetail+",";
+	    			
+	          		List l = rdd.getProductDetails(pid);
+				 	Iterator itr2 = l.iterator();
+				 	
+				 	while(itr2.hasNext()){
+				 		String productName=itr2.next().toString();
+						String qty=itr2.next().toString();
+						String rate=itr2.next().toString();
+						
+						s += productName+","+ qty+","+rate+",";
+				 	}
+	          	}
+	          	//System.out.println(s);
+	          	out.print(s);
+			}
+		}
+
+		
+		//Ajax for supplier list
+		if(request.getParameter("ReportBysupplierName")!=null){
+			String query = "SELECT material_supply_master.supplier_business_name FROM material_supply_master WHERE material_supply_master.type=2";
+			List details = gd.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) 
+				{
+					out.print("<option>"+itr.next()+"</option>");
+				}
+			}
+		}
+			
 		
 		
 	}

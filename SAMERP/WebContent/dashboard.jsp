@@ -246,8 +246,8 @@
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Debit</th>
                   <th>Credit</th>
+                  <th>Debit</th>
                   <th>Type</th>
                   <th>Balance</th>
                 </tr>
@@ -523,17 +523,17 @@
             	</h4>
             </span>	
             
-            	<span style="float: right; margin-top: 1%; margin-right: 27.5%;">
+            	<span style="float: right; margin-top: 1%; margin-right: 20%;">
             	<h4>
             	Helper Previous Remaining : <span id="helperPrevCost">  </span> <br>
             	Helper Charges : <span id="helperCharge"> </span> <br> <!-- <input type="text" id="helperCharge" style="width: 5%;"> -->
             	
-            	Total Helper Charges : <span id="tHelperCharge"> </span>
-            	<input type="button" class="btn btn-success btn" onclick="makeHelperPayment()" value="Generate Payment" style="float: right; margin-right: 3%; margin-top: 5%;">
+            	Total Helper Charges : <span id="tHelperCharge"> </span> <!-- - <input type="text" style="width:10%; margin:0;" value="0" maxlength="5" onkeyup="getDates()" pattern="[0-9]{1,5}" /> = <span id="ftHelperCharge"> </span> -->
+            	<input type="button" class="btn btn-success btn" onclick="makeHelperPayment()" value="Generate Payment" style="float: right; margin-right: 3%;">
             	</h4>
             	</span>
 
-				<span style="float: right; margin-right: 3%; margin-top: 2%;">
+				<span style="float: right;  margin-top: 2%; margin-right: 1%;">
 				<h4>
             	Driver Previous Remaining : <span id="driverPrevCost">  </span> <br> 
             	Driver (D.C. + A + Extra) :  
@@ -542,14 +542,14 @@
 	            	<span id="allowance"> </span> * <span id="allowanceCharge"> </span> <!-- <input type="text" id="allowanceCharge" style="width: 5%;">  --> + 
 	            	<input type="text" id="extraCharge" value="0" maxlength="5" onkeyup="getDates()" pattern="[0-9]{1,5}" style="width: 10%; margin:0;"> =  <span id="totalDPayment">  </span>  &nbsp;&nbsp;&nbsp;
 	            	<br>
-	            	Total Driver Charges : <span id="tDriverCharge"> </span>
-	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment" style="float: right; margin-right: 47%; margin-top: 3%;">
+	            	Total Driver Charges : <span id="tDriverCharge"> </span> <!-- - <input type="text" style="width:10%;  margin:0;" value="0" /> = <span id="ftDriverCharge"> </span> -->
+	            	<input type="button" class="btn btn-success btn" onclick="makeDriverPayment()" value="Generate Payment" style="float: right; margin-right: 3%;">
 	            	<br>
 	            </h4>
 	            </span>
 	            	
              	<span style="margin-right:28%; ">
-            		<h4 style=" margin-top: 20%; margin-left: 4%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : <span id="totalCost">  </span>  </h4> 
+            		<h4 style=" margin-top: 22%; margin-left: 4%;">Total Expendeture of "<span id="vnum" style="color: #f1133c;"> </span>" From "<span id="fdate" style="color: #f1133c;"> </span>" To "<span id="tdate" style="color: #f1133c;"> </span>" : <span id="totalCost">  </span>  </h4> 
             	</span>  
            	</span>  
             </form>
@@ -998,7 +998,7 @@ function getSetSelect(id,value)
 	
   	getWeek();
     getDates();
-    //getVehicleData();
+    getVehicleData();
    
 }
 
@@ -1117,7 +1117,9 @@ function getDriverExp(sdate, edate)
 				document.getElementById("driverPrevCost").innerHTML = d[6];
 				
 				document.getElementById("tHelperCharge").innerHTML = +d[1]+ +d[5];
+				//document.getElementById("ftHelperCharge").innerHTML = +d[1]+ +d[5];
 				document.getElementById("tDriverCharge").innerHTML = +totalDPayment+ +d[6];
+				//document.getElementById("ftDriverCharge").innerHTML = +totalDPayment+ +d[6];
 				document.getElementById("depositCost").innerHTML=cost[1];
 				
 				document.getElementById("totalCost").innerHTML = totalCost+ +cost[0]+ +cost[1]+ +d[1]+ +d[5]+ +d[6]+ +totalDPayment; 

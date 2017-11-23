@@ -749,7 +749,6 @@
 					if (this.readyState == 4 && this.status == 200) {
 						var myData = this.responseText.split(",");
 						var totalAmount=0;
-						alert(myData);
 						if(myData[0]==1)
 							{
 							document.getElementById("depositCount").innerHTML=myData[1];
