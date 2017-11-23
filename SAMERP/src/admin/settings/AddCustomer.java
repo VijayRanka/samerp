@@ -40,6 +40,8 @@ public class AddCustomer extends HttpServlet {
 		// Add Customer
 		PrintWriter out = response.getWriter();
 		GenericDAO dao = new GenericDAO();
+		RequireData rd=new RequireData();
+		SysDate sd=new SysDate();
 
 		String query = "";
 		int result=0;
@@ -65,7 +67,10 @@ public class AddCustomer extends HttpServlet {
 		//checkContactNo
 		String checkContactNo=request.getParameter("checkContactNo");
 		String checkContactNoUpdate=request.getParameter("checkContactNoUpdate");
-
+		
+		//Delete 
+		String deleteCustId=request.getParameter("deleteCustId");
+		String deleteProjectId=request.getParameter("deleteProjectId");
 		if (custid==null && custName != null) {
 			
 			String Customer_query = "INSERT INTO `customer_master`(`intcustid`, `custname`, `address`, `contactno`, `gstin`, `bucket_rate`, `breaker_rate`) VALUES (DEFAULT,'"
@@ -111,7 +116,57 @@ public class AddCustomer extends HttpServlet {
 				out.print("something wrong");
 			}
 		}
-		
+		if (deleteCustId != null) {
+			
+			String Customer_query="DELETE FROM `customer_master` WHERE `intcustid`="+deleteCustId;
+			
+			int Customer_result = dao.executeCommand(Customer_query);
+
+			if (Customer_result == 1) {
+				HttpSession session=request.getSession();  
+		        session.setAttribute("status","Customer Deleted Successfully!");
+				response.sendRedirect("jsp/admin/settings/addCustomer.jsp");
+			} else {
+				HttpSession session=request.getSession();  
+		        session.setAttribute("error","2");
+				response.sendRedirect("jsp/admin/settings/addCustomer.jsp");
+			}
+		}
+		if (deleteProjectId != null) {
+			query="SELECT `cust_id`,`opening_balance` FROM `jcbpoc_project` WHERE `id`="+deleteProjectId;
+			details=dao.getData(query);
+			Iterator itr = details.iterator();
+			String updateDeposit="";
+			Object custidproject="";
+			while (itr.hasNext()) {
+				custidproject=itr.next();
+				updateDeposit=(String) itr.next();
+
+			}
+			String Customer_query="DELETE FROM `jcbpoc_project` WHERE `id`="+deleteProjectId;
+			
+			int Customer_result = dao.executeCommand(Customer_query);
+
+			if (Customer_result == 1) {
+				if (!updateDeposit.equals("")) {
+					String openingBal="";
+					String[] todate= sd.todayDate().split("-");
+					String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
+					String balance=rd.getTotalRemainingBalance(custidproject.toString(), openingBal, updateDeposit);
+					query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `amount`, `total_balance`, `date`, `pay_mode`, `debtorId`) VALUES "
+							+ "("+custidproject.toString()+",'REVERT','"+openingBal+"','"+balance+"','"+transactionDate+"','CASH',1)";
+					 dao.executeCommand(query);
+				}
+				HttpSession session=request.getSession();  
+		        session.setAttribute("status","Project Deleted Successfully!");
+				response.sendRedirect("jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp");
+			} else {
+				HttpSession session=request.getSession();  
+		        //session.setAttribute("error","2");
+				session.setAttribute("status","Project Not Deleted!");
+				response.sendRedirect("jsp/admin/jcb-poc-work/jcb_pokland_dashboard.jsp");
+			}
+		}
 		if (custid_project != null) {
 			String projectname = request.getParameter("projectname");
 			String openingBal = request.getParameter("openingBal");
@@ -128,8 +183,7 @@ public class AddCustomer extends HttpServlet {
 			
 //			============================Payment Entry=========================================================
 			if (openingBal != "") {
-				RequireData rd =new RequireData();
-				SysDate sd=new SysDate();
+				
 				
 				query="SELECT `contactno` FROM `customer_master` WHERE `intcustid`="+custid_project;
 				details=dao.getData(query);
@@ -242,23 +296,6 @@ public class AddCustomer extends HttpServlet {
 			} else {
 				out.print("something wrong");
 			}
-		}
-	}
-
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out=response.getWriter();
-		GenericDAO dao = new GenericDAO();
-		
-		String Customer_query="DELETE FROM `customer_master` WHERE `intcustid`="+request.getParameter("q");
-		
-		int Customer_result = dao.executeCommand(Customer_query);
-
-		if (Customer_result == 1) {
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin/settings/addCustomer.jsp");
-			rd.forward(request, response);
-		} else {
-			out.print("something wrong");
-
 		}
 	}
 

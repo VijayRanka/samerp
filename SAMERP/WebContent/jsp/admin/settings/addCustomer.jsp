@@ -248,7 +248,7 @@
 										<td><%=breaker_rate%></td>
 										<td><a href="#update" data-toggle='modal'
 											onclick='getSr(<%=custid%>)'><i class="icon-pencil"></i></a> / 
-											<a href="" onclick="DeleteCustomer(<%=custid%>)"><i class="icon-remove"></i></a></td>
+											<a onclick="getDeleteId(<%=custid%>)" href="#DeleteConfirmBox" data-toggle="modal"><i class="icon-remove"></i></a></td>
 										
 									</tr>
 									<%
@@ -281,7 +281,57 @@
 
 
 	<!--end-Footer-part-->
-	<!-- Model -->
+	<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Model @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+	<div class="modal fade" id="DeleteConfirmBox" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: red;" class="modal-title">Error</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" action="/SAMERP/AddCustomer.do" method="post" name="form4">
+						<div class="form-group">
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<input type="hidden" id="deleteCustId" name="deleteCustId" />
+									<h4>Are you sure want to delete the selected row...!!</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="submit" class="btn btn-primary" id="submitbtn"
+									value="OK" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="error-msg-delete" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: red;" class="modal-title">Error</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" action="#" method="post" name="form4">
+						<div class="form-group">
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<h4>Cannot delete the Selected record as it is linked with
+										some other records..!!</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-primary" id="submitbtn"
+									data-dismiss="modal" value="OK" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="modal hide fade" id="update" role="dialog">
 		<div class="modal-dialog">
 		<form action="/SAMERP/AddCustomer.do" method="post"
@@ -364,6 +414,7 @@
 
 	function loadFunction(){
 		document.getElementById("custname").focus();
+		showModal();
 		snackBar();
 	}
 	function snackBar() {
@@ -380,7 +431,22 @@ function isNumber(evt) {
     }
     return true;
 }
-
+//************************************** Modele Delete
+function getDeleteId(id1)
+{
+	
+ document.getElementById("deleteCustId").value=id1;
+ 
+}
+function showModal(){
+	var error=<%=session.getAttribute("error")%>;
+	
+	if(error==2)
+	{
+		$('#error-msg-delete').modal('show');	
+	}
+	<% session.removeAttribute("error"); %>
+}
 //***************************************Contact Error *******************************
 function checkContactNo(str) {
 	var xhttp;
@@ -470,26 +536,6 @@ function getSr(id){
 		}  
 }
 
-function DeleteCustomer(id){
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	try{ 
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var demoStr = this.responseText.split(",");
-				
-		}
-
-	};
-	
-	xhttp.open("doDelete", "/SAMERP/AddCustomer.do?q=" + id, true);
-	xhttp.send();
-	}
-	catch(e)
-	{
-		alert("Unable to connect to server");
-	}     
-}
 
 </script>
 	<script src="/SAMERP/config/js/jquery.min.js"></script>
