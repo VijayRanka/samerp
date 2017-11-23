@@ -27,6 +27,70 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 		PrintWriter out=response.getWriter();
 		
 		//System.out.println("ghjk");
+		
+		
+		
+		if(request.getParameter("getDateData")!=null)
+		{
+			GenericDAO da = new GenericDAO();
+			String fromDate=request.getParameter("fromDate");
+			String toDate=request.getParameter("toDate");
+			String individualName=request.getParameter("individualName");
+			
+			if(individualName!=null)
+			{
+				String getRawPurchaseDetails="SELECT purchase_raw_material_master.date,purchase_raw_material_master.chalan_no,purchase_raw_material_master.vehicle_details,raw_material_master.name,purchase_raw_material_master.qty FROM purchase_raw_material_master,raw_material_master,material_supply_master WHERE purchase_raw_material_master.material_supply_master_id=material_supply_master.supplier_business_id AND purchase_raw_material_master.raw_material_master_id=raw_material_master.id AND purchase_raw_material_master.date BETWEEN '"+fromDate+"' AND '"+toDate+"' AND material_supply_master.supplier_alias='"+individualName+"' ORDER BY purchase_raw_material_master.date DESC";
+				List rawPurchaseDetails=da.getData(getRawPurchaseDetails);
+				Iterator itr=rawPurchaseDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object chalanNo=itr.next();
+					Object vNo=itr.next();
+					Object rawMaterial=itr.next();
+					Object qty=itr.next();
+					
+					out.print(date+","+chalanNo+","+vNo+","+rawMaterial+","+qty+",");
+				}
+			}
+			else
+			{
+				String getRawPurchaseDetails="SELECT purchase_raw_material_master.date,material_supply_master.supplier_alias,purchase_raw_material_master.chalan_no,purchase_raw_material_master.vehicle_details,raw_material_master.name,purchase_raw_material_master.qty FROM purchase_raw_material_master,raw_material_master,material_supply_master WHERE purchase_raw_material_master.material_supply_master_id=material_supply_master.supplier_business_id AND purchase_raw_material_master.raw_material_master_id=raw_material_master.id AND purchase_raw_material_master.date BETWEEN '"+fromDate+"' AND '"+toDate+"' ORDER BY purchase_raw_material_master.date DESC";
+				List rawPurchaseDetails=da.getData(getRawPurchaseDetails);
+				Iterator itr=rawPurchaseDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object supName=itr.next();
+					Object chalanNo=itr.next();
+					Object vNo=itr.next();
+					Object rawMaterial=itr.next();
+					Object qty=itr.next();
+					
+					out.print(date+","+supName+","+chalanNo+","+vNo+","+rawMaterial+","+qty+",");
+				}
+		
+			}
+		}
+	
+		if(request.getParameter("findNameByReport")!=null)
+		{
+			
+			GenericDAO da = new GenericDAO();
+			List details = null;
+			String query="SELECT material_supply_master.supplier_alias FROM material_supply_master WHERE type=1";
+			details = da.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+				}
+			}
+			
+			//out.print("<option>working</option>");
+		}
+		
 		//inserting into purchase raw material master
 		if(request.getParameter("purchase")!=null)
 		{

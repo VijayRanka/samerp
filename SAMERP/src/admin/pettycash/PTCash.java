@@ -45,6 +45,61 @@ public class PTCash extends HttpServlet {
 		
 		
 		
+		if(request.getParameter("getDateData")!=null)
+		{
+			String fromDate=request.getParameter("fromDate");
+			String toDate =request.getParameter("toDate");
+			String individualName =request.getParameter("individualName");
+			
+			if(individualName!=null)
+			{
+				String getHandLoanDetails="SELECT handloan_details.date,handloan_details.debit,handloan_details.credit,handloan_details.mode,handloan_details.particulars,handloan_details.balance FROM handloan_master,handloan_details WHERE handloan_master.id=handloan_details.handloan_id AND handloan_details.date BETWEEN '"+fromDate+"' AND '"+toDate+"' AND handloan_master.alias_name='"+individualName+"' ORDER BY handloan_details.id";
+				List handLoanDetails=gd.getData(getHandLoanDetails);
+				Iterator itr= handLoanDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object mode=itr.next();
+					Object pariculars=itr.next();
+					Object balance=itr.next();
+					
+					out.print(date+","+debit+","+credit+","+mode+","+pariculars+","+balance+",");
+				}
+			}
+			else
+			{
+				String getHandLoanDetails="SELECT handloan_details.date,handloan_master.alias_name,handloan_details.debit,handloan_details.credit,handloan_details.mode,handloan_details.particulars,handloan_details.balance FROM handloan_master,handloan_details WHERE handloan_master.id=handloan_details.handloan_id AND handloan_details.date BETWEEN '"+fromDate+"' AND '"+toDate+"' ORDER BY handloan_details.id";
+				List handLoanDetails=gd.getData(getHandLoanDetails);
+				Iterator itr= handLoanDetails.iterator();
+				while(itr.hasNext())
+				{
+					Object date=itr.next();
+					Object alias=itr.next();
+					Object debit=itr.next();
+					Object credit=itr.next();
+					Object mode=itr.next();
+					Object pariculars=itr.next();
+					Object balance=itr.next();
+					
+					out.print(date+","+alias+","+debit+","+credit+","+mode+","+pariculars+","+balance+",");
+				}
+			}
+			
+			
+		}
+		if(request.getParameter("findNameByReport")!=null)
+		{
+			String getHandLoanName="SELECT alias_name FROM handloan_master";
+			List handLoanName=gd.getData(getHandLoanName);
+			Iterator itr=handLoanName.iterator();
+			while(itr.hasNext())
+			{
+				out.print("<option>"+itr.next()+"</option>");
+			}
+			
+		}
 		
 		if(request.getParameter("updateHandLoan")!=null)
 		{

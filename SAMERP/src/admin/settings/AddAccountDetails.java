@@ -52,7 +52,7 @@ public class AddAccountDetails extends HttpServlet {
 			
 			if(indName!=null)
 			{
-				String getBankData="SELECT bank_account_details.date,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,debtor_master,account_details WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date BETWEEN '2017-11-01' and '2017-11-31' AND account_details.acc_aliasname='"+indName+"' order by bank_account_details.id";
+				String getBankData="SELECT bank_account_details.date,bank_account_details.debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance FROM bank_account_details,debtor_master,account_details WHERE bank_account_details.bid=account_details.acc_id AND bank_account_details.debter_id=debtor_master.id AND bank_account_details.date BETWEEN '"+fromDate+"' and '"+toDate+"' AND account_details.acc_aliasname='"+indName+"' order by bank_account_details.id";
 				List bankData=gd.getData(getBankData);
 				Iterator itr=bankData.iterator();
 				while(itr.hasNext())
