@@ -113,6 +113,7 @@ public class PTCash extends HttpServlet {
 			String mode=request.getParameter("uMode");
 			String chqNo=request.getParameter("chqNo");
 			int oldBalance=Integer.parseInt(request.getParameter("uBalance"));
+			String handloanDetailsId=request.getParameter("detailsId");
 			String particulars="";
 			
 			
@@ -136,7 +137,7 @@ public class PTCash extends HttpServlet {
 					int cancelEntryBalance=(int)handLoanBalance.get(0)-oldCr;
 					
 					String cancelHandLoanEntry="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
-							+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+0+","+oldCr+",'"+mode+"','"+date+"','"+cancelEntryBalance+"')";
+							+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+0+","+oldCr+",'"+mode+"','REVERT_ENTRY_"+date+"','"+cancelEntryBalance+"')";
 					int cancelHandLoanEntryStatus=gd.executeCommand(cancelHandLoanEntry);
 					if(cancelHandLoanEntryStatus>0)
 					{
@@ -155,7 +156,7 @@ public class PTCash extends HttpServlet {
 								
 								if(mode.equals("CHEQUE"))
 								{
-									particulars="HANDLOAN CHEQUE";
+									particulars="HANDLOAN CHEQUE_"+chqNo;
 								}
 								else if(mode.equals("TRANSFER"))
 								{
@@ -175,7 +176,7 @@ public class PTCash extends HttpServlet {
 								
 								int cancelBankEntryBalance=(int)bankBalance.get(0)-oldCr;
 								String cancelBankEntry="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-										+ "VALUES ('"+bid+"','"+requiredDate+"',"+oldCr+","+0+",'"+date+"','"+debtId+"',"+cancelBankEntryBalance+")";
+										+ "VALUES ('"+bid+"','"+requiredDate+"',"+oldCr+","+0+",'REVERT_ENTRY_"+date+"','"+debtId+"',"+cancelBankEntryBalance+")";
 								int cancelBankEntryStatus=gd.executeCommand(cancelBankEntry);
 								if(cancelBankEntryStatus>0)
 								{
@@ -253,7 +254,7 @@ public class PTCash extends HttpServlet {
 				int cancelEntryBalance=(int)handLoanBalance.get(0)+oldDr;
 				
 				String cancelHandLoanEntry="INSERT INTO `handloan_details`(`handloan_id`, `date`, `credit`, `debit`, `mode`, `particulars`, `balance`) "
-						+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+oldDr+","+0+",'"+mode+"','"+date+"','"+cancelEntryBalance+"')";
+						+ "VALUES ('"+handLoanId+"','"+requiredDate+"',"+oldDr+","+0+",'"+mode+"','REVERT_ENTRY_"+date+"','"+cancelEntryBalance+"')";
 				int cancelHandLoanEntryStatus=gd.executeCommand(cancelHandLoanEntry);
 				if(cancelHandLoanEntryStatus>0)
 				{
@@ -272,7 +273,7 @@ public class PTCash extends HttpServlet {
 							
 							if(mode.equals("CHEQUE"))
 							{
-								particulars="HANDLOAN CHEQUE";
+								particulars="HANDLOAN CHEQUE_"+chqNo;
 							}
 							else if(mode.equals("TRANSFER"))
 							{
@@ -292,7 +293,7 @@ public class PTCash extends HttpServlet {
 							
 							int cancelBankEntryBalance=(int)bankBalance.get(0)+oldDr;
 							String cancelBankEntry="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-									+ "VALUES ('"+bid+"','"+requiredDate+"',"+0+","+oldDr+",'"+date+"','"+debtId+"',"+cancelBankEntryBalance+")";
+									+ "VALUES ('"+bid+"','"+requiredDate+"',"+0+","+oldDr+",'REVERT_ENTRY_"+date+"','"+debtId+"',"+cancelBankEntryBalance+")";
 							int cancelBankEntryStatus=gd.executeCommand(cancelBankEntry);
 							if(cancelBankEntryStatus>0)
 							{
@@ -303,6 +304,9 @@ public class PTCash extends HttpServlet {
 								int revertBankEntryStatus=gd.executeCommand(revertBankEntry);
 								if(revertBankEntryStatus>0)
 								{
+									String updateExp="UPDATE `expenses_master` SET `amount`="+newDr+" WHERE hand_loan_id='"+handloanDetailsId+"'";
+									int updateExpStatus=gd.executeCommand(updateExp);
+									
 									System.out.println("updated successfully");
 									request.setAttribute("status", "Updated & Reverted Successfully in Bank");
 									request.setAttribute("tab", "tab2");
@@ -344,6 +348,9 @@ public class PTCash extends HttpServlet {
 								int revertPettyEntryStatus=gd.executeCommand(revertPettyEntry);
 								if(revertPettyEntryStatus>0)
 								{
+									String updateExp="UPDATE `expenses_master` SET `amount`="+newDr+" WHERE hand_loan_id='"+handloanDetailsId+"'";
+									int updateExpStatus=gd.executeCommand(updateExp);
+									
 									request.setAttribute("status", "Updated & Reverted Successfully in PettyCash");
 									request.setAttribute("tab", "tab2");
 									RequestDispatcher rq=request.getRequestDispatcher("/jsp/admin/PTCash/ptcash.jsp");
@@ -699,7 +706,7 @@ public class PTCash extends HttpServlet {
 						int debtorId=rd.getDebtorId(newAlias);
 						
 						String insertBankDetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-								+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN CHEQUE',"+debtorId+","+newBankBalance+")";
+								+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN CHEQUE_"+chequeNo+"',"+debtorId+","+newBankBalance+")";
 						int bankStatus=gd.executeCommand(insertBankDetails);
 						if(bankStatus>0)
 						{
@@ -763,7 +770,7 @@ public class PTCash extends HttpServlet {
 						int debtorId=rd.getDebtorId(aliasname);
 						
 						String insertBankDetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-								+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN CHEQUE',"+debtorId+","+newBankBalance+")";
+								+ "VALUES ("+bankBalance.get(0)+",'"+date+"','0',"+amount+",'HANDLOAN CHEQUE_"+chequeNo+"',"+debtorId+","+newBankBalance+")";
 						int bankStatus=gd.executeCommand(insertBankDetails);
 						if(bankStatus>0)
 						{
