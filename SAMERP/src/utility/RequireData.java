@@ -142,6 +142,17 @@ public class RequireData
 					return pList;
 				}
 				
+				public List getPurchaseProductBySupplier(String sid)
+				{
+					String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, "
+							+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
+							+ "material_supply_master, client_details "
+							+ "WHERE product_purchase_master.material_supply_master_id="+sid+" AND material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
+							+ "AND client_details.client_id=product_purchase_master.client_details_id";
+					List purchaseList = gd.getData(purchaseQuery);
+					return purchaseList;
+				}
+				
 				public List getCompletePurchaseData()
 				{
 					List finalData = new ArrayList();
@@ -242,7 +253,7 @@ public class RequireData
 							+ "supplier_payment_master.cheque_no FROM supplier_payment_master WHERE total_supplier_payment_master.payment_id=supplier_payment_master.id)"
 							+ " AS cheque_no, (SELECT account_details.acc_aliasname FROM account_details, supplier_payment_master WHERE"
 							+ " account_details.acc_id=supplier_payment_master.description AND total_supplier_payment_master.payment_id=supplier_payment_master.id) "
-							+ "AS bank_details, `total_remaining`FROM `total_supplier_payment_master` WHERE  total_supplier_payment_master.id="+tid+" AND total_supplier_payment_master.supplier_id="+pid+" "
+							+ "AS bank_details, `total_remaining`, total_supplier_payment_master.exp_master_id FROM `total_supplier_payment_master` WHERE  total_supplier_payment_master.id="+tid+" AND total_supplier_payment_master.supplier_id="+pid+" "
 									+ "ORDER BY total_supplier_payment_master.id DESC";
 					List List = gd.getData(query);
 					return List;
@@ -319,6 +330,7 @@ public class RequireData
 					List l = gd.getData(q);
 					return l.get(0).toString();
 				}
+				
 				public String getHelperDebterIdFromVid(String vid){
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 					String tdate = df.format(new Date()).toString();
@@ -363,11 +375,6 @@ public class RequireData
 					
 					return flag;
 				}
-				
-				
-				
-				
-				
 				
 	
 	//--mukesh end
@@ -689,7 +696,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_designation,emplyoee_details.aliasname FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_designation FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
@@ -703,8 +710,12 @@ public class RequireData
 		
 		public List getEmployeeRowData(String RowId)
 		{
-			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_designation,debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id="+RowId+"";
+			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.emp_id='"+RowId+"'";
+			
+			System.out.println("Select query:"+employeeRowDataQuery);
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
+			System.out.println("Seleexecute query:"+employeeDetailsData);
+			
 			return employeeDetailsData;
 		}
 		
@@ -838,8 +849,6 @@ public class RequireData
 	//--sarang end
 	
 	// vijay start
-	
-			
 			public List getMaterialSupplyData()
 			{
 				String demo="select * from material_supply_master";
@@ -864,6 +873,7 @@ public class RequireData
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
+			
 			public List getExpensesDetailsDash()
 			{
 				SysDate sd=new SysDate();
@@ -874,12 +884,14 @@ public class RequireData
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
+			
 			public List getExpensesType()
 			{
 				String demo="select expenses_type_id, expenses_type_name from expenses_type where status=0";
 				List demoList=gd.getData(demo);
 				return demoList;
 			}
+			
 			public List getDebtorList()
 			{
 				String demo="select * from debtor_master where status=0";
@@ -889,12 +901,12 @@ public class RequireData
 			public String getVRM(String expId)
 			{
 				String returnString="";
-				String demo="SELECT vehicle_details.vehicle_aliasname,vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
+				String demo="SELECT vehicle_reading_master.vehicle_reading,vehicle_reading_master.vehicle_diesel_qty FROM "
 						+ "vehicle_reading_master,vehicle_details WHERE vehicle_reading_master.vehicle_id=vehicle_details.vehicle_id "
 						+ "and vehicle_reading_master.expenses_master_id="+expId;
 				if(!gd.getData(demo).isEmpty())
 					{
-					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1)+","+gd.getData(demo).get(2);
+					returnString=gd.getData(demo).get(0)+","+gd.getData(demo).get(1);
 						return returnString;
 					}
 				else 
@@ -1028,8 +1040,6 @@ public class RequireData
 				SysDate sd=new SysDate();
 				List getDataList=gd.getData("SELECT amount FROM `expenses_master` "
 						+ "WHERE date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'");
-				System.out.println("SELECT amount FROM `expenses_master` "
-						+ "WHERE date="+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]);
 				if(!getDataList.isEmpty())
 				{
 					Iterator itr=getDataList.iterator();
@@ -1060,6 +1070,12 @@ public class RequireData
 				else
 					return "0";
 			}
+			public String getDebtorAlias(String id)
+			{
+				String aliasName=gd.getData("SELECT debtor_master.type FROM debtor_master WHERE id="+id).get(0).toString();
+				
+				return aliasName;
+			}
 	
 	
 		//--vijay end
@@ -1084,7 +1100,6 @@ public class RequireData
 					String insertQuery="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`)"
 							+ " VALUES ('"+bankId+"', '"+transactionDate+"', '"+debit+"', '"+credit+"', '"+particular+"', '"+debtorId+"', '"+balance+"')";
 					
-					System.out.println(insertQuery);
 					
 					int x=gd.executeCommand(insertQuery);
 					if(x>0)

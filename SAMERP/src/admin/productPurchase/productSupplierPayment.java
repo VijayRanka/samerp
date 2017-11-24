@@ -134,7 +134,17 @@ public class productSupplierPayment extends HttpServlet {
 				
 				if(balStatus==1){
 					
-					if(rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, payMode+"_"+chequeNo, String.valueOf(debtorId))){
+					String particular="";
+					
+					if(payMode.equals("Cheque")){
+						particular = payMode+"_"+chequeNo;
+					}
+					else if(payMode.equals("Transfer")){
+						particular = payMode;
+					}
+					
+					
+					if(rd.badEntry(bankInfo, paidDate, Integer.parseInt(paidAmt), 0, particular, String.valueOf(debtorId))){
 					
 						if(payMode.equals("Cheque")){
 							String insertPayment = "INSERT INTO `supplier_payment_master`(`material_supply_master_id`, `date`, `paid_amt`, `mode`, `cheque_no`, `description`)"
@@ -187,6 +197,9 @@ public class productSupplierPayment extends HttpServlet {
 				
 				rd.commonExpEntry("4", debtorId, "", paidAmt, payMode, bankInfo, chequeNo, requiredDate);
 				
+				
+				String maxTid = gd.getData("SELECT max(total_supplier_payment_master.id) FROM total_supplier_payment_master;").get(0).toString();
+				gd.executeCommand("UPDATE total_supplier_payment_master SET total_supplier_payment_master.exp_master_id=(SELECT MAX(expenses_master.exp_id) FROM expenses_master) WHERE total_supplier_payment_master.id="+maxTid);
 			}
 			
 			System.out.println("bankExit : "+bankExit);
@@ -224,6 +237,8 @@ public class productSupplierPayment extends HttpServlet {
 			String updateMode = request.getParameter("updateMode").trim();
 			String updateBank = request.getParameter("updateBank").trim();
 			String updateChequeNumber = request.getParameter("updateChequeNumber").trim();
+			String updateExpId = request.getParameter("updateExpId").trim();
+			String query2="";
 			
 			boolean amountStatusClear = false;
 
@@ -256,10 +271,10 @@ public class productSupplierPayment extends HttpServlet {
 						boolean successSecond=rd.pCashEntry(requiredDate, Integer.parseInt(newAmt), 0, debtorId);
 						if(successSecond)
 						{
-							request.setAttribute("status", "Updated Petty Cash And Expense");
+							request.setAttribute("status", "Record Updated Successfully");
 						}
 					}
-					
+					query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+"), `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
 				}
 			}
 			else if(updateMode.equalsIgnoreCase("Cheque"))
@@ -294,9 +309,10 @@ public class productSupplierPayment extends HttpServlet {
 						boolean successSecond=rd.badEntry(bankId, requiredDate, Integer.parseInt(newAmt), 0, "CHEQUE_"+updateChequeNumber, debtorId);
 						if(successSecond)
 						{
-							request.setAttribute("status", "Updated Bank Amount And Expense");
+							request.setAttribute("status", "Record Updated Successfully");
 						}
 					}
+					query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+"), `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
 				}
 			}
 			else if(updateMode.equalsIgnoreCase("Transfer"))
@@ -309,15 +325,14 @@ public class productSupplierPayment extends HttpServlet {
 					boolean successSecond=rd.badEntry(bankId, requiredDate, Integer.parseInt(newAmt), 0, updateMode, debtorId);
 					if(successSecond)
 					{
-						request.setAttribute("status", "Updated Bank Amount And Expense");
+						request.setAttribute("status", "Record Updated Successfully");
 					}
 				}
+				query2="UPDATE `expenses_master` SET name=(select `supplier_business_name`  FROM `material_supply_master` WHERE supplier_business_id="+supid+"), `amount`="+newAmt+" WHERE expenses_master.exp_id="+updateExpId;
 			}
 			
 			
-			
-			
-			int diff = Integer.parseInt(newAmt)-Integer.parseInt(oldAmt);
+			int diff = Integer.parseInt(oldAmt)-Integer.parseInt(newAmt);
 			
 			String maxIdQ = "SELECT max(id) FROM `total_supplier_payment_master`";
 			List maxList = gd.getData(maxIdQ);
@@ -343,14 +358,9 @@ public class productSupplierPayment extends HttpServlet {
 				int updateSPaymetStatus = gd.executeCommand(updateSPaymet);
 				
 				if(updateSPaymetStatus==1){
-					
+					gd.executeCommand(query2);
 				}
 			}
-			
-			
-			
-			
-			
 			
 			RequestDispatcher rdd = request.getRequestDispatcher("jsp/admin/productPurchase/productSupplierPayment.jsp?ppid="+supid);
 			rdd.forward(request, response);
@@ -359,14 +369,3 @@ public class productSupplierPayment extends HttpServlet {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-

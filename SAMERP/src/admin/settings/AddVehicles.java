@@ -92,7 +92,6 @@ public class AddVehicles extends HttpServlet {
 			if(deletestatus==1)
 			{
 				System.out.println("delete vehicle successful");
-				
 			}		
 		}
 		else
@@ -328,6 +327,86 @@ public class AddVehicles extends HttpServlet {
 			
 			
 		}
+		
+		if(request.getParameter("getDateData")!=null){
+			
+			String indName=request.getParameter("individualName");
+			String firstDate=request.getParameter("fromDate");
+			String lastDate=request.getParameter("toDate");
+			
+			String vehiclePaymentQuery=null, vehicleReadingQuery=null, expId="";
+			
+
+			System.out.println("indName "+indName);
+			
+			if(indName==null){
+			
+				vehiclePaymentQuery="SELECT expenses_master.exp_id, `date`, `name`, `amount`, debtor_master.type, expenses_type.expenses_type_name,  `payment_mode`, "
+						+ "`bankId`, `other_details`, `reason` FROM expenses_master, debtor_master, expenses_type WHERE debtor_master.id=expenses_master.debtor_id "
+						+ "AND expenses_type.expenses_type_id=expenses_master.expenses_type_id AND expenses_master.debtor_id IN(SELECT debtor_master.id FROM "
+						+ "debtor_master WHERE debtor_master.type IN (SELECT vehicle_details.vehicle_aliasname FROM vehicle_details  WHERE "
+						+ "vehicle_details.vehicle_aliasname LIKE '%TRANSPORT%')) AND expenses_master.date BETWEEN '"+firstDate+"' AND '"+lastDate+"'";
+				
+			}else {
+				
+				String getVehicleID="SELECT vehicle_details.vehicle_id FROM vehicle_details WHERE vehicle_details.vehicle_aliasname='"+indName+"'";
+				
+				String vehicleID=gd.getData(getVehicleID).get(0).toString();
+				
+				vehiclePaymentQuery="SELECT expenses_master.exp_id, `date`, `name`, `amount`, debtor_master.type, expenses_type.expenses_type_name,  `payment_mode`, "
+						+ "`bankId`, `other_details`, `reason` FROM expenses_master, debtor_master, expenses_type WHERE debtor_master.id=expenses_master.debtor_id "
+						+ "AND expenses_type.expenses_type_id=expenses_master.expenses_type_id AND expenses_master.debtor_id IN(SELECT debtor_master.id FROM "
+						+ "debtor_master WHERE debtor_master.type IN (SELECT vehicle_details.vehicle_aliasname FROM vehicle_details  WHERE "
+						+ "vehicle_details.vehicle_aliasname='"+indName+"' )) AND expenses_master.date BETWEEN '"+firstDate+"' AND '"+lastDate+"'";	
+			}
+
+			List vehiclePaymentList = gd.getData(vehiclePaymentQuery);
+			Iterator iterator = vehiclePaymentList.iterator();
+			String s="";
+			
+			
+			while (iterator.hasNext()) {
+				
+				expId = iterator.next().toString();
+				
+				vehicleReadingQuery="SELECT `vehicle_reading`, `vehicle_diesel_qty` FROM `vehicle_reading_master` WHERE vehicle_reading_master.expenses_master_id="+expId;
+				System.out.println();
+				List vehicleReadingList = gd.getData(vehicleReadingQuery);
+				Iterator itr = vehicleReadingList.iterator();
+				String dieselQty="-", dieselReading="-", bankId="", getBankId="-";
+				
+				if(itr.hasNext()){ 
+					dieselQty = itr.next().toString();
+					dieselReading = itr.next().toString();
+				}
+				
+				s+=iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+dieselQty+","+dieselReading+","+iterator.next()+",";
+				
+				bankId = iterator.next().toString();
+				if(Integer.parseInt(bankId)!=0){
+					getBankId = gd.getData("SELECT account_details.acc_aliasname FROM account_details WHERE account_details.acc_id="+bankId).get(0).toString();
+				}
+				
+				s+=getBankId+","+iterator.next()+","+iterator.next()+",";
+			}
+			out.print(s);
+		}	
+		
+			
+		//Ajax for vehicle name
+		if(request.getParameter("ReportByVehicleName")!=null){
+			String query = "SELECT vehicle_details.vehicle_aliasname FROM vehicle_details WHERE vehicle_details.vehicle_aliasname LIKE '%TRANSPORT%'";
+			List details = gd.getData(query);
+			if(!details.isEmpty())
+			{
+				Iterator itr = details.iterator();
+				while (itr.hasNext()) {
+					out.print("<option>"+itr.next()+"</option>");
+	
+					}
+			}
+		}
+		
 		
 	}
 

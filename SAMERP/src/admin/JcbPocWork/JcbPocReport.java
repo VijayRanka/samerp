@@ -38,7 +38,7 @@ public class JcbPocReport extends HttpServlet {
 			if (noGst.equals("1")) {
 				query="SELECT `bill_id`, customer_master.custname, `date`, `bill_amount`, `gst` FROM `jcbpoc_invoice`,customer_master WHERE jcbpoc_invoice.cust_id=customer_master.intcustid AND bill_id IS NOT null AND jcbpoc_invoice.date BETWEEN '"+formDate+"' AND '"+toDate+"' ORDER BY jcbpoc_invoice.id ASC";
 			}else{
-				query="SELECT `bill_id`, customer_master.custname, `date`, `bill_amount`, `gst` FROM `jcbpoc_invoice`,customer_master WHERE jcbpoc_invoice.cust_id=customer_master.intcustid AND jcbpoc_invoice.date BETWEEN '"+formDate+"' AND '"+toDate+"' ORDER BY jcbpoc_invoice.id ASC";
+				query="SELECT `id`, customer_master.custname, `date`, `bill_amount`, `gst` FROM `jcbpoc_invoice`,customer_master WHERE jcbpoc_invoice.cust_id=customer_master.intcustid AND jcbpoc_invoice.date BETWEEN '"+formDate+"' AND '"+toDate+"' ORDER BY jcbpoc_invoice.id ASC";
 			}
 			
 			details=dao.getData(query);

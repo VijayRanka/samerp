@@ -246,8 +246,8 @@
               <thead>
                 <tr>
                   <th>S.No.</th>
-                  <th>Debit</th>
                   <th>Credit</th>
+                  <th>Debit</th>
                   <th>Type</th>
                   <th>Balance</th>
                 </tr>
