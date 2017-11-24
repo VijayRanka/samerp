@@ -299,7 +299,7 @@
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
-								
+								<!-- 
 								<div class="control-group">
 									<label class="control-label">Designation: </label>
 									<div class="controls">
@@ -325,7 +325,9 @@
 											
 									</div>
 									
-								</div>
+								</div> -->
+								
+								<input type="hidden" id="alias" name="alias">
 								
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
@@ -392,7 +394,9 @@ function searchEmpolyee(id) {
 			
 			document.getElementById("contactno").value = demoStr[3];
 			
-			document.getElementById("designationid").value = demoStr[4];			
+			document.getElementById("alias").value = demoStr[4];
+			
+			/* document.getElementById("designationid").value = demoStr[4];			
 			var dd = document.getElementById('designationid');			
 			for (var i = 0; i < dd.options.length; i++) {
 			    if (dd.options[i].text === demoStr[4]) {
@@ -421,7 +425,7 @@ function searchEmpolyee(id) {
 				    }
 				}
 		     
-		     
+		      */
 		     
 			}
 		};
@@ -451,7 +455,7 @@ function getVehicle(id) {
 function showOpening(str) {
 	
 	if(str=='DRIVER' ||str=='HELPER'){
-		document.getElementById("opening_balid").style.display="block";
+		document.getElementById("opening_balid ").style.display="none";
 	}
 	else if(str=='HOME WORKER' ||str=='LABOUR'){
 
@@ -487,7 +491,7 @@ function showOpening(str) {
 	
 }
 
-
+/* 
 
 function showVehicle(str) {
 	
@@ -526,7 +530,7 @@ function showVehicle(str) {
 	
 	
 }
-
+ */
 
 function getSetSelect(id,value)
 {

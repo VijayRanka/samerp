@@ -404,13 +404,6 @@
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">
-								<div class="controls"style="float: right;position: relative;right: 280px;">
-					              <span  style="position: relative;bottom: 5px;">
-					              	<b>From Date:</b></span>
-					               	<input type="text" name="" id="dataTableFrom" data-date-format="dd-mm-yyyy" value="" class="datepicker">
-					               	<b>To Date:</b></span>
-					               	<input type="text" name="" id="dataTableTo" data-date-format="dd-mm-yyyy" value="" class="datepicker">
-					              </div> 
 									<thead>
 									<tr>
 										<th></th>
@@ -465,9 +458,8 @@
 										<td><%=breaker_hr%></td>
 										<td><%=bucket_rate%></td>
 										<td><%=breaker_rate%></td>
-										<td><a href="#update" data-toggle='modal'
-											onclick='getSr(<%=jcbpocid%>)'>Update</a> / <a
-											href="/SAMERP/JcbPocDetails.do?deleteid=<%=jcbpocid%>">Delete</a></td>
+										<td><a href="#update" data-toggle='modal' onclick='getSr(<%=jcbpocid%>)'>Update</a> / 
+											<a onclick="getDeleteId(<%=jcbpocid%>)" href="#DeleteConfirmBox" data-toggle="modal">Delete</a></td>
 									</tr>
 									<%
 										}
@@ -555,7 +547,57 @@
 	</div>
 	<!-- ========================================Model End=========================================== -->
 	
-	
+	<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Model @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+	<div class="modal fade" id="DeleteConfirmBox" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: red;" class="modal-title">Error</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" action="/SAMERP/JcbPocDetails.do" method="post" name="form4">
+						<div class="form-group">
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<input type="hidden" id="deleteJcbId" name="deleteJcbId" />
+									<h4>Are you sure want to delete the selected row...!!</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="submit" class="btn btn-primary" id="submitbtn"
+									value="OK" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="error-msg-delete" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: red;" class="modal-title">Error</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" action="#" method="post" name="form4">
+						<div class="form-group">
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<h4>Cannot delete the Selected record as it is linked with
+										some other records..!!</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-primary" id="submitbtn"
+									data-dismiss="modal" value="OK" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	
 	
@@ -579,58 +621,29 @@
 	    return true;
 	}
 	function snackBar() {
-		setMonth();
+		showModal();
+// 		showModalProject();
+		
 	    var x = document.getElementById("snackbar")
 	    x.className = "show";
 	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 	}
-	
-// 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@DATA TABLE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-function setMonth() {
-	var thisYear = new Date().getFullYear();
-	var thisMonth = new Date().getMonth();
-	thisMonth=thisMonth+1;
-	document.getElementById("dataTableFrom").value ="1-"+thisMonth+"-"+thisYear;
-	document.getElementById("dataTableTo").value ="30-"+thisMonth+"-"+thisYear;
-}
-function getDataForTable() {
-	var fromDate=document.getElementById("dataTableFrom").value;
-	var toDate=document.getElementById("dataTableTo").value;
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var demoStr = this.responseText.split("~");
-			if(demoStr=="")
-			document.getElementById("jcbpocDataTable").innerHTML="<tr><td colspan='10'>No Records Found!</td></tr>"
-			else{
-				var count=1;
-				var wholeData="";
-				
-				for(var i=0;i<demoStr.length-2;i=i+6){
-						
-					wholeData+="<tr>"+
-					"<td style='text-align: center'>"+count+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+1]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+2]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+3]+"</td>"+
-					"<td style='text-align: center' >"+demoStr[i+4]+"</td>"+
-					"<td style='text-align: center'>"+demoStr[i+5]+"</td>"+
-					"<tr>";
-					count++;
-				}
-			
-			document.getElementById("jcbpocDataTable").innerHTML=wholeData;
-			}
+	//************************************** Modele Delete
+	function getDeleteId(id1)
+	{
+		
+	 document.getElementById("deleteJcbId").value=id1;
+	 
+	}
+	function showModal(){
+		var error=<%=session.getAttribute("error")%>;
+		
+		if(error==2)
+		{
+			$('#error-msg-delete').modal('show');	
 		}
-	};
-	xhttp.open("GET", "/SAMERP/JcbPocDetails.do?fromDate=" + fromDate+"&toDate="+toDate, true);
-	xhttp.send();
-}
-
-// 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END DATA TABLE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		<% session.removeAttribute("error"); %>
+	}
 		//**********************Customer Search******************************************
 		
 		

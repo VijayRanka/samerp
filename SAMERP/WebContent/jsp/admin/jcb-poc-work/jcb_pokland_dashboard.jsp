@@ -31,9 +31,51 @@
     position: absolute;
     text-align: left;
 }
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50px;
+    font-size: 15px;
+    border-radius:50px 50px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 50px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 50px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {top: 50px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 50px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
 </style>
 </head>
-<body>
+<body onload="snackBar()">
 <!--Header-part-->
 <div id="header">
   <h1><a href="/SAMERP/index.jsp">Matrix Admin</a></h1>
@@ -41,6 +83,14 @@
 <!--close-Header-part--> 
 <!--top-Header-menu-->
 <!--start-top-serch-->
+<%
+			if (session.getAttribute("status") != null) {
+		%>
+		<div id="snackbar"><%=session.getAttribute("status")%></div>
+		<%
+			}
+			session.removeAttribute("status");
+		%>
 <div id="search">
 	<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
 </div>
@@ -60,13 +110,13 @@
     <div class="quick-actions_homepage">
       <ul class="quick-actions">
       <!-- loop for all of them goes here -->
-		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Chalan Entry</a> </li>
+		<li class="bg_lg"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocDetails.jsp"> <i class="icon-th-list"></i><span class="label label-success"></span>Chalan Entry</a> </li>
 		<li class="bg_ly"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocPayment.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Payment View</a> </li>
 		<li class="bg_lb"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocPaymentReceived.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Payment Received</a> </li>
-		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/settings/addCustomer.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Add Customer</a> </li>
-		<li class="bg_lo"> <a href="#addProject"  data-toggle="modal" > <i class="icon-money"></i><span class="label label-success"></span>Add Project</a> </li>
-      	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocBill.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Create Bill</a> </li>
-      	<li class="bg_lb"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocReport.jsp"> <i class="icon-money"></i><span class="label label-success"></span>Report</a> </li>
+		<li class="bg_ls"> <a href="/SAMERP/jsp/admin/settings/addCustomer.jsp"> <i class="icon-user"></i><span class="label label-success"></span>Add Customer</a> </li>
+		<li class="bg_lo"> <a href="#addProject"  data-toggle="modal" > <i class="icon-signal"></i><span class="label label-success"></span>Add Project</a> </li>
+      	<li class="bg_lr"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocBill.jsp"> <i class="icon-calendar"></i><span class="label label-success"></span>Create Bill</a> </li>
+      	<li class="bg_lb"> <a href="/SAMERP/jsp/admin/jcb-poc-work/jcb-pocReport.jsp"> <i class="icon-pencil"></i><span class="label label-success"></span>Report</a> </li>
       </ul>
     </div>
 <!--End-Action boxes-->    
@@ -116,6 +166,8 @@
         
 </div>
 <jsp:include page="config/addProject.jsp"></jsp:include>
+
+
 <!--Footer-part-->
 <div class="row-fluid">
 		<div id="footer" class="span12">
@@ -125,7 +177,31 @@
 	</div>
 
 <!--end-Footer-part--> 
-
+<script type="text/javascript">
+function snackBar() {
+	showModalProject();
+    var x = document.getElementById("snackbar")
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+//************************************** Modele Delete
+function getDeleteIdProject(id1)
+{
+	
+ document.getElementById("deleteProjectId").value=id1;
+ 
+}
+function showModalProject(){
+	
+	var error=<%=session.getAttribute("error")%>;
+	
+	if(error==2)
+	{
+		$('#error-msg-delete').modal('show');
+	}
+	<% session.removeAttribute("error"); %>
+}
+</script>
 <script src="/SAMERP/config/js/jquery.min.js"></script> 
 <script src="/SAMERP/config/js/jquery.ui.custom.js"></script> 
 <script src="/SAMERP/config/js/bootstrap.min.js"></script> 

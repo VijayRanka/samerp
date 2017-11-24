@@ -49,6 +49,7 @@ public class JcbPocDetails extends HttpServlet {
 		String fromDate = request.getParameter("fromDate");
 		String toDate = request.getParameter("toDate");
 		
+				
 		if (jcbPocSelectList != null) {
 			query="SELECT vehicle_details.vehicle_aliasname,customer_master.`custname`,jcbpoc_master.bucket_hr,"
 					+ "jcbpoc_master.breaker_hr,jcbpoc_master.deposit,jcbpoc_master.diesel FROM `jcbpoc_master`,"
@@ -75,6 +76,7 @@ public class JcbPocDetails extends HttpServlet {
 
 			}
 		}
+		
 	}
 
 	/**
@@ -86,13 +88,14 @@ public class JcbPocDetails extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		GenericDAO dao = new GenericDAO();
 		RequireData rd =new RequireData();
+		SysDate sd=new SysDate();
 		
 		String CustomerSearch = request.getParameter("q");
 		String CustomerPrint = request.getParameter("CustomerPrint");
 		String updateselect = request.getParameter("updateselect");
 		String update = request.getParameter("update");
 		String jcbpocid = request.getParameter("jcbpocid");
-		String deleteid =request.getParameter("deleteid");
+		String deleteJcbId =request.getParameter("deleteJcbId");
 		String CustomerProjectId=request.getParameter("CustomerProjectId");
 		String CustomerProjectIdUpdate=request.getParameter("CustomerProjectIdUpdate");
 		
@@ -102,6 +105,7 @@ public class JcbPocDetails extends HttpServlet {
 		String breakerRateCustomer=request.getParameter("breakerRateCustomer");
 		String radios = request.getParameter("radios");
 		
+		String custname=request.getParameter("custname");
 		String vehicleid=request.getParameter("vehicle");
 		String chalanno=request.getParameter("chalanno");
 		String chalandate=request.getParameter("chalandate");
@@ -120,7 +124,13 @@ public class JcbPocDetails extends HttpServlet {
 		if (custid != null && vehicleid!= null) {
 			
 			String[] arrayOfString = chalandate.split("-");
+			String jcbpocPayId="null";
 			if (deposit != "") {
+				
+				query="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA='samerp' AND TABLE_NAME='jcbpoc_payment'";
+				details=dao.getData(query);
+				jcbpocPayId=details.get(0).toString();
+				
 				String payBank = request.getParameter("payBank");
 				String payCheque =request.getParameter("payCheque");
 				
@@ -135,18 +145,18 @@ public class JcbPocDetails extends HttpServlet {
 				
 				
 				if (radios.equals("2")) {
-					payMode="Cheque";
+					payMode="CHEQUE";
 					particular="Cheque No-"+payCheque;
 				}
 				if (radios.equals("3")) {
-					payMode="Transfer";
+					payMode="TRANSFER";
 					payCheque="";
 					particular="Transfer";
 				}
 				
 				if (radios.equals("1")) {
 					
-					payMode="cash";
+					payMode="CASH";
 					payBank="null";
 					payCheque="";
 					
@@ -179,7 +189,12 @@ public class JcbPocDetails extends HttpServlet {
 					result = dao.executeCommand(query);
 				}
 			}
-			if (diesel != null) {
+			String exp_master_id="null";
+			if (!diesel.equals("") && diesel != null ) {
+				query="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA='samerp' AND TABLE_NAME='expenses_master'";
+				details=dao.getData(query);
+				exp_master_id=details.get(0).toString();
+				
 				String debtorId ="";
 				String contactno="CUST_"+request.getParameter("contactno");
 				query="SELECT `id` FROM `debtor_master` WHERE `type`='"+contactno+"'";
@@ -188,11 +203,11 @@ public class JcbPocDetails extends HttpServlet {
 				
 				String transactionDate=arrayOfString[2]+"-"+arrayOfString[1]+"-"+arrayOfString[0];
 				
-				rd.commonExpEntry("2", Integer.parseInt(debtorId), "-", diesel, "CASH", "", "", transactionDate);
+				rd.commonExpEntry("2", Integer.parseInt(debtorId), custname, diesel, "CASH", "", "", transactionDate);
 			}
 		
-			query = "INSERT INTO `jcbpoc_master`(`intjcbpocid`, `intcustid`, `project_id`, `intvehicleid`, `chalanno`, `data`, `bucket_hr`, `breaker_hr`, `bucket_rate`, `breaker_rate`, `deposit`, `diesel`) VALUES (DEFAULT,'"+custid+"','"+project_id+"','"+vehicleid+"','"+chalanno+"','"+arrayOfString[2]+"-"+arrayOfString[1]+"-"+arrayOfString[0]+"','"+bucket_hrs+"','"+breaker_hrs+"','"+bucket_rate+"','"+breaker_rate+"','"+deposit+"','"+diesel+"')";
-
+			query = "INSERT INTO `jcbpoc_master`(`intjcbpocid`, `intcustid`, `project_id`, `intvehicleid`, `chalanno`, `data`, `bucket_hr`, `breaker_hr`, `bucket_rate`, `breaker_rate`, `deposit`, `diesel`, `exp_master_id`,`jcbpoc_payment_id`) VALUES (DEFAULT,'"+custid+"','"+project_id+"','"+vehicleid+"','"+chalanno+"','"+arrayOfString[2]+"-"+arrayOfString[1]+"-"+arrayOfString[0]+"','"+bucket_hrs+"','"+breaker_hrs+"','"+bucket_rate+"','"+breaker_rate+"','"+deposit+"','"+diesel+"',"+exp_master_id+","+jcbpocPayId+")";
+			System.out.println(">>"+query);
 			result = dao.executeCommand(query);
 
 			if (result == 1) {
@@ -258,15 +273,73 @@ public class JcbPocDetails extends HttpServlet {
 				out.print("something wrong");
 			}
 		}
-		if (deleteid !=null) {
-			query = "DELETE FROM `jcbpoc_master` WHERE `intjcbpocid`="+deleteid;
+		if (deleteJcbId != null) {
+			query="SELECT `intcustid`,`deposit`,`diesel`,jcbpoc_payment.pay_mode,jcbpoc_payment.bank_id,`exp_master_id` FROM `jcbpoc_master`,jcbpoc_payment WHERE `jcbpoc_payment_id`=jcbpoc_payment.id AND `intjcbpocid`="+deleteJcbId;
+			details=dao.getData(query);
+			Iterator itr = details.iterator();
+			
+			Object custidproject="";
+			String updateDeposit="";
+			String updateDiesel="";
+			String payMode="";
+			Object payBankId="";
+			Object expId="";
+			while (itr.hasNext()) {
+				custidproject=itr.next();
+				updateDeposit=(String) itr.next();
+				updateDiesel=(String) itr.next();
+				payMode=(String) itr.next();
+				payBankId=itr.next();
+				expId=itr.next();
+			}
+			String Customer_query="DELETE FROM `jcbpoc_master` WHERE `intjcbpocid`="+deleteJcbId;
+			
+			int Customer_result = dao.executeCommand(Customer_query);
 
-			result = dao.executeCommand(query);
-
-			if (result == 1) {
-				response.sendRedirect("jsp/admin/jcb-poc work/jcb-pocDetails.jsp");
+			if (Customer_result == 1) {
+				if (!updateDeposit.equals("")) {
+					if (payMode.equals("CASH")) {
+						
+						int debit = Integer.parseInt(updateDeposit);
+						int credit = 0;
+						String[] todate= sd.todayDate().split("-");
+						String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
+						rd.pCashEntry(transactionDate, debit, credit, "1");
+						
+						deposit="";
+						String balance=rd.getTotalRemainingBalance(custidproject.toString(), updateDeposit, deposit);
+						
+						query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `bill_amount`, `total_balance`, `date`, `pay_mode`, `debtorId`) VALUES "
+								+ "("+custidproject+",'CHALAN DEPOSIT','"+updateDeposit+"','"+balance+"','"+transactionDate+"','"+payMode+"',1)";
+						result = dao.executeCommand(query);
+					}
+					if (payMode.equals("CHEQUE") || payMode.equals("TRANSFER")) {
+						int debit = Integer.parseInt(updateDeposit);
+						int credit = 0;
+						String[] todate= sd.todayDate().split("-");
+						String transactionDate=todate[2]+"-"+todate[1]+"-"+todate[0];
+						rd.badEntry(payBankId.toString(), transactionDate, debit, credit, "REVERT", "1");
+						
+						deposit="";
+						String balance=rd.getTotalRemainingBalance(custidproject.toString(), updateDeposit, deposit);
+						
+						query = "INSERT INTO `jcbpoc_payment`(`cust_id`,  `description`, `bill_amount`, `total_balance`, `date`, `pay_mode`,`bank_id`,`debtorId`) VALUES "
+								+ "("+custidproject+",'REVERT','"+updateDeposit+"','"+balance+"','"+transactionDate+"','"+payMode+"',"+payBankId+",1)";
+						result = dao.executeCommand(query);
+					}
+				}
+				if (!updateDiesel.equals("")) {
+					query="DELETE FROM `expenses_master` WHERE `exp_id`="+expId;
+					dao.executeCommand(query);
+				}
+				HttpSession session=request.getSession();  
+		        session.setAttribute("status","Chalan Deleted Successfully!");
+		        response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocDetails.jsp");
 			} else {
-				out.print("something wrong");
+				HttpSession session=request.getSession();  
+		        session.setAttribute("error","2");
+//				session.setAttribute("status","Project Not Deleted!");
+		        response.sendRedirect("jsp/admin/jcb-poc-work/jcb-pocDetails.jsp");
 			}
 		}
 		if (updateselect != null) {
