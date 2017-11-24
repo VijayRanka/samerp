@@ -493,28 +493,28 @@
 												<label class="control-label">Date</label>
 	    										<div class="controls">
 	                                				<input type="text" id="uDate" name="uDate" readonly>
-	                                				<input type="text" id="detailsId" name="detailsId">
+	                                				<input type="hidden" id="detailsId" name="detailsId">
 	                                			</div>
 											</div>
 											<div class="control-group">
 												<label class="control-label">Name</label>
 	    										<div class="controls">
 	                                				<input type="text" id="uName" name="uName" readonly>
-	                                				<input type="text" id="handLoanId" name="handLoanId">
+	                                				<input type="hidden" id="handLoanId" name="handLoanId">
 	                                			</div>
 											</div>
 											<div class="control-group">
 												<label class="control-label">Debit</label>
 	    										<div class="controls">
 	                                				<input type="number" id="dr" name="dr">
-	                                				<input type="number" id="oldDr" name="oldDr">
+	                                				<input type="hidden" id="oldDr" name="oldDr">
 	                                			</div>
 											</div>
 											<div class="control-group">
 												<label class="control-label">Credit</label>
 	    										<div class="controls">
 	                                				<input type="number" id="cr" name="cr">
-	                                				<input type="number" id="oldCr" name="oldCr">
+	                                				<input type="hidden" id="oldCr" name="oldCr">
 	                                			</div>
 											</div>
 											<div class="control-group">
