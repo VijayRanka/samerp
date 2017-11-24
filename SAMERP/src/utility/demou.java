@@ -12,9 +12,10 @@ public class demou {
 		GenericDAO gd=new GenericDAO();	
 		RequireData rd=new RequireData();
 		
-		
-		
-		String q="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='JAY GANESH ENTERPRISE'";
+		String chqNo="123";
+		String parti="HandLoan Cheque"+chqNo;
+		System.out.println(parti);
+		//String q="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='JAY GANESH ENTERPRISE'";
 		
 		
 		
