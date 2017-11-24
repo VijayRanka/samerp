@@ -224,7 +224,6 @@ public class SalePayment extends HttpServlet {
 				String getClientID="SELECT `client_id` FROM `client_details` WHERE `client_organization_name`='"+indName+"'";
 				
 				String clientId=gd.getData(getClientID).get(0).toString();
-				System.out.println(clientId);
 				
 				clientPaymentQuery="SELECT `bill_id`, client_details.client_organization_name, `date`, `bill_amt`, `paid_amt`, `mode`, `cheque_no`, `bank_id`,"
 						+ "`total_remaining_amt` FROM `client_payment_master`,client_details WHERE client_details.client_id=client_payment_master.client_id "
@@ -237,7 +236,20 @@ public class SalePayment extends HttpServlet {
 			
 			while (iterator.hasNext()) {
 				
-				out.println(iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+",");
+				out.print(iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+","+iterator.next()+",");
+				
+				Object bankid=iterator.next().toString();
+				int bank_id=Integer.parseInt((String) bankid);
+				
+				if(bank_id==0){
+					out.print("-"+",");
+				}else {
+					String a="SELECT bank_name FROM account_details WHERE acc_id="+bank_id;
+					
+					out.print(gd.getData(a).get(0)+",");
+				}
+				out.print(iterator.next()+",");
+				
 			}
 		}		
 	}

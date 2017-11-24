@@ -1143,7 +1143,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
 				"<th style='text-align: center'>Paid Amount</th>"+
 				"<th style='text-align: center'>Mode</th>"+
 				"<th style='text-align: center'>Cheque No</th>"+
-				"<th style='text-align: center'>Bank</th>"+
+				"<th style='text-align: center'>Bank Name</th>"+
 				"<th style='text-align: center'>Total Balance</th>"+
 				"</tr></thead><tbody>";
 				var count=1;
@@ -1226,7 +1226,7 @@ function DoOnCellHtmlData(cell, row, col, data) {
 				"<th style='text-align: center'>Paid Amount</th>"+
 				"<th style='text-align: center'>Mode</th>"+
 				"<th style='text-align: center'>Cheque No</th>"+
-				"<th style='text-align: center'>Bank</th>"+
+				"<th style='text-align: center'>Bank Name</th>"+
 				"<th style='text-align: center'>Total Balance</th>"+
 				"</tr></thead><tbody>";
 				var count=1;
