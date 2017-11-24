@@ -155,9 +155,9 @@
 
 								<div class="control-group">
 									<label class="control-label">Designation: </label>
-									<div class="controls">
+									<div class="controls" style="margin-bottom: 30px;">
 										
-											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" >
+											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" required>
 											<option>Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
@@ -173,8 +173,8 @@
 								<div class="control-group" >
 									<label class="control-label"><span style="color: red;"></span>WorkWith:</label>
 
-									<div class="controls">
-										<select name="contractorVehicle_name"  class="span5" id="Vehicleid" >
+									<div class="controls" style="margin-bottom: 30px;">
+										<select name="contractorVehicle_name"  class="span5" id="Vehicleid" required>
 										
 										</select>
 									</div>
@@ -187,13 +187,13 @@
 									<label class="control-label"><span style="color: red;"></span>
 										Opening Balance :</label>
 									<div class="controls">
-										<input type="text" name="opening_balance"  id="opening_balanceid" class="span5" placeholder="OPening Balance" pattern="[0-9]*" required />
+										<input type="text" name="opening_balance"  id="opening_balanceid" class="span5" placeholder="Opening Balance" pattern="[0-9]*"/>
 										
 									</div>
 								</div>
 									
 								<div class="form-actions">								
-									<input type="submit" name="InsertBtn"	class="btn btn-success"	style="position: relative; right: 685px; float: right;" value="Submit">
+									<button type="submit" name="InsertBtn" class="btn btn-success" style="position: relative; right: 685px; float: right;">Submit</button>
 									<a href="/SAMERP/dashboard.jsp"><button type="button" class="btn btn-danger " style="position: relative; right: 550px; float: right;">Exit</button></a>
 								</div>
 							</form>
@@ -219,7 +219,6 @@
 								<th>Contact No</th>
 								<th>WorkWith</th>
 								<th>Designation</th>
-								<th>AliasName</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
@@ -241,7 +240,6 @@
 							<td ><%=itr.next() %></td>							
 							<td ><%=itr.next() %></td>							
 							<td><%=itr.next() %></td>
-							<td ><%=itr.next() %></td>
 							<td><a href="#update_employee"
 										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil" title="Update"></i></a>
 									</td>
@@ -270,18 +268,19 @@
 				<div class="modal-body">
 					<form action="/SAMERP/AddEmployee" method="post" class="form-horizontal">
 						<input type="hidden" id="Updateid" name="Updateid" />
-						<div class="control-group">
-							<label class="control-label">Date :</label>
-							<div class="controls">
-								<%
-									RequireData rd1 = new RequireData();
-									SysDate sd1 = new SysDate();
-									String[] sdDem = sd1.todayDate().split("-");
-								%>
-								<input name="date" id="dateid" type="date"	value="<%=sdDem[2] + "-" + sdDem[1] + "-" + sdDem[0]%>" class="span3">
-							</div>
-						</div>
-						<div class="control-group">									
+								<div class="control-group">
+									<label class="control-label">Date :</label>
+									<div class="controls">
+										<%
+											RequireData rd1 = new RequireData();
+											SysDate sd1 = new SysDate();
+											String[] sdDem = sd1.todayDate().split("-");
+										%>
+										<input name="date" id="dateid" type="date"	value="<%=sdDem[2] + "-" + sdDem[1] + "-" + sdDem[0]%>" class="span3">
+									</div>
+								</div>
+								
+								<div class="control-group">									
 									<label class="control-label"><span style="color: red;">*</span>
 										Employee Name :</label>
 									<div class="controls">
@@ -300,12 +299,12 @@
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
-								
-									<div class="control-group">
+								<!-- 
+								<div class="control-group">
 									<label class="control-label">Designation: </label>
 									<div class="controls">
 										
-											<select name="designation" style="width: 271px;" id="designationid" onchange="showVehicle(this.value)" >
+											<select name="designation"  id="designationid" onchange="showVehicle(this.value)" style="width: 271px;">
 											<option value="">Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
@@ -316,7 +315,7 @@
 									</div>
 								</div>
 									
-									<div class="control-group">
+								<div class="control-group">
 									<label class="control-label" style="margin-top: 6px; margin-bottom: -25px;"><span style="color: red;">*</span>WorkWith:</label>
 
 									<div class="controls" style="margin-left: 171px; margin-right: 58px;" >
@@ -326,7 +325,9 @@
 											
 									</div>
 									
-								</div>
+								</div> -->
+								
+								<input type="hidden" id="alias" name="alias">
 								
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
@@ -393,7 +394,9 @@ function searchEmpolyee(id) {
 			
 			document.getElementById("contactno").value = demoStr[3];
 			
-			document.getElementById("designationid").value = demoStr[4];			
+			document.getElementById("alias").value = demoStr[4];
+			
+			/* document.getElementById("designationid").value = demoStr[4];			
 			var dd = document.getElementById('designationid');			
 			for (var i = 0; i < dd.options.length; i++) {
 			    if (dd.options[i].text === demoStr[4]) {
@@ -422,7 +425,7 @@ function searchEmpolyee(id) {
 				    }
 				}
 		     
-		     
+		      */
 		     
 			}
 		};
@@ -452,11 +455,11 @@ function getVehicle(id) {
 function showOpening(str) {
 	
 	if(str=='DRIVER' ||str=='HELPER'){
-		document.getElementById("opening_balid").className="control-group ";
+		document.getElementById("opening_balid ").style.display="none";
 	}
 	else if(str=='HOME WORKER' ||str=='LABOUR'){
 
-		document.getElementById("opening_balid").className="control-group hide";
+		document.getElementById("opening_balid").style.display="none";
 		
 	}
 	
@@ -481,16 +484,15 @@ function showOpening(str) {
 		
 			}
 		};
-		alert(str);
-		
+				
 	xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
 	xhttp.send();
 	
 	
 }
 
-
 /* 
+
 function showVehicle(str) {
 	
 	if(str=='Driver' ||str=='Helper'){
@@ -528,8 +530,8 @@ function showVehicle(str) {
 	
 	
 }
-
  */
+
 function getSetSelect(id,value)
 {
 	var x=document.getElementById(id).children;

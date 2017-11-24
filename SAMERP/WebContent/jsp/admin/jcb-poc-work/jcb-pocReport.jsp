@@ -459,7 +459,6 @@ function getBillReportData() {
 	}else {
 		noGst=1;
 	}
-	alert(noGst);
 	var xhttp;
 	xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {

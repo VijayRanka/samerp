@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
-<title>sidhu SAMERP PROJECT</title>
+<title>SAMERP PROJECT</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="/SAMERP/config/css/jquery.mobile-1.4.5.css">
@@ -112,7 +112,7 @@
 								<div class="control-group">
 									<label class="control-label">Suppliers-Business Name:</label>
 									<div class="controls">
-										<input type="text" name="suppbusines_name" id="supp_busi_name" class="span7"
+										<input type="text" name="suppbusinesname" id="supp_busi_name" class="span7"
 											placeholder="Suppliers-Business Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
 									</div>
 								</div>
@@ -306,7 +306,7 @@
 									<label class="control-label">Opening Balance :</label>
 									<div class="controls">
 										<input type="number" name="opening_balance" id="opening_balance" class="span4"
-											placeholder="Opening Balance" pattern="[0-9]*" required/>
+											placeholder="Opening Balance" pattern="[0-9]*" readonly required/>
 									</div>
 								</div>
 						

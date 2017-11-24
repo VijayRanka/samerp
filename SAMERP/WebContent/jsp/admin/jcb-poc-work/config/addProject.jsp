@@ -144,14 +144,65 @@
 
 		</div>
 		</div>
+		<!--***************************************************** END Update Project *******************************************************-->
+	<!--***************************************************** Delete Project *******************************************************-->
+	<div class="modal fade" id="DeleteConfirmBoxProject" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: red;" class="modal-title">Error</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" action="/SAMERP/AddCustomer.do" method="post" name="form4">
+						<div class="form-group">
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<input type="hidden" id="deleteProjectId" name="deleteProjectId" />
+									<h4>Are you sure want to delete the selected row...!!</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="submit" class="btn btn-primary" id="submitbtn"
+									value="OK" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal hide fade" id="error-msg-delete" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 style="color: red;" class="modal-title">Error</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" action="#" method="post" name="form4">
+						<div class="form-group">
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<h4>Cannot delete the Selected record as it is linked with
+										some other records..!!</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="button" class="btn btn-primary" id="submitbtn"
+									data-dismiss="modal" value="OK" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+</div>
+	<!--***************************************************** END Delete Project *******************************************************-->
 		
 	<!-- 	Add Form End -->
 	
 	<script type="text/javascript">
 
-	function loadFunction(){
-		document.getElementById("custname").focus();
-	}
 	
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
@@ -168,6 +219,7 @@ function paySubmit(){
 		addProject();
 	}
 }
+
 //*************************************** DEPOSIT *******************************
 function showBankProject(str) {
 	if(str==1){
@@ -347,7 +399,7 @@ function projectList() {
 					text += "</td><td>"+demoStr[i];
 					i++;
 					text += "</td><td><a href=\"#updateProject\" data-toggle='modal'	onclick='getProjectUpdate("+id;
-					text +=")'>Update</a> / <a href=\"/SAMERP/JcbPocDetails.do?deleteid=\">Delete</a></td></tr>";
+					text +=")'>Update</a> / <a onclick=\"getDeleteIdProject("+id+")\" href=\"#DeleteConfirmBoxProject\" data-toggle=\"modal\">Delete</a></td></tr>";
 					
 				}
 				document.getElementById("ProjectList").innerHTML = text;

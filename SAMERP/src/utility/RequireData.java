@@ -142,6 +142,17 @@ public class RequireData
 					return pList;
 				}
 				
+				public List getPurchaseProductBySupplier(String sid)
+				{
+					String purchaseQuery = "SELECT product_purchase_master.id, `product_count`, "
+							+ "client_details.client_organization_name , `chalan_no`, `vehicle_no`, `date` FROM `product_purchase_master`, "
+							+ "material_supply_master, client_details "
+							+ "WHERE product_purchase_master.material_supply_master_id="+sid+" AND material_supply_master.supplier_business_id=product_purchase_master.material_supply_master_id  "
+							+ "AND client_details.client_id=product_purchase_master.client_details_id";
+					List purchaseList = gd.getData(purchaseQuery);
+					return purchaseList;
+				}
+				
 				public List getCompletePurchaseData()
 				{
 					List finalData = new ArrayList();
@@ -685,7 +696,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_designation,emplyoee_details.aliasname FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_designation FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
@@ -699,8 +710,12 @@ public class RequireData
 		
 		public List getEmployeeRowData(String RowId)
 		{
-			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_designation,debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id="+RowId+"";
+			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.emp_id='"+RowId+"'";
+			
+			System.out.println("Select query:"+employeeRowDataQuery);
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
+			System.out.println("Seleexecute query:"+employeeDetailsData);
+			
 			return employeeDetailsData;
 		}
 		
