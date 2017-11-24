@@ -154,9 +154,9 @@ td{
       <!-- loop for all of them goes here -->
       	
       	<div class="control-group" style="height: 50px;">
-         <label class="control-label"><span style="color: red;  margin-left: -25%;">*</span>Select Client :</label>
+         <label class="control-label"><span style="color: red;  margin-left: -32%;">*</span>Select Client :</label>
       
-         <div class="controls" style="margin-left: 43%; margin-top: -2.7%; margin-right: 30%;" >
+         <div class="controls" style="margin-left: 38%; margin-top: -2.7%; margin-right: 32%;" >
          		<select name="clientid" onchange="setClientId()" id="clientid" autofocus  required >
             	<option value=""> Select Client</option>
             	  <%
@@ -176,10 +176,13 @@ td{
          </div><hr>
         </div>
      
+     		<div class="quick-actions_homepage" style="margin-left: 205px;">	
      		<li class="bg_ls"> <a href="#" onclick="showdata('paymentDetails')" > <i class="icon-desktop"></i><span class="label label-success"></span>View Balance</a> </li>
-     		<li class="bg_ls"> <a href="#" onclick="showdata('billDetails')" > <i class="icon-list-alt"></i><span class="label label-success"></span>Bill Entry</a> </li>
+     		<li class="bg_ls"> <a href="#" onclick="showdata('billDetails')" > <i class="icon-list-alt"></i><span class="label label-success"></span>Generate Bill</a> </li>
      		<li class="bg_ls"> <a href="#paymentEntry" data-toggle='modal' onclick="showdata()" > <i class="icon-money"></i><span class="label label-success"></span>Payment Received</a> </li>
-     		<!-- <li class="bg_ls"> <a href="#createBill" data-toggle="modal" > <i class="icon-desktop"></i> <span class="label label-important"></span>Create Bill</a></li> -->
+     		<li class="bg_ls"> <a href="#" onclick="showdata('showBills')" > <i class="icon-desktop"></i> <span class="label label-important"></span>View Bills</a></li>     		
+     		</div>
+     		
       </ul>
     </div>
   </div>
@@ -414,11 +417,44 @@ td{
            </form>
          </div>
          <button  id="chalanSubmitBtn" onclick="selectedChalan()" disabled="disabled"  class="btn btn-success" style=" margin-left: 45%; margin-top: 3%;" data-toggle='modal'>Generate Bill</button>
-         <hr style="border-top-color: #c5bbbb;">
+         <hr style="borde
+         r-top-color: #c5bbbb;">
       </div>
       
       
-      
+     <div class="widget-box" id="showBills" style="display:none;">
+		        <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+          <h5>Data table</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <table class="table table-bordered data-table">
+            <thead>
+              <tr>
+			 	 <th>Sr.No.</th>
+                 <th>Bill Number</th>
+                 <th>Date</th>
+                 <th>Bill Amount</th>
+                 <th>Action</th>  
+              </tr>
+            </thead>
+            <tbody>
+            <%
+          		if(request.getParameter("ppid")!=null){
+          			String clientID=request.getParameter("ppid");
+          			List list=rd.getClientBillDetails(Integer.parseInt(clientID));
+          			System.out.println(list);
+          			
+          		 	
+          	%>
+          
+          	<% 		
+          		}
+            %>
+
+            </tbody>
+          </table>
+        </div>
+     </div>    
       
 
       
@@ -459,7 +495,7 @@ td{
 					<div class="control-group" style="">
 	             	   <label class="control-label">Total Remaining : </label>
 		               <div class="controls">
-		                 <input type="text" name="remaminAmt" placeholder="Total Remaining Amount" value="<%=totalRemaining %>" required/>
+		                 <input type="text" name="remaminAmt" placeholder="Total Remaining Amount" readonly="readonly" value="<%=totalRemaining %>" required/>
 		               </div>
 	             	</div>
 					
@@ -572,7 +608,6 @@ td{
 					String gstin=null;
 					if(clientId!=null){
 						clientInfo=rd.getClientData(Integer.parseInt(clientId));
-						System.out.println(clientInfo);
 						name=clientInfo.get(0).toString();
 						address = clientInfo.get(1).toString();
 						if(clientInfo.get(2)!=null){
