@@ -111,7 +111,7 @@ public class AddEmployee extends HttpServlet {
 				String opening_bal=request.getParameter("opening_balance");
 				String mx_query="SELECT MAX(id) FROM debtor_master";
 				String maxid=gd.getData(mx_query).get(0).toString();			
-				String drier_helper_op_bal="INSERT INTO driver_helper_payment_master(debter_id,exp_id,date,credit,debit,extra_charges,particular,type,balance) VALUES('"+maxid+"',NULL,'"+reqdate+"',0,0,0,'Opening Balance','"+designation+"','"+opening_bal+"')";
+				String drier_helper_op_bal="INSERT INTO driver_helper_payment_master(debter_id,exp_id,date,credit,debit,extra_charges,particular,type,balance) VALUES('"+maxid+"',NULL,'"+reqdate+"',0,0,0,'Opening Balance','"+desig+"','"+opening_bal+"')";
 				int i=gd.executeCommand(drier_helper_op_bal);
 				System.out.println("driver pay:"+drier_helper_op_bal);	
 			

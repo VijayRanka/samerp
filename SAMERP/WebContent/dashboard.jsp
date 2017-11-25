@@ -1130,8 +1130,10 @@ function getDriverExp(sdate, edate)
 				document.getElementById("helperCharge").innerHTML = "0";
 				document.getElementById("allowanceCharge").innerHTML = "0";
 				document.getElementById("totalDPayment").innerHTML = "0";
-				document.getElementById("dieselCost").innerHTML = "0 + 0";
+				document.getElementById("dieselCost").innerHTML = "0";
+				document.getElementById("dieselExpCost").innerHTML = "0";
 				document.getElementById("driverCost").innerHTML = "0";
+				document.getElementById("depositCost").innerHTML = "0";
 				document.getElementById("totalCost").innerHTML = "0";
 				document.getElementById("helperPrevCost").innerHTML = "0";
 				document.getElementById("driverPrevCost").innerHTML = "0";
