@@ -711,7 +711,7 @@ public class RequireData
 		
 		public List getEmployeeRowData(String RowId)
 		{
-			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.emp_designation,(SELECT DISTINCT debtor_master.type FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id='"+RowId+"') AS emp_Work FROM emplyoee_details WHERE emplyoee_details.emp_id='"+RowId+"'";
+			String employeeRowDataQuery = "SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.emp_id='"+RowId+"'";
 			
 			System.out.println("Select query:"+employeeRowDataQuery);
 			List employeeDetailsData = gd.getData(employeeRowDataQuery);
@@ -724,7 +724,6 @@ public class RequireData
 		{
 			String demo="select organization_id, organization_name, organization_contactno1, organization_contactno2, organization_address, organization_email,organization_op_balance from organization_details";
 			List demoList=gd.getData(demo);
-			System.out.println("List is:"+demoList);
 			return demoList;
 		}
 		
@@ -836,7 +835,18 @@ public class RequireData
 		public List getClientData(int client_id)
 		{
 			return gd.getData("SELECT client_organization_name, client_address,gstin FROM client_details WHERE client_id="+client_id);
-		}		
+		}
+		
+		public List getClientBillDetails(int clientid)
+		{
+			
+			String clientListQuery ="SELECT `bill_id`, `bill_amt`, `date` FROM `client_bill_master` WHERE client_id="+clientid;
+			System.out.println(clientListQuery);
+			List clientList = gd.getData(clientListQuery);
+			System.out.println("CLISt"+clientList);
+			return clientList;
+		}
+		
 	//--sarang end
 	
 	// vijay start

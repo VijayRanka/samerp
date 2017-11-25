@@ -449,7 +449,6 @@ public class Expenses extends HttpServlet {
 					query2="UPDATE `expenses_master` SET `name`='"+uName+"',`reason`='"+uReason+"',`other_details`='"+uOtherDetails+"' WHERE expenses_master.exp_id="+uId;
 					
 					getstatus=gd.executeCommand(query2);
-					System.out.println("after upd");
 					if(getstatus!=0)
 					{
 						status=true;
@@ -696,10 +695,13 @@ public class Expenses extends HttpServlet {
 						String expId=gd.getData("SELECT expenses_type.expenses_type_id FROM expenses_type WHERE expenses_type.expenses_type_name='"+expType+"'").get(0).toString();
 						if(expId.equals("4"))
 						{
+							
 							String handLoanId=gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).get(0).toString();
-						int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
-								+ " WHERE handloan_master.id=handloan_details.handloan_id and handloan_details.id="
-								+ "(SELECT MAX(handloan_details.id) FROM handloan_details WHERE handloan_master.id="+handLoanId+")").get(0).toString());
+						int prevBalance=0;
+						if(!gd.getData("SELECT handloan_details.balance FROM handloan_details WHERE handloan_details.id=(SELECT max(handloan_details.id) FROM handloan_details WHERE handloan_details.handloan_id="+handLoanId+")").isEmpty());
+						{
+						prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details WHERE handloan_details.id=(SELECT max(handloan_details.id) FROM handloan_details WHERE handloan_details.handloan_id="+handLoanId+")").get(0).toString());
+						}
 						
 						if(prevBalance-amount<0) 
 							{
@@ -724,9 +726,8 @@ public class Expenses extends HttpServlet {
 						{
 							String handLoanInsert="";
 							String handLoanId=gd.getData("SELECT handloan_master.id FROM handloan_master, debtor_master WHERE debtor_master.type=handloan_master.alias_name AND debtor_master.id="+debtType).get(0).toString();
-							int prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details,handloan_master"
-									+ " WHERE handloan_master.id=handloan_details.handloan_id and handloan_details.id="
-									+ "(SELECT MAX(handloan_details.id) FROM handloan_details WHERE handloan_master.id="+handLoanId+")").get(0).toString());
+							int prevBalance=0;
+							prevBalance=Integer.parseInt(gd.getData("SELECT handloan_details.balance FROM handloan_details WHERE handloan_details.id=(SELECT max(handloan_details.id) FROM handloan_details WHERE handloan_details.handloan_id="+handLoanId+")").get(0).toString());
 							//for cash paymode
 							if(payMode.equalsIgnoreCase("CASH"))
 							{
@@ -736,20 +737,20 @@ public class Expenses extends HttpServlet {
 										+ "(`handloan_id`, `date`, `credit`, `debit`, `mode`, `balance`) "
 										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'CASH',"+newBalance+")";
 								gd.executeCommand(handLoanInsert);
+								request.setAttribute("status", "Data Inserted Successfully");
 								
 							}
 							//for cheque paymode
 							else if(payMode.equalsIgnoreCase("cheque")) {
-								
 								int newBalance=0;
 								newBalance=prevBalance - amount;
-								
-								rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], newBalance, 0, chequeNo, debtType);
+								rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, "HANDLOAN CHEQUE_"+chequeNo, debtType);
 								
 								handLoanInsert="INSERT INTO `handloan_details`"
 										+ "(`handloan_id`, `date`, `credit`, `debit`, particulars,`mode`, `balance`) "
 										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'"+chequeNo+"','CHEQUE',"+newBalance+")";
 								gd.executeCommand(handLoanInsert);
+								request.setAttribute("status", "Data Inserted Successfully");
 								
 							}
 							//for transfer paymode
@@ -757,12 +758,13 @@ public class Expenses extends HttpServlet {
 								
 								int newBalance=0;
 								newBalance=prevBalance - amount;
-								rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], newBalance, 0, chequeNo, debtType);
+								rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, "HANDLOAN TRANSFER", debtType);
 								
 								handLoanInsert="INSERT INTO `handloan_details`"
 										+ "(`handloan_id`, `date`, `credit`, `debit`, `mode`, `balance`) "
 										+ "VALUES ("+handLoanId+",'"+arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]+"',0,"+amount+",'TRANSFER',"+newBalance+")";
 								gd.executeCommand(handLoanInsert);
+								request.setAttribute("status", "Data Inserted Successfully");
 							}
 							String maxHandDetailsId=gd.getData("SELECT MAX(id) FROM handloan_details").get(0).toString();
 							if(payMode.equalsIgnoreCase("cash"))
@@ -798,31 +800,33 @@ public class Expenses extends HttpServlet {
 					}
 					else {
 						rd.commonExpEntry(getExpId, Integer.parseInt(debtType), name, Integer.toString(amount), payMode, bankInfo, chequeNo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2]);
-					}
-					
-					request.setAttribute("status", "Data Inserted Successfully");
-					
-					if(payMode.equalsIgnoreCase("cash"))
-					rd.pCashEntry(arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, debtType);
-					else if(payMode.equalsIgnoreCase("cheque"))
-						rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, payMode+"_"+chequeNo, debtType);
-					else
-						rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, payMode, debtType);
-					
-					if(!request.getParameter("vehicleReading").isEmpty())
-					{
-						String getMax="SELECT MAX(expenses_master.exp_id) FROM expenses_master";
-						if(!gd.getData(getMax).isEmpty()){
-							String getVehicleId="SELECT vehicle_details.vehicle_id FROM vehicle_details,debtor_master WHERE debtor_master.type=vehicle_details.vehicle_aliasname and debtor_master.id="+debtType;
-							if(!gd.getData(getVehicleId).isEmpty())
-							{
-								String insertVRM="INSERT INTO `vehicle_reading_master`(`expenses_master_id`, `vehicle_id`,`vehicle_diesel_qty`, `vehicle_reading`) VALUES ("+gd.getData(getMax).get(0)+","+gd.getData(getVehicleId).get(0).toString()+","+vehicleLtrQt+","+vehicleReading+")";
-								int stats=gd.executeCommand(insertVRM);
-								if(stats>0){
-									System.out.println("Vehicle Reading Updated");
-									status=true;
-									request.setAttribute("status", "Reading and Data Inserted Successfully");
-									}
+						
+						
+						request.setAttribute("status", "Data Inserted Successfully");
+						
+						if(payMode.equalsIgnoreCase("cash"))
+						rd.pCashEntry(arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, debtType);
+						else if(payMode.equalsIgnoreCase("cheque"))
+							rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, payMode+"_"+chequeNo, debtType);
+						else {
+							rd.badEntry(bankInfo, arrayOfString[0]+"-"+arrayOfString[1]+"-"+arrayOfString[2], amount, 0, payMode, debtType);
+						}
+						
+						if(!request.getParameter("vehicleReading").isEmpty())
+						{
+							String getMax="SELECT MAX(expenses_master.exp_id) FROM expenses_master";
+							if(!gd.getData(getMax).isEmpty()){
+								String getVehicleId="SELECT vehicle_details.vehicle_id FROM vehicle_details,debtor_master WHERE debtor_master.type=vehicle_details.vehicle_aliasname and debtor_master.id="+debtType;
+								if(!gd.getData(getVehicleId).isEmpty())
+								{
+									String insertVRM="INSERT INTO `vehicle_reading_master`(`expenses_master_id`, `vehicle_id`,`vehicle_diesel_qty`, `vehicle_reading`) VALUES ("+gd.getData(getMax).get(0)+","+gd.getData(getVehicleId).get(0).toString()+","+vehicleLtrQt+","+vehicleReading+")";
+									int stats=gd.executeCommand(insertVRM);
+									if(stats>0){
+										System.out.println("Vehicle Reading Updated");
+										status=true;
+										request.setAttribute("status", "Reading and Data Inserted Successfully");
+										}
+								}
 							}
 						}
 					}
