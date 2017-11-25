@@ -493,9 +493,10 @@ public class RequireData
 		return list;
 	}
 	
+
 	public List getDriverPayment()
 	{
-		String driverPayment="SELECT driver_helper_payment_master.id,driver_helper_payment_master.debter_id,driver_helper_payment_master.date, driver_helper_payment_master.credit,driver_helper_payment_master.debit, driver_helper_payment_master.etra_charges,driver_helper_payment_master.particular,driver_helper_payment_master.type,driver_helper_payment_master.balance FROM driver_helper_payment_master";
+		String driverPayment="SELECT driver_helper_payment_master.id,debtor_master.type,driver_helper_payment_master.date,driver_helper_payment_master.credit,driver_helper_payment_master.debit,driver_helper_payment_master.extra_charges,driver_helper_payment_master.particular,driver_helper_payment_master.type,driver_helper_payment_master.balance FROM debtor_master,driver_helper_payment_master WHERE debtor_master.id=driver_helper_payment_master.debter_id";
 		List list=gd.getData(driverPayment);
 		return list;
 	}
