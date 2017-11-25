@@ -157,7 +157,7 @@
 									<label class="control-label">Designation: </label>
 									<div class="controls" style="margin-bottom: 30px;">
 										
-											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 356px;" required>
+											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 321px;" required>
 											<option>Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
@@ -299,7 +299,7 @@
 											onkeypress="return isNumber(event)" pattern="[0-9]*" maxlength="10" required />
 									</div>
 								</div>
-								<!-- 
+								
 								<div class="control-group">
 									<label class="control-label">Designation: </label>
 									<div class="controls">
@@ -325,9 +325,7 @@
 											
 									</div>
 									
-								</div> -->
-								
-								<input type="hidden" id="alias" name="alias">
+								</div>
 								
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
@@ -394,9 +392,7 @@ function searchEmpolyee(id) {
 			
 			document.getElementById("contactno").value = demoStr[3];
 			
-			document.getElementById("alias").value = demoStr[4];
-			
-			/* document.getElementById("designationid").value = demoStr[4];			
+			document.getElementById("designationid").value = demoStr[4];			
 			var dd = document.getElementById('designationid');			
 			for (var i = 0; i < dd.options.length; i++) {
 			    if (dd.options[i].text === demoStr[4]) {
@@ -425,7 +421,7 @@ function searchEmpolyee(id) {
 				    }
 				}
 		     
-		      */
+		     
 		     
 			}
 		};
@@ -455,7 +451,7 @@ function getVehicle(id) {
 function showOpening(str) {
 	
 	if(str=='DRIVER' ||str=='HELPER'){
-		document.getElementById("opening_balid ").style.display="none";
+		document.getElementById("opening_balid").style.display="block";
 	}
 	else if(str=='HOME WORKER' ||str=='LABOUR'){
 
@@ -491,7 +487,7 @@ function showOpening(str) {
 	
 }
 
-/* 
+
 
 function showVehicle(str) {
 	
@@ -530,7 +526,7 @@ function showVehicle(str) {
 	
 	
 }
- */
+
 
 function getSetSelect(id,value)
 {
