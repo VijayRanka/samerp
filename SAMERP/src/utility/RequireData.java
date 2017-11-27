@@ -839,10 +839,8 @@ public class RequireData
 		public List getClientBillDetails(int clientid)
 		{
 			
-			String clientListQuery ="SELECT `bill_id`, `bill_amt`, `date` FROM `client_bill_master` WHERE client_id="+clientid;
-			System.out.println(clientListQuery);
+			String clientListQuery ="SELECT `bill_id`, `date`, `bill_amt` FROM `client_bill_master` WHERE client_id="+clientid;
 			List clientList = gd.getData(clientListQuery);
-			System.out.println("CLISt"+clientList);
 			return clientList;
 		}
 		

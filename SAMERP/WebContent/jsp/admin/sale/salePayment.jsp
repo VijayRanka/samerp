@@ -440,14 +440,26 @@ td{
             <tbody>
             <%
           		if(request.getParameter("ppid")!=null){
+          			int count=0;
           			String clientID=request.getParameter("ppid");
           			List list=rd.getClientBillDetails(Integer.parseInt(clientID));
-          			System.out.println(list);
+          			Iterator iterator=list.iterator();
+          			while(iterator.hasNext()){
+          				
+          				String bill_id=iterator.next().toString();
           			
-          		 	
           	%>
-          
+          				<tr>
+          					<td><%=++count %></td>
+          					<td><%=bill_id %></td>
+           					<td><%=iterator.next() %></td>
+           					<td><%=iterator.next() %></td>
+           					<td><a class="tip" title="Bill Print" <%-- onclick="getDeleteId('<%=sid%>')" --%> 
+           						href="#createBillAgain" data-toggle='modal'><i class="icon-print"></i></a>
+           					</td>       				
+          				</tr>
           	<% 		
+          			}
           		}
             %>
 
@@ -564,6 +576,9 @@ td{
 		</form>
 	</div>
 </div>
+
+
+<!-- Bill  -->
 <div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;max-height: 600px">
   <div class="modal-dialog" role="document">
    <form class="form-horizontal" action="/SAMERP/SalePayment" method="post">
@@ -682,7 +697,7 @@ td{
 			<input type="hidden" id="checkedChalan" name="checkedChalan">
       </div> 
       <div class="modal-footer">
-        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData()" style="margin-right:5px;">Save & Create PDF</button> 
+        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData()" style="margin-right:5px;">Save & Create Bill</button> 
           </div>
     </div>
    </form>
@@ -691,9 +706,14 @@ td{
 
 
 
-	<%-- <div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;">
-	 	<div class="modal-dialog">
-			<table style="margin: 0 auto; width: 800px;" id="createBillTable">
+<!-- A Bill  -->
+<div class="modal hide fade" id="createBillAgain" name="bill" role="dialog" style="width: 920px; margin-left: -460px;max-height: 600px">
+  <div class="modal-dialog" role="document">
+   <form class="form-horizontal" action="/SAMERP/SalePayment" method="post">
+    <div class="modal-content">
+      <div class="modal-body createBillSarthak" id="showModal">
+	     
+	        <table style="margin: 0 auto; width: 800px;" id="createBillTable">
 				<thead>
 					<tr>
 						<th colspan="12"><h2 style="color: #ff704d; margin: 0px; ">SARTHAK ENTERPRISES</h2></th>
@@ -704,47 +724,42 @@ td{
 					<tr style="border-top: 1px; border-top-style: groove;">
 						<th colspan="12">A/P-Naigaon,Tal-Haveli,Dist-Pune 412110. Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com</h2></th>
 					</tr>
-<!-- 					<tr>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th colspan="4" style="padding-left: 68px;">STATE: MAHARASHTRA </th>
-						<th colspan="2" style="padding-right: 40px;"> STATE CODE: 27</th>
-					</tr> -->					
-	<!-- 				.Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com -->
+
+
 				</thead>
 				<tbody>
+				
+
 					<tr>
 						<td colspan="8" style="border: 0;">To,</td>
-						<td colspan="4">Bill No : <%=maxid+1 %></td>
+						<td colspan="4">Bill No : <%=1 %></td>
 					</tr>
 					<%
-					String clientId = request.getParameter("ppid");
-					List clientInfo=null;
-					String name=null;
-					String address=null;
-					String gstin=null;
-					if(clientId!=null){
-						clientInfo=rd.getClientData(Integer.parseInt(clientId));
-						System.out.println(clientInfo);
-						name=clientInfo.get(0).toString();
-						address = clientInfo.get(1).toString();
-						if(clientInfo.get(2)!=null){
-							gstin=clientInfo.get(2).toString();
+					String client_Id = request.getParameter("ppid");
+					List client_Info=null;
+					String name1=null;
+					String address1=null;
+					String gstin1=null;
+					if(client_Id!=null){
+						client_Info=rd.getClientData(Integer.parseInt(clientId));
+						name1=client_Info.get(0).toString();
+						address1 = client_Info.get(1).toString();
+						if(client_Info.get(2)!=null){
+							gstin1=client_Info.get(2).toString();
 						}else
-							gstin=" ";
+							gstin1=" ";
 					}	
 					
 
 					
 					%>
 					<tr>
-						<td colspan="3" style="border: 0;"><%=name %></td>
-						<td colspan="5" style="border: 0;">GSTIN : <%=gstin %></td>
-						<td colspan="4">Date : <%=requiredDate %></td>
+						<td colspan="3" style="border: 0;"><%=name1 %></td>
+						<td colspan="5" style="border: 0;">GSTIN : <%=gstin1 %></td>
+						<td colspan="4">Date : <%=1 %></td>
 					</tr>
 					<tr>
-					<td colspan="8" style="border: 0;"><%=address %></td>
+					<td colspan="8" style="border: 0;"><%=address1 %></td>
 						<td colspan="4">GSTIN : 27ALTPC9493M1Z3</td>
 					</tr>
 					<tr>
@@ -756,7 +771,7 @@ td{
 						<th>GST(%)</th>
 						<th>Qty</th>
 						<th>Rate</th>
-						<th>Taxable Amount</th>
+						<th style="width: 105px;">Taxable Amount</th>
 						<th>CGST</th>
 						<th>SGST</th>
 						<th>Total Amount</th>
@@ -766,22 +781,22 @@ td{
 					
 					
  					<tr>
- 						<th colspan="8" style="text-align: right; border: 0;"></th>
+ 						<td colspan="8" style="text-align: left; border: 0;">TERMS & CONDITIONS :</td>
 						<th style="text-align: right;">Taxable Amount</th>
 						<th colspan="3" style="text-align: center;"><i id="totalAmount_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<td colspan="8" style="text-align: left; border: 0;">1. Payment Within 30 days of delivery</td>
 						<th style="text-align: right;">CGST</th>
 						<th colspan="3" style="text-align: center;"><i id="CGST_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<td colspan="8" style="text-align: left; border: 0;">2. Guarantee doesn't cover mishandling of component after delivery</td>
 						<th style="text-align: right;">SGST</th>
 						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<td colspan="8" style="text-align: left; border: 0;">3. We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</th>
 						<th style="text-align: right;" >Total Amount</th>
 						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
 					</tr>
@@ -789,24 +804,24 @@ td{
 					<tr>
 						<th colspan="12" style="text-align: right;">(In Words)&nbsp;:- <i id="print_inwords"></i></th>
 					</tr>
-1
 					<tr>
 						<th colspan="12" style="text-align: right; height: 70px;" valign="bottom">For Sarthak Enterprises</th>
 					</tr>
 				</tbody>
 			</table>
-	
-			<!-- <button id="btnPrint" onclick="printData()">Print Preview</button> -->
-
-			
-			<div class="modal-footer">
-				<div class="form-actions">
-					<button type="submit" name="insertorganizer" class="btn btn-success" style="float: right;" onclick="myFunction()" >Submit</button>
-				</div>
-			</div>
-		</div>
-	</div> --%>
-
+			<input type="hidden" name="clientID1" id="clientID1" />
+			<input type="hidden" name="billNumber" id="billNumber" value="<%= (maxid+1) %>" />
+			<input type="hidden" name="billDate" value="<%= requiredDate%>"/>
+			<input type="hidden" id="totalBillAmount" name="totalBillAmount" value=""/>
+			<input type="hidden" id="checkedChalan" name="checkedChalan">
+      </div> 
+      <div class="modal-footer">
+        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData()" style="margin-right:5px;">Save & Create PDF</button> 
+          </div>
+    </div>
+   </form>
+  </div>
+</div>
  	
 <div class="modal hide fade zoom-out" id="checkboxError" role="dialog" >
 	<div class="modal-header">
