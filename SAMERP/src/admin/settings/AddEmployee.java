@@ -75,29 +75,22 @@ public class AddEmployee extends HttpServlet {
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
 			String Debtor_Id=request.getParameter("contractorVehicle_name").trim();
-			System.out.print("debtor:"+Debtor_Id);
 			String empid=request.getParameter("employeeid");
 			
 			RequireData rq=new RequireData();
-			String WorkWith=rq.getType(Debtor_Id).get(0).toString();
-			
-				System.out.println("work:"+WorkWith);
-				
+			String WorkWith=rq.getType(Debtor_Id).get(0).toString();				
 			String desig=request.getParameter("designation");
-			char designation=desig.charAt(0);
+			char designation=desig.charAt(0);		
 			
-			String aliasname="EMP_"+desig+"_"+employeename.replace(" ", "_")+'_'+WorkWith;
-			
-			checkStatus=aliasname.split("_");		
-			System.out.println(reqdate+","+employeename+","+contactno+","+WorkWith+","+desig);
+			String aliasname="EMP_"+desig+"_"+employeename.replace(" ", "_")+'_'+WorkWith;			
+			checkStatus=aliasname.split("_");	
 			
 			String checkStatus1="SELECT emplyoee_details.emp_id, emplyoee_details.aliasname FROM emplyoee_details WHERE emplyoee_details.aliasname LIKE '%TRANSPORT_"+checkStatus[4]+"%' AND emplyoee_details.aliasname LIKE '%"+desig+"%' AND emplyoee_details.status=0 ";
 			List ckst=gd.getData(checkStatus1);
 			if(!ckst.isEmpty())
 			{
 				String updatestatus="UPDATE emplyoee_details SET status=1 WHERE emp_id='"+ckst.get(0)+"'";
-				int st=gd.executeCommand(updatestatus);
-				
+				int st=gd.executeCommand(updatestatus);				
 			}
 						
 			insertQuery="INSERT INTO emplyoee_details(emp_date,emp_name, emp_contactno,emp_workwith,emp_designation,aliasname)"
@@ -108,23 +101,23 @@ public class AddEmployee extends HttpServlet {
 			{
 				insertQuery="INSERT INTO `debtor_master`(`type`) values('"+aliasname+"')";
 				gd.executeCommand(insertQuery);
+				
 				String opening_bal=request.getParameter("opening_balance");
+				String credit=request.getParameter("opening_balance");
 				String mx_query="SELECT MAX(id) FROM debtor_master";
-				String maxid=gd.getData(mx_query).get(0).toString();			
-				String drier_helper_op_bal="INSERT INTO driver_helper_payment_master(debter_id,exp_id,date,credit,debit,extra_charges,particular,type,balance) VALUES('"+maxid+"',NULL,'"+reqdate+"',0,0,0,'Opening Balance','"+designation+"','"+opening_bal+"')";
-				int i=gd.executeCommand(drier_helper_op_bal);
-				System.out.println("driver pay:"+drier_helper_op_bal);	
-			
-			}		
-			
+				String maxid=gd.getData(mx_query).get(0).toString();
+				
+				if(desig.equals("DRIVER") || desig.equals("HELPER") )
+				{
+					String drier_helper_op_bal="INSERT INTO driver_helper_payment_master(debter_id,exp_id,date,credit,debit,extra_charges,particular,type,balance) VALUES('"+maxid+"',NULL,'"+reqdate+"','"+credit+"',0,0,'Opening Balance','"+desig+"','"+opening_bal+"')";
+					int i=gd.executeCommand(drier_helper_op_bal);					
+				}			
+			}				
 			if(status!=0)
 			{
 				System.out.println("employee successfully inserted");
-				request.setAttribute("status", "Employee Inserted Successfully");
-				
-			}
-			
-			
+				request.setAttribute("status", "Employee Inserted Successfully");				
+			}			
 			RequestDispatcher req=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
 			req.forward(request, response);
 		}
@@ -140,10 +133,8 @@ public class AddEmployee extends HttpServlet {
 				request.setAttribute("status", "Employee Deleted Successfully");				
 			}
 			RequestDispatcher rd=request.getRequestDispatcher("jsp/admin/settings/addEmployee.jsp");
-			rd.forward(request, response);
-			
-		}
-		
+			rd.forward(request, response);		
+		}		
 		
 		if(request.getParameter("employeeid")!=null)
 		{
@@ -155,9 +146,7 @@ public class AddEmployee extends HttpServlet {
 			{
 				out.print(itr.next()+",");
 			}
-		}
-		
-		
+		}		
 		
 		if(request.getParameter("update")!=null)
 		{
@@ -190,11 +179,8 @@ public class AddEmployee extends HttpServlet {
 
 			String updateEmployeeQuery = "UPDATE emplyoee_details,debtor_master SET emplyoee_details.emp_date='"+up_date+"',emplyoee_details.emp_name='"+employee_name+"',emplyoee_details.emp_contactno='"+contact_no+"', aliasname='"+newAlias+"' WHERE emplyoee_details.emp_workwith=debtor_master.id AND emplyoee_details.emp_id='"+Emp_id+"'";
 			
-			System.out.println("updated:"+updateEmployeeQuery);
-			
 			int updatestatus = gd.executeCommand(updateEmployeeQuery);
 			
-			System.out.println("update :"+updatestatus);
 			if(updatestatus!=0)
 			{
 				System.out.println("update Empolyee Successfully");

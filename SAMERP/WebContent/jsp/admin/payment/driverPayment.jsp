@@ -105,7 +105,7 @@
 						<thead>
 							<tr>
 								<th>Sr.No</th>
-								<th>Debtor Id</th>
+								<th>Debtor Type</th>
 								<th>Date</th>
 								<th>Credit</th>
 								<th>Debit</th>
@@ -120,45 +120,46 @@
 						int id=0,count=1;
 						RequireData rd=new RequireData();
 						List list=rd.getDriverPayment();
+						if (list != null) {							
 						Iterator itr=list.iterator();
+						%>
+						<tbody>
+						<% 
 						while(itr.hasNext())
 						{
 							
 							String id1=itr.next().toString();
-						
-						%>
-						<tbody>
-							<td id="<%=id1%>"><%=count %></td>
+						%>					
+						<tr>
+							<td id="<%=id1%>"><%=count%></td>
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
 							<td><%=itr.next() %></td>
-							<%
-							String Driver="";
-							String Helper="";
-							String type=itr.next().toString();
-							if(type.equals("1"))
-							{
-							%>
-							<td>Driver</td>
-							<%}else{ %>
-							<td>Helper</td>
-							<%} %>
 							<td><%=itr.next() %></td>
-
-						</tbody>
+							<td><%=itr.next() %></td>
+						</tr>
 						<%
+						count++;
+							}
 						}
 						%>
+						</tbody>
+						
 					</table>
 				</div>
 			</div>
 		</div>
     </div>
       
-  
+  <div class="row-fluid">
+		<div id="footer" class="span12">
+			2017 &copy; Vertical Software. <a
+				href="http://verticalsoftware.co.in">www.verticalsoftware.in</a>
+		</div>
+	</div>
 
 		<!--end-Footer-part-->
 
