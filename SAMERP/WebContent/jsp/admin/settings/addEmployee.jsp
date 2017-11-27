@@ -157,7 +157,7 @@
 									<label class="control-label">Designation: </label>
 									<div class="controls" style="margin-bottom: 30px;">
 										
-											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 321px;" required>
+											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 357px;" required>
 											<option>Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
