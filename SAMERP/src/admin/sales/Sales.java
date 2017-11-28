@@ -35,9 +35,9 @@ public class Sales extends HttpServlet {
 		if (searchVehicle != null)
 		{ 
 			String query="SELECT vehicle_id, vehicle_number FROM vehicle_details WHERE vehicle_number LIKE '%"+searchVehicle+"%' AND vehicle_type='TRANSPORT';";
-			System.out.println("Query ===>  "+query);
+			//System.out.println("Query ===>  "+query);
 			List list = gd.getData(query);	
-			System.out.println("List ===>  "+list);
+			//System.out.println("List ===>  "+list);
 			Iterator itr = list.iterator();
 			while (itr.hasNext()) 
 			{
@@ -177,15 +177,15 @@ public class Sales extends HttpServlet {
 				else{
 					
 					query2="UPDATE `sale_master` SET `chalan_no`='"+uChalan+"' WHERE sale_master.id="+uId;
-					System.out.println(query2);
+					//System.out.println(query2);
 				}
 				
 				getstatus=gd.executeCommand(query2);
-				System.out.println("after upd");
+				//System.out.println("after upd");
 				if(getstatus!=0)
 				{
 					status=true;
-					System.out.println("Successfully Updated In Sale");
+					//System.out.println("Successfully Updated In Sale");
 					request.setAttribute("status", "Data Updated Successfully");
 				}
 
@@ -268,7 +268,7 @@ public class Sales extends HttpServlet {
 			{
 				String insertQuery=null;
 				if(!debtorId.isEmpty()){
-					System.out.println(debtorId.get(0));
+					//System.out.println(debtorId.get(0));
 					insertQuery="INSERT INTO `sale_master`(`client_id`, `loading_by_id`, `date`, `chalan_no`, `loading_charges`, "
 							+ " `debtor_id`,`vehicle_deposit`, `po_no`, `product_count`) VALUES ("+clientId+","+loading_team_id+", "
 									+ "'"+date+"','"+chalan_no+"',"+loading_charges+","+debtorId.get(0)+","+vehicleDeposit+",'"+po_no+"',"+count+");";
@@ -287,19 +287,19 @@ public class Sales extends HttpServlet {
 				if(vehicle_id!=null)
 				{
 	
-					System.out.println("hi");
+				//	System.out.println("hi");
 					if(!debtorId.isEmpty())
 					{
 						
 						String insertExp_masterForDeposit="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
 								+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleDeposit+",'CASH','"+date+"','-','-')";
-						System.out.println(insertExp_masterForDeposit);
+						//System.out.println(insertExp_masterForDeposit);
 				
 						gd.executeCommand(insertExp_masterForDeposit);
 					
 						String insertExp_masterForDiesel="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
 								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
-						System.out.println(insertExp_masterForDiesel);
+					//	System.out.println(insertExp_masterForDiesel);
 				
 						gd.executeCommand(insertExp_masterForDiesel);
 						
@@ -320,7 +320,7 @@ public class Sales extends HttpServlet {
 								int xx=gd.executeCommand(sales_id);
 								if(xx==1)
 								{
-									System.out.println("done Successfully in Vehicles rides details");
+									//System.out.println("done Successfully in Vehicles rides details");
 								
 									String insertVRM ="INSERT INTO vehicle_reading_master(expenses_master_id, vehicle_id, vehicle_diesel_qty, vehicle_reading) "
 											+ " VALUES ("+max_exp_id+","+vehicle_id+","+dieselInLiter+","+vehicleReading+")";
@@ -425,7 +425,7 @@ public class Sales extends HttpServlet {
 				
 				String clientId=gd.getData(getClientID).get(0).toString();
 				
-				System.out.println(clientId);
+				//System.out.println(clientId);
 				
 				saleData="SELECT sale_master.id, sale_master.product_count, client_details.client_organization_name, sale_master.chalan_no, "
 						+ "sale_master.date, sale_master.vehicle_details,sale_master.debtor_id, sale_master.vehicle_deposit FROM sale_master, "
