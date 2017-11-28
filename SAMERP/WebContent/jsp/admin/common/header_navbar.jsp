@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
 <script type="text/javascript">
 function clock(){
 	var time = new Date()
@@ -58,27 +53,10 @@ function clock(){
 		     
 	}
 </script>
-</head>
-<body onload="clock()">
-
 <div id="header">
   <h1><a href="dashboard.html">Vertical Software</a></h1>
 </div>
 <!--close-Header-part-->
-
-
-<!--top-Header-menu-->
-<div id="user-nav" class="navbar navbar-inverse" style=" margin-top: 10px; z-index: 0; */">
-  <ul class="nav">
-	<li class="dropdown" id="menu-messages">
-		<i class="icon icon-globe"></i> 
-		<span class="badge badge-inverse" id="clockButton"></span>
-		<span id="currentDate" class="badge badge-inverse"></span> 
-	</li>
-	<li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">Opening Cash</span></a></li>
-  </ul>
-</div>
-<!--close-top-Header-menu-->
 <!--start-top-serch-->
 <div id="search">
 <form name="logOut">
@@ -100,7 +78,7 @@ function clock(){
 				</div>
 			</div>
 					<div class="modal-footer">
-					<form action="/MSaleERP/LogoutAction.do">
+					<form action="/SAMERP/">
 					<input type="submit" class="btn btn-primary" value="OK" name="ok" />
 					<input type="button" class="btn btn-danger" data-dismiss="modal" on value="Cancel"/>
 					</form>
@@ -109,8 +87,3 @@ function clock(){
 				
 			</div>
 		</div>
-
-
-
-</body>
-</html>
