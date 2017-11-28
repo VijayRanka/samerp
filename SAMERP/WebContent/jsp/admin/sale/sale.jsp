@@ -452,8 +452,8 @@ margin-top: 5px;
 								<td><%=itr3.next()%></td>
 								<td><%=itr3.next()%></td>
 								<td><%=itr3.next()%></td>
-								<td rowspan="<%=span%>" > <a class="tip" title="Update" href="#update" data-toggle="modal" onclick="getUpdateData(<%=sid%>)"><i class="icon-pencil"></i></a> |
-														<a class="tip" title="Delete" onclick="getDeleteId('<%=sid%>')" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a>
+								<td rowspan="<%=span%>" > <a class="tip" title="Update" href="#update" data-toggle="modal" onclick="getUpdateData(<%=sid%>)"><i class="icon-pencil"></i></a> <%-- |
+														<a class="tip" title="Delete" onclick="getDeleteId('<%=sid%>')" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a> --%>
 								</td>
 
 								<%
@@ -882,6 +882,8 @@ function addMaterial()
 	var ChalanNo="-";
 	var supplierName="SARTHAK";
 	var gst=document.getElementById("gstSarthak").value;
+	
+	productName = productName.toUpperCase();
 	
 	if(productName && qty && rate){
 		var table = document.getElementById("tempMaterialTable");
