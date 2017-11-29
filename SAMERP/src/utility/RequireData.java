@@ -386,7 +386,7 @@ public class RequireData
 			{
 				SysDate sd=new SysDate();
 				String demo="SELECT account_details.acc_aliasname,bank_account_details."
-						+ "credit,bank_account_details.debit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance"
+						+ "debit,bank_account_details.credit,bank_account_details.particulars,debtor_master.type,bank_account_details.balance"
 						+ " FROM `bank_account_details`, debtor_master,account_details WHERE account_details.acc_id=bank_account_details"
 						+ ".bid AND debtor_master.id=bank_account_details.debter_id"
 						+ " AND date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'";
@@ -409,7 +409,7 @@ public class RequireData
 			public List getPettyCashDetailsDash()
             {
                     SysDate sd=new SysDate();
-                    String demo="SELECT petty_cash_details.credit,petty_cash_details.debit,debtor_master.type,petty_cash_details"
+                    String demo="SELECT petty_cash_details.debit,petty_cash_details.credit,debtor_master.type,petty_cash_details"
                                     + ".balance FROM `petty_cash_details`,debtor_master WHERE debtor_master.id=petty_cash_details."
                                     + "debtor_id AND date='"+sd.todayDate().split("-")[2]+"-"+sd.todayDate().split("-")[1]+"-"+sd.todayDate().split("-")[0]+"'";
                     if(!gd.getData(demo).isEmpty())
@@ -432,14 +432,14 @@ public class RequireData
 	}
 	public List getAccountDetails()
 	{
-		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_no,bank_account_details.balance,account_details.acc_aliasname FROM account_details,bank_account_details WHERE account_details.acc_id=bank_account_details.bid AND bank_account_details.particulars='Opening Balance'";
+		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_holder_name,account_details.acc_no,bank_account_details.balance,account_details.acc_aliasname FROM account_details,bank_account_details WHERE account_details.acc_id=bank_account_details.bid AND bank_account_details.particulars='Opening Balance'";
 		List demoList=gd.getData(demo);
 		return demoList;	
 	}
 	
 	public List getAccountRowData(String id)
 	{
-		String demo="select * from account_details where acc_id="+id+"";
+		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_holder_name,account_details.acc_no,account_details.acc_aliasname FROM account_details where account_details.acc_id="+id+"";
 		List demoList=gd.getData(demo);
 		return demoList;
 	}
@@ -840,10 +840,8 @@ public class RequireData
 		public List getClientBillDetails(int clientid)
 		{
 			
-			String clientListQuery ="SELECT `bill_id`, `bill_amt`, `date` FROM `client_bill_master` WHERE client_id="+clientid;
-			System.out.println(clientListQuery);
+			String clientListQuery ="SELECT `bill_id`, `date`, `bill_amt` FROM `client_bill_master` WHERE client_id="+clientid;
 			List clientList = gd.getData(clientListQuery);
-			System.out.println("CLISt"+clientList);
 			return clientList;
 		}
 		

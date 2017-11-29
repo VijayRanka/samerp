@@ -36,6 +36,19 @@
 	border: 1px;
 	border-style: groove;
 }
+
+#createBillTableAgain tbody {
+	border: 1px;
+	border-style: groove;
+}		
+#createBillTableAgain tbody tr td{
+	border: 1px;
+	border-style: groove;
+}
+#createBillTableAgain tbody tr th{
+	border: 1px;
+	border-style: groove;
+}
 @media print
 {
   table { page-break-after:auto }
@@ -424,7 +437,7 @@ td{
       
      <div class="widget-box" id="showBills" style="display:none;">
 		        <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-          <h5>Data table</h5>
+          <h5>Bill Details	</h5>
         </div>
         <div class="widget-content nopadding">
           <table class="table table-bordered data-table">
@@ -434,20 +447,34 @@ td{
                  <th>Bill Number</th>
                  <th>Date</th>
                  <th>Bill Amount</th>
-                 <th>Action</th>  
+                 <th>Bill Print</th>  
               </tr>
             </thead>
             <tbody>
             <%
           		if(request.getParameter("ppid")!=null){
+          			int count=0;
           			String clientID=request.getParameter("ppid");
           			List list=rd.getClientBillDetails(Integer.parseInt(clientID));
-          			System.out.println(list);
+          			Iterator iterator=list.iterator();
+          			while(iterator.hasNext()){
+          				
+          				String bill_id=iterator.next().toString();
+          				String billDate=iterator.next().toString();
+          				String billAmount=iterator.next().toString();
           			
-          		 	
           	%>
-          
+          				<tr>
+          					<td><%=++count %></td>
+          					<td><%=bill_id %></td>
+           					<td><%=billDate %></td>
+           					<td><%=billAmount %></td>
+           					<td><a class="tip" title="Bill Print" onclick="getBillId('<%=bill_id%>','<%=billDate%>','<%=billAmount%>')" 
+           						href="#createBillAgain" data-toggle='modal'><i class="icon-print"></i></a>
+           					</td>       				
+          				</tr>
           	<% 		
+          			}
           		}
             %>
 
@@ -564,6 +591,9 @@ td{
 		</form>
 	</div>
 </div>
+
+
+<!-- Bill  -->
 <div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;max-height: 600px">
   <div class="modal-dialog" role="document">
    <form class="form-horizontal" action="/SAMERP/SalePayment" method="post">
@@ -682,7 +712,7 @@ td{
 			<input type="hidden" id="checkedChalan" name="checkedChalan">
       </div> 
       <div class="modal-footer">
-        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData()" style="margin-right:5px;">Save & Create PDF</button> 
+        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData()" style="margin-right:5px;">Save & Create Bill</button> 
           </div>
     </div>
    </form>
@@ -691,9 +721,13 @@ td{
 
 
 
-	<%-- <div class="modal hide fade" id="createBill" name="bill" role="dialog" style="width: 920px; margin-left: -460px;">
-	 	<div class="modal-dialog">
-			<table style="margin: 0 auto; width: 800px;" id="createBillTable">
+<!-- A Bill  -->
+<div class="modal hide fade" id="createBillAgain" name="bill" role="dialog" style="width: 920px; margin-left: -460px;max-height: 600px">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body createBillSarthak" id="showModal">
+	     
+	        <table style="margin: 0 auto; width: 800px;" id="createBillTableAgain">
 				<thead>
 					<tr>
 						<th colspan="12"><h2 style="color: #ff704d; margin: 0px; ">SARTHAK ENTERPRISES</h2></th>
@@ -704,47 +738,42 @@ td{
 					<tr style="border-top: 1px; border-top-style: groove;">
 						<th colspan="12">A/P-Naigaon,Tal-Haveli,Dist-Pune 412110. Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com</h2></th>
 					</tr>
-<!-- 					<tr>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th colspan="4" style="padding-left: 68px;">STATE: MAHARASHTRA </th>
-						<th colspan="2" style="padding-right: 40px;"> STATE CODE: 27</th>
-					</tr> -->					
-	<!-- 				.Con-No:98814907070/9921267070 E-mail:sbchoudhari11@gmail.com -->
+
+
 				</thead>
 				<tbody>
+				
+
 					<tr>
 						<td colspan="8" style="border: 0;">To,</td>
-						<td colspan="4">Bill No : <%=maxid+1 %></td>
+						<td colspan="4" id="billNumberD"> </td>
 					</tr>
 					<%
-					String clientId = request.getParameter("ppid");
-					List clientInfo=null;
-					String name=null;
-					String address=null;
-					String gstin=null;
-					if(clientId!=null){
-						clientInfo=rd.getClientData(Integer.parseInt(clientId));
-						System.out.println(clientInfo);
-						name=clientInfo.get(0).toString();
-						address = clientInfo.get(1).toString();
-						if(clientInfo.get(2)!=null){
-							gstin=clientInfo.get(2).toString();
+					String client_Id = request.getParameter("ppid");
+					List client_Info=null;
+					String name1=null;
+					String address1=null;
+					String gstin1=null;
+					if(client_Id!=null){
+						client_Info=rd.getClientData(Integer.parseInt(clientId));
+						name1=client_Info.get(0).toString();
+						address1 = client_Info.get(1).toString();
+						if(client_Info.get(2)!=null){
+							gstin1=client_Info.get(2).toString();
 						}else
-							gstin=" ";
+							gstin1=" ";
 					}	
 					
 
 					
 					%>
 					<tr>
-						<td colspan="3" style="border: 0;"><%=name %></td>
-						<td colspan="5" style="border: 0;">GSTIN : <%=gstin %></td>
-						<td colspan="4">Date : <%=requiredDate %></td>
+						<td colspan="3" style="border: 0;"><%=name1 %></td>
+						<td colspan="5" style="border: 0;">GSTIN : <%=gstin1 %></td>
+						<td colspan="4" id="billNumberDate"> </td>
 					</tr>
 					<tr>
-					<td colspan="8" style="border: 0;"><%=address %></td>
+					<td colspan="8" style="border: 0;"><%=address1 %></td>
 						<td colspan="4">GSTIN : 27ALTPC9493M1Z3</td>
 					</tr>
 					<tr>
@@ -756,57 +785,53 @@ td{
 						<th>GST(%)</th>
 						<th>Qty</th>
 						<th>Rate</th>
-						<th>Taxable Amount</th>
+						<th style="width: 105px;">Taxable Amount</th>
 						<th>CGST</th>
 						<th>SGST</th>
 						<th>Total Amount</th>
 					</tr>
-					<tbody id="saleDetailsData">
+					<tbody id="saleDetailsDataAgain">
 					</tbody>
 					
 					
  					<tr>
- 						<th colspan="8" style="text-align: right; border: 0;"></th>
+ 						<td colspan="8" style="text-align: left; border: 0;">TERMS & CONDITIONS :</td>
 						<th style="text-align: right;">Taxable Amount</th>
-						<th colspan="3" style="text-align: center;"><i id="totalAmount_1" ></th>
+						<th colspan="3" style="text-align: center;"><i id="totalAmount_11" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<td colspan="8" style="text-align: left; border: 0;">1. Payment Within 30 days of delivery</td>
 						<th style="text-align: right;">CGST</th>
-						<th colspan="3" style="text-align: center;"><i id="CGST_1" ></th>
+						<th colspan="3" style="text-align: center;"><i id="CGST_11" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<td colspan="8" style="text-align: left; border: 0;">2. Guarantee doesn't cover mishandling of component after delivery</td>
 						<th style="text-align: right;">SGST</th>
-						<th colspan="3" style="text-align: center;"><i id="SGST_1" ></th>
+						<th colspan="3" style="text-align: center;"><i id="SGST_11" ></th>
 					</tr>
 					<tr>
-						<th colspan="8" style="text-align: right; border: 0;"></th>
+						<td colspan="8" style="text-align: left; border: 0;">3. We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct</th>
 						<th style="text-align: right;" >Total Amount</th>
-						<th colspan="3" style="text-align: center;" id="totalamt"><i id="totalAmountGST_1" ></i></th>
+						<th colspan="3" style="text-align: center; font-size: 18px;"><i id="totalAmountGST_11" >  </i></th>
 					</tr>
 
 					<tr>
-						<th colspan="12" style="text-align: right;">(In Words)&nbsp;:- <i id="print_inwords"></i></th>
+						<th colspan="12" style="text-align: right;">(In Words)&nbsp;:- <i id="print_inwords1"></i></th>
 					</tr>
-1
 					<tr>
 						<th colspan="12" style="text-align: right; height: 70px;" valign="bottom">For Sarthak Enterprises</th>
 					</tr>
 				</tbody>
 			</table>
-	
-			<!-- <button id="btnPrint" onclick="printData()">Print Preview</button> -->
 
-			
-			<div class="modal-footer">
-				<div class="form-actions">
-					<button type="submit" name="insertorganizer" class="btn btn-success" style="float: right;" onclick="myFunction()" >Submit</button>
-				</div>
-			</div>
-		</div>
-	</div> --%>
 
+      </div> 
+      <div class="modal-footer">
+        <button type="submit" name="generateBillData" class="btn btn-primary" onclick="printData1()" style="margin-right:5px;">Print Bill</button> 
+      </div>
+    </div>
+  </div>
+</div>
  	
 <div class="modal hide fade zoom-out" id="checkboxError" role="dialog" >
 	<div class="modal-header">
@@ -835,6 +860,110 @@ td{
 
 
 <script type="text/javascript">
+
+
+function getBillId(billId,billDate,billAmt) {
+	
+	document.getElementById('billNumberD').innerHTML="Bill No : "+billId;
+	document.getElementById('billNumberDate').innerHTML="Date : "+billDate;
+	//document.getElementById('totalAmountGST_11').innerHTML=billAmt;
+
+	xhttp = new XMLHttpRequest();
+
+	try {
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var demoStr = this.responseText.split(",");
+				
+	  			var demoStrLen=demoStr.length;
+	  			
+	  			var data1="",data2="",data3="",wholeData="";
+	  			var i=0,l=0;
+	  			var totalAmount=0;
+	  			var s=1;
+	  			 for(var j=1;s<(demoStrLen-4);j++)
+	  				{
+	  				 
+	  				 var count=l;
+	  				 l++;
+	  				data1="";data2="";
+	  				data1="<tr>"+
+						"<td rowspan='"+demoStr[count]+"' valign='top' style='vertical-align: middle; text-align: -webkit-center;'>"+j+"</td>"+
+						"<td rowspan='"+demoStr[count]+"' valign='top' style='vertical-align: middle; text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+						"<td rowspan='"+demoStr[count]+"' valign='top' style='vertical-align: middle; text-align: -webkit-center;'>"+demoStr[l++]+"</td>";
+						for(var k=1;k<=demoStr[count];k++)
+							{
+							
+							
+							
+							if(k==1)
+								{
+								if(totalAmount!=0){
+									if(demoStr[count]>1)
+										{
+										totalAmount+=8*demoStr[count]+4;
+										}
+									}else
+										{
+										totalAmount=8*demoStr[count]+3;
+										
+										}
+								
+								data2+="<td style='text-align: -webkit-center;'>"+ demoStr[l++] +"</td>"+
+								"<td style='text-align: -webkit-center;' >"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-left;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"<td style='text-align:center; vertical-align: middle; ' rowspan='"+demoStr[count]+"' valign='bottom'>"+demoStr[totalAmount]+"</td>"+
+							"</tr>";
+								}
+							else{
+								data2+="<tr>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-left;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+									"<td style='text-align: -webkit-center;'>"+demoStr[l++]+"</td>"+
+								"</tr>";
+								
+							}
+							}
+						l++;
+						s=l;
+						wholeData+=data1+data2;
+					}
+	  			
+	  			document.getElementById('totalAmount_11').innerHTML=demoStr[l++];
+	  			document.getElementById('CGST_11').innerHTML=demoStr[l++];
+	  			document.getElementById('SGST_11').innerHTML=demoStr[l++];
+	  			var TAmount=demoStr[l++];
+	  			TAmount = TAmount.trim();
+	  			
+	  			document.getElementById('totalAmountGST_11').innerHTML=TAmount;
+	  			
+	  			document.getElementById("totalAmountGST").innerHTML=TAmount;
+	  			document.getElementById("saleDetailsDataAgain").innerHTML=wholeData;
+	  			inWords();
+
+			}
+		};
+		
+		
+
+	xhttp.open("POST", "/SAMERP/SalePayment?getChallans=1&billNumber=" + billId, true);
+	xhttp.send();
+	} 
+	catch (e) {
+		alert("Unable to connect to server");
+	}	
+}
+
 
 function getAllCheckBoxes(){
 	
@@ -1048,7 +1177,7 @@ function setClientId() {
 
 function setSelectValue(){
 
-	inWords();
+//	inWords();
 	var m = <%=request.getParameter("ppid") %>
 	var e = document.getElementById("clientid");
 
@@ -1117,16 +1246,20 @@ function snackBar() {
 function inWords()
 {
     var str = document.getElementById("totalAmountGST").innerHTML;
+    if(str==0){
+        var str1 = document.getElementById("totalAmountGST_11").innerHTML;
+        alert(str1+''+str1.length);
+    }
+
     var splt = str.split("");
     var rev = splt.reverse();
     var once = ['Zero', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine'];
     var twos = ['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
     var tens = ['', 'Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety'];
 
-    numLength = rev.length;
+    var numLength = rev.length;
     var word = new Array();
     var j = 0;
-
     for (i = 0; i < numLength; i++) {
         switch (i) {
 
@@ -1242,6 +1375,7 @@ function inWords()
     }
     var print =finalOutput +" Only";
     document.getElementById("print_inwords").innerHTML = print;
+    document.getElementById("print_inwords1").innerHTML = print;
 }
 
 //===============================================PRINT========================================
@@ -1266,6 +1400,42 @@ function printData()
 		'border-style: groove;'+
 	'}'+
 	'#createBillTable tbody tr th{'+
+		'border: 1px;'+
+		'border-style: groove;'+
+		'font-size: x-small;'+
+	'}'+
+	'h2,h3,h6{'+
+		'margin:-3px 0;'+
+	'}'+
+   '</style>';
+   htmlToPrint += divToPrint.outerHTML+"</table>";
+   newWin= window.open("");
+   newWin.document.write(htmlToPrint);
+ //  newWin.print();
+//	   newWin.close();
+}
+
+function printData1()
+{
+   var divToPrint=document.getElementById("createBillTableAgain");
+   var htmlToPrint = '' +       
+   	   '<link rel="stylesheet" href="/SAMERP/config/css/bootstrap.min.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-responsive.min.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/colorpicker.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/datepicker.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/uniform.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/select2.css" />'+
+	   '<link rel="stylesheet" href="/SAMERP/config/css/bootstrap-wysihtml5.css" />'+
+	   '<style type="text/css">' +
+		'#createBillTableAgain tbody {'+
+		'border: 1px;'+
+		'border-style: groove;'+
+	'}'+
+   '#createBillTableAgain tbody tr td{'+
+		'border: 1px;'+
+		'border-style: groove;'+
+	'}'+
+	'#createBillTableAgain tbody tr th{'+
 		'border: 1px;'+
 		'border-style: groove;'+
 		'font-size: x-small;'+

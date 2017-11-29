@@ -100,7 +100,7 @@
 		<!--breadcrumbs-->
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" class="tip-bottom"
+				<a href="/SAMERP/dashboard.jsp" class="tip-bottom"
 					data-original-title="Go to Home"><i class="icon-home"> </i>
 					Home</a> <a href="#" class="current">Add Employee</a>
 			</div>
@@ -157,7 +157,7 @@
 									<label class="control-label">Designation: </label>
 									<div class="controls" style="margin-bottom: 30px;">
 										
-											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 321px;" required>
+											<select name="designation" class="span3" onchange="showOpening(this.value)" style="width: 357px;" required>
 											<option>Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
@@ -300,7 +300,7 @@
 									</div>
 								</div>
 								
-								<div class="control-group">
+								<!-- <div class="control-group">
 									<label class="control-label">Designation: </label>
 									<div class="controls">
 										
@@ -325,8 +325,14 @@
 											
 									</div>
 									
-								</div>
+
+								</div> -->
+								
 								<input type="hidden" id="alias" name="alias" />
+
+								</div> 
+								
+
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
