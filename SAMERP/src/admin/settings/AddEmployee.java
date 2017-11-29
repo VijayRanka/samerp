@@ -172,7 +172,6 @@ public class AddEmployee extends HttpServlet {
 		/*	String work_with= request.getParameter("contractorVehicle_alias");
 			System.out.println("workwith up:"+work_with);
 			String designation = request.getParameter("designation")*/;
-			
 			String aliasA[] = alias.split("_");
 			
 			String newAlias = aliasA[0]+"_"+aliasA[1]+ "_"+employee_name+ "_"+aliasA[3] +"_"+aliasA[4];
