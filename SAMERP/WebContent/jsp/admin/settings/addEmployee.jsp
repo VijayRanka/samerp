@@ -325,8 +325,14 @@
 											
 									</div>
 									
+
 								</div> -->
 								
+								<input type="hidden" id="alias" name="alias" />
+
+								</div> 
+								
+
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -383,7 +389,6 @@ function searchEmpolyee(id) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			
 			document.getElementById("Updateid").value = demoStr[0];
 			
 			document.getElementById("dateid").value = demoStr[1];
@@ -392,12 +397,12 @@ function searchEmpolyee(id) {
 			
 			document.getElementById("contactno").value = demoStr[3];
 			
-			document.getElementById("designationid").value = demoStr[4];			
+			document.getElementById("alias").value = demoStr[4];
+			
 			var dd = document.getElementById('designationid');			
 			for (var i = 0; i < dd.options.length; i++) {
 			    if (dd.options[i].text === demoStr[4]) {
 			        dd.selectedIndex = i;
-			
 			        getSetSelect('s2id_designationid', demoStr[4]);
 			        break;
 			    }
