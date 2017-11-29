@@ -432,14 +432,14 @@ public class RequireData
 	}
 	public List getAccountDetails()
 	{
-		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_no,bank_account_details.balance,account_details.acc_aliasname FROM account_details,bank_account_details WHERE account_details.acc_id=bank_account_details.bid AND bank_account_details.particulars='Opening Balance'";
+		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_holder_name,account_details.acc_no,bank_account_details.balance,account_details.acc_aliasname FROM account_details,bank_account_details WHERE account_details.acc_id=bank_account_details.bid AND bank_account_details.particulars='Opening Balance'";
 		List demoList=gd.getData(demo);
 		return demoList;	
 	}
 	
 	public List getAccountRowData(String id)
 	{
-		String demo="select * from account_details where acc_id="+id+"";
+		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_holder_name,account_details.acc_no,account_details.acc_aliasname FROM account_details where account_details.acc_id="+id+"";
 		List demoList=gd.getData(demo);
 		return demoList;
 	}

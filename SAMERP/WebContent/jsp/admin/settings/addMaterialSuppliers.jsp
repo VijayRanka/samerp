@@ -93,7 +93,7 @@
 <div id="content">
 	<!--breadcrumbs-->
 	  <div id="content-header">
-	    <div id="breadcrumb"> <a href="index.html" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home">
+	    <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home">
 	    </i> Home</a> <a href="#" class="current">Add Material Suppliers</a> </div>
 	  </div>
 	<!--End-breadcrumbs-->
