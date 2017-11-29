@@ -94,7 +94,7 @@
 <div id="content">
 <!--breadcrumbs-->
   <div id="content-header">
-    <div id="breadcrumb"> <a href="/SAMERP/index.jsp" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a> <a href="#" class="current">Add Vehicles</a> </div>
+    <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a> <a href="#" class="current">Add Vehicles</a> </div>
   
   </div>
 <!--End-breadcrumbs-->
@@ -117,10 +117,10 @@
           <form action="/SAMERP/AddVehicles" method="post" class="form-horizontal" name="form1">
             
 			<div class="control-group" style="height: 50px;">
-              <label class="control-label"><span style="color: red;">*</span>Vehicle Type :</label>
+              <label class="control-label">Vehicle Type :</label>
               <div class="controls">
 <!--                 <input type="text" class="span3" placeholder="Vehicle Type" onkeyup="this.value=this.value.toUpperCase()" name="vehicle_type" id="vehicle_type" required  /> -->
-                <select class="span3" style="width:257px;" name="vehicle_type" id="vehicle_type"  required >
+                <select class="span3" style="width:257px;" name="vehicle_type" id="vehicle_type" onchange="showChargesFielld(this.value)" required >
                 	<option value=""> Select</option>
                 	<option value="JCB">JCB</option>
                 	<option value="POCLAIN">POCLAIN</option>
@@ -130,32 +130,32 @@
             </div>
             
             <div class="control-group">
-              <label class="control-label"><span style="color: red;">*</span>Vehicle Number :</label>
+              <label class="control-label">Vehicle Number :</label>
               <div class="controls">
-                <input type="text" class="span1" placeholder="XX" style="width: 40px;" onkeyup="this.value=this.value.toUpperCase()" name="vehicleno1"  pattern="[A-Za-z]+" maxlength="2" required />  &ndash; 
-                <input type="text" class="span1" placeholder="XX" style="width: 40px;" name="vehicleno2"  pattern="[0-9]+" maxlength="2" required />  &ndash; 
-                <input type="text" class="span1" placeholder="XX" style="width: 40px;" onkeyup="this.value=this.value.toUpperCase()" name="vehicleno3"  pattern="[A-Za-z]+" maxlength="2" required />  &ndash;
-                <input type="text" class="span2" placeholder="XXXX" style="width: 100px;" name="vehicleno4" pattern="[0-9]+" maxlength="4" required />
+                <input type="text" class="span1" placeholder="XX" style="width: 40px;" name="vehicleno1"  pattern="[A-Za-z]+" id="state" maxlength="2" required />  &ndash; 
+                <input type="text" class="span1" placeholder="XX" style="width: 40px;"  name="vehicleno2" pattern="[0-9]+" id="state_code" maxlength="2" required />  &ndash; 
+                <input type="text" class="span1" placeholder="XX" style="width: 40px;" id="vehicle_serial" name="vehicleno3"  pattern="[A-Za-z]+"  maxlength="2" required />  &ndash;
+                <input type="text" class="span2" placeholder="XXXX" style="width: 100px;" name="vehicleno4" pattern="[0-9]+" id="vehicle_code" maxlength="4" required />
               </div>
             </div>
             
-            <div class="control-group">
+            <div class="control-group hide" id="trip_allowid">
 					<label class="control-label">Trip Allowance:</label>
 						<div class="controls">
-							<input type="text" name="trip_allowance" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Trip Allowance" style="width: 257px;" pattern="[0-9]*" required />
+							<input type="text" name="trip_allowance" id="trip_allow" class="span3" placeholder="Trip Allowance" style="width: 257px;" pattern="[0-9]*"/>
 						</div>
 					</div>
 					
-			<div class="control-group">
-					<label class="control-label">Helper Charges:</label>
+			<div class="control-group hide" id="helper_chargesid">
+					<label class="control-label">Helper Charges(Weekly):</label>
 						<div class="controls">
-							<input type="text" name="helper_charges" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" style="width: 257px;" pattern="[0-9]*" required />
+							<input type="text" name="helper_charges" class="span3" id="helper_charges_id" placeholder="Helper Charges" style="width: 257px;" pattern="[0-9]*"/>
 						</div>
 					</div>
-            <div class="control-group">
-							<label class="control-label">Driver Charges:</label>
+            <div class="control-group hide" id="driver_chargesid">
+							<label class="control-label">Driver Charges(Weekly):</label>
 								<div class="controls">
-										<input type="text" name="driver_charges"  class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" style="width: 257px;" pattern="[0-9]*" required />
+										<input type="text" name="driver_charges"  id="driver_charges_id" class="span3" placeholder="Driver Charges" style="width: 257px;" pattern="[0-9]*" />
 								</div>
 							</div>
             <div class="form-actions" align="center">
@@ -280,13 +280,13 @@
 					<div class="control-group">
 							<label class="control-label">Helper Charges:</label>
 								<div class="controls">
-										<input type="text" name="helper_charges" id="helper_chargesid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" pattern="[0-9]*" required />
+										<input type="text" name="helper_charges" id="helper_chargid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" pattern="[0-9]*" required />
 								</div>
 							</div>
 						<div class="control-group">
 							<label class="control-label">Driver Charges:</label>
 								<div class="controls">
-										<input type="text" name="driver_charges" id="driver_chargesid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" pattern="[0-9]*" required />
+										<input type="text" name="driver_charges" id="driver_chargid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" pattern="[0-9]*" required />
 								</div>
 							</div>
 							
@@ -363,6 +363,22 @@
 
 <script type="text/javascript">
 
+function showChargesFielld(str)
+{
+	if(str=='JCB' ||str=='POCLAIN'){
+		
+		document.getElementById("driver_chargesid").style.display="block";
+	}
+	else if(str=='TRANSPORT'){
+
+		document.getElementById("trip_allowid").style.display="block";
+		document.getElementById("helper_chargesid").style.display="block";
+		document.getElementById("driver_chargesid").style.display="block";
+		
+	}
+
+}
+
 
 function searchName(id) {
 	
@@ -386,8 +402,9 @@ function searchName(id) {
 			document.getElementById("Updatevehicleno4").value = vehicleNumber[3];
 			
 			document.getElementById("trip_allowanceid").value = demoStr[3];
-			document.getElementById("helper_chargesid").value = demoStr[4];
-			document.getElementById("driver_chargesid").value = demoStr[5];
+			document.getElementById("helper_chargid").value = demoStr[4];
+		
+			document.getElementById("driver_chargid").value = demoStr[5];
 			
 			document.getElementById("oldvehicle_alias").value = demoStr[6];
 			
@@ -423,7 +440,59 @@ function showModal(){
 }
 
 function setFocusToTextBox() {
-	document.getElementById("vehicle_type").focus();
+	
+	$(document).ready(function(){
+		 $("#vehicle_type").focus().select();
+		});
+	
+	
+	
+	var state= document.getElementById("state"),
+      	state_code = document.getElementById("state_code"),
+    	vehicle_serial= document.getElementById("vehicle_serial"),
+	    vehicle_code=document.getElementById("vehicle_code"),
+	    trip_allowance=document.getElementById("trip_allow");
+	    helperChages=document.getElementById("helper_charges_id");
+	    driverCharges=document.getElementById("driver_charges_id");
+/* 	
+state.onkeyup = function() {
+		var doc=document.getElementById("vehicle_type");
+		alert(doc);
+	    if ( doc==='JCB'||doc=='POCLAIN'||doc=='TRANSPORT') {
+	        state.focus();
+	    }
+	} */
+	
+	state.onkeyup = function() {
+		
+		this.value = this.value.toUpperCase();
+	    if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
+	        state_code.focus();
+	    }
+	}
+	
+	state_code.onkeyup = function() {
+		
+	    if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
+	        vehicle_serial.focus();
+	    }
+	}
+	
+	vehicle_serial.onkeyup = function() {
+		this.value = this.value.toUpperCase();
+	    if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
+	        vehicle_code.focus();
+	    }
+	}
+	
+	vehicle_code.onkeyup = function() {
+	    if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
+	    	trip_allowance.focus();
+	    	
+	    }
+	}
+	
+	
 	showModal();
 	setSelectValue();
 	myFunction();

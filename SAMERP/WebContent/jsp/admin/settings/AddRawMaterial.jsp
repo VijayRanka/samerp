@@ -155,7 +155,7 @@
 
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="/SAMERP/index.jsp" title="Go to Home" class="tip-bottom"><i
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i
 					class="fa fa-home"></i> Home</a> <a href="#" class="current">Add Raw Material</a>
 			</div>
 		

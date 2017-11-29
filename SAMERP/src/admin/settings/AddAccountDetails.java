@@ -123,6 +123,7 @@ public class AddAccountDetails extends HttpServlet {
 			String bId=request.getParameter("modalId");
 			String bName=request.getParameter("modalbName");
 			String branch=request.getParameter("modalBranch");
+			String accHolderName=request.getParameter("modalAccHolderName");
 			String accNo=request.getParameter("modalAccNo");
 			String opBalance=request.getParameter("modalBalance");
 			String alias=request.getParameter("modalAlias");
@@ -134,7 +135,7 @@ public class AddAccountDetails extends HttpServlet {
 			String space="_";
 			String finalAlias=firstLetter+space+accNo;
 			
-			String updateAccountDetails="UPDATE `account_details` SET `bank_name`='"+bName+"',`branch`='"+branch+"',`acc_no`='"+accNo+"'"
+			String updateAccountDetails="UPDATE `account_details` SET `bank_name`='"+bName+"',`branch`='"+branch+"',`acc_holder_name`='"+accHolderName+"',`acc_no`='"+accNo+"'"
 					+ ",`acc_aliasname`='"+finalAlias+"' WHERE acc_id="+bId+"";
 			status=gd.executeCommand(updateAccountDetails);
 			if(status==1)
@@ -161,6 +162,7 @@ public class AddAccountDetails extends HttpServlet {
 			
 			String bname=request.getParameter("bankName");
 			String branch=request.getParameter("branch");
+			String accHolderName=request.getParameter("accountHolderName");
 			String accNo=request.getParameter("accNo");
 			int openingBalance=Integer.parseInt(request.getParameter("openingBalance"));
 			int status=0;
@@ -181,7 +183,7 @@ public class AddAccountDetails extends HttpServlet {
 			out.println(openingBalance);*/
 			
 			String insertQuery="INSERT INTO `account_details`(`bank_name`, "
-					+ "`branch`, `acc_no`,`acc_aliasname`) VALUES ('"+bname+"','"+branch+"','"+accNo+"','"+alias+"')";
+					+ "`branch`,`acc_holder_name`,`acc_no`,`acc_aliasname`) VALUES ('"+bname+"','"+branch+"','"+accHolderName+"','"+accNo+"','"+alias+"')";
 			status=gd.executeCommand(insertQuery);
 			if(status!=0)
 			{
