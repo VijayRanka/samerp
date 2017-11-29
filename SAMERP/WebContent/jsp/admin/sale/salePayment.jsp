@@ -943,12 +943,11 @@ function getBillId(billId,billDate,billAmt) {
 	  			document.getElementById('CGST_11').innerHTML=demoStr[l++];
 	  			document.getElementById('SGST_11').innerHTML=demoStr[l++];
 	  			var TAmount=demoStr[l++];
-	//  			TAmount = TAmount.split("");
-	  			alert(TAmount+" "+TAmount.length);
+	  			TAmount = TAmount.trim();
 	  			
 	  			document.getElementById('totalAmountGST_11').innerHTML=TAmount;
 	  			
-	  			//document.getElementById("totalAmountGST").innerHTML=TAmount;
+	  			document.getElementById("totalAmountGST").innerHTML=TAmount;
 	  			document.getElementById("saleDetailsDataAgain").innerHTML=wholeData;
 	  			inWords();
 
@@ -1247,8 +1246,11 @@ function snackBar() {
 function inWords()
 {
     var str = document.getElementById("totalAmountGST").innerHTML;
-    var str1 = document.getElementById("totalAmountGST_11").innerHTML;
-    alert(str1+''+str1.length);
+    if(str==0){
+        var str1 = document.getElementById("totalAmountGST_11").innerHTML;
+        alert(str1+''+str1.length);
+    }
+
     var splt = str.split("");
     var rev = splt.reverse();
     var once = ['Zero', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine'];
