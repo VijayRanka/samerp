@@ -162,30 +162,25 @@
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
 											<option value="HOME WORKER">HOME WORKER</option>
-											<option value="LABOUR">LABOUR</option>
-											
+											<option value="LABOUR">LABOUR</option>											
 											</select>
+										</div>
 									</div>
-								</div>
 								
 							
 								
 								<div class="control-group" >
 									<label class="control-label"><span style="color: red;"></span>WorkWith:</label>
-
 									<div class="controls" style="margin-bottom: 30px;">
-										<select name="contractorVehicle_name"  class="span5" id="Vehicleid" required>
-										
+										<select name="contractorVehicle_name"  class="span5" id="Vehicleid">										
 										</select>
-									</div>
-									
+									</div>									
 								</div>
 								
 								
 																
 								<div class="control-group hide" id="opening_balid">
-									<label class="control-label"><span style="color: red;"></span>
-										Opening Balance :</label>
+									<label class="control-label"><span style="color: red;"></span>Opening Balance :</label>
 									<div class="controls">
 										<input type="text" name="opening_balance"  id="opening_balanceid" class="span5" placeholder="Opening Balance" pattern="[0-9]*"/>
 										
