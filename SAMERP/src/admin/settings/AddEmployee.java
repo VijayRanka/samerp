@@ -155,6 +155,7 @@ public class AddEmployee extends HttpServlet {
 			String employee_name = request.getParameter("employee_name");
 			String contact_no = request.getParameter("contact_no");
 			String alias = request.getParameter("alias");
+			System.out.println("alias:"+alias);
 		/*	String work_with= request.getParameter("contractorVehicle_alias");
 			System.out.println("workwith up:"+work_with);
 			String designation = request.getParameter("designation")*/;

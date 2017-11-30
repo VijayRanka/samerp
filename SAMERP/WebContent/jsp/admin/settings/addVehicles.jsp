@@ -251,7 +251,7 @@
 				              		<input type="hidden" name="oldvehicle_alias" id="oldvehicle_alias" />
 				              		
 				<!--                 <input type="text" class="span3" placeholder="Vehicle Type" onkeyup="this.value=this.value.toUpperCase()" name="vehicle_type" id="vehicle_type" required  /> -->
-				                <select class="span3" style="width:269px;" autofocus name="Updatevehicle_type" id="Updatevehicle_type" required >
+				                <select class="span3" style="width:269px;" autofocus name="Updatevehicle_type"  onchange="updateCharges(this.value)" id="Updatevehicle_type" required >
 				                	<option value=""> Select </option>
 				                	<option value="JCB">JCB</option>
 				                	<option value="POCLAIN">POCLAIN</option>
@@ -270,23 +270,23 @@
 				              </div>
 				            </div>
 				            
-				     <div class="control-group">
+				     <div class="control-group " id="trip_allowanceiddiv">
 							<label class="control-label">Trip Allowance:</label>
 								<div class="controls">
-								<input type="text" name="trip_allowance" id="trip_allowanceid" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Trip Allowance" pattern="[0-9]*" required />
+								<input type="text" name="trip_allowance" id="trip_allowanceid" class="span3" onkeyup="this.value=this.value.toUpperCase()" placeholder="Trip Allowance" pattern="[0-9]*" />
 								</div>
 							</div>
 					
-					<div class="control-group">
+					<div class="control-group " id="helper_chargiddiv">
 							<label class="control-label">Helper Charges:</label>
 								<div class="controls">
-										<input type="text" name="helper_charges" id="helper_chargid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" pattern="[0-9]*" required />
+										<input type="text" name="helper_charges" id="helper_chargid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Helper Charges" pattern="[0-9]*" />
 								</div>
 							</div>
-						<div class="control-group">
+						<div class="control-group ">
 							<label class="control-label">Driver Charges:</label>
 								<div class="controls">
-										<input type="text" name="driver_charges" id="driver_chargid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" pattern="[0-9]*" required />
+										<input type="text" name="driver_charges" id="driver_chargid" class="span3" onkeyup="this.value=this.value.toUpperCase()"	placeholder="Driver Charges" pattern="[0-9]*" />
 								</div>
 							</div>
 							
@@ -368,6 +368,8 @@ function showChargesFielld(str)
 	if(str=='JCB' ||str=='POCLAIN'){
 		
 		document.getElementById("driver_chargesid").style.display="block";
+		document.getElementById("trip_allowid").style.display="none";
+		document.getElementById("helper_chargesid").style.display="none";
 	}
 	else if(str=='TRANSPORT'){
 
@@ -378,6 +380,26 @@ function showChargesFielld(str)
 	}
 
 }
+
+
+function updateCharges(str)
+{
+	if(str=='JCB' ||str=='POCLAIN'){
+		
+		document.getElementById("driver_chargesid").style.display="block";
+		document.getElementById("trip_allowid").style.display="none";
+		document.getElementById("helper_chargesid").style.display="none";
+	}
+	else if(str=='TRANSPORT'){
+
+		document.getElementById("trip_allowid").style.display="block";
+		document.getElementById("helper_chargesid").style.display="block";
+		document.getElementById("driver_chargesid").style.display="block";
+		
+	}
+
+}
+
 
 
 function searchName(id) {
@@ -391,6 +413,7 @@ function searchName(id) {
 			
 			document.getElementById("Updatevehicle_id").value = demoStr[0];
 			document.getElementById("Updatevehicle_type").value = demoStr[1];
+			
 			document.getElementById("oldvehicle_type").value = document.getElementById("Updatevehicle_type").value;
 			getSetSelect("s2id_Updatevehicle_type", demoStr[1]);			
 			
@@ -408,7 +431,18 @@ function searchName(id) {
 			
 			document.getElementById("oldvehicle_alias").value = demoStr[6];
 			
-	
+			if(demoStr[1].trim()=="JCB"||demoStr[1].trim()=="POCLAIN")
+			{
+				alert(demoStr[1]);
+			document.getElementById("trip_allowanceiddiv").style.display="none";
+			document.getElementById("helper_chargiddiv").style.display="none";
+			}
+		else
+			{
+			document.getElementById("trip_allowanceiddiv").style.display="block";
+			document.getElementById("helper_chargiddiv").style.display="block";
+			
+			}
 			
 			//document.getElementById("UpdateRateText").value = demoStr[3];
 			//document.getElementById("oldRate").value = document.getElementById("UpdateRateText").value;
