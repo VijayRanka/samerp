@@ -74,7 +74,8 @@ public class AddEmployee extends HttpServlet {
 			String reqdate=request.getParameter("date");
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
-			String Debtor_Id=request.getParameter("contractorVehicle_name").trim();
+			String Debtor_Id=request.getParameter("contractorVehicle_name");
+			System.out.println("DebtorID:"+Debtor_Id);
 			String empid=request.getParameter("employeeid");
 			
 			RequireData rq=new RequireData();
