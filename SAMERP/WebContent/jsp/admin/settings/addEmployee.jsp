@@ -241,8 +241,8 @@
 							<td ><%=itr.next() %></td>							
 							<td><%=itr.next() %></td>
 							<td><a href="#update_employee"
-										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil" title="Update"></i></a>
-									</td>
+										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil" title="Update"></i></a>|
+										<a onclick="getDeleteId(<%=empid%>)" data-toggle='modal'><i class="icon-remove"></i></a></td>
 							
 						</tr>
 						<%
@@ -396,36 +396,7 @@ function searchEmpolyee(id) {
 			document.getElementById("employeename").value = demoStr[2];
 			
 			document.getElementById("contactno").value = demoStr[3];
-			
-			document.getElementById("alias").value = demoStr[4];
-			
-			var dd = document.getElementById('designationid');			
-			for (var i = 0; i < dd.options.length; i++) {
-			    if (dd.options[i].text === demoStr[4]) {
-			        dd.selectedIndex = i;
-			        getSetSelect('s2id_designationid', demoStr[4]);
-			        break;
-			    }
-			}
-			
-			document.getElementById("up_Vehicleid").value = demoStr[5];				
-			var select = document.getElementById('up_Vehicleid');			
-			var opt = document.createElement('option');
-		     opt.value = demoStr[5];
-		     opt.innerHTML =  demoStr[5];
-		     select.appendChild(opt);
-		     
-		     var dd = document.getElementById('up_Vehicleid');
-				
-				for (var i = 0; i < dd.options.length; i++) {
-				    if (dd.options[i].text === demoStr[5]) {
-				        dd.selectedIndex = i;
-				
-				        getSetSelect('s2id_up_Vehicleid', demoStr[5]);
-				        break;
-				    }
-				}
-		     
+
 		     
 		     
 			}

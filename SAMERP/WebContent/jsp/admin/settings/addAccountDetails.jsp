@@ -125,7 +125,7 @@
                 <div class="control-group">
                   <label class="control-label">Account Holder Name</label>
                   <div class="controls">
-                    <input type="text" name="accountHolderName" placeholder="Account Holder Name" pattern="[a-z A-Z]*" required/>
+                    <input type="text" name="accountHolderName" placeholder="Account Holder Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
                   </div>
                 </div>
                 
@@ -240,7 +240,7 @@
         	<div class="control-group">
                   <label class="control-label">Account Holder Name</label>
                   <div class="controls">
-                    <input type="text" id="modalAccHolderName"  name="modalAccHolderName" placeholder="Account Holder Name" pattern="[a-z A-Z]*"  required />
+                    <input type="text" id="modalAccHolderName"  name="modalAccHolderName" onkeyup="this.value=this.value.toUpperCase()" placeholder="Account Holder Name" pattern="[a-z A-Z]*"  required />
          			</div>
         	</div>
         	
