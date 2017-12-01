@@ -247,8 +247,8 @@
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
-										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
+										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a> / 
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal' class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;

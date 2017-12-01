@@ -239,8 +239,8 @@
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>										
 										<td><a href="#myModal" data-toggle="modal"
-											onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
-											<a href="/SAMERP/AddRawMaterial?deleteId=<%=id1%>"><i class="icon-remove"></i></a></td>
+											onclick="searchName(<%=id1%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a> / 
+											<a href="/SAMERP/AddRawMaterial?deleteId=<%=id1%>" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;

@@ -196,7 +196,7 @@
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="searchName(<%=accId %>)" data-toggle="modal"><i class="icon-pencil"></i></a>|
-                  <a onclick="getDeleteId(<%=accId%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
+                  <a onclick="getDeleteId(<%=accId%>)" class="tip-top" data-original-title="Delete" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
                 </tr>
                 <%}} %>
               </tbody>

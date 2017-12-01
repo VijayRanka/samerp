@@ -486,7 +486,7 @@ public class RequireData
 	
 	public List getVehicle()
 	{
-		String query="SELECT debtor_master.id, debtor_master.type FROM debtor_master WHERE debtor_master.type LIKE '%TRANSPORT%' AND debtor_master.type NOT LIKE '%EMP%'";
+		String query="SELECT * FROM (SELECT debtor_master.id, debtor_master.type FROM debtor_master WHERE debtor_master.type LIKE '%JCB%' OR debtor_master.type LIKE '%POCLAIN%' OR debtor_master.type LIKE '%TRANSPORT%' AND debtor_master.type NOT LIKE '%EMP%')as data WHERE data.type NOT LIKE '%EMP%'";
 		List list=gd.getData(query);
 		
 		System.out.println("List Of Vehicle Aliasname:"+list);
@@ -546,9 +546,9 @@ public class RequireData
 		
 	}
 	
-	public List getType(String debtor_id)
+	public List getType(String debtor_Id)
 	{
-		String query="SELECT debtor_master.type FROM debtor_master where debtor_master.id='"+debtor_id+"'";
+		String query="SELECT debtor_master.type FROM debtor_master where debtor_master.id='"+debtor_Id+"'";
 		List list=gd.getData(query);
 		return list;
 		
