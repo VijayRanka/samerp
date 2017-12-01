@@ -161,26 +161,31 @@
 											<option>Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
-											<option value="HOME WORKER">HOME WORKER</option>
-											<option value="LABOUR">LABOUR</option>											
+											<option value="HOME-WORKER">HOME WORKER</option>
+											<option value="LABOUR">LABOUR</option>
+											
 											</select>
-										</div>
 									</div>
+								</div>
 								
 							
 								
 								<div class="control-group" >
 									<label class="control-label"><span style="color: red;"></span>WorkWith:</label>
+
 									<div class="controls" style="margin-bottom: 30px;">
-										<select name="contractorVehicle_name"  class="span5" id="Vehicleid">										
+										<select name="contractorVehicle_name"  class="span5" id="Vehicleid">
+										
 										</select>
-									</div>									
+									</div>
+									
 								</div>
 								
 								
 																
 								<div class="control-group hide" id="opening_balid">
-									<label class="control-label"><span style="color: red;"></span>Opening Balance :</label>
+									<label class="control-label"><span style="color: red;"></span>
+										Opening Balance :</label>
 									<div class="controls">
 										<input type="text" name="opening_balance"  id="opening_balanceid" class="span5" placeholder="Opening Balance" pattern="[0-9]*"/>
 										
@@ -236,8 +241,8 @@
 							<td ><%=itr.next() %></td>							
 							<td><%=itr.next() %></td>
 							<td><a href="#update_employee"
-										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil" title="Update"></i></a>|
-										<a onclick="getDeleteId(<%=empid%>)" data-toggle='modal'><i class="icon-remove"></i></a></td>
+										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a>|
+										<a href="/SAMERP/AddEmployee?deleteId=<%=empid%>" class="tip-top" data-original-title="Delete" ><i class="icon-remove"></i></a></td>
 							
 						</tr>
 						<%
@@ -392,7 +397,7 @@ function searchEmpolyee(id) {
 			
 			document.getElementById("contactno").value = demoStr[3];
 
-		     
+			document.getElementById("alias").value = demoStr[4];
 		     
 			}
 		};
@@ -430,30 +435,61 @@ function showOpening(str) {
 		
 	}
 	
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			
-			var demoStr = this.responseText.split(",");
-			
-			var select = document.getElementById('Vehicleid');
-				
-			 $("#Vehicleid").empty();
-			 for (var i = 0; i<demoStr.length-1; i++){
-				 
-			     var opt = document.createElement('option');
-			     opt.value = demoStr[i];
-			     opt.innerHTML =  demoStr[++i];
-			     select.appendChild(opt);
-			 }
-			 
+	
+	if(str=='DRIVER' ||str=='HELPER' ||str=="LABOUR"){
 		
-			}
-		};
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
 				
-	xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
-	xhttp.send();
+				var demoStr = this.responseText.split(",");
+				
+				var select = document.getElementById('Vehicleid');
+					
+				 $("#Vehicleid").empty();
+				 for (var i = 0; i<demoStr.length-1; i++){
+				
+				     var opt = document.createElement('option');
+				     opt.value = demoStr[i];
+				     opt.innerHTML =  demoStr[++i];
+				     select.appendChild(opt);
+				 }
+				 
+			
+				}
+			};
+					
+		xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
+		xhttp.send();
+		
+	}/* else if(str=='HOME WORKER'){
+		
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				
+				var demoStr = this.responseText.split(",");
+				
+				var select = document.getElementById('Vehicleid');
+					
+			//	 $("#Vehicleid").empty();				
+				     var opt = document.createElement('option');				    
+				     opt.innerHTML ="HOME";
+				     select.appendChild(opt);
+				 
+				 
+			
+				}
+			};
+					
+		xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
+		xhttp.send();
+		
+	} */
+	
+	
 	
 	
 }

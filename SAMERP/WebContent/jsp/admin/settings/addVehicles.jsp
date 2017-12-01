@@ -213,8 +213,8 @@
 	                        <td><%=tripAllowance%></td>
 	                        <td><%=helperChagres%></td>
 	                        <td><%=driverCharges%></td>
-	                        <td><a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)"><i class="icon-pencil"></i></a>/
-                     	<a onclick="getDeleteId(<%=vehicleId%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td></tr>
+	                        <td><a href="#update" data-toggle="modal"  onclick="searchName(<%=vehicleId%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a>/
+                     	<a onclick="getDeleteId(<%=vehicleId%>)" href="#DeleteConfirmBox" data-toggle='modal' class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td></tr>
              <%
                      	i++;
                  }
@@ -433,7 +433,7 @@ function searchName(id) {
 			
 			if(demoStr[1].trim()=="JCB"||demoStr[1].trim()=="POCLAIN")
 			{
-				alert(demoStr[1]);
+				
 			document.getElementById("trip_allowanceiddiv").style.display="none";
 			document.getElementById("helper_chargiddiv").style.display="none";
 			}

@@ -195,8 +195,8 @@
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
-                  <td style="text-align: center"><a href="#update_organization" data-toggle="modal"  onclick="searchOrganization(<%=organization_id%>)"><i class="icon-pencil"></i>
-                  </a> /<a href="/SAMERP/AddOrganization?deleteId=<%=organization_id%>"><i class="icon-remove"></i></a></td>
+                  <td style="text-align: center"><a href="#update_organization" data-toggle="modal" class="tip-top" data-original-title="Update" onclick="searchOrganization(<%=organization_id%>)"><i class="icon-pencil"></i>
+                  </a> /<a href="/SAMERP/AddOrganization?deleteId=<%=organization_id%>" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
                 </tr>
                 <% }} %>
               </tbody>

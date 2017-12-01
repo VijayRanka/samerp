@@ -805,7 +805,7 @@ function myFunction() {
 		$('#bankBalanceError').modal('show');
 	}
 	
-	if(pettyExit==0 || pettyExit==-1){
+	if(pettyExit==0 || pettyExit==-1|| pettyExit==2){
 		$('#pettyCashError').modal('show');
 	}
 }
