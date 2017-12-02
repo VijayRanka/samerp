@@ -104,7 +104,7 @@
 
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="/SAMERP/index.jsp" title="Go to Home" class="tip-bottom"><i
+				<a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i
 					class="fa fa-home"></i> Home</a> <a href="#" class="current">Add
 					Client</a>
 			</div>
@@ -247,8 +247,8 @@
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
 										<td><%=itr.next()%></td>
-										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> / 
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
+										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a> / 
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal' class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;

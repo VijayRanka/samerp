@@ -55,9 +55,9 @@ public class SalePayment extends HttpServlet {
 					{
 						Object prodName=itr2.next();
 						Object hsnCode=itr2.next();
-						double gst=Double.parseDouble(itr2.next().toString());
-						double qty=Double.parseDouble(itr2.next().toString());
-						double rate=Double.parseDouble(itr2.next().toString());
+						int gst=Integer.parseInt(itr2.next().toString());
+						int qty=Integer.parseInt(itr2.next().toString());
+						int rate=Integer.parseInt(itr2.next().toString());
 						
 						out.print(prodName+","+hsnCode+","+gst+","+qty+","+rate+","+qty*rate+","+(qty*rate*gst/100)/2+","+(qty*rate*gst/100)/2+",");
 						totalAmount+=(qty*rate)+((qty*rate*gst)/100);
@@ -251,6 +251,72 @@ public class SalePayment extends HttpServlet {
 				out.print(iterator.next()+",");
 				
 			}
-		}		
+		}	
+		
+		if(request.getParameter("getChallans")!=null){
+			
+			
+			String billId=request.getParameter("billNumber");
+
+			String ch="";
+			
+			
+			List ch1=gd.getData("SELECT chalan_no FROM sale_master WHERE bill_id="+billId);
+			Iterator itr1=ch1.iterator();
+			while (itr1.hasNext()) {
+				Object object = itr1.next();
+				ch+=object+",";			
+			}
+			
+
+			double amount=0.0;
+			int temp=0;
+			
+			String[] chalanNos=ch.split(",");
+				for(int i=0;i<chalanNos.length;i++)
+				{
+					String getDataByChalan="SELECT sale_master.id,sale_master.product_count,sale_master.date,sale_master.chalan_no FROM `sale_master` WHERE chalan_no='"+chalanNos[i]+"';";
+					List chalanData=gd.getData(getDataByChalan);
+					Iterator itr=chalanData.iterator();
+					
+					while(itr.hasNext())
+					{
+						Object id=itr.next();
+						Object prodCount=itr.next();
+						Object date=itr.next();
+						Object chalanNo=itr.next();
+						out.print(prodCount+","+date+","+chalanNo+",");
+						
+						String getSaleDetails="SELECT sale_details_master.product_name,product_master.hsncode,"
+								+ "sale_details_master.gst,sale_details_master.qty,sale_details_master.rate FROM "
+								+ "sale_details_master,product_master WHERE sale_details_master.sale_master_id="+id
+								+ " AND sale_details_master.product_name=product_master.name";
+						List saleDetails=gd.getData(getSaleDetails);
+						Iterator itr2=saleDetails.iterator();
+						double totalAmountwithGST=0.0;
+						while(itr2.hasNext())
+						{
+							Object prodName=itr2.next();
+							Object hsnCode=itr2.next();
+							int gst=Integer.parseInt(itr2.next().toString());
+							int qty=Integer.parseInt(itr2.next().toString());
+							int rate=Integer.parseInt(itr2.next().toString());
+							amount+=qty*rate;
+							out.print(prodName+","+hsnCode+","+gst+","+qty+","+rate+","+qty*rate+","+(qty*rate*gst/100)/2+","+(qty*rate*gst/100)/2+",");
+							totalAmountwithGST+=(qty*rate)+((qty*rate*gst)/100);
+							
+						}
+						
+						out.print(totalAmountwithGST+",");		
+						temp+=totalAmountwithGST;
+					}
+				}
+				
+				out.println(amount+",");
+				out.println(( temp- amount)/2+",");
+				out.println(( temp- amount)/2+",");
+				out.println(temp);
+			
+		}
 	}
 }

@@ -93,7 +93,7 @@
 <div id="content">
 	<!--breadcrumbs-->
 	  <div id="content-header">
-	    <div id="breadcrumb"> <a href="index.html" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home">
+	    <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home">
 	    </i> Home</a> <a href="#" class="current">Add Material Suppliers</a> </div>
 	  </div>
 	<!--End-breadcrumbs-->
@@ -226,21 +226,18 @@
 											<td>RawMaterial</td>
 										<%} %>
 														
-										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)"><i class="icon-pencil"></i></a> /
-										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
+										<td><a href="#update" data-toggle="modal" onclick="searchName(<%=id1%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a> /
+										<a onclick="getDeleteId(<%=id1%>)" href="#DeleteConfirmBox" data-toggle='modal' class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
 									</tr>
 									<%
 										count++;
 											}
 										}
 									%>
-								</tbody>
-									
-								
+								</tbody>							
 							</table>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>

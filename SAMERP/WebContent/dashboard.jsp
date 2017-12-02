@@ -84,9 +84,7 @@
 </head>
 <body onload="setSelectValue()">
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/index.jsp">Matrix Admin</a></h1>
-</div>
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
 <!--close-Header-part--> 
 <!--top-Header-menu-->
 <!--start-top-serch-->
@@ -96,8 +94,6 @@
 <% if(request.getAttribute("status")!=null){ %>
 <div id="snackbar"><%=request.getAttribute("status")%></div>
 <%} %>
-
-	<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
 </div>
 <!--close-top-serch--> 
 <!--sidebar-menu-->
@@ -106,7 +102,7 @@
 
 <div id="content">
 <div id="content-header">
-  <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Dashboard</a>  </div>
+  <div id="breadcrumb"> <a href="" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Dashboard</a>  </div>
   <!--Action boxes-->
   <div class="container-fluid" align="center">
     <div class="quick-actions_homepage">
@@ -1130,8 +1126,10 @@ function getDriverExp(sdate, edate)
 				document.getElementById("helperCharge").innerHTML = "0";
 				document.getElementById("allowanceCharge").innerHTML = "0";
 				document.getElementById("totalDPayment").innerHTML = "0";
-				document.getElementById("dieselCost").innerHTML = "0 + 0";
+				document.getElementById("dieselCost").innerHTML = "0";
+				document.getElementById("dieselExpCost").innerHTML = "0";
 				document.getElementById("driverCost").innerHTML = "0";
+				document.getElementById("depositCost").innerHTML = "0";
 				document.getElementById("totalCost").innerHTML = "0";
 				document.getElementById("helperPrevCost").innerHTML = "0";
 				document.getElementById("driverPrevCost").innerHTML = "0";

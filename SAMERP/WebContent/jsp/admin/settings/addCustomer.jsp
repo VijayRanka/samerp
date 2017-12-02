@@ -246,9 +246,8 @@
 										<td><%=gstin%></td>
 										<td><%=bucket_rate%></td>
 										<td><%=breaker_rate%></td>
-										<td><a href="#update" data-toggle='modal'
-											onclick='getSr(<%=custid%>)'><i class="icon-pencil"></i></a> / 
-											<a onclick="getDeleteId(<%=custid%>)" href="#DeleteConfirmBox" data-toggle="modal"><i class="icon-remove"></i></a></td>
+										<td><a href="#update" data-toggle='modal' onclick='getSr(<%=custid%>)' class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a> / 
+											<a onclick="getDeleteId(<%=custid%>)" href="#DeleteConfirmBox" data-toggle="modal" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
 										
 									</tr>
 									<%

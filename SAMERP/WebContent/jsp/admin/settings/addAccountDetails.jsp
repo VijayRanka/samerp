@@ -94,7 +94,7 @@
 <div id="content">
 <!--breadcrumbs-->
   <div id="content-header">
-    <div id="breadcrumb"> <a href="index.html" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home">
+    <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home">
     </i> Home</a> <a href="#" class="current">Add Account Details</a> </div>
   </div>
 <!--End-breadcrumbs-->
@@ -121,6 +121,14 @@
                     <input type="text" name="branch" placeholder="Branch" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
                   </div>
                 </div>
+                
+                <div class="control-group">
+                  <label class="control-label">Account Holder Name</label>
+                  <div class="controls">
+                    <input type="text" name="accountHolderName" placeholder="Account Holder Name" onkeyup="this.value=this.value.toUpperCase()" pattern="[a-z A-Z]*" required/>
+                  </div>
+                </div>
+                
                 
                 <div class="control-group">
                   <label class="control-label">Account No</label>
@@ -162,6 +170,7 @@
                   <th>S.No.</th>
                   <th>Bank Name</th>
                   <th>Branch</th>
+                  <th>Account Holder Name</th>
                   <th>Account No</th>
                   <th>Opening Balance</th>
                   <th>Alias Name</th>
@@ -185,8 +194,9 @@
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
+                  <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><a class="tip" title="Update" href="#updateAccDetails" onclick="searchName(<%=accId %>)" data-toggle="modal"><i class="icon-pencil"></i></a>|
-                  <a onclick="getDeleteId(<%=accId%>)" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
+                  <a onclick="getDeleteId(<%=accId%>)" class="tip-top" data-original-title="Delete" href="#DeleteConfirmBox" data-toggle='modal'><i class="icon-remove"></i></a></td>
                 </tr>
                 <%}} %>
               </tbody>
@@ -224,6 +234,13 @@
                   <label class="control-label">Branch</label>
                   <div class="controls">
                     <input type="text" id="modalBranch"  name="modalBranch" placeholder="Branch" pattern="[a-z A-Z]*" onkeyup="this.value=this.value.toUpperCase()" required/>
+         			</div>
+        	</div>
+        	
+        	<div class="control-group">
+                  <label class="control-label">Account Holder Name</label>
+                  <div class="controls">
+                    <input type="text" id="modalAccHolderName"  name="modalAccHolderName" onkeyup="this.value=this.value.toUpperCase()" placeholder="Account Holder Name" pattern="[a-z A-Z]*"  required />
          			</div>
         	</div>
         	
@@ -378,10 +395,11 @@ function searchName(id) {
 			document.getElementById("modalId").value = demoStr[0];
 			document.getElementById("modalName").value = demoStr[1];
 			document.getElementById("modalBranch").value = demoStr[2];
-			document.getElementById("modalAccNo").value = demoStr[3];
-			document.getElementById("oldAlias").value = demoStr[4];
-			document.getElementById("modalAlias").value = demoStr[4];
-				
+			document.getElementById("modalAccHolderName").value = demoStr[3];
+			document.getElementById("modalAccNo").value = demoStr[4];
+			document.getElementById("oldAlias").value = demoStr[5];
+			document.getElementById("modalAlias").value = demoStr[6];
+			
 			}
 		};
 	xhttp.open("POST","/SAMERP/AddAccountDetails?updateid="+id, true);
