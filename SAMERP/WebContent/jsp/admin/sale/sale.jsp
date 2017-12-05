@@ -96,9 +96,7 @@ margin-top: 5px;
 <body onload="setFocusToTextBox()">
 
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/index.jsp">SAMERP</a></h1>
-</div>
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
 
 <!--start-top-serch-->
 <div id="search">
@@ -116,7 +114,6 @@ margin-top: 5px;
 %>
 	<input type="hidden" name="error" id="error" value="<%=error%>" />
 
-  <button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
 </div>
 <!--close-top-serch-->
 <!--sidebar-menu-->
@@ -127,7 +124,7 @@ margin-top: 5px;
 <div id="content">
 <!--breadcrumbs-->
   <div id="content-header">
-    <div id="breadcrumb"> <a href="/SAMERP/index.jsp" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a> <a href="#" class="current">Sales</a> </div>
+    <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a> <a href="#" class="current">Sales</a> </div>
 
   </div>
 <!--End-breadcrumbs-->
