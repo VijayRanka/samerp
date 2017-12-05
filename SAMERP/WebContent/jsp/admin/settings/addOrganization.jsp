@@ -95,7 +95,7 @@
 <div id="content">
 <!--breadcrumbs-->
   <div id="content-header">
-    <div id="breadcrumb"> <a href="index.html" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home"></i> Home</a> <a href="#" class="current">Add Organization</a> </div>
+    <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" class="tip-bottom" data-original-title="Go to Home"><i class="icon-home"></i> Home</a> <a href="#" class="current">Add Organization</a> </div>
   </div>
 <!--End-breadcrumbs-->
 <div class="container-fluid">
@@ -195,8 +195,8 @@
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
                   <td style="text-align: center"><%=itr.next() %></td>
-                  <td style="text-align: center"><a href="#update_organization" data-toggle="modal"  onclick="searchOrganization(<%=organization_id%>)"><i class="icon-pencil"></i>
-                  </a> /<a href="/SAMERP/AddOrganization?deleteId=<%=organization_id%>"><i class="icon-remove"></i></a></td>
+                  <td style="text-align: center"><a href="#update_organization" data-toggle="modal" class="tip-top" data-original-title="Update" onclick="searchOrganization(<%=organization_id%>)"><i class="icon-pencil"></i>
+                  </a> /<a href="/SAMERP/AddOrganization?deleteId=<%=organization_id%>" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
                 </tr>
                 <% }} %>
               </tbody>

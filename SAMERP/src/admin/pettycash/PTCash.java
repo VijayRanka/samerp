@@ -602,7 +602,7 @@ public class PTCash extends HttpServlet {
 						
 						int newBankBalance=bankBalance-withdrawlAmt;
 						String insertBankdetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-								+ "VALUES ("+getBankDetails.get(0)+",'"+pettyDate+"',"+withdrawlAmt+","+0+",'HANDLOAN',"+debtorId.get(0)+","+newBankBalance+")";
+								+ "VALUES ("+getBankDetails.get(0)+",'"+pettyDate+"',"+withdrawlAmt+","+0+",'ATM WITHDRAWL',"+debtorId.get(0)+","+newBankBalance+")";
 						System.out.println(insertBankdetails);
 						int bankDetailsStatus=gd.executeCommand(insertBankdetails);
 						if(bankDetailsStatus>0)
@@ -652,7 +652,7 @@ public class PTCash extends HttpServlet {
 			int sum=PTCash.sum(cash);
 			String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
 			List lastPettyBalance=gd.getData(getLastPettyBalance);
-			request.setAttribute("tab", "tab2");
+			request.setAttribute("tab", "tab1");
 			request.setAttribute("status", "Rs."+sum+" Petty Cash Added. Total Petty Cash Balance is Rs."+lastPettyBalance.get(1));
 			RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 			rq.forward(request, response);
@@ -854,7 +854,9 @@ public class PTCash extends HttpServlet {
 			String paymode=request.getParameter("payMode");
 			String chequeNo=request.getParameter("chequeNo");
 			String bank_name=request.getParameter("bankInfo");
+			int updatedPettyBalance=0;
 			
+			System.out.println("alias : "+aliasname);
 			
 			String HL_MasterDetails="INSERT INTO handloan_master(name,mob_no,alias_name) VALUES('"+name+"','"+mobileNo+"','"+aliasname+"')";
 			status=gd.executeCommand(HL_MasterDetails);
@@ -870,38 +872,45 @@ public class PTCash extends HttpServlet {
 					
 			if(paymode.equals("CASH"))
 			{
-				String insert_query1="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+amount+"')";
+				String insert_query1="insert into `handloan_details`(`handloan_id`,`date`,`debit`,`credit`,`mode`,`balance`) values('"+handloan_id+"','"+date+"',"+0+",'"+amount+"','"+paymode+"','"+amount+"')";
 				System.out.println("cash:"+insert_query1);
 				status1=gd.executeCommand(insert_query1);
 				
-			}else if(paymode.equals("Cheque"))
-			{
 				
-				String insert_bank1="INSERT INTO bank_account_details(date,credit,particulars,balance) VALUES('"+date+"','"+amount+"','"+paymode+"','"+amount+"');";
-				gd.executeCommand(insert_bank1);
+				String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
+				List lastPettyBalance=gd.getData(getLastPettyBalance);
 				
-				String insert_query2="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`particulars`,`description`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+chequeNo+"','"+bank_name+"','"+amount+"')";
-				System.out.println("cheque:"+insert_query2);
-				status1=gd.executeCommand(insert_query2);
+				if(!lastPettyBalance.isEmpty())
+				{
+					updatedPettyBalance=Integer.parseInt(amount)+(int)lastPettyBalance.get(1);
+				}
+				else
+				{
+					updatedPettyBalance=Integer.parseInt(amount)+0;
+				}
 				
-			}else if(paymode.equals("Transfer"))
-			{
+				String getDebtorId="SELECT debtor_master.id FROM debtor_master WHERE debtor_master.type='"+aliasname+"'";
+				List debtorId=gd.getData(getDebtorId);
 				
-				String insert_bank2="INSERT INTO bank_account_details(date,credit,particulars,balance) VALUES('"+date+"','"+amount+"','"+paymode+"','"+amount+"');";
-				gd.executeCommand(insert_bank2);
+				String insertPetty="INSERT INTO `petty_cash_details`(`date`, `debit`, `credit`, `debtor_id`, `balance`) VALUES ('"+date+"',"+0+",'"+amount+"',"+debtorId.get(0)+","+updatedPettyBalance+")";
+				int insertStatus=gd.executeCommand(insertPetty);
+				if(insertStatus>0)
+				{
+					
+					System.out.println("inserted in pettyCash");
+				}
 				
-				String insert_query3="insert into `handloan_details`(`handloan_id`,`date`,`credit`,`mode`,`description`,`balance`) values('"+handloan_id+"','"+date+"','"+amount+"','"+paymode+"','"+bank_name+"','"+amount+"')";
-				System.out.println("transfer:"+insert_query3);
-				status1=gd.executeCommand(insert_query3);
+				
 			}
 			
+		
 			
 			if(status1>0)
 			{
 				System.out.println("inserted Successfully");
-				request.setAttribute("hName", aliasname);
-				request.setAttribute("amt", amount);
-				request.setAttribute("status", "Handloan Details Added");
+				//request.setAttribute("hName", aliasname);
+				//request.setAttribute("amt", amount);
+				request.setAttribute("status", "Handloan Details and Petty Cash Added");
 			}
 			else
 			{

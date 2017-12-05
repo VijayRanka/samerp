@@ -102,7 +102,7 @@
 
 <div id="content">
 <div id="content-header">
-  <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Dashboard</a>  </div>
+  <div id="breadcrumb"> <a href="" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Dashboard</a>  </div>
   <!--Action boxes-->
   <div class="container-fluid" align="center">
     <div class="quick-actions_homepage">

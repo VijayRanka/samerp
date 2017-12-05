@@ -203,7 +203,7 @@
            								 <span class="badge badge-inverse" id="removeH" onclick="RemoveRow()"><i class="icon-minus"></i></span>
            								 </div></td>
            								 <td><a href="#paymentEntry" data-toggle="modal">
-											<span class="badge badge-inverse">Add HandLoan</span>
+											<span class="badge badge-inverse">Add New HandLoan</span>
 										 </a></td>
            							</div>
      						  
@@ -638,7 +638,7 @@
 
 				<div class="modal-footer">
 					<input type="submit" id="handloanbtn" name="handloanbtn"
-						class="btn btn-primary" value="Submit" /> <a href="/SAMERP/index.jsp"
+						class="btn btn-primary" value="Add Petty Cash" /> <a href="/SAMERP/index.jsp"
 						class="btn btn-danger" data-dismiss="modal">Cancel</a>
 				</div>
 

@@ -100,7 +100,7 @@
 		<!--breadcrumbs-->
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="index.html" class="tip-bottom"
+				<a href="/SAMERP/dashboard.jsp" class="tip-bottom"
 					data-original-title="Go to Home"><i class="icon-home"> </i>
 					Home</a> <a href="#" class="current">Add Employee</a>
 			</div>
@@ -161,7 +161,7 @@
 											<option>Select Designation</option>
 											<option value="DRIVER">DRIVER</option>
 											<option value="HELPER">HELPER</option>
-											<option value="HOME WORKER">HOME WORKER</option>
+											<option value="HOME-WORKER">HOME WORKER</option>
 											<option value="LABOUR">LABOUR</option>
 											
 											</select>
@@ -174,7 +174,7 @@
 									<label class="control-label"><span style="color: red;"></span>WorkWith:</label>
 
 									<div class="controls" style="margin-bottom: 30px;">
-										<select name="contractorVehicle_name"  class="span5" id="Vehicleid" required>
+										<select name="contractorVehicle_name"  class="span5" id="Vehicleid">
 										
 										</select>
 									</div>
@@ -241,8 +241,8 @@
 							<td ><%=itr.next() %></td>							
 							<td><%=itr.next() %></td>
 							<td><a href="#update_employee"
-										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)"><i class="icon-pencil" title="Update"></i></a>
-									</td>
+										data-toggle="modal" onclick="searchEmpolyee(<%=empid%>)" class="tip-top" data-original-title="Update"><i class="icon-pencil"></i></a>|
+										<a href="/SAMERP/AddEmployee?deleteId=<%=empid%>" class="tip-top" data-original-title="Delete" ><i class="icon-remove"></i></a></td>
 							
 						</tr>
 						<%
@@ -300,7 +300,7 @@
 									</div>
 								</div>
 								
-								<div class="control-group">
+								<!-- <div class="control-group">
 									<label class="control-label">Designation: </label>
 									<div class="controls">
 										
@@ -325,13 +325,20 @@
 											
 									</div>
 									
-								</div>
+
+								</div> -->
 								
+								<input type="hidden" id="alias" name="alias" />
+
+							
+								
+
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
-							</form>
+						</form>
+					</div> 
 				</div>
 
 			</div>
@@ -383,7 +390,6 @@ function searchEmpolyee(id) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var demoStr = this.responseText.split(",");
-			
 			document.getElementById("Updateid").value = demoStr[0];
 			
 			document.getElementById("dateid").value = demoStr[1];
@@ -391,37 +397,8 @@ function searchEmpolyee(id) {
 			document.getElementById("employeename").value = demoStr[2];
 			
 			document.getElementById("contactno").value = demoStr[3];
-			
-			document.getElementById("designationid").value = demoStr[4];			
-			var dd = document.getElementById('designationid');			
-			for (var i = 0; i < dd.options.length; i++) {
-			    if (dd.options[i].text === demoStr[4]) {
-			        dd.selectedIndex = i;
-			
-			        getSetSelect('s2id_designationid', demoStr[4]);
-			        break;
-			    }
-			}
-			
-			document.getElementById("up_Vehicleid").value = demoStr[5];				
-			var select = document.getElementById('up_Vehicleid');			
-			var opt = document.createElement('option');
-		     opt.value = demoStr[5];
-		     opt.innerHTML =  demoStr[5];
-		     select.appendChild(opt);
-		     
-		     var dd = document.getElementById('up_Vehicleid');
-				
-				for (var i = 0; i < dd.options.length; i++) {
-				    if (dd.options[i].text === demoStr[5]) {
-				        dd.selectedIndex = i;
-				
-				        getSetSelect('s2id_up_Vehicleid', demoStr[5]);
-				        break;
-				    }
-				}
-		     
-		     
+
+			document.getElementById("alias").value = demoStr[4];
 		     
 			}
 		};
@@ -459,30 +436,61 @@ function showOpening(str) {
 		
 	}
 	
-	var xhttp;
-	xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			
-			var demoStr = this.responseText.split(",");
-			
-			var select = document.getElementById('Vehicleid');
-				
-			 $("#Vehicleid").empty();
-			 for (var i = 0; i<demoStr.length-1; i++){
-				 
-			     var opt = document.createElement('option');
-			     opt.value = demoStr[i];
-			     opt.innerHTML =  demoStr[++i];
-			     select.appendChild(opt);
-			 }
-			 
+	
+	if(str=='DRIVER' ||str=='HELPER' ||str=="LABOUR"){
 		
-			}
-		};
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
 				
-	xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
-	xhttp.send();
+				var demoStr = this.responseText.split(",");
+				
+				var select = document.getElementById('Vehicleid');
+					
+				 $("#Vehicleid").empty();
+				 for (var i = 0; i<demoStr.length-1; i++){
+				
+				     var opt = document.createElement('option');
+				     opt.value = demoStr[i];
+				     opt.innerHTML =  demoStr[++i];
+				     select.appendChild(opt);
+				 }
+				 
+			
+				}
+			};
+					
+		xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
+		xhttp.send();
+		
+	}/* else if(str=='HOME WORKER'){
+		
+		var xhttp;
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				
+				var demoStr = this.responseText.split(",");
+				
+				var select = document.getElementById('Vehicleid');
+					
+			//	 $("#Vehicleid").empty();				
+				     var opt = document.createElement('option');				    
+				     opt.innerHTML ="HOME";
+				     select.appendChild(opt);
+				 
+				 
+			
+				}
+			};
+					
+		xhttp.open("POST","/SAMERP/AddEmployee?empid="+str, true);
+		xhttp.send();
+		
+	} */
+	
+	
 	
 	
 }

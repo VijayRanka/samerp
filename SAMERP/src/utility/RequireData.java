@@ -432,14 +432,14 @@ public class RequireData
 	}
 	public List getAccountDetails()
 	{
-		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_no,bank_account_details.balance,account_details.acc_aliasname FROM account_details,bank_account_details WHERE account_details.acc_id=bank_account_details.bid AND bank_account_details.particulars='Opening Balance'";
+		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_holder_name,account_details.acc_no,bank_account_details.balance,account_details.acc_aliasname FROM account_details,bank_account_details WHERE account_details.acc_id=bank_account_details.bid AND bank_account_details.particulars='Opening Balance'";
 		List demoList=gd.getData(demo);
 		return demoList;	
 	}
 	
 	public List getAccountRowData(String id)
 	{
-		String demo="select * from account_details where acc_id="+id+"";
+		String demo="SELECT account_details.acc_id,account_details.bank_name,account_details.branch,account_details.acc_holder_name,account_details.acc_no,account_details.acc_aliasname FROM account_details where account_details.acc_id="+id+"";
 		List demoList=gd.getData(demo);
 		return demoList;
 	}
@@ -486,7 +486,7 @@ public class RequireData
 	
 	public List getVehicle()
 	{
-		String query="SELECT debtor_master.id, debtor_master.type FROM debtor_master WHERE debtor_master.type LIKE '%TRANSPORT%' AND debtor_master.type NOT LIKE '%EMP%'";
+		String query="SELECT * FROM (SELECT debtor_master.id, debtor_master.type FROM debtor_master WHERE debtor_master.type LIKE '%JCB%' OR debtor_master.type LIKE '%POCLAIN%' OR debtor_master.type LIKE '%TRANSPORT%' AND debtor_master.type NOT LIKE '%EMP%')as data WHERE data.type NOT LIKE '%EMP%'";
 		List list=gd.getData(query);
 		
 		System.out.println("List Of Vehicle Aliasname:"+list);
@@ -546,9 +546,9 @@ public class RequireData
 		
 	}
 	
-	public List getType(String debtor_id)
+	public List getType(String debtor_Id)
 	{
-		String query="SELECT debtor_master.type FROM debtor_master where debtor_master.id='"+debtor_id+"'";
+		String query="SELECT debtor_master.type FROM debtor_master where debtor_master.id='"+debtor_Id+"'";
 		List list=gd.getData(query);
 		return list;
 		
@@ -697,7 +697,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_designation FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,(SELECT debtor_master.type FROM debtor_master,emplyoee_details WHERE debtor_master.id=emplyoee_details.emp_workwith) AS emp_workwith,emplyoee_details.emp_designation FROM emplyoee_details";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}
