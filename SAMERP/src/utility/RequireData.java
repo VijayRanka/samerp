@@ -697,7 +697,7 @@ public class RequireData
 	
 	public List getEmployeeData()
 		{
-			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,debtor_master.type,emplyoee_details.emp_designation FROM emplyoee_details,debtor_master WHERE emplyoee_details.emp_workwith=debtor_master.id";
+			String demo="SELECT emplyoee_details.emp_id,emplyoee_details.emp_date,emplyoee_details.emp_name,emplyoee_details.emp_contactno,(SELECT debtor_master.type FROM debtor_master,emplyoee_details WHERE debtor_master.id=emplyoee_details.emp_workwith) AS emp_workwith,emplyoee_details.emp_designation FROM emplyoee_details";
 			List demoList=gd.getData(demo);
 			return demoList;
 		}

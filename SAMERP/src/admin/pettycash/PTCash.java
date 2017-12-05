@@ -602,7 +602,7 @@ public class PTCash extends HttpServlet {
 						
 						int newBankBalance=bankBalance-withdrawlAmt;
 						String insertBankdetails="INSERT INTO `bank_account_details`(`bid`, `date`, `debit`, `credit`, `particulars`, `debter_id`, `balance`) "
-								+ "VALUES ("+getBankDetails.get(0)+",'"+pettyDate+"',"+withdrawlAmt+","+0+",'HANDLOAN',"+debtorId.get(0)+","+newBankBalance+")";
+								+ "VALUES ("+getBankDetails.get(0)+",'"+pettyDate+"',"+withdrawlAmt+","+0+",'ATM WITHDRAWL',"+debtorId.get(0)+","+newBankBalance+")";
 						System.out.println(insertBankdetails);
 						int bankDetailsStatus=gd.executeCommand(insertBankdetails);
 						if(bankDetailsStatus>0)
@@ -652,7 +652,7 @@ public class PTCash extends HttpServlet {
 			int sum=PTCash.sum(cash);
 			String getLastPettyBalance="SELECT petty_cash_details.id,petty_cash_details.balance FROM petty_cash_details ORDER BY petty_cash_details.id DESC LIMIT 1";
 			List lastPettyBalance=gd.getData(getLastPettyBalance);
-			request.setAttribute("tab", "tab2");
+			request.setAttribute("tab", "tab1");
 			request.setAttribute("status", "Rs."+sum+" Petty Cash Added. Total Petty Cash Balance is Rs."+lastPettyBalance.get(1));
 			RequestDispatcher rq=request.getRequestDispatcher("jsp/admin/PTCash/ptcash.jsp");
 			rq.forward(request, response);

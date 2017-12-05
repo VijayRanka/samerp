@@ -75,6 +75,7 @@ public class AddEmployee extends HttpServlet {
 			String employeename=request.getParameter("employee_name");
 			String contactno=request.getParameter("contact_no");
 			String Debtor_Id=request.getParameter("contractorVehicle_name");
+			System.out.println("EmpWork:"+Debtor_Id);
 			String empid=request.getParameter("employeeid");
 			String desig=request.getParameter("designation");
 			char designation=desig.charAt(0);
