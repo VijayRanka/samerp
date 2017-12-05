@@ -330,14 +330,15 @@
 								
 								<input type="hidden" id="alias" name="alias" />
 
-								</div> 
+							
 								
 
 						<div class='modal-footer' >
 							<button type="submit" name="update" class="btn btn-success">Update</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 						</div>
-							</form>
+						</form>
+					</div> 
 				</div>
 
 			</div>
