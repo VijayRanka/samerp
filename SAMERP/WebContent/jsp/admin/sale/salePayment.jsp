@@ -41,14 +41,17 @@
 	border: 1px;
 	border-style: groove;
 }		
+
 #createBillTableAgain tbody tr td{
 	border: 1px;
 	border-style: groove;
 }
+
 #createBillTableAgain tbody tr th{
 	border: 1px;
 	border-style: groove;
 }
+
 @media print
 {
   table { page-break-after:auto }
@@ -57,6 +60,7 @@
   thead { display:table-header-group }
   tfoot { display:table-footer-group }
 }
+
 @media print {
         table td, table th {
           border:block;
@@ -135,9 +139,8 @@ td{
 </head>
 <body onload="setSelectValue()">
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/index.jsp">SAMERP</a></h1>
-</div>
+
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
 
 <% if(request.getAttribute("status")!=null){ 
 %>
@@ -148,7 +151,6 @@ td{
 <!--top-Header-menu-->
 <!--start-top-serch-->
 <div id="search">
-	<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
 </div>
 <!--close-top-serch--> 
 <!--sidebar-menu-->
@@ -157,7 +159,7 @@ td{
 
 <div id="content">
 <div id="content-header">
-  <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Sale Payment</a>  </div>
+  <div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Sale Payment</a>  </div>
   
   
   <!--Action boxes-->
@@ -1246,10 +1248,10 @@ function snackBar() {
 function inWords()
 {
     var str = document.getElementById("totalAmountGST").innerHTML;
-    if(str==0){
-        var str1 = document.getElementById("totalAmountGST_11").innerHTML;
-        alert(str1+''+str1.length);
-    }
+//     if(str==0){
+//         var str1 = document.getElementById("totalAmountGST_11").innerHTML;
+//         alert(str1+''+str1.length);
+//     }
 
     var splt = str.split("");
     var rev = splt.reverse();
