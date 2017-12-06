@@ -73,18 +73,14 @@
 <body onload="setFocusToTextBox()">
 
 <!--Header-part-->
-<div id="header">
-  <h1><a href="dashboard.html">Matrix Admin</a></h1>
-</div>
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
 
-<!--start-top-serch-->
-<div id="search">
 <% if(request.getAttribute("status")!=null){ %>
 <div id="snackbar"><%=request.getAttribute("status")%></div>
 <%} %>
 
-  <button type="submit" class="tip-bottom">LOGOUT</button>
-</div>
+
 <!--close-top-serch-->
 <!--sidebar-menu-->
 	<jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>

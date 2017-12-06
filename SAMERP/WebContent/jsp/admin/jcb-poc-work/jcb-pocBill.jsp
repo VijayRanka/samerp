@@ -35,19 +35,9 @@
 </head>
 <body onload="setMonth()">
 
-	<!--Header-part-->
-	<div id="header">
-		<h1>
-			<a href="dashboard.html">Matrix Admin</a>
-		</h1>
-	</div>
-
-	<!--start-top-serch-->
-	<div id="search">
-
-		<button type="submit" class="tip-bottom">LOGOUT</button>
-	</div>
-	<!--close-top-serch-->
+<!--Header-part-->
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
 	<!--sidebar-menu-->
 	<jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>
 	<!--sidebar-menu-->

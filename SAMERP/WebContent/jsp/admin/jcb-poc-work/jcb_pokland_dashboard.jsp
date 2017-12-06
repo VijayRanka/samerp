@@ -77,9 +77,8 @@
 </head>
 <body onload="snackBar()">
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/index.jsp">Matrix Admin</a></h1>
-</div>
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
 <!--close-Header-part--> 
 <!--top-Header-menu-->
 <!--start-top-serch-->
@@ -91,9 +90,7 @@
 			}
 			session.removeAttribute("status");
 		%>
-<div id="search">
-	<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
-</div>
+
 <!--close-top-serch--> 
 <!--sidebar-menu-->
 	<jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>

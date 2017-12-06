@@ -91,17 +91,14 @@ display: none;}
 <body onload="myFunction()">
 
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/dashboard.jsp">Matrix Admin</a></h1>
-</div>
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
 
 <!--start-top-serch-->
 <% if(request.getAttribute("status")!=null){ %>
 <div id="snackbar"><%=request.getAttribute("status")%></div>
 <%} %>
-<div id="search">
-  <button type="submit" class="tip-bottom">LOGOUT</button>
-</div>
+
 <!--close-top-serch-->
 <!--sidebar-menu-->
 <jsp:include page="../common/left_navbar.jsp"></jsp:include>

@@ -95,6 +95,7 @@ public class Sales extends HttpServlet {
 				}	
 			}			
 		}
+		
 		if(request.getParameter("UpdateData")!=null)
 		{
 			int getstatus=0;
@@ -257,6 +258,7 @@ public class Sales extends HttpServlet {
 					String pettyCash=gd.getData(pcStatusString).get(0).toString();		
 					int remaining=Integer.parseInt(pettyCash)-Integer.parseInt(vehicleDeposit);
 					String insertPettyCash="INSERT INTO `petty_cash_details`(`date`, `debit`, `balance`, `debtor_id`) VALUES ('"+date+"',"+Integer.parseInt(vehicleDeposit)+","+remaining+","+debtorId.get(0)+")";
+					System.out.println("Petty Q = "+insertPettyCash);
 					int s=gd.executeCommand(insertPettyCash);
 					flag=1;
 				}
@@ -279,6 +281,8 @@ public class Sales extends HttpServlet {
 									+ "'"+date+"','"+chalan_no+"',"+loading_charges+",'"+vehicleDetails+"',"+vehicleDeposit+",'"+po_no+"',"+count+");";
 				}
 				
+				System.out.println("sale master Q = "+insertQuery);
+				
 				gd.executeCommand(insertQuery);
 				String max_id="select max(id) from sale_master";
 				List l = gd.getData(max_id);
@@ -291,18 +295,25 @@ public class Sales extends HttpServlet {
 					if(!debtorId.isEmpty())
 					{
 						
-						String insertExp_masterForDeposit="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-								+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleDeposit+",'CASH','"+date+"','-','-')";
-						//System.out.println(insertExp_masterForDeposit);
-				
-						gd.executeCommand(insertExp_masterForDeposit);
+						if(Integer.parseInt(vehicleDeposit)>0){
+							
+							String insertExp_masterForDeposit="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+									+ " `other_details`) VALUES (1,"+debtorId.get(0)+",'-',"+vehicleDeposit+",'CASH','"+date+"','-','-')";
+							System.out.println("Exp master "+insertExp_masterForDeposit);
 					
-						String insertExp_masterForDiesel="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
-								+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
-					//	System.out.println(insertExp_masterForDiesel);
-				
-						gd.executeCommand(insertExp_masterForDiesel);
-						
+							gd.executeCommand(insertExp_masterForDeposit);
+							
+						}
+					
+						if(Integer.parseInt(vehicleAmount)>0){
+							
+							String insertExp_masterForDiesel="INSERT INTO `expenses_master`(`expenses_type_id`, `debtor_id`, `name`, `amount`, `payment_mode`, `date`, `reason`, "
+									+ " `other_details`) VALUES (2,"+debtorId.get(0)+",'-',"+vehicleAmount+",'CASH','"+date+"','-','-')";
+							System.out.println("Exp master "+insertExp_masterForDiesel);
+					
+							gd.executeCommand(insertExp_masterForDiesel);
+							
+						}
 						
 					
 						if(vehicleAmount!=null||vehicleReading!=null||dieselInLiter!=null)
@@ -316,7 +327,7 @@ public class Sales extends HttpServlet {
 							{
 								String max_sales_id=gd.getData("SELECT MAX(id) FROM sale_master").get(0).toString();
 								String sales_id="INSERT INTO `vehicles_ride_details`(`exp_master_id`, `sales_id`) VALUES ("+max_exp_id+","+max_sales_id+")";
-								
+								System.out.println("vehicle ride "+sales_id);
 								int xx=gd.executeCommand(sales_id);
 								if(xx==1)
 								{
@@ -324,6 +335,7 @@ public class Sales extends HttpServlet {
 								
 									String insertVRM ="INSERT INTO vehicle_reading_master(expenses_master_id, vehicle_id, vehicle_diesel_qty, vehicle_reading) "
 											+ " VALUES ("+max_exp_id+","+vehicle_id+","+dieselInLiter+","+vehicleReading+")";
+									System.out.println("vehicle reading master "+insertVRM);
 									gd.executeCommand(insertVRM);
 								}
 							}
@@ -358,6 +370,7 @@ public class Sales extends HttpServlet {
 					
 					String insertProduct="INSERT INTO `sale_details_master`(`sale_master_id`, `product_name`, `qty`, `rate`, `gst`, `supplier_name`, "
 							+ " `third_party_chalan`) VALUES ("+max_sale_id+",'"+productName+"',"+qty+","+rate+","+gst+",'"+supplierName+"','"+chalanNo_third+"');";
+					System.out.println("sale details master"+insertProduct);
 					gd.executeCommand(insertProduct);				
 					count--;
 				}	
