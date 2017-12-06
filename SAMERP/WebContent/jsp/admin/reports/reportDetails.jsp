@@ -99,13 +99,10 @@ to {
 </style>
 <body onload="loadFunction()">
 
-	<!--Header-part-->
-	<div id="header">
-		<h1>
-			<a href="dashboard.html">Matrix Admin</a>
-		</h1>
-	</div>
-	<div id="search">
+<!--Header-part-->
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
+
 		<%
 			if (request.getAttribute("status") != null) {
 		%>
@@ -113,8 +110,7 @@ to {
 		<%
 			}
 		%>
-		<button type="submit" class="tip-bottom">LOGOUT</button>
-	</div>
+
 	<!--sidebar-menu-->
 	<jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>
 	<!--sidebar-menu-->

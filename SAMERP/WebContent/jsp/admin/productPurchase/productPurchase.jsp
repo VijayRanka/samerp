@@ -78,23 +78,15 @@
 </head>
 <body onload="setFocusToTextBox()">
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/index.jsp">SAMERP</a></h1>
-</div>
-<!--close-Header-part--> 
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
 
 <% if(request.getAttribute("status")!=null){ %>
 <div id="snackbar"><%=request.getAttribute("status")%></div>
 <%} %>
 
 
-<!--top-Header-menu-->
-	<!--start-top-serch-->
-		<div id="search">
-			<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
-		</div>
-	<!--close-top-serch--> 
-<!--close-top-Header-menu-->
+
 
 <!--sidebar-menu-->
 <jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>
@@ -103,7 +95,7 @@
 <div id="content">
 
 	<div id="content-header">
-	  	<div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product Purchase</a>  </div>
+	  	<div id="breadcrumb"> <a href="/SAMERP/dashboard.jsp" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product Purchase</a>  </div>
 	</div>
 	
 	<div class="container-fluid">
@@ -300,12 +292,12 @@
           <div class="widget-content nopadding">
             <table class="table table-bordered" id="pastPurchaseTable">
             <div class="controls" style="float: right;position: relative;right: 68px; bottom: 33px">
-              <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
+<%--               <span  style="position: relative;bottom: 5px;"><b id="dateFun">From Date:</b></span>
               <% SysDate sd=new SysDate(); String[] sdDemo; sdDemo=sd.todayDate().split("-");
               %>
                 <input id="fromDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,1)" style="width: 130px">
                   <span  style="position: relative;bottom: 5px;"><b id="dateFun">To Date:</b></span>
-                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 130px">
+                 <input id="toDate" type="date" value="<%=sdDemo[2]+"-"+sdDemo[1]+"-"+sdDemo[0] %>" onchange="getData(this.value,2)" style="width: 1 30px">--%>
                 </div> 
               <thead>
                 <tr>

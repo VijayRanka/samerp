@@ -78,21 +78,15 @@
 </head>
 <body onload="setSelectValue()">
 <!--Header-part-->
-<div id="header">
-  <h1><a href="/SAMERP/dashboard.jsp">SAMERP</a></h1>
-</div>
+<jsp:include page="/jsp/admin/common/header_navbar.jsp"></jsp:include>
+<!--close-Header-part-->
 
 <% if(request.getAttribute("status")!=null){ 
 %>
 <div id="snackbar"><%=request.getAttribute("status")%></div>
 <%} %>
 
-<!--close-Header-part--> 
-<!--top-Header-menu-->
-<!--start-top-serch-->
-<div id="search">
-	<button type="submit" class="tip-bottom" style="margin-top: -1px;">LOGOUT</button>
-</div>
+
 <!--close-top-serch--> 
 <!--sidebar-menu-->
 <jsp:include page="/jsp/admin/common/left_navbar.jsp"></jsp:include>
